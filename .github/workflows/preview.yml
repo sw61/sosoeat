@@ -1,4 +1,4 @@
-name: Preview Deployment (Dev)
+name: Preview 배포 (개발 환경)
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy-preview:
-    name: Build & Deploy Preview
+    name: 빌드 및 Preview 배포 (개발)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
