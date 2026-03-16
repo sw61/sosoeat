@@ -77,13 +77,14 @@ export const Password: Story = {
 export const PasswordError: Story = {
   render: () => {
     const [show, setShow] = useState(false);
+    const [value, setValue] = useState('1234');
 
     return (
       <Input
         label="비밀번호"
         type={show ? 'text' : 'password'}
-        defaultValue="1234"
-        errorMessage="8자 이상 입력해주세요."
+        defaultValue={value}
+        errorMessage={value.length < 8 ? '8자 이상 입력해주세요.' : ''}
         required
         rightAddon={
           <button
@@ -95,6 +96,9 @@ export const PasswordError: Story = {
             {show ? <EyeOff /> : <Eye />}
           </button>
         }
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
       />
     );
   },

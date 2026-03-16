@@ -48,8 +48,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const borderClass = errorMessage
       ? 'border-red-500'
       : isFocused
-        ? 'border-sosoeat-orange-500'
-        : 'border-sosoeat-gray-300';
+        ? 'border-sosoeat-gray-300'
+        : 'border-sosoeat-gray-200';
 
     return (
       <div className="flex flex-col gap-1.5">
