@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { ProgressWithLabel } from './progress-with-label';
+import { ProgressWithLabel } from '.';
 
 const meta = {
   title: 'ui/progress-bar/with-label',

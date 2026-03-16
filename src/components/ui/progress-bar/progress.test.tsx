@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { Progress } from './progress';
+import { Progress } from '.';
 
 describe('Progress', () => {
   test("variant='groupEat'일 때 groupEat 색상 클래스가 적용된다", () => {

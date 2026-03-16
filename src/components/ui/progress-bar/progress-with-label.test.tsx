@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { ProgressWithLabel } from './progress-with-label';
+import { ProgressWithLabel } from '.';
 
 describe('ProgressWithLabel', () => {
   test('기본적으로 참여중이 나온다.', () => {

@@ -52,3 +52,7 @@ storybook-static
 
 # swc
 .swc/
+
+#나를 위한 설명
+/docs
+
