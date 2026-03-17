@@ -3,4 +3,6 @@ export type DropdownSimpleProp = {
   placeholder?: string;
   value: string | null;
   onChange: (value: string | null) => void;
+  triggerClassName?: string;
+  itemClassName?: string;
 };

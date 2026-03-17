@@ -11,10 +11,12 @@ export function DropdownSimple({
   placeholder = '선택',
   value,
   onChange,
+  triggerClassName = ' ',
+  itemClassName = ' ',
 }: DropdownSimpleProp) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{placeholder}</DropdownMenuTrigger>
+      <DropdownMenuTrigger className={triggerClassName}>{placeholder}</DropdownMenuTrigger>
       <DropdownMenuContent>
         {options.map((option) => (
           <DropdownMenuCheckboxItem
@@ -24,6 +26,7 @@ export function DropdownSimple({
             onCheckedChange={(checked) => {
               onChange(checked ? option : null);
             }}
+            className={itemClassName}
           >
             {option}
           </DropdownMenuCheckboxItem>

@@ -17,6 +17,8 @@ export const Primary: Story = {
     placeholder: '음식 종류 선택',
     value: null,
     onChange: () => {},
+    itemClassName: '',
+    triggerClassName: '',
   },
   render: (args) => {
     const [value, setValue] = useState<string | null>(null);

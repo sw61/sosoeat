@@ -40,12 +40,14 @@ src/data/
 
 ### 1. DropdownSimple (서브메뉴 없음)
 
-| Prop          | Type                              | 기본값   | 설명                  |
-| ------------- | --------------------------------- | -------- | --------------------- |
-| `options`     | `string[]`                        | —        | 선택 옵션 목록        |
-| `placeholder` | `string`                          | `'선택'` | 선택 전 트리거 텍스트 |
-| `value`       | `string \| null`                  | —        | 선택된 값             |
-| `onChange`    | `(value: string \| null) => void` | —        | 선택 변경 콜백        |
+| Prop               | Type                              | 기본값   | 설명                        |
+| ------------------ | --------------------------------- | -------- | --------------------------- |
+| `options`          | `string[]`                        | —        | 선택 옵션 목록              |
+| `placeholder`      | `string`                          | `'선택'` | 선택 전 트리거 텍스트       |
+| `value`            | `string \| null`                  | —        | 선택된 값                   |
+| `onChange`         | `(value: string \| null) => void` | —        | 선택 변경 콜백              |
+| `triggerClassName` | `string`                          | —        | 트리거 버튼 Tailwind (선택) |
+| `itemClassName`    | `string`                          | —        | 메뉴 아이템 Tailwind (선택) |
 
 **사용 예시**
 
@@ -55,16 +57,21 @@ src/data/
   placeholder="음식 종류 선택"
   value={value}
   onChange={setValue}
+  triggerClassName="rounded-lg border px-4 py-2"
+  itemClassName="hover:bg-accent/50"
 />
 ```
 
 ### 2. LocalDropDownSub (카테고리별 옵션)
 
-| Prop       | Type                                      | 설명               |
-| ---------- | ----------------------------------------- | ------------------ |
-| `data`     | `{ label: string; options: string[] }`    | 라벨 + 옵션 배열   |
-| `value`    | `Record<string, string>`                  | 선택값 (라벨→옵션) |
-| `onChange` | `(value: Record<string, string>) => void` | 선택 변경 콜백     |
+| Prop               | Type                                      | 설명                          |
+| ------------------ | ----------------------------------------- | ----------------------------- |
+| `data`             | `{ label: string; options: string[] }`    | 라벨 + 옵션 배열              |
+| `value`            | `Record<string, string>`                  | 선택값 (라벨→옵션)            |
+| `onChange`         | `(value: Record<string, string>) => void` | 선택 변경 콜백                |
+| `triggerClassName` | `string`                                  | 트리거 버튼 Tailwind (선택)   |
+| `contentClassName` | `string`                                  | 드롭다운 패널 Tailwind (선택) |
+| `itemClassName`    | `string`                                  | 메뉴 아이템 Tailwind (선택)   |
 
 **사용 예시**
 
@@ -76,6 +83,9 @@ src/data/
   }}
   value={value}
   onChange={setValue}
+  triggerClassName="rounded-lg border px-4 py-2"
+  contentClassName="min-w-48 shadow-xl"
+  itemClassName="hover:bg-accent/50"
 />
 ```
 
@@ -101,6 +111,7 @@ import { regionData } from '@/components/ui/dropdown';
 - [x] Storybook stories (Primary)
 - [x] DropdownSimple: 플랫 옵션, 단일 선택
 - [x] LocalDropDownSub: `{ label, options }` 구조, Record 기반 선택
+- [x] Tailwind `className` 지원 (triggerClassName, contentClassName, itemClassName)
 
 ---
 
