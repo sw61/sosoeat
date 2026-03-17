@@ -18,8 +18,28 @@ export const Primary: Story = {
       label: regionData.regions[0].name,
       options: regionData.regions[0].districts,
     },
-    value: {}, // placeholder (render에서 실제 값으로 대체됨)
-    onChange: () => {}, // placeholder
+    value: {},
+    onChange: () => {},
+  },
+  render: (args) => {
+    const [value, setValue] = useState<Record<string, string>>({});
+    return <LocalDropDownSub {...args} value={value} onChange={setValue} />;
+  },
+};
+
+export const Customized: Story = {
+  args: {
+    data: {
+      label: regionData.regions[0].name,
+      options: regionData.regions[0].districts,
+    },
+    value: {},
+    onChange: () => {},
+    triggerClassName:
+      'rounded-xl border-2 border-emerald-500 bg-emerald-50 px-4 py-2 font-semibold text-emerald-900 hover:bg-emerald-100',
+    contentClassName: 'min-w-56 rounded-xl shadow-lg border border-emerald-200',
+    itemClassName:
+      'hover:bg-emerald-100 data-[state=checked]:bg-emerald-200 data-[state=checked]:text-emerald-900',
   },
   render: (args) => {
     const [value, setValue] = useState<Record<string, string>>({});
