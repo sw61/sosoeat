@@ -1,4 +1,4 @@
-import type { LocalDroupDownProp } from '@/components/ui/dropdown';
+import type { DropdownSubProp } from '@/components/ui/dropdown';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -7,14 +7,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown';
 
-export function LocalDropDownSub({
+export function DropdownSub({
   data,
   value,
   onChange,
   triggerClassName,
   contentClassName,
   itemClassName,
-}: LocalDroupDownProp) {
+}: DropdownSubProp) {
   const selectedOption = value[data.label];
   return (
     <DropdownMenu>

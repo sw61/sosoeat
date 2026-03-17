@@ -9,7 +9,7 @@
 드롭다운 메뉴 컴포넌트를 구현했습니다.
 
 - **DropdownSimple**: 서브메뉴 없는 단순 드롭다운 (단일 선택, 토글)
-- **LocalDropDownSub**: 카테고리별 옵션을 가진 드롭다운 (선택 토글)
+- **DropdownSub**: 카테고리별 옵션을 가진 드롭다운 (선택 토글)
 - Radix UI DropdownMenu + shadcn/ui 기반
 
 사용 기술: Next.js + TypeScript + Tailwind CSS + Radix UI + shadcn/ui
@@ -22,9 +22,9 @@
 src/components/ui/dropdown/
   ├── index.tsx                 # 통합 export (import 중심)
   ├── dropdown-menu.tsx         # Radix 기반 기본 컴포넌트
-  ├── dropdown-sub.tsx         # LocalDropDownSub (카테고리+옵션)
+  ├── dropdown-sub.tsx         # DropdownSub (카테고리+옵션)
   ├── dropdown-simple.tsx      # DropdownSimple (플랫 옵션)
-  ├── droupdown-sub.type.ts    # LocalDroupDownProp
+  ├── dropdown-sub.type.ts    # DropdownSubProp
   ├── dropdown-simple.type.ts  # DropdownSimpleProp
   ├── dropdown-sub.stories.tsx
   └── dropdown-simple.stories.tsx
@@ -62,7 +62,7 @@ src/data/
 />
 ```
 
-### 2. LocalDropDownSub (카테고리별 옵션)
+### 2. DropdownSub (카테고리별 옵션)
 
 | Prop               | Type                                      | 설명                          |
 | ------------------ | ----------------------------------------- | ----------------------------- |
@@ -76,7 +76,7 @@ src/data/
 **사용 예시**
 
 ```tsx
-<LocalDropDownSub
+<DropdownSub
   data={{
     label: '서울특별시',
     options: ['강남구', '서초구', '마포구', ...],
@@ -110,7 +110,7 @@ import { regionData } from '@/components/ui/dropdown';
 - [x] index를 중심으로 import (`@/components/ui/dropdown`)
 - [x] Storybook stories (Primary)
 - [x] DropdownSimple: 플랫 옵션, 단일 선택
-- [x] LocalDropDownSub: `{ label, options }` 구조, Record 기반 선택
+- [x] DropdownSub: `{ label, options }` 구조, Record 기반 선택
 - [x] Tailwind `className` 지원 (triggerClassName, contentClassName, itemClassName)
 
 ---
@@ -135,10 +135,10 @@ import { regionData } from '@/components/ui/dropdown';
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
   DropdownSimple,
-  LocalDropDownSub);
+  DropdownSub);
 
 // 타입
-(LocalDroupDownProp, DropdownSimpleProp);
+(DropdownSubProp, DropdownSimpleProp);
 
 // 데이터
 regionData;

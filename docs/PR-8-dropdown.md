@@ -20,7 +20,7 @@
 
 > - **#8** 네비게이션·설정 메뉴, 지역 선택 등에서 사용할 드롭다운 컴포넌트가 없어 Radix UI 기반으로 구현했습니다.
 > - **DropdownSimple**: 서브메뉴 없는 단순 드롭다운 (플랫 옵션, 단일 선택, 토글)을 추가했습니다.
-> - **LocalDropDownSub**: 카테고리별 옵션을 가진 드롭다운 (지역 선택 등에 사용)을 추가했습니다.
+> - **DropdownSub**: 카테고리별 옵션을 가진 드롭다운 (지역 선택 등에 사용)을 추가했습니다.
 > - **Tailwind className 지원**: `triggerClassName`, `contentClassName`, `itemClassName` props를 추가해 스타일 커스터마이징을 지원합니다.
 > - **index 중심**: `@/components/ui/dropdown`에서 통합 export 및 import 구조로 정리했습니다.
 > - **regionData**: `korea-regions-districts.json` 기반 지역 데이터를 index에서 export합니다.
@@ -32,7 +32,7 @@
 
 1. `npm run storybook`으로 Storybook을 실행합니다.
 2. **DropdownSimple** 스토리에서 트리거 클릭 → 옵션 선택 → 체크 표시 → 같은 항목 재클릭 시 체크 해제가 되는지 확인합니다.
-3. **LocalDropDownSub** 스토리에서 트리거 클릭 → 옵션 선택 → 체크 표시 → 같은 항목 재클릭 시 체크 해제가 되는지 확인합니다.
+3. **DropdownSub** 스토리에서 트리거 클릭 → 옵션 선택 → 체크 표시 → 같은 항목 재클릭 시 체크 해제가 되는지 확인합니다.
 4. `triggerClassName`, `itemClassName` 등 props로 전달한 스타일이 적용되는지 확인합니다.
 5. 선택 후에도 메뉴가 닫히지 않고 유지되는지 확인합니다.
 
@@ -40,9 +40,9 @@
 
 (UI/UX 변경 사항이 있을 경우, 변경 전/후 스크린샷이나 동작 영상 첨부)
 
-| 변경 전 (Before) |                     변경 후 (After)                     |
-| :--------------: | :-----------------------------------------------------: |
-|  드롭다운 없음   | DropdownSimple, LocalDropDownSub 드롭다운 컴포넌트 추가 |
+| 변경 전 (Before) |                  변경 후 (After)                   |
+| :--------------: | :------------------------------------------------: |
+|  드롭다운 없음   | DropdownSimple, DropdownSub 드롭다운 컴포넌트 추가 |
 
 ### 🚨 기타 참고 사항 (Notes)
 

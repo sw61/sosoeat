@@ -17,6 +17,6 @@ export {
 } from './dropdown-menu';
 export { DropdownSimple } from './dropdown-simple';
 export type { DropdownSimpleProp } from './dropdown-simple.type';
-export { LocalDropDownSub } from './dropdown-sub';
-export type { LocalDroupDownProp } from './droupdown-sub.type';
+export { DropdownSub } from './dropdown-sub';
+export type { DropdownSubProp } from './dropdown-sub.type';
 export { default as regionData } from '@/data/korea-regions-districts.json';
