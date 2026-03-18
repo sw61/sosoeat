@@ -17,7 +17,13 @@ import {
 } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
 
-const BANNERS = [
+interface Banner {
+  imageUrl: string;
+  alt: string;
+  href?: string;
+}
+
+const BANNERS: Banner[] = [
   {
     imageUrl:
       'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070',
@@ -53,9 +59,15 @@ export function MainBanner() {
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap());
 
-    api.on('select', () => {
+    const onSelect = () => {
       setCurrent(api.selectedScrollSnap());
-    });
+    };
+
+    api.on('select', onSelect);
+
+    return () => {
+      api.off('select', onSelect);
+    };
   }, [api]);
 
   return (
@@ -141,7 +153,7 @@ export function MainBanner() {
   );
 }
 
-function BannerImage({ banner, index }: { banner: (typeof BANNERS)[number]; index: number }) {
+function BannerImage({ banner, index }: { banner: Banner; index: number }) {
   return (
     <>
       <Image
