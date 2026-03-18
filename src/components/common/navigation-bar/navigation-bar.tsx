@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +8,12 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import { Bell, ChevronDown, Plus } from 'lucide-react';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown';
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useAuthStore } from '@/store/authStore';
 
@@ -32,22 +38,8 @@ export function NavigationBar() {
   // ex) const { data: wishlistCount = 0 } = useWishlistCount();
   const [wishlistCount] = useState(0);
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   function handleLogout() {
     logout();
-    setIsDropdownOpen(false);
     router.push('/');
   }
 
@@ -139,51 +131,37 @@ export function NavigationBar() {
               </button>
 
               {/* 프로필 — md 이상만: md: 사진만, lg: 이름+드롭다운 */}
-              <div ref={dropdownRef} className="relative hidden md:block">
-                <button
-                  className="flex items-center gap-1"
-                  onClick={() => setIsDropdownOpen((prev) => !prev)}
-                  aria-label="프로필 메뉴"
-                >
-                  <div className="bg-sosoeat-gray-200 h-8 w-8 shrink-0 overflow-hidden rounded-full">
-                    {user.profileImage ? (
-                      <Image
-                        src={user.profileImage}
-                        alt={user.name}
-                        width={32}
-                        height={32}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="text-sosoeat-gray-500 flex h-full w-full items-center justify-center text-sm font-medium">
-                        {user.name[0]}
-                      </div>
-                    )}
-                  </div>
-                  <span className="hidden text-sm font-medium lg:block">{user.name}</span>
-                  <ChevronDown className="text-muted-foreground hidden h-4 w-4 lg:block" />
-                </button>
-
-                {isDropdownOpen && (
-                  <div className="bg-background border-border absolute top-full right-0 z-50 mt-2 w-40 rounded-lg border py-1 shadow-md">
-                    <button
-                      className="hover:bg-muted w-full px-4 py-2 text-left text-sm transition-colors"
-                      onClick={() => {
-                        router.push('/profile');
-                        setIsDropdownOpen(false);
-                      }}
-                    >
-                      내 프로필
-                    </button>
-                    <button
-                      className="text-destructive hover:bg-muted w-full px-4 py-2 text-left text-sm transition-colors"
-                      onClick={handleLogout}
-                    >
-                      로그아웃
-                    </button>
-                  </div>
-                )}
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="hidden items-center gap-1 md:flex" aria-label="프로필 메뉴">
+                    <div className="bg-sosoeat-gray-200 h-8 w-8 shrink-0 overflow-hidden rounded-full">
+                      {user.profileImage ? (
+                        <Image
+                          src={user.profileImage}
+                          alt={user.name}
+                          width={32}
+                          height={32}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="text-sosoeat-gray-500 flex h-full w-full items-center justify-center text-sm font-medium">
+                          {user.name[0]}
+                        </div>
+                      )}
+                    </div>
+                    <span className="hidden text-sm font-medium lg:block">{user.name}</span>
+                    <ChevronDown className="text-muted-foreground hidden h-4 w-4 lg:block" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => router.push('/profile')}>
+                    내 프로필
+                  </DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+                    로그아웃
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             /* 비로그인 상태 */

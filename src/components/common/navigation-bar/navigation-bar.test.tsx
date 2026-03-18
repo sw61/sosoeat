@@ -113,7 +113,7 @@ describe('NavigationBar', () => {
       render(<NavigationBar />);
 
       await user.click(screen.getByRole('button', { name: '프로필 메뉴' }));
-      expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
+      expect(screen.getByRole('menuitem', { name: '로그아웃' })).toBeInTheDocument();
     });
 
     it('로그아웃 클릭 시 user가 null이 되고 홈으로 이동한다', async () => {
@@ -121,7 +121,7 @@ describe('NavigationBar', () => {
       render(<NavigationBar />);
 
       await user.click(screen.getByRole('button', { name: '프로필 메뉴' }));
-      await user.click(screen.getByRole('button', { name: '로그아웃' }));
+      await user.click(screen.getByRole('menuitem', { name: '로그아웃' }));
 
       expect(useAuthStore.getState().user).toBeNull();
       expect(mockPush).toHaveBeenCalledWith('/');
