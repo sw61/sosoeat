@@ -41,6 +41,14 @@ export const NotLoggedInActiveMenu: Story = {
   },
 };
 
+export const NotLoggedInMobile: Story = {
+  name: '비로그인 / 모바일',
+  decorators: [withAuthState({ user: null })],
+  parameters: {
+    viewport: { defaultViewport: 'mobile1' },
+  },
+};
+
 // ── 로그인 ────────────────────────────────────────────
 
 export const LoggedIn: Story = {
@@ -52,7 +60,7 @@ export const LoggedInActiveMenu: Story = {
   name: '로그인 / 활성메뉴',
   decorators: [withAuthState({ user: MOCK_USER })],
   parameters: {
-    nextjs: { navigation: { pathname: '/together' } },
+    nextjs: { navigation: { pathname: '/wishlist' } },
   },
 };
 
@@ -63,6 +71,14 @@ export const LoggedInWithProfileImage: Story = {
       user: { id: '2', name: '김소소', profileImage: 'https://i.pravatar.cc/32?img=47' },
     }),
   ],
+};
+
+export const LoggedInMobile: Story = {
+  name: '로그인 / 모바일',
+  decorators: [withAuthState({ user: MOCK_USER })],
+  parameters: {
+    viewport: { defaultViewport: 'mobile1' },
+  },
 };
 
 // TODO: 아래 스토리는 React Query 연결 후 추가 예정
