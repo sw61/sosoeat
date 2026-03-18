@@ -82,6 +82,16 @@ describe('NavigationBar', () => {
       expect(screen.getAllByRole('link', { name: /찜한 모임/ }).length).toBeGreaterThan(0);
       expect(screen.getAllByText('0').length).toBeGreaterThan(0);
     });
+
+    it('모임 만들기 버튼이 표시된다', () => {
+      render(<NavigationBar />);
+      expect(screen.getByRole('button', { name: /모임 만들기/ })).toBeInTheDocument();
+    });
+
+    it('프로필 이미지가 없을 때 이름 첫 글자가 표시된다', () => {
+      render(<NavigationBar />);
+      expect(screen.getByText(MOCK_USER.name[0])).toBeInTheDocument();
+    });
   });
 
   describe('모바일 메뉴', () => {

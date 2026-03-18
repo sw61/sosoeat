@@ -6,8 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { Bell, ChevronDown, Plus } from 'lucide-react';
+import { Bell, ChevronDown } from 'lucide-react';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +21,7 @@ import { useAuthStore } from '@/store/authStore';
 
 const NAV_ITEMS = [
   { href: '/meetings', label: '모임찾기' },
-  { href: '/wishlist', label: '찜한 모임', showBadge: true },
+  { href: '/mypage?tab=liked', label: '찜한 모임', showBadge: true },
   { href: '/sosotalk', label: '소소토크' },
 ] as const;
 
@@ -95,25 +97,30 @@ export function NavigationBar() {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-64 p-0 pt-12">
                   <SheetTitle className="sr-only">알림</SheetTitle>
-                  {/* TODO: 알림 패널 연결 시 주석 해제
-                  <NotificationPanel /> */}
+                  {/* TODO: 알림 패널 구현 후 아래 방식으로 연결
+                  - 알림 컴포넌트를 import한 뒤 이 자리에 렌더링하면 됩니다.
+                  ex) import { 알림컴포넌트 } from '...'
+                      <알림컴포넌트 /> */}
                 </SheetContent>
               </Sheet>
 
-              {/* PC·Tablet 알림 (md 이상) — Dropdown 연결 시 주석 해제 */}
-              {/* <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+              {/* PC·Tablet 알림 (md 이상) — 알림 구현 후 아래 방식으로 연결
+                1. import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog' 추가
+                2. 아래 주석 해제 후 알림 컴포넌트 자리에 렌더링
+                ex) import { 알림컴포넌트 } from '...'
+              <Dialog>
+                <DialogTrigger asChild>
                   <button className="relative hidden p-1 md:block" aria-label="알림">
                     <Bell className="text-sosoeat-orange-600 h-5 w-5" />
                     {hasUnread && (
                       <span className="bg-sosoeat-orange-600 absolute top-0 right-0 h-2 w-2 rounded-full" />
                     )}
                   </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <NotificationPanel />
-                </DropdownMenuContent>
-              </DropdownMenu> */}
+                </DialogTrigger>
+                <DialogContent>
+                  <알림컴포넌트 />
+                </DialogContent>
+              </Dialog> */}
               <button className="relative hidden p-1 md:block" aria-label="알림">
                 <Bell className="text-sosoeat-orange-600 h-5 w-5" />
                 {hasUnread && (
@@ -122,40 +129,32 @@ export function NavigationBar() {
               </button>
 
               {/* 모임 만들기 — lg 이상 */}
-              <button
-                className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center gap-1 rounded-[0.875rem] px-3 py-1.5 text-sm font-medium text-white transition-colors lg:flex"
-                onClick={() => router.push('/meetings/new')}
+              <Button
+                size="lg"
+                className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden w-[124px] items-end justify-center gap-[7px] rounded-[0.875rem] pt-2 pr-[17px] pb-2 pl-4 font-medium text-white lg:flex"
+                // TODO: 모임 만들기 모달 컴포넌트 완성 시 연결할 것
               >
-                <Plus className="h-4 w-4" />
+                <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
                 모임 만들기
-              </button>
+              </Button>
 
               {/* 프로필 — md 이상만: md: 사진만, lg: 이름+드롭다운 */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="hidden items-center gap-1 md:flex" aria-label="프로필 메뉴">
-                    <div className="bg-sosoeat-gray-200 h-8 w-8 shrink-0 overflow-hidden rounded-full">
-                      {user.profileImage ? (
-                        <Image
-                          src={user.profileImage}
-                          alt={user.name}
-                          width={32}
-                          height={32}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="text-sosoeat-gray-500 flex h-full w-full items-center justify-center text-sm font-medium">
-                          {user.name[0]}
-                        </div>
-                      )}
-                    </div>
+                    <Avatar className="bg-sosoeat-gray-200 shrink-0">
+                      <AvatarImage src={user.profileImage ?? undefined} alt={user.name} />
+                      <AvatarFallback className="text-sosoeat-gray-500 text-sm font-medium">
+                        {user.name[0]}
+                      </AvatarFallback>
+                    </Avatar>
                     <span className="hidden text-sm font-medium lg:block">{user.name}</span>
                     <ChevronDown className="text-muted-foreground hidden h-4 w-4 lg:block" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => router.push('/profile')}>
-                    내 프로필
+                  <DropdownMenuItem onClick={() => router.push('/mypage')}>
+                    마이페이지
                   </DropdownMenuItem>
                   <DropdownMenuItem variant="destructive" onClick={handleLogout}>
                     로그아웃
