@@ -73,7 +73,9 @@
     'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic',
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
   --font-sans: var(--font-pretendard);
-  --font-mono: var(--font-noto-sans-kr);
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
 
   /* ── Font Size ─────────────────────────────────── */
   --text-xs: 12px;
@@ -111,16 +113,16 @@
 
 :root {
   /* ── Gray ──────────────────────────────────────── */
-  --sosoeat-gray-50: #f9fafb;
-  --sosoeat-gray-100: #f2f4f6;
-  --sosoeat-gray-200: #e5e8eb;
-  --sosoeat-gray-300: #d1d6db;
-  --sosoeat-gray-400: #b0b8c1;
-  --sosoeat-gray-500: #8b95a1;
-  --sosoeat-gray-600: #6b7684;
-  --sosoeat-gray-700: #4e5968;
-  --sosoeat-gray-800: #333d4b;
-  --sosoeat-gray-900: #191f28;
+  --sosoeat-gray-50: #fdfdfd;
+  --sosoeat-gray-100: #f9f9f9;
+  --sosoeat-gray-200: #f6f6f6;
+  --sosoeat-gray-300: #e8e8e8;
+  --sosoeat-gray-400: #e1e1e1;
+  --sosoeat-gray-500: #bebebe;
+  --sosoeat-gray-600: #8e8e8e;
+  --sosoeat-gray-700: #646464;
+  --sosoeat-gray-800: #3c3c3c;
+  --sosoeat-gray-900: #1e1e1e;
 
   /* ── Orange ────────────────────────────────────── */
   --sosoeat-orange-100: #ffe7cc;

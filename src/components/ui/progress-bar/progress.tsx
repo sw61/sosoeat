@@ -4,9 +4,8 @@ import * as React from 'react';
 
 import { Progress as ProgressPrimitive } from 'radix-ui';
 
+import { ProgressProps } from '@/components/ui/progress-bar/progress.type';
 import { cn } from '@/lib/utils';
-
-import { ProgressProps } from './progress.type';
 
 const variantStyles = {
   groupBuy: 'bg-sosoeat-blue-500',

@@ -124,28 +124,55 @@
 
 ## 📂 폴더 구조 (Folder Structure)
 
-본 프로젝트는 **도메인(Feature) 기반 구조**를 채택하여 관련 로직을 한데 모으고 유지보수성을 극대화했습니다.
+본 프로젝트는 **계층형 구조(Layered Architecture)**와 **App Router의 Route Colocation** 패턴을 채택하여 유지보수성과 확장성을 극대화했습니다. 모든 폴더와 파일 이름은 **kebab-case**를 사용합니다.
 
 ```text
 src/
-├── app/                # Next.js App Router (라우팅 및 페이지 레이아웃 전용)
-├── features/           # 핵심 비즈니스 로직 (도메인 단위 모듈)
-│   └── [domain-name]/  # 예: auth, user, order 등
-│       ├── components/ # 해당 도메인에서만 사용되는 컴포넌트
-│       ├── hooks/      # 해당 도메인 전용 커스텀 훅
-│       ├── store/      # 해당 도메인의 Zustand 스토어
-│       ├── queries/    # 해당 도메인의 TanStack Query (api 호출 포함)
-│       ├── types/      # 해당 도메인 전용 타입 정의
-│       └── index.ts    # 외부 노출 엔트리포인트
-├── components/         # 여러 도메인에서 공용으로 사용하는 컴포넌트
-│   ├── ui/             # 원자(Atomic) 컴포넌트 (Base UI 기반)
-│   └── common/         # Layout, Header, Footer 등 공용 컴포넌트
+├── app/                # Next.js App Router (라우팅 및 페이지 레이아웃)
+│   ├── (auth)/         # 라우팅 그룹 (login, signup 등)
+│   ├── [route]/        # 개별 페이지 라우트
+│   │   ├── _components/# 해당 페이지 전용 컴포넌트 (Colocation)
+│   │   └── page.tsx    # 페이지 엔트리포인트
+│   ├── layout.tsx      # 전역 레이아웃
+│   ├── providers.tsx   # 전역 컨텍스트 프로바이더 (QueryClient 등)
+│   └── globals.css     # 전역 스타일
+├── components/         # 재사용 가능한 공통 UI 컴포넌트
+│   ├── ui/             # [Level 1] 원자(Atomic) 단위 컴포넌트 (shadcn 기반)
+│   │   └── [name]/     # 폴더 단위 관리 (예: button/button.tsx)
+│   └── common/         # [Level 2] UI 조각들을 조합한 공통 패턴 컴포넌트
+│       └── [name]/     # 폴더 단위 관리 (예: labeled-input/labeled-input.tsx)
+├── services/           # API fetch 함수 + TanStack Query 커스텀 훅
+├── store/              # Zustand 기반 클라이언트 전역 상태 관리
 ├── hooks/              # 전역 공통 커스텀 훅
-├── lib/                # 외부 라이브러리 초기 설정 (예: utils, query-client)
-└── types/              # 프로젝트 전역 공통 타입 정의
+├── lib/                # 외부 라이브러리 설정 (axios 인스턴스 등)
+├── types/              # 전역 공통 타입 정의 및 API 응답 타입
+└── utils/              # 순수 함수 및 유틸리티 로직
 
 tests/e2e               # Playwright E2E 테스트 시나리오
 .github/workflows/      # CI/CD (GitHub Actions)
+```
+
+### 💡 컴포넌트 관리 규칙
+
+- **Colocation**: 특정 페이지에서만 쓰이는 컴포넌트는 해당 라우트의 `_components/` 폴더에 위치시킵니다.
+- **Atomic & Composed**: 순수 UI 조각은 `ui/`, 이를 조합한 재사용 패턴은 `common/`에서 관리합니다.
+- **Barrel Pattern**: 각 컴포넌트 폴더에는 `index.ts`를 두어 외부에서 깔끔하게 임포트할 수 있도록 re-export합니다.
+- **Testing & Stories**: 컴포넌트 파일(`.tsx`), 테스트(`.test.tsx`), 스토리북(`.stories.tsx`)은 반드시 **동일한 폴더**에 함께 둡니다.
+
+### 🎨 스토리북 구조 (Storybook Structure)
+
+Storybook 내에서의 컴포넌트 계층 구조는 다음과 같은 명명 규칙을 따릅니다:
+
+- **Components/ui**: 원자(Atomic) 단위의 UI 컴포넌트
+- **Components/common**: 공통으로 재사용되는 조합형 컴포넌트
+
+`.stories.tsx` 파일의 `title` 속성을 통해 다음과 같이 설정합니다:
+
+```typescript
+const meta = {
+  title: 'Components/ui/Button', // or 'Components/common/LabeledInput'
+  component: Button,
+} satisfies Meta<typeof Button>;
 ```
 
 ---
@@ -164,13 +191,15 @@ tests/e2e               # Playwright E2E 테스트 시나리오
 
 ### 2. 네이밍 컨벤션
 
-| 대상            | 규칙       | 예시                        |
-| :-------------- | :--------- | :-------------------------- |
-| 폴더명          | kebab-case | `button/`, `user-auth/`     |
-| 파일명          | kebab-case | `button.tsx`, `use-auth.ts` |
-| 컴포넌트        | PascalCase | `Button`, `DatePicker`      |
-| 훅              | camelCase  | `useAuth`, `useToggle`      |
-| 타입/인터페이스 | PascalCase | `ButtonProps`, `UserData`   |
+| 타입별 명명      | 규칙       | 예시                        |
+| :--------------- | :--------- | :-------------------------- |
+| 폴더명           | kebab-case | `button/`, `user-auth/`     |
+| 파일명           | kebab-case | `button.tsx`, `use-auth.ts` |
+| 컴포넌트         | PascalCase | `Button`, `DatePicker`      |
+| 훅               | camelCase  | `useAuth`, `useToggle`      |
+| 타입 선언 (필수) | PascalCase | `interface ButtonProps {}`  |
+
+> 💡 **타입 선언 규칙**: 본 프로젝트에서는 객체의 타입을 정의할 때 `type` 키워드 대신 확장성이 좋은 **`interface` 구문만을 사용**하도록 강제합니다. (예: `type User = {}` 지양, `interface User {}` 권장)
 
 ### 3. Import 순서 정렬 (자동화)
 
@@ -236,4 +265,3 @@ GitHub Actions와 Vercel CLI를 결합하여 견고한 배포 파이프라인을
 
 - **검증**: 프로덕션 빌드 가능 여부를 최종 확인합니다. (`npm run build`)
 - **배포**: Vercel CLI를 통해 **Production 환경**으로 즉시 배포합니다. (`vercel deploy --prod`)
-
