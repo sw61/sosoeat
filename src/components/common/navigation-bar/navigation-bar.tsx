@@ -50,7 +50,7 @@ export function NavigationBar() {
       <div className="flex h-12 items-center justify-between px-4 md:h-16 md:px-[30px]">
         {/* 로고 */}
         <Link href="/" className="shrink-0">
-          <Image src="/images/logo.png" alt="sosoeat" width={72} height={22.64} priority />
+          <Image src="/images/logo.svg" alt="sosoeat" width={72} height={22.64} priority />
         </Link>
 
         {/* 메뉴 링크 — 태블릿 이상 */}
@@ -188,7 +188,7 @@ export function NavigationBar() {
                     <SheetClose key={item.href} asChild>
                       <Link
                         href={item.href}
-                        className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                        className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                           isActive
                             ? 'text-sosoeat-orange-600 bg-orange-50'
                             : 'text-muted-foreground hover:text-foreground'
