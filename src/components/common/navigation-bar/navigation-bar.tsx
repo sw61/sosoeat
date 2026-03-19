@@ -131,7 +131,7 @@ export function NavigationBar() {
               {/* 모임 만들기 — lg 이상 */}
               <Button
                 size="lg"
-                className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden w-[124px] items-end justify-center gap-[7px] rounded-[0.875rem] pt-2 pr-[17px] pb-2 pl-4 font-medium text-white lg:flex"
+                className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white lg:flex"
                 // TODO: 모임 만들기 모달 컴포넌트 완성 시 연결할 것
               >
                 <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
