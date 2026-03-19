@@ -30,7 +30,7 @@ const variantStyles = {
 };
 
 export function DetailDatePicker({
-  variant = 'groupBuy',
+  variant = 'groupEat',
   value,
   onChange,
 }: {
