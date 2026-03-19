@@ -14,7 +14,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/components/ui/carousel';
+} from '@/components/ui/carousel/index';
 import { cn } from '@/lib/utils';
 
 interface Banner {

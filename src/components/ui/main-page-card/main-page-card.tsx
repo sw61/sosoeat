@@ -10,6 +10,7 @@ import { ko } from 'date-fns/locale';
 import { Clock, MapPin, Tag } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
+import { ProgressWithLabel } from '@/components/common/progress-with-label';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -22,8 +23,6 @@ import {
 } from '@/components/ui/card';
 import type { Meeting } from '@/components/ui/main-page-card/main-page-card.type';
 import { cn } from '@/lib/utils';
-
-import { ProgressWithLabel } from '../progress-bar';
 
 const variantTagStyles = {
   groupBuy:
