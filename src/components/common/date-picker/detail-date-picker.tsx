@@ -7,24 +7,38 @@ import { ko } from 'react-day-picker/locale';
 import { startOfDay } from 'date-fns';
 import { ChevronDown, Triangle } from 'lucide-react';
 
+import type { DetailDatePickerProps } from '@/components/common/date-picker/detail-date-picker.type';
 import { Button } from '@/components/ui/button/button';
 import { Calendar } from '@/components/ui/calendar/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/popover';
 import { cn } from '@/lib/utils';
 
-const variantStyles = {
+const variantStyles: Record<
+  NonNullable<DetailDatePickerProps['variant']>,
+  {
+    triggerText: string;
+    rangeEdge: string;
+    rangeMiddle: string;
+    resetButton: string;
+    applyButton: string;
+  }
+> = {
   groupEat: {
     triggerText: 'text-sosoeat-orange-500',
-    rangeEdge: '[&_button]:!bg-sosoeat-orange-500 [&_button]:!text-white',
-    rangeMiddle: '[&_button]:!bg-sosoeat-orange-100 [&_button]:!text-sosoeat-orange-900',
+    rangeEdge:
+      '[&_button]:!rounded-none [&_button[data-range-start=true][data-range-end=true]]:!rounded-[var(--radius-md)] [&_button]:!bg-sosoeat-orange-500 [&_button]:!text-white',
+    rangeMiddle:
+      '[&_button]:!rounded-none [&_button]:!bg-sosoeat-orange-100 [&_button]:!text-sosoeat-orange-900',
     resetButton:
       'bg-white border border-sosoeat-orange-600 text-sosoeat-orange-700 rounded-xl hover:bg-sosoeat-orange-50',
     applyButton: 'bg-sosoeat-orange-600 text-white rounded-xl hover:bg-sosoeat-orange-700',
   },
   groupBuy: {
     triggerText: 'text-sosoeat-blue-500',
-    rangeEdge: '[&_button]:!bg-sosoeat-blue-500 [&_button]:!text-white',
-    rangeMiddle: '[&_button]:!bg-sosoeat-blue-100 [&_button]:!text-sosoeat-blue-900',
+    rangeEdge:
+      '[&_button]:!rounded-none [&_button[data-range-start=true][data-range-end=true]]:!rounded-[var(--radius-md)] [&_button]:!bg-sosoeat-blue-500 [&_button]:!text-white',
+    rangeMiddle:
+      '[&_button]:!rounded-none [&_button]:!bg-sosoeat-blue-100 [&_button]:!text-sosoeat-blue-900',
     resetButton:
       'bg-white border border-sosoeat-blue-500 text-sosoeat-blue-600 rounded-xl hover:bg-sosoeat-blue-50',
     applyButton: 'bg-sosoeat-blue-500 text-white rounded-xl hover:bg-sosoeat-blue-600',
