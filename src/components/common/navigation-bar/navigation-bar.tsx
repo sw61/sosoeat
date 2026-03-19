@@ -64,7 +64,7 @@ export function NavigationBar() {
                 className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
                   isActive
                     ? 'text-sosoeat-orange-600 bg-orange-50'
-                    : 'text-muted-foreground hover:text-foreground'
+                    : 'text-sosoeat-gray-900 hover:text-foreground' // TODO: 기본 text 색상 변경 시 text-sosoeat-gray-900 제거
                 }`}
               >
                 {item.label}
