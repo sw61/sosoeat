@@ -17,15 +17,17 @@ const variantStyles = {
     triggerText: 'text-sosoeat-orange-500',
     rangeEdge: '[&_button]:!bg-sosoeat-orange-500 [&_button]:!text-white',
     rangeMiddle: '[&_button]:!bg-sosoeat-orange-100 [&_button]:!text-sosoeat-orange-900',
-    resetButton: 'text-sosoeat-orange-500 boder border-sosoeat-orange-500',
-    applyButton: 'bg-sosoeat-orange-600 text-white hover:bg-sosoeat-orange-500/90',
+    resetButton:
+      'bg-white border border-sosoeat-orange-600 text-sosoeat-orange-700 rounded-xl hover:bg-sosoeat-orange-50',
+    applyButton: 'bg-sosoeat-orange-600 text-white rounded-xl hover:bg-sosoeat-orange-700',
   },
   groupBuy: {
     triggerText: 'text-sosoeat-blue-500',
     rangeEdge: '[&_button]:!bg-sosoeat-blue-500 [&_button]:!text-white',
     rangeMiddle: '[&_button]:!bg-sosoeat-blue-100 [&_button]:!text-sosoeat-blue-900',
-    resetButton: 'text-sosoeat-blue-500 boder border-sosoeat-blue-500',
-    applyButton: 'bg-sosoeat-blue-500 text-white hover:bg-sosoeat-blue-500/90',
+    resetButton:
+      'bg-white border border-sosoeat-blue-500 text-sosoeat-blue-600 rounded-xl hover:bg-sosoeat-blue-50',
+    applyButton: 'bg-sosoeat-blue-500 text-white rounded-xl hover:bg-sosoeat-blue-600',
   },
 };
 
