@@ -88,7 +88,7 @@ export function NavigationBar() {
               {/* Mobile 알림 (md 미만) */}
               <Sheet>
                 <SheetTrigger asChild>
-                  <button className="relative p-1 md:hidden" aria-label="알림">
+                  <button className="relative cursor-pointer p-1 md:hidden" aria-label="알림">
                     <Bell className="text-sosoeat-orange-600 h-5 w-5" />
                     {hasUnread && (
                       <span className="bg-sosoeat-orange-600 absolute top-0 right-0 h-2 w-2 rounded-full" />
@@ -121,7 +121,7 @@ export function NavigationBar() {
                   <알림컴포넌트 />
                 </DialogContent>
               </Dialog> */}
-              <button className="relative hidden p-1 md:block" aria-label="알림">
+              <button className="relative hidden cursor-pointer p-1 md:block" aria-label="알림">
                 <Bell className="text-sosoeat-orange-600 h-5 w-5" />
                 {hasUnread && (
                   <span className="bg-sosoeat-orange-600 absolute top-0 right-0 h-2 w-2 rounded-full" />
@@ -141,7 +141,10 @@ export function NavigationBar() {
               {/* 프로필 — md 이상만: md: 사진만, lg: 이름+드롭다운 */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="hidden items-center gap-1 md:flex" aria-label="프로필 메뉴">
+                  <button
+                    className="hidden cursor-pointer items-center gap-1 md:flex"
+                    aria-label="프로필 메뉴"
+                  >
                     <Avatar className="bg-sosoeat-gray-200 shrink-0">
                       <AvatarImage src={user.profileImage ?? undefined} alt={user.name} />
                       <AvatarFallback className="text-sosoeat-gray-500 text-sm font-medium">
