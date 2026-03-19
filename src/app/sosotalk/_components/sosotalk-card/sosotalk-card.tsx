@@ -21,13 +21,13 @@ export function SosoTalkCard({
 
       {/* 제목 + 내용 */}
       <div className="px-[14px] pt-[14px] pb-[14px]">
-        <h3 className="pb-[4px] text-[16px] leading-[24px] font-bold">{title}</h3>
-        <p className="line-clamp-2 text-[14px] leading-[20px] font-normal">{content}</p>
+        <h3 className="pb-[4px] text-base font-bold">{title}</h3>
+        <p className="line-clamp-2 text-sm font-normal">{content}</p>
       </div>
 
       {/* 하단 정보 영역 */}
       <div className="border-t px-[14px] pt-[8px] pb-[12px]">
-        <div className="flex items-center justify-between text-xs font-medium">
+        <div className="flex items-center justify-between pb-[8px] text-xs font-medium">
           {/* 프로필 이미지 + 작성자 이름 */}
           <div className="flex items-center gap-[6px]">
             <Avatar className="h-8 w-8">
@@ -50,7 +50,7 @@ export function SosoTalkCard({
           </div>
         </div>
 
-        <span className="mt-[14px] block text-xs font-medium text-gray-500">{createdAt}</span>
+        <span className="bold mt-[14px] text-xs font-medium text-gray-500">{createdAt}</span>
       </div>
     </article>
   );
