@@ -85,9 +85,8 @@ export function DetailDatePicker({
           locale={ko}
           mode="range"
           disabled={{ before: startOfDay(new Date()) }}
-          required={true}
           selected={dateRange ?? undefined}
-          onSelect={setDateRange}
+          onSelect={(range) => setDateRange(range ?? null)}
           className="w-[250px] text-sm font-semibold"
           classNames={{
             range_start: styles.rangeEdge,
