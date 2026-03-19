@@ -51,13 +51,12 @@ export function DetailDatePicker({
 
   const handleApply = () => {
     if (dateRange?.from && !dateRange?.to) {
-      if (dateRange?.from) {
-        onChange({ ...dateRange, from: dateRange.to });
-      } else {
-        onChange({ ...dateRange, to: dateRange.from });
-      }
+      onChange({ from: dateRange.from, to: dateRange.from });
+    } else if (!dateRange?.from && dateRange?.to) {
+      onChange({ from: dateRange.to, to: dateRange.to });
+    } else {
+      onChange(dateRange);
     }
-    onChange(dateRange);
     setOpen(false);
   };
 
