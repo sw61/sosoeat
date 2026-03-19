@@ -6,7 +6,7 @@ export interface GroupTypeProps extends React.ComponentProps<typeof ProgressPrim
 
 export const variantStyles = {
   groupBuy: 'bg-sosoeat-blue-500',
-  groupEat: 'bg-sosoeat-orange-500',
+  groupEat: 'bg-gradient-to-r from-sosoeat-orange-600 to-sosoeat-orange-500',
   error: 'bg-red-600',
 };
 export const variantStylesFull = {

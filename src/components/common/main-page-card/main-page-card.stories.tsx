@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { addDays, addMonths, format } from 'date-fns';
 
-import { MainPageCard } from '@/components/ui/main-page-card/main-page-card';
-import type { Meeting } from '@/components/ui/main-page-card/main-page-card.type';
+import { MainPageCard } from '@/components/common/main-page-card/main-page-card';
+import type { Meeting } from '@/components/common/main-page-card/main-page-card.type';
 
 const meta = {
-  title: 'ui/main-page-card/MainPageCard',
+  title: 'components/common/main-page-card',
   component: MainPageCard,
 } satisfies Meta<typeof MainPageCard>;
 

@@ -11,5 +11,18 @@ const config: StorybookConfig = {
   ],
   framework: '@storybook/nextjs-vite',
   staticDirs: ['../public'],
+  async viteFinal(config) {
+    return {
+      ...config,
+      optimizeDeps: {
+        ...config.optimizeDeps,
+        include: [...(config.optimizeDeps?.include ?? []), 'motion', 'motion/react'],
+      },
+      ssr: {
+        ...config.ssr,
+        noExternal: [...(config.ssr?.noExternal ?? []), 'motion'],
+      },
+    };
+  },
 };
 export default config;
