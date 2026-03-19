@@ -35,8 +35,8 @@ export function BestSoeatCard({
       </div>
 
       {/* 카드 정보 */}
-      <CardContent className="flex flex-col gap-1 p-3">
-        <CardTitle className="line-clamp-2 text-sm leading-(--text-base--line-height) font-semibold">
+      <CardContent className="flex flex-col p-3">
+        <CardTitle className="mb-1.5 line-clamp-2 text-sm leading-(--text-xs--line-height) font-bold">
           {title}
         </CardTitle>
         <div className="text-sosoeat-gray-700 flex items-center gap-1 text-xs">
