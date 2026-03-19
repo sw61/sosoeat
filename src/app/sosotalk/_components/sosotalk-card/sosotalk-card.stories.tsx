@@ -14,7 +14,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    tag: '함께 먹기',
     title: '유기농 채소 주기적으로 공구 하실 분!',
     content: '유기농 채소 주기적으로 공구 하실 분들을 찾습니다.',
     imageUrl:

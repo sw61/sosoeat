@@ -1,5 +1,4 @@
 export type SosoTalkCardProps = {
-  tag: string;
   title: string;
   content: string;
   imageUrl: string;
