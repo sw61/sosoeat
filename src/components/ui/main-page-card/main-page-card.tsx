@@ -37,6 +37,9 @@ export function MainPageCard(meeting: Meeting) {
   const startDate = new TZDate(new Date(), 'Asia/Seoul');
   const endDate = new TZDate(meeting.registrationEnd, 'Asia/Seoul');
 
+  // 마감 시각 포맷 (서울 기준)
+  const registrationEndFormatted = format(endDate, 'HH:mm', { locale: ko });
+
   // "2일 5시간 30분 남음" 마감시간
   const duration = intervalToDuration({ start: startDate, end: endDate });
   const hoursUntilEnd = differenceInHours(endDate, startDate);
@@ -132,7 +135,7 @@ export function MainPageCard(meeting: Meeting) {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4 }}
                   >
-                    마감 임박
+                    오늘 {registrationEndFormatted} 마감
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -155,7 +158,7 @@ export function MainPageCard(meeting: Meeting) {
             height={32}
             className="rounded-full ring-2 ring-gray-300"
           />
-          <span className="ml-1 block text-base font-semibold">{meeting.host.name}</span>
+          <span className="ml-2 block text-base font-semibold">{meeting.host.name}</span>
         </div>
       </CardContent>
     </Card>
