@@ -161,18 +161,31 @@ tests/e2e               # Playwright E2E 테스트 시나리오
 
 ### 🎨 스토리북 구조 (Storybook Structure)
 
-Storybook 내에서의 컴포넌트 계층 구조는 다음과 같은 명명 규칙을 따릅니다:
+Storybook 내에서의 컴포넌트 계층 구조(`title`)는 컴포넌트의 역할과 실제 폴더 위치에 따라 다음과 같은 명명 규칙을 따릅니다:
 
-- **Components/ui**: 원자(Atomic) 단위의 UI 컴포넌트
-- **Components/common**: 공통으로 재사용되는 조합형 컴포넌트
+1. **페이지 종속 컴포넌트 (`pages/`)**
+   - 특정 라우트(페이지)의 `_components/` 내에서만 사용되는 컴포넌트는 실제 라우트 URL 경로와 동일하게 작성합니다.
+   - 포맷: `pages/[라우트경로]/[컴포넌트명]`
+   - 예: `pages/auth/signup/SignupForm`
 
-`.stories.tsx` 파일의 `title` 속성을 통해 다음과 같이 설정합니다:
+2. **공용 컴포넌트 (`ui/`, `common/`)**
+   - **ui**: 원자(Atomic) 단위의 순수 UI 조각 (예: `ui/Button`, `ui/Input`)
+   - **common**: 공용으로 재사용되는 조합형 패턴 (예: `common/Funnel`, `common/ProgressWithLabel`)
+
+`.stories.tsx` 파일 작성 시 상단 `meta`의 `title` 속성을 아래와 같이 설정해 주세요:
 
 ```typescript
-const meta = {
-  title: 'Components/ui/Button', // or 'Components/common/LabeledInput'
+// 1. 페이지 컴포넌트 예시
+const meta: Meta<typeof SignupForm> = {
+  title: 'pages/auth/signup/signupForm',
+  component: SignupForm,
+};
+
+// 2. 공용 컴포넌트 예시
+const meta: Meta<typeof Button> = {
+  title: 'ui/Button', // 또는 'common/Funnel'
   component: Button,
-} satisfies Meta<typeof Button>;
+};
 ```
 
 ---

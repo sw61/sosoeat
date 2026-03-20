@@ -6,7 +6,7 @@ import { SignupForm } from './signup-form';
 const queryClient = new QueryClient();
 
 const meta: Meta<typeof SignupForm> = {
-  title: 'Auth/SignupForm',
+  title: 'pages/auth/signup/signupForm',
   component: SignupForm,
   parameters: {
     layout: 'centered',
