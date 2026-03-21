@@ -1,18 +1,23 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronLeft, ChevronRight, Eye, EyeOff } from 'lucide-react';
+import { ChevronLeft, Eye, EyeOff } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 
-import { MiddleStepProps, passwordSchema, PasswordValues } from '../signup-form.types';
-import { getErrorAnimationClasses, getInputClasses } from '../signup-form.utils';
+import {
+  getAuthFieldError,
+  getErrorAnimationClasses,
+  getInputClasses,
+} from '../../../../_components';
+import { AuthSubmitButton } from '../../../../_components/auth-submit-button';
+import { passwordSchema, PasswordValues } from '../signup-form.schema';
+import { MiddleStepProps } from '../signup-form.types';
 
 export const PasswordStep = ({
   onNext,
@@ -27,10 +32,11 @@ export const PasswordStep = ({
     handleSubmit,
     control,
     trigger,
-    formState: { errors, isValid },
+    formState: { errors, isValid, touchedFields, isSubmitted },
   } = useForm<PasswordValues>({
     resolver: zodResolver(passwordSchema),
     mode: 'all',
+    delayError: 1000,
     defaultValues,
   });
 
@@ -43,26 +49,37 @@ export const PasswordStep = ({
     name: 'passwordConfirm',
   });
 
-  // 비밀번호가 변경되었을 때, 비밀번호 확인 필드도 유효성 재검사 (일치 여부 확인)
+  // 이전 비밀번호 값을 ref로 관리
+  const prevPasswordRef = useRef(passwordValue);
+
+  // 비밀번호가 실제로 변경되었을 때만 비밀번호 확인 필드 유효성 재검사 (일치 여부 확인)
   useEffect(() => {
-    if (passwordConfirmValue) {
+    if (prevPasswordRef.current !== passwordValue && passwordConfirmValue) {
       trigger('passwordConfirm');
     }
+    prevPasswordRef.current = passwordValue;
   }, [passwordValue, passwordConfirmValue, trigger]);
 
-  // 비밀번호: 값이 존재하고 에러가 있는 경우
-  const hasPasswordError = !!errors.password && !!passwordValue?.length;
+  // 공통 헬퍼 함수를 사용하여 에러 노출 여부 결정
+  const passwordError = getAuthFieldError(
+    errors.password,
+    touchedFields.password,
+    isSubmitted,
+    passwordValue
+  );
+  const hasPasswordError = !!passwordError;
 
-  // 비밀번호 확인: 에러가 존재하고 값이 1자 이상 입력되었을 때만 에러 메시지가 표시되도록 (빈 칸에서 포커스 잃을 때 에러 숨김)
-  const hasConfirmError = !!errors.passwordConfirm && !!passwordConfirmValue?.length;
+  const confirmError = getAuthFieldError(
+    errors.passwordConfirm,
+    touchedFields.passwordConfirm,
+    isSubmitted,
+    passwordConfirmValue
+  );
+  const hasConfirmError = !!confirmError;
 
   const onSubmit = (data: PasswordValues) => {
     onNext(data);
   };
-
-  // 비밀번호 필드에 에러가 있으면 비밀번호 확인 필드의 에러는 표시하지 않음
-  // -> (수정) 비밀번호 유효성 검사와 비밀번호 확인 유효성 검사 메세지가 같이 나오도록 변경
-  const shouldShowConfirmError = hasConfirmError;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex h-full flex-col">
@@ -93,7 +110,7 @@ export const PasswordStep = ({
             </div>
             <div className={getErrorAnimationClasses(hasPasswordError)}>
               <div className="overflow-hidden">
-                <FieldError errors={[errors.password]} className="mt-1 ml-1" />
+                <FieldError errors={[passwordError]} className="mt-1 ml-1" />
               </div>
             </div>
           </FieldContent>
@@ -123,38 +140,26 @@ export const PasswordStep = ({
                 {showConfirmPassword ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
               </button>
             </div>
-            <div className={getErrorAnimationClasses(shouldShowConfirmError)}>
+            <div className={getErrorAnimationClasses(hasConfirmError)}>
               <div className="overflow-hidden">
-                <FieldError errors={[errors.passwordConfirm]} className="mt-1 ml-1" />
+                <FieldError errors={[confirmError]} className="ml-1" />
               </div>
             </div>
           </FieldContent>
         </Field>
       </div>
 
-      <div className="mt-4 flex gap-3">
+      <div className="mt-2 flex gap-3">
         <Button
           type="button"
           variant="outline"
           onClick={onPrev}
-          className="hover:bg-sosoeat-gray-100 h-[52px] rounded-[16px] px-4 text-base font-semibold text-gray-500 shadow-sm transition-colors"
+          className="bg-sosoeat-gray-100 mt-2 h-[52px] rounded-[16px] px-4 text-base font-semibold text-gray-500 shadow-sm transition-colors"
         >
           <ChevronLeft className="h-6 w-6" />
           <span>이전</span>
         </Button>
-        <Button
-          type="submit"
-          className={cn(
-            'relative h-[52px] flex-1 rounded-[16px] text-base font-semibold shadow-sm transition-all duration-300 disabled:cursor-not-allowed',
-            isValid
-              ? 'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 text-white'
-              : 'bg-sosoeat-gray-300 text-sosoeat-gray-700'
-          )}
-          disabled={!isValid}
-        >
-          <span>다음</span>
-          <ChevronRight className="h-6 w-6" />
-        </Button>
+        <AuthSubmitButton label="다음" isActive={isValid} className="h-[52px] flex-1" />
       </div>
     </form>
   );

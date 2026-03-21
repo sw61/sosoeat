@@ -8,10 +8,15 @@ import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 
-import { MiddleStepProps, nicknameSchema, NicknameValues } from '../signup-form.types';
-import { getErrorAnimationClasses, getInputClasses } from '../signup-form.utils';
+import {
+  getAuthFieldError,
+  getErrorAnimationClasses,
+  getInputClasses,
+} from '../../../../_components';
+import { AuthSubmitButton } from '../../../../_components/auth-submit-button';
+import { nicknameSchema, NicknameValues } from '../signup-form.schema';
+import { MiddleStepProps } from '../signup-form.types';
 
 export const NicknameStep = ({
   onNext,
@@ -23,10 +28,11 @@ export const NicknameStep = ({
     register,
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState: { errors, isValid, touchedFields, isSubmitted },
   } = useForm<NicknameValues>({
     resolver: zodResolver(nicknameSchema),
     mode: 'all',
+    delayError: 1000,
     defaultValues,
   });
 
@@ -35,8 +41,14 @@ export const NicknameStep = ({
     name: 'nickname',
   });
 
-  // 에러가 존재하고 값이 실제로 입력되었을 때만 에러 UI 표시
-  const hasError = !!errors.nickname && !!nicknameValue?.length;
+  // 공통 헬퍼 함수를 사용하여 에러 노출 여부 결정
+  const nicknameError = getAuthFieldError(
+    errors.nickname,
+    touchedFields.nickname,
+    isSubmitted,
+    nicknameValue
+  );
+  const hasError = !!nicknameError;
 
   const onSubmit = (data: NicknameValues) => {
     onNext(data);
@@ -59,36 +71,30 @@ export const NicknameStep = ({
             />
             <div className={getErrorAnimationClasses(hasError)}>
               <div className="overflow-hidden">
-                <FieldError errors={[errors.nickname]} className="mt-1 ml-1" />
+                <FieldError errors={[nicknameError]} className="ml-1" />
               </div>
             </div>
           </FieldContent>
         </Field>
       </div>
 
-      <div className="mt-4 flex gap-3">
+      <div className="mt-2 flex gap-3">
         <Button
           type="button"
           variant="outline"
           onClick={onPrev}
           disabled={isLoading}
-          className="hover:bg-sosoeat-gray-100 h-[52px] rounded-[16px] px-4 text-base font-semibold text-gray-500 shadow-sm transition-colors"
+          className="bg-sosoeat-gray-100 mt-2 h-[52px] rounded-[16px] px-4 text-base font-semibold text-gray-500 shadow-sm transition-colors"
         >
           <ChevronLeft className="h-6 w-6" />
           <span>이전</span>
         </Button>
-        <Button
-          type="submit"
-          className={cn(
-            'h-[52px] flex-1 rounded-[16px] text-base font-semibold shadow-sm transition-all duration-300',
-            isValid && !isLoading
-              ? 'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 text-white'
-              : 'bg-sosoeat-gray-300 text-sosoeat-gray-700'
-          )}
-          disabled={!isValid || isLoading}
-        >
-          {isLoading ? '회원가입 중...' : '회원가입'}
-        </Button>
+        <AuthSubmitButton
+          label="회원가입"
+          isActive={isValid}
+          isLoading={isLoading}
+          className="h-[52px] flex-1"
+        />
       </div>
     </form>
   );
