@@ -12,7 +12,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <LoginLayout title="로그인">
+      <LoginLayout>
         <Story />
       </LoginLayout>
     ),
