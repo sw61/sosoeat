@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -37,9 +35,9 @@ export function NavigationBar() {
   // ex) const { data: hasUnread = false } = useHasUnreadNotification();
   const hasUnread = false;
 
-  // TODO: 찜 기능 구현 시 React Query로 교체 예정
-  // ex) const { data: wishlistCount = 0 } = useWishlistCount();
-  const [wishlistCount] = useState(0);
+  // TODO: 찜 컴포넌트 분리 시 아래 상수 제거 후 컴포넌트로 교체
+  // ex) import { WishGroupBadge } from '@/components/common/wish-group-badge'
+  const wishGroupCount = 0;
 
   function handleLogout() {
     logout();
@@ -51,8 +49,8 @@ export function NavigationBar() {
       <div
         className={cn(
           'mx-auto flex w-full items-center justify-between',
-          'h-[50px] max-w-[1140px] px-4',
-          'md:h-16 md:px-[37px]'
+          'h-16 max-w-[1140px] px-4',
+          'md:px-[37px]'
         )}
       >
         {/* 로고 */}
@@ -70,14 +68,15 @@ export function NavigationBar() {
                 href={item.href}
                 className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
                   isActive
-                    ? 'text-sosoeat-orange-600 bg-orange-50'
+                    ? 'text-sosoeat-orange-600 bg-sosoeat-orange-100'
                     : 'text-sosoeat-gray-900 hover:text-foreground' // TODO: 기본 text 색상 변경 시 text-sosoeat-gray-900 제거
                 }`}
               >
                 {item.label}
+                {/* TODO: 찜 컴포넌트 분리 시 <WishGroupBadge />로 교체 */}
                 {'showBadge' in item && (
                   <span className="bg-sosoeat-orange-600 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white">
-                    {wishlistCount}
+                    {wishGroupCount}
                   </span>
                 )}
               </Link>
@@ -98,7 +97,7 @@ export function NavigationBar() {
                   <button className="relative cursor-pointer p-1 md:hidden" aria-label="알림">
                     <Bell className="text-sosoeat-orange-600 h-5 w-5" />
                     {hasUnread && (
-                      <span className="bg-sosoeat-orange-600 absolute top-0 right-0 h-2 w-2 rounded-full" />
+                      <span className="bg-sosoeat-orange-600 absolute top-0.5 right-0.5 h-1.5 w-1.5 rounded-full" />
                     )}
                   </button>
                 </SheetTrigger>
@@ -131,14 +130,14 @@ export function NavigationBar() {
               <button className="relative hidden cursor-pointer p-1 md:block" aria-label="알림">
                 <Bell className="text-sosoeat-orange-600 h-5 w-5" />
                 {hasUnread && (
-                  <span className="bg-sosoeat-orange-600 absolute top-0 right-0 h-2 w-2 rounded-full" />
+                  <span className="bg-sosoeat-orange-600 absolute top-0.5 right-0.5 h-1.5 w-1.5 rounded-full" />
                 )}
               </button>
 
               {/* 모임 만들기 — lg 이상 */}
               <Button
                 size="lg"
-                className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white lg:flex"
+                className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white lg:mr-1 lg:flex"
                 // TODO: 모임 만들기 모달 컴포넌트 완성 시 연결할 것
               >
                 <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
