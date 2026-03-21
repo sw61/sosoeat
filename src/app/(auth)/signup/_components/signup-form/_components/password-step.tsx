@@ -11,10 +11,14 @@ import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/fie
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
-import { passwordSchema, PasswordValues, StepProps } from '../signup-form.types';
+import { MiddleStepProps, passwordSchema, PasswordValues } from '../signup-form.types';
 import { getErrorAnimationClasses, getInputClasses } from '../signup-form.utils';
 
-export const PasswordStep = ({ onNext, onPrev, defaultValues }: StepProps<PasswordValues>) => {
+export const PasswordStep = ({
+  onNext,
+  onPrev,
+  defaultValues,
+}: MiddleStepProps<PasswordValues>) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -88,7 +92,9 @@ export const PasswordStep = ({ onNext, onPrev, defaultValues }: StepProps<Passwo
               </button>
             </div>
             <div className={getErrorAnimationClasses(hasPasswordError)}>
-              <FieldError errors={[errors.password]} />
+              <div className="overflow-hidden">
+                <FieldError errors={[errors.password]} className="mt-1 ml-1" />
+              </div>
             </div>
           </FieldContent>
         </Field>
@@ -118,7 +124,9 @@ export const PasswordStep = ({ onNext, onPrev, defaultValues }: StepProps<Passwo
               </button>
             </div>
             <div className={getErrorAnimationClasses(shouldShowConfirmError)}>
-              <FieldError errors={shouldShowConfirmError ? [errors.passwordConfirm] : []} />
+              <div className="overflow-hidden">
+                <FieldError errors={[errors.passwordConfirm]} className="mt-1 ml-1" />
+              </div>
             </div>
           </FieldContent>
         </Field>

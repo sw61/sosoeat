@@ -13,9 +13,12 @@ export const getInputClasses = (hasError: boolean, className?: string) =>
 
 /**
  * 에러 메시지 애니메이션을 위한 공통 스타일 클래스를 반환합니다.
+ * 높이가 늘어나면서(Grid) 아래에서 위로(Translate) 부드럽게 나타납니다.
  */
 export const getErrorAnimationClasses = (hasError: boolean) =>
   cn(
-    'ml-1 transform transition-all duration-300',
-    hasError ? 'translate-y-0 scale-100 opacity-100' : '-translate-y-2 scale-95 opacity-0'
+    'grid transition-all duration-300 ease-in-out',
+    hasError
+      ? 'translate-y-0 grid-rows-[1fr] opacity-100'
+      : 'translate-y-2 grid-rows-[0fr] opacity-0'
   );

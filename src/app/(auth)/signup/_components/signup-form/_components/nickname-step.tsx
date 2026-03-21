@@ -10,7 +10,7 @@ import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/fie
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
-import { nicknameSchema, NicknameValues, StepProps } from '../signup-form.types';
+import { MiddleStepProps, nicknameSchema, NicknameValues } from '../signup-form.types';
 import { getErrorAnimationClasses, getInputClasses } from '../signup-form.utils';
 
 export const NicknameStep = ({
@@ -18,7 +18,7 @@ export const NicknameStep = ({
   onPrev,
   isLoading,
   defaultValues,
-}: StepProps<NicknameValues>) => {
+}: MiddleStepProps<NicknameValues>) => {
   const {
     register,
     handleSubmit,
@@ -58,7 +58,9 @@ export const NicknameStep = ({
               aria-invalid={hasError}
             />
             <div className={getErrorAnimationClasses(hasError)}>
-              <FieldError errors={[errors.nickname]} />
+              <div className="overflow-hidden">
+                <FieldError errors={[errors.nickname]} className="mt-1 ml-1" />
+              </div>
             </div>
           </FieldContent>
         </Field>

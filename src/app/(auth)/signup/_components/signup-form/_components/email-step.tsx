@@ -11,7 +11,7 @@ import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/fie
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
-import { emailSchema, EmailValues, StepProps } from '../signup-form.types';
+import { emailSchema, EmailValues, FirstStepProps } from '../signup-form.types';
 import { getErrorAnimationClasses, getInputClasses } from '../signup-form.utils';
 
 // 테스트를 위한 임시 이메일 중복 확인 모의 함수
@@ -23,7 +23,7 @@ const checkEmailDuplicateMock = async (email: string) => {
   return { isDuplicate: false };
 };
 
-export const EmailStep = ({ onNext, defaultValues }: StepProps<EmailValues>) => {
+export const EmailStep = ({ onNext, defaultValues }: FirstStepProps<EmailValues>) => {
   const {
     register,
     handleSubmit,
@@ -89,7 +89,9 @@ export const EmailStep = ({ onNext, defaultValues }: StepProps<EmailValues>) => 
               aria-invalid={hasError}
             />
             <div className={getErrorAnimationClasses(hasError)}>
-              <FieldError errors={[errors.email]} />
+              <div className="overflow-hidden">
+                <FieldError errors={[errors.email]} className="mt-1 ml-1" />
+              </div>
             </div>
           </FieldContent>
         </Field>
