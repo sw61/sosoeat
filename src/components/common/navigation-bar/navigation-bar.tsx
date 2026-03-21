@@ -199,7 +199,7 @@ export function NavigationBar() {
                         href={item.href}
                         className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                           isActive
-                            ? 'text-sosoeat-orange-600 bg-orange-50'
+                            ? 'text-sosoeat-orange-600 bg-sosoeat-orange-100'
                             : 'text-muted-foreground hover:text-foreground'
                         }`}
                       >
