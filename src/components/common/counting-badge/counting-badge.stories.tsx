@@ -1,7 +1,7 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/nextjs-vite';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { LikedMeetingBadge } from './liked-meeting-badge';
+import { CountingBadge } from './counting-badge';
 
 const withQueryData =
   (count: number): Decorator =>
@@ -16,12 +16,12 @@ const withQueryData =
   };
 
 const meta = {
-  title: 'components/common/navigation-bar/liked-meeting-badge',
-  component: LikedMeetingBadge,
+  title: 'components/common/counting-badge',
+  component: CountingBadge,
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof LikedMeetingBadge>;
+} satisfies Meta<typeof CountingBadge>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -32,13 +32,18 @@ export const Default: Story = {
 };
 
 export const WithCount: Story = {
-  name: '찜한 모임 있음',
+  name: '카운트 있음',
   decorators: [withQueryData(5)],
 };
 
-export const LargeCount: Story = {
-  name: '많은 수량',
+export const MaxCount: Story = {
+  name: '최대 표시 (99)',
   decorators: [withQueryData(99)],
+};
+
+export const OverMaxCount: Story = {
+  name: '99 초과 (99+)',
+  decorators: [withQueryData(100)],
 };
 
 export const Loading: Story = {

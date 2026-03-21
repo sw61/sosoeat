@@ -12,7 +12,7 @@ async function getLikedMeetingCount(): Promise<number> {
   return data.count;
 }
 
-export function LikedMeetingBadge() {
+export function CountingBadge() {
   // 찜 버튼 컴포넌트에서 찜 액션 성공 후 아래 key로 invalidateQueries 호출 필요
   const { data: count = 0, isLoading } = useQuery({
     queryKey: ['likedMeetingCount'],
@@ -22,8 +22,8 @@ export function LikedMeetingBadge() {
   if (isLoading) return null;
 
   return (
-    <span className="bg-sosoeat-orange-600 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white">
-      {count}
+    <span className="bg-sosoeat-orange-600 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-bold text-white">
+      {count > 99 ? '99+' : count}
     </span>
   );
 }
