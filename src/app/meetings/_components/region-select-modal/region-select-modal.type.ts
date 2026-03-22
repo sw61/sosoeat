@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import type { DropdownSubProp } from '@/components/common/dropdown-sub';
 
-export type RegionSelectModalProps = {
+export interface RegionSelectModalProps {
   trigger: ReactNode;
   title: string;
   description?: ReactNode;
@@ -15,4 +15,4 @@ export type RegionSelectModalProps = {
   draftValue?: Record<string, string>;
   onDraftChange?: (value: Record<string, string>) => void;
   contentClassName?: string;
-};
+}

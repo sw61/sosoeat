@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import { XIcon } from 'lucide-react';
 
-import type { RegionSelectModalProps } from '@/app/meetings/_components/region-select-modal/region-select-modal.type';
 import { DropdownSub } from '@/components/common/dropdown-sub';
 import { Button } from '@/components/ui/button/button';
 import {
@@ -17,6 +16,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+
+import type { RegionSelectModalProps } from './region-select-modal.type';
 
 /** 피그마 Region Select — shell 544×724, p 48, section gap 48, radius 40, shadow-xl */
 const dialogContentClass =
@@ -47,7 +48,7 @@ const confirmButtonClass =
   'h-[60px] flex-1 rounded-2xl border-0 bg-[#FF6600] px-[30px] py-4 text-xl font-semibold ' +
   'tracking-[-0.02em] text-white shadow-none hover:bg-[#e65c00]';
 
-export function RegionSelectModal({
+export const RegionSelectModal = ({
   trigger,
   title,
   description,
@@ -56,7 +57,7 @@ export function RegionSelectModal({
   onDraftChange,
   children,
   contentClassName,
-}: RegionSelectModalProps) {
+}: RegionSelectModalProps) => {
   const triggerAsChild = React.isValidElement(trigger);
 
   const draftControlled = draftValueProp !== undefined && onDraftChange !== undefined;
@@ -160,4 +161,4 @@ export function RegionSelectModal({
       </DialogContent>
     </Dialog>
   );
-}
+};
