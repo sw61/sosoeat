@@ -1,1 +1,1 @@
-export { ProgressWithLabel } from './progress-with-label';
+export * from './progress-with-label';
