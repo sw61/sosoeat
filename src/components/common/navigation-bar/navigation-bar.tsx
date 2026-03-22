@@ -8,6 +8,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import { Bell, ChevronDown, Plus, X } from 'lucide-react';
 
+import { CountingBadge } from '@/components/common/counting-badge';
 import { useAuthStore } from '@/store/auth-store';
 
 const NAV_ITEMS = [
@@ -26,8 +27,8 @@ export function NavigationBar() {
   const unreadCount = 0;
 
   // TODO: 찜 기능 구현 시 React Query로 교체 예정
-  // ex) const { data: wishlistCount = 0 } = useWishlistCount();
-  const [wishlistCount] = useState(0);
+  // ex) const { data: likedGroupCount = 0 } = useLikedGroupCount();
+  const likedGroupCount = 0;
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -78,11 +79,7 @@ export function NavigationBar() {
                   }`}
                 >
                   {item.label}
-                  {'showBadge' in item && (
-                    <span className="bg-sosoeat-orange-600 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white">
-                      {wishlistCount}
-                    </span>
-                  )}
+                  {'showBadge' in item && <CountingBadge count={likedGroupCount} />}
                 </Link>
               );
             })}

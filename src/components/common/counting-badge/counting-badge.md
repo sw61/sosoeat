@@ -1,58 +1,72 @@
 # CountingBadge
 
-숫자 카운트를 원형 배지로 시각적으로 보여주는 공통 컴포넌트입니다.
+숫자 카운트를 원형/pill 배지로 시각적으로 보여주는 공통 컴포넌트입니다.
 
 ---
 
-## 위치 선정 이유
+## 사용 위치
 
-여러 페이지에서 공통으로 사용되기 때문에 `common/` 폴더 아래에 위치시켰습니다.
-
-| 사용 위치       | 역할                  |
-| :-------------- | :-------------------- |
-| `NavigationBar` | 찜한 모임 카운트 표시 |
-| 상세페이지 댓글 | 댓글 카운트 표시      |
-| 소소토크 댓글   | 댓글 카운트 표시      |
-
----
-
-## react-query 사용 이유
-
-`NavigationBar`는 모든 페이지에 렌더링됩니다.
-`fetch`를 직접 사용하면 페이지 이동 시마다 API를 새로 호출하게 되므로, `react-query`의 캐싱을 활용해 불필요한 재요청을 방지합니다.
-
----
-
-## 로딩 처리
-
-로딩 중에는 `null`을 반환해 배지를 숨깁니다.
-`0`을 표시하면 "데이터가 없다"는 의미로 오해할 수 있기 때문입니다.
+| 사용 위치                    | 사이즈  | 역할                  |
+| :--------------------------- | :------ | :-------------------- |
+| `NavigationBar` (태블릿·PC)  | `large` | 찜한 모임 카운트 표시 |
+| `NavigationBar` 모바일 Sheet | `small` | 찜한 모임 카운트 표시 |
+| 상세페이지 댓글              | `large` | 댓글 카운트 표시      |
+| 소소토크 댓글                | `large` | 댓글 카운트 표시      |
 
 ---
 
 ## Props
 
-없음.
+| Prop    | Type                 | 기본값    | 필수 | 설명        |
+| :------ | :------------------- | :-------- | :--- | :---------- |
+| `count` | `number`             | —         | ✅   | 표시할 숫자 |
+| `size`  | `'small' \| 'large'` | `'large'` |      | 배지 크기   |
+
+---
+
+## 사이즈 스펙
+
+| 사이즈  | 형태 | 클래스         |
+| :------ | :--- | :------------- |
+| `large` | pill | `h-4 px-[7px]` |
+| `small` | 원형 | `h-3 w-3`      |
+
+---
+
+## 사용 예시
 
 ```tsx
-<CountingBadge />
+// large (기본)
+<CountingBadge count={5} />
+
+// small — 모바일 Sheet
+<CountingBadge count={5} size="small" />
 ```
 
 ---
 
-## 캐시 무효화 연동
+## 데이터 연동 방식
 
-react-query는 캐시를 자동으로 갱신하지 않습니다.
-관련 액션(찜, 댓글 등) 성공 후 아래 코드로 캐시를 무효화해야 카운트가 즉시 반영됩니다.
+`CountingBadge`는 순수 UI 컴포넌트입니다. 데이터 fetching은 사용처에서 담당합니다.
 
 ```tsx
-queryClient.invalidateQueries({ queryKey: ['likedMeetingCount'] });
+// 사용처에서 React Query로 count를 가져와 prop으로 전달
+const { data: likedGroupCount = 0 } = useLikedGroupCount();
+
+<CountingBadge count={likedGroupCount} />;
 ```
+
+데이터 소스가 다른 경우(찜 카운트, 댓글 카운트 등)에도 동일 컴포넌트를 재사용할 수 있습니다.
 
 ---
 
-## 의존성
+## 적용 예정 파일
 
-| 항목                    | 설명                                         |
-| :---------------------- | :------------------------------------------- |
-| `@tanstack/react-query` | `likedMeetingCount` 키로 카운트 캐싱 및 조회 |
+아래 파일들에 `CountingBadge` 컴포넌트를 적용해야 합니다.
+
+| 파일                                                  | 상태       | 작업 내용                                                                                                                                 |
+| :---------------------------------------------------- | :--------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/common/navigation-bar/navigation-bar.tsx` | ⏳ 대기 중 | 새 navbar PR 머지 시 인라인 `<span>` → `<CountingBadge count={likedGroupCount} />` 교체, `wishGroupCount` → `likedGroupCount` 변수명 변경 |
+| 모바일 Sheet 찜한 모임 항목                           | ⏳ 미구현  | `<CountingBadge count={likedGroupCount} size="small" />` 추가                                                                             |
+| 상세페이지 댓글 카운트                                | ⏳ 미구현  | `<CountingBadge count={commentCount} />` 적용                                                                                             |
+| 소소토크 댓글 카운트                                  | ⏳ 미구현  | `<CountingBadge count={commentCount} />` 적용                                                                                             |
