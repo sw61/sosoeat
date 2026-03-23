@@ -1,5 +1,7 @@
 import Image from 'next/image';
+
 import { cn } from '@/lib/utils';
+
 import { SosoTalkBannerProps } from './sosotalk-banner.types';
 
 export const SosoTalkBanner = ({
