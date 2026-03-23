@@ -10,7 +10,7 @@ const LOGO_SRC = '/images/logo.svg';
 const LOGO_ALT = '서비스 로고';
 const COPYRIGHT_TEXT = '© 2026 소소잇. All rights reserved.';
 
-export function Footer({ className }: FooterProps) {
+export const Footer = ({ className }: FooterProps) => {
   return (
     <footer className={cn('flex h-[60px] w-full items-center bg-white px-6', className)}>
       <div className="mx-auto flex w-full max-w-[1227px] items-center justify-between">
@@ -21,4 +21,4 @@ export function Footer({ className }: FooterProps) {
       </div>
     </footer>
   );
-}
+};
