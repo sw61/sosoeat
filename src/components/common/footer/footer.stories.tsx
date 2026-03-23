@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Footer } from './footer';
 
 const meta = {
-  title: 'Common/Footer',
+  title: 'components/common/footer',
   component: Footer,
   parameters: {
     layout: 'fullscreen',
