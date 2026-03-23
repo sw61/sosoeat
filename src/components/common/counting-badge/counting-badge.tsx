@@ -10,18 +10,30 @@ const badgeVariants = cva(
   {
     variants: {
       size: {
-        small: 'h-3 w-3 text-[8px] px-0',
-        large: 'h-4 px-[7px] text-xs',
+        small: 'h-3 text-[8px]',
+        large: 'h-4 text-xs',
+      },
+      overMax: {
+        true: 'w-auto',
+        false: '',
       },
     },
+    compoundVariants: [
+      { size: 'small', overMax: false, className: 'w-3 px-0' },
+      { size: 'large', overMax: false, className: 'px-1.75' },
+      { size: 'small', overMax: true, className: 'px-1' },
+      { size: 'large', overMax: true, className: 'px-1.25' },
+    ],
     defaultVariants: {
       size: 'large',
+      overMax: false,
     },
   }
 );
 
 export function CountingBadge({ count, size = 'large' }: CountingBadgeProps) {
-  const displayCount = count > 99 ? '99+' : count;
+  const overMax = count > 99;
+  const displayCount = overMax ? '99+' : count;
 
-  return <span className={badgeVariants({ size })}>{displayCount}</span>;
+  return <span className={badgeVariants({ size, overMax })}>{displayCount}</span>;
 }

@@ -36,3 +36,8 @@ export const OverMaxCount: Story = {
   name: '카운트 99 초과 (99+)',
   args: { count: 100 },
 };
+
+export const OverMaxCountSmall: Story = {
+  name: '카운트 99 초과 (99+) - Small',
+  args: { count: 100, size: 'small' },
+};
