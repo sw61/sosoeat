@@ -1,5 +1,5 @@
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
-
 import { SosoTalkBannerProps } from './sosotalk-banner.types';
 
 export const SosoTalkBanner = ({
@@ -12,10 +12,10 @@ export const SosoTalkBanner = ({
       <div
         className={cn(
           'relative h-[60px] w-full overflow-hidden rounded-none md:h-[200px] xl:max-w-[1280px] xl:rounded-[16px]',
-          className,
+          className
         )}
       >
-        <image src={imageUrl} alt={alt} className="h-full w-full object-cover" />
+        <Image src={imageUrl} alt={alt} className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-black/50" />
       </div>
     </section>
