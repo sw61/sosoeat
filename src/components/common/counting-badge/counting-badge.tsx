@@ -20,9 +20,9 @@ const badgeVariants = cva(
     },
     compoundVariants: [
       { size: 'small', overMax: false, className: 'w-3 px-0' },
-      { size: 'large', overMax: false, className: 'px-1.75' },
+      { size: 'large', overMax: false, className: 'px-[7px]' },
       { size: 'small', overMax: true, className: 'px-1' },
-      { size: 'large', overMax: true, className: 'px-1.25' },
+      { size: 'large', overMax: true, className: 'px-[5px]' },
     ],
     defaultVariants: {
       size: 'large',

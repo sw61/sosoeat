@@ -19,7 +19,7 @@ describe('CountingBadge', () => {
       const badge = screen.getByText('3');
       expect(badge).toHaveClass(
         'h-4',
-        'px-1.75',
+        'px-[7px]',
         'rounded-full',
         'bg-sosoeat-orange-600',
         'text-white'
@@ -41,7 +41,7 @@ describe('CountingBadge', () => {
     it('large 사이즈에서 99+ 일 때 px-[5px] w-auto 스타일이 적용된다', () => {
       render(<CountingBadge count={100} />);
       const badge = screen.getByText('99+');
-      expect(badge).toHaveClass('px-1.25', 'w-auto');
+      expect(badge).toHaveClass('px-[5px]', 'w-auto');
     });
 
     it('small 사이즈에서 99+ 일 때 px-1 w-auto 스타일이 적용된다', () => {
