@@ -92,9 +92,9 @@ export function MainPageCard(meeting: Meeting) {
             <Image
               src="/icons/deadline-calendar.svg"
               alt=""
-              width={14}
-              height={14}
-              className="size-3.5 shrink-0"
+              width={16}
+              height={16}
+              className="size-4 shrink-0"
             />
             {formatted}
           </span>
