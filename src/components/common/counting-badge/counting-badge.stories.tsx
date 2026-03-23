@@ -31,3 +31,8 @@ export const ZeroCount: Story = {
   name: '카운트 0',
   args: { count: 0 },
 };
+
+export const OverMaxCount: Story = {
+  name: '카운트 99 초과 (99+)',
+  args: { count: 100 },
+};

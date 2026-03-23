@@ -27,6 +27,18 @@ describe('CountingBadge', () => {
     });
   });
 
+  describe('99+ 초과 카운트', () => {
+    it('count가 99를 초과하면 99+가 렌더링된다', () => {
+      render(<CountingBadge count={100} />);
+      expect(screen.getByText('99+')).toBeInTheDocument();
+    });
+
+    it('count가 99이면 99가 렌더링된다', () => {
+      render(<CountingBadge count={99} />);
+      expect(screen.getByText('99')).toBeInTheDocument();
+    });
+  });
+
   describe('small 사이즈', () => {
     it('count가 렌더링된다', () => {
       render(<CountingBadge count={5} size="small" />);

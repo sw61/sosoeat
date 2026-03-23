@@ -1,22 +1,27 @@
-type BadgeSize = 'small' | 'large';
+import { cva } from 'class-variance-authority';
 
 interface CountingBadgeProps {
   count: number;
-  size?: BadgeSize;
+  size?: 'small' | 'large';
 }
 
-export function CountingBadge({ count, size = 'large' }: CountingBadgeProps) {
-  if (size === 'small') {
-    return (
-      <span className="bg-sosoeat-orange-600 flex h-3 w-3 items-center justify-center rounded-full text-[8px] font-bold text-white">
-        {count}
-      </span>
-    );
+const badgeVariants = cva(
+  'bg-sosoeat-orange-600 flex items-center justify-center rounded-full font-bold text-white',
+  {
+    variants: {
+      size: {
+        small: 'h-3 w-3 text-[8px] px-0',
+        large: 'h-4 px-[7px] text-xs',
+      },
+    },
+    defaultVariants: {
+      size: 'large',
+    },
   }
+);
 
-  return (
-    <span className="bg-sosoeat-orange-600 flex h-4 items-center justify-center rounded-full px-[7px] text-xs font-bold text-white">
-      {count}
-    </span>
-  );
+export function CountingBadge({ count, size = 'large' }: CountingBadgeProps) {
+  const displayCount = count > 99 ? '99+' : count;
+
+  return <span className={badgeVariants({ size })}>{displayCount}</span>;
 }
