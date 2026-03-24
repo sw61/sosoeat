@@ -9,7 +9,11 @@ const gradientDot = (
   />
 );
 
-function ReadCheckIcon({ className }: { className?: string }) {
+interface ReadCheckIconProps {
+  className?: string;
+}
+
+const ReadCheckIcon = ({ className }: ReadCheckIconProps) => {
   return (
     <span
       className={cn(
@@ -29,16 +33,16 @@ function ReadCheckIcon({ className }: { className?: string }) {
       </svg>
     </span>
   );
-}
+};
 
-export function NotificationTab({
+export const NotificationTab = ({
   variant = 'default',
   thumbnail,
   title,
   showReadBadge = false,
   metaRight,
   description,
-}: NotificationTabProps) {
+}: NotificationTabProps) => {
   return (
     <div
       className={cn(
@@ -64,4 +68,4 @@ export function NotificationTab({
       </div>
     </div>
   );
-}
+};

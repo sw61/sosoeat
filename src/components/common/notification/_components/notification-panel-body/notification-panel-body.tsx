@@ -2,11 +2,11 @@
 
 import type { NotificationPanelBodyProps } from './notification-panel-body.types';
 
-export function NotificationPanelBody({
+export const NotificationPanelBody = ({
   titleId,
   listScrollClassName,
   list,
-}: NotificationPanelBodyProps) {
+}: NotificationPanelBodyProps) => {
   return (
     <div className="flex h-full min-h-0 flex-col pt-6 pb-4">
       <div className="m-0 flex flex-row items-center space-y-0 p-0">
@@ -31,4 +31,4 @@ export function NotificationPanelBody({
       </div>
     </div>
   );
-}
+};

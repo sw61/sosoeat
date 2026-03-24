@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import type { NotificationTriggerProps } from './notification-trigger.types';
 
 export const NotificationTrigger = React.forwardRef<HTMLButtonElement, NotificationTriggerProps>(
-  function NotificationTrigger({ className, type = 'button', ...props }, ref) {
+  ({ className, type = 'button', ...props }, ref) => {
     return (
       <Button
         ref={ref}

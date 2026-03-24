@@ -4,23 +4,21 @@ import { useSyncExternalStore } from 'react';
 
 const QUERY = '(max-width: 767px)';
 
-function getSnapshot(): boolean {
+const getSnapshot = (): boolean => {
   if (typeof window.matchMedia !== 'function') return false;
   return window.matchMedia(QUERY).matches;
-}
+};
 
-function subscribe(onChange: () => void): () => void {
+const subscribe = (onChange: () => void): (() => void) => {
   if (typeof window.matchMedia !== 'function') return () => {};
   const mq = window.matchMedia(QUERY);
   mq.addEventListener('change', onChange);
   return () => mq.removeEventListener('change', onChange);
-}
+};
 
-function getServerSnapshot(): boolean {
-  return false;
-}
+const getServerSnapshot = (): boolean => false;
 
 /** 뷰포트 너비가 767px 이하인지 */
-export function useIsMaxWidth767(): boolean {
+export const useIsMaxWidth767 = (): boolean => {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-}
+};

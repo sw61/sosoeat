@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { NotificationTab } from './_components/notification-tab';
 
-export function NotificationList() {
+export const NotificationList = () => {
   return (
     <>
       <NotificationTab
@@ -63,4 +63,4 @@ export function NotificationList() {
       />
     </>
   );
-}
+};

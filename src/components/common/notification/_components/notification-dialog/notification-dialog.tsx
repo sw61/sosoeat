@@ -18,7 +18,7 @@ const mobileDialogContentClass = cn(
   'h-[min(812px,100dvh)] max-h-[100dvh] w-full max-w-none rounded-t-[24px] rounded-r-none'
 );
 
-export function NotificationDialog({ triggerClassName, list }: NotificationDialogProps) {
+export const NotificationDialog = ({ triggerClassName, list }: NotificationDialogProps) => {
   const titleId = React.useId();
 
   return (
@@ -40,4 +40,4 @@ export function NotificationDialog({ triggerClassName, list }: NotificationDialo
       </DialogContent>
     </Dialog>
   );
-}
+};
