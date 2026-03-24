@@ -5,7 +5,8 @@ import { useForm, useWatch } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { getAuthFieldError } from '../../../../_components/auth.utils';
+import { getAuthFieldError } from '@/app/(auth)/_components/auth.utils';
+
 import { loginSchema } from '../login-form.schema';
 import { LoginFormProps, LoginFormValues } from '../login-form.types';
 
