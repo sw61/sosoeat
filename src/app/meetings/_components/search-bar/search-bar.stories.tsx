@@ -31,3 +31,14 @@ export const Default: Story = {
     );
   },
 };
+
+export const largeScreen: Story = {
+  render: function SearchBarStory(args) {
+    const [value, setValue] = useState('');
+    return (
+      <div className="w-300 max-w-[1140px] px-4">
+        <SearchBar placeholder={args.placeholder} value={value} onChange={setValue} />
+      </div>
+    );
+  },
+};
