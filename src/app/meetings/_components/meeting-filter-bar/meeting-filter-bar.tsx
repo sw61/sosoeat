@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 
 import { RegionSelectModal } from '../region-select-modal';
 
-import { MeetingFilterBarButton } from './_components/meetig-filter-bar-button';
+import { MeetingFilterBarButton } from './_components/meeting-filter-bar-button';
 import type { MeetingFilterBarProps } from './meeting-filter-bar.types';
 
 export const MeetingFilterBar = ({
