@@ -29,6 +29,9 @@ jobs:
 
       - name: 단위 테스트 실행
         run: npm test
+        
+      - name: 프로젝트 빌드 실행
+        run: npm run build
 
       # --- Vercel 배포 섹션 ---
 
