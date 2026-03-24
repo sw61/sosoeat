@@ -51,7 +51,7 @@ export const AlertModal = ({
 
         {/* 설명이 있을 경우에만 렌더링 */}
         {description && (
-          <DialogDescription className="text-sosoeat-gray-700 mt-0.5 text-center text-sm md:mt-2 md:text-lg">
+          <DialogDescription className="text-sosoeat-gray-700 mt-0.5 text-center text-sm break-keep whitespace-pre-wrap md:mt-2 md:text-lg">
             {description}
           </DialogDescription>
         )}
@@ -68,9 +68,11 @@ export const AlertModal = ({
           >
             {cancelText}
           </Button>
-
           <Button
-            onClick={() => onConfirm()}
+            onClick={() => {
+              onConfirm();
+              onCancel();
+            }}
             id="alert-modal-confirm-btn"
             className={cn(
               ALERT_MODAL_BTN_BASE_CLASS,

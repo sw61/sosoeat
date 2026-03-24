@@ -65,13 +65,13 @@ describe('AlertModal', () => {
       expect(DEFAULT_PROPS.onConfirm).not.toHaveBeenCalled();
     });
 
-    it('확인 버튼 클릭 시 onConfirm 콜백이 호출된다', async () => {
+    it('확인 버튼 클릭 시 onConfirm 콜백이 호출되고, 모달을 닫기 위해 onCancel 도 연이어 호출된다', async () => {
       const user = userEvent.setup();
       render(<AlertModal {...DEFAULT_PROPS} confirmText="진행" />);
 
       await user.click(screen.getByRole('button', { name: '진행' }));
       expect(DEFAULT_PROPS.onConfirm).toHaveBeenCalledTimes(1);
-      expect(DEFAULT_PROPS.onCancel).not.toHaveBeenCalled();
+      expect(DEFAULT_PROPS.onCancel).toHaveBeenCalledTimes(1); // 모달 자동 닫기 설계 반영
     });
   });
 
