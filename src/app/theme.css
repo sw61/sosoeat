@@ -11,6 +11,7 @@
   --color-sosoeat-gray-800: var(--sosoeat-gray-800);
   --color-sosoeat-gray-900: var(--sosoeat-gray-900);
 
+  --color-sosoeat-orange-100: var(--sosoeat-orange-50);
   --color-sosoeat-orange-100: var(--sosoeat-orange-100);
   --color-sosoeat-orange-200: var(--sosoeat-orange-200);
   --color-sosoeat-orange-300: var(--sosoeat-orange-300);
@@ -152,11 +153,11 @@
 
   /* ── Light Mode (shadcn) ───────────────────────── */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: var(--sosoeat-gray-900);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: var(--sosoeat-gray-900);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --popover-foreground: var(--sosoeat-gray-900);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
@@ -176,7 +177,7 @@
   --chart-5: oklch(0.424 0.199 265.638);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-foreground: var(--sosoeat-gray-900);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);

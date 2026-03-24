@@ -1,0 +1,12 @@
+import type { SVGProps } from 'react';
+
+export function KakaoIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M12 3C6.48 3 2 6.45 2 10.7c0 2.76 1.83 5.18 4.6 6.55-.26.98-1 3.73-1.03 3.86-.05.16.02.24.11.24.07 0 .15-.02.26-.09 1.45-1 3.43-2.35 4.38-3.03.54.08 1.1.12 1.68.12 5.52 0 10-3.45 10-7.69C22 6.45 17.52 3 12 3z"
+        fill="#000000"
+      />
+    </svg>
+  );
+}

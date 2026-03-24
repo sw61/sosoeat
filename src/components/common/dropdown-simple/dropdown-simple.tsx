@@ -5,7 +5,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown/index';
 
-import type { DropdownSimpleProp } from './dropdown-simple.type';
+import type { DropdownSimpleProp } from './dropdown-simple.types';
 
 export function DropdownSimple({
   options,
@@ -23,7 +23,6 @@ export function DropdownSimple({
           <DropdownMenuCheckboxItem
             key={option}
             checked={value === option}
-            onSelect={(e) => e.preventDefault()}
             onCheckedChange={(checked) => {
               onChange(checked ? option : null);
             }}

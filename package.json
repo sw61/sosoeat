@@ -16,7 +16,8 @@
     "test:watch": "jest --watch",
     "test:watchAll": "jest --watchAll",
     "test:changed": "jest --onlyChanged",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "generate:api": "docker run --rm -v \"%cd%:/local\" openapitools/openapi-generator-cli generate -i https://dallaem-backend.vercel.app/doc -g typescript-fetch -o /local/src/types/generated-client"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -29,6 +30,7 @@
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.577.0",
+    "framer-motion": "^12.38.0",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",

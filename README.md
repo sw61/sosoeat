@@ -8,11 +8,13 @@
 - **프레임워크**: Next.js 16 (App Router)
 - **언어**: TypeScript 5
 - **스타일링**: Tailwind CSS v4
+- **애니메이션**: framer motion
 
 ### 상태 및 데이터 관리 (State & Data)
 
 - **상태 관리**: Zustand 5 (전역 상태 관리)
 - **서버 상태 관리**: TanStack Query v5 (데이터 페칭 및 캐싱)
+- **시간 관리 **: date-fns/locale
 
 ### 테스트 및 개발 도구 (Testing & Tooling)
 
