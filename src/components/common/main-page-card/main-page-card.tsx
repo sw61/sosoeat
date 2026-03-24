@@ -32,6 +32,7 @@ const variantImageBadgeIcon = {
 export function MainPageCard(meeting: Meeting) {
   const formatted = format(parseISO(meeting.dateTime), 'M/d(E) HH:mm', { locale: ko });
   const progress = (meeting.participantCount / meeting.capacity) * 100;
+  console.log(meeting.image);
 
   return (
     <Card
@@ -41,7 +42,7 @@ export function MainPageCard(meeting: Meeting) {
     >
       <div className="relative h-[180px] w-full shrink-0 overflow-hidden rounded-2xl">
         <Image
-          src={meeting.image}
+          src="https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1774346246700-03852ea0-e505-4716-9fee-f4aeaa1535a5.함꼐먹기"
           fill
           sizes="360px"
           alt="main-page-card-image"

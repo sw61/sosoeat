@@ -4,6 +4,7 @@ apis/ImagesApi.ts
 apis/MeetingTypesApi.ts
 apis/MeetingsApi.ts
 apis/NotificationsApi.ts
+apis/OGApi.ts
 apis/PostsApi.ts
 apis/ReviewsApi.ts
 apis/UsersApi.ts
@@ -41,6 +42,8 @@ docs/Notification.md
 docs/NotificationData.md
 docs/NotificationList.md
 docs/NotificationsApi.md
+docs/OGApi.md
+docs/OgMetadata.md
 docs/PaginatedReview.md
 docs/Participant.md
 docs/ParticipantList.md
@@ -107,6 +110,7 @@ models/MeetingWithHost.ts
 models/Notification.ts
 models/NotificationData.ts
 models/NotificationList.ts
+models/OgMetadata.ts
 models/PaginatedReview.ts
 models/Participant.ts
 models/ParticipantList.ts

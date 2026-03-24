@@ -1,10 +1,10 @@
-interface MeetingHost {
+export interface MeetingHost {
   id: number;
   name: string;
   image: string;
 }
 
-interface Meeting {
+export interface Meeting {
   id: number;
   isFavorited: boolean;
   teamId: string;
@@ -27,4 +27,5 @@ interface Meeting {
   createdAt: string;
   updatedAt: string;
   host: MeetingHost;
+  variant: 'groupEat' | 'groupBuy';
 }

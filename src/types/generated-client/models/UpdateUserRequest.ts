@@ -30,6 +30,12 @@ export interface UpdateUserRequest {
    * @type {string}
    * @memberof UpdateUserRequest
    */
+  email?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateUserRequest
+   */
   companyName?: string;
   /**
    *
@@ -59,6 +65,7 @@ export function UpdateUserRequestFromJSONTyped(
   }
   return {
     name: json['name'] == null ? undefined : json['name'],
+    email: json['email'] == null ? undefined : json['email'],
     companyName: json['companyName'] == null ? undefined : json['companyName'],
     image: json['image'] == null ? undefined : json['image'],
   };
@@ -78,6 +85,7 @@ export function UpdateUserRequestToJSONTyped(
 
   return {
     name: value['name'],
+    email: value['email'],
     companyName: value['companyName'],
     image: value['image'],
   };

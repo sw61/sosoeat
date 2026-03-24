@@ -274,7 +274,7 @@ export class ReviewsApi extends runtime.BaseAPI {
 
   /**
    * 특정 모임에 리뷰를 작성합니다.
-   * 리뷰 작성 (중첩)
+   * 리뷰 작성
    */
   async teamIdMeetingsMeetingIdReviewsPostRaw(
     requestParameters: TeamIdMeetingsMeetingIdReviewsPostRequest,
@@ -291,7 +291,7 @@ export class ReviewsApi extends runtime.BaseAPI {
 
   /**
    * 특정 모임에 리뷰를 작성합니다.
-   * 리뷰 작성 (중첩)
+   * 리뷰 작성
    */
   async teamIdMeetingsMeetingIdReviewsPost(
     requestParameters: TeamIdMeetingsMeetingIdReviewsPostRequest,

@@ -5,6 +5,7 @@
 | Name          | Type   |
 | ------------- | ------ |
 | `name`        | string |
+| `email`       | string |
 | `companyName` | string |
 | `image`       | string |
 
@@ -16,6 +17,7 @@ import type { UpdateUserRequest } from ''
 // TODO: Update the object below with actual values
 const example = {
   "name": 김철수,
+  "email": new@example.com,
   "companyName": 네이버,
   "image": https://example.com/image.jpg,
 } satisfies UpdateUserRequest

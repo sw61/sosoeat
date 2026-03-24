@@ -1,11 +1,11 @@
 # ReviewsApi
 
-All URIs are relative to *https://dallaem-backend.vercel.app*
+All URIs are relative to *https://together-dallaem-api.vercel.app*
 
 | Method                                                                                         | HTTP request                                    | Description                |
 | ---------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------------------------- |
 | [**teamIdMeetingsMeetingIdReviewsGet**](ReviewsApi.md#teamidmeetingsmeetingidreviewsget)       | **GET** /{teamId}/meetings/{meetingId}/reviews  | 특정 모임 리뷰 목록 (중첩) |
-| [**teamIdMeetingsMeetingIdReviewsPost**](ReviewsApi.md#teamidmeetingsmeetingidreviewspost)     | **POST** /{teamId}/meetings/{meetingId}/reviews | 리뷰 작성 (중첩)           |
+| [**teamIdMeetingsMeetingIdReviewsPost**](ReviewsApi.md#teamidmeetingsmeetingidreviewspost)     | **POST** /{teamId}/meetings/{meetingId}/reviews | 리뷰 작성                  |
 | [**teamIdReviewsCategoriesStatisticsGet**](ReviewsApi.md#teamidreviewscategoriesstatisticsget) | **GET** /{teamId}/reviews/categories/statistics | 카테고리별 리뷰 통계       |
 | [**teamIdReviewsGet**](ReviewsApi.md#teamidreviewsget)                                         | **GET** /{teamId}/reviews                       | 리뷰 목록                  |
 | [**teamIdReviewsReviewIdDelete**](ReviewsApi.md#teamidreviewsreviewiddelete)                   | **DELETE** /{teamId}/reviews/{reviewId}         | 리뷰 삭제                  |
@@ -115,7 +115,7 @@ example().catch(console.error);
 
 > ReviewWithDetails teamIdMeetingsMeetingIdReviewsPost(teamId, meetingId, createReviewByMeeting)
 
-리뷰 작성 (중첩)
+리뷰 작성
 
 특정 모임에 리뷰를 작성합니다.
 

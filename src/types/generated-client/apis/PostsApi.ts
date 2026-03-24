@@ -192,7 +192,7 @@ export class PostsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
+   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
    * 게시글 목록
    */
   async teamIdPostsGetRaw(
@@ -206,7 +206,7 @@ export class PostsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
+   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
    * 게시글 목록
    */
   async teamIdPostsGet(
@@ -1059,6 +1059,7 @@ export const TeamIdPostsGetSortByEnum = {
   CreatedAt: 'createdAt',
   ViewCount: 'viewCount',
   LikeCount: 'likeCount',
+  CommentCount: 'commentCount',
 } as const;
 export type TeamIdPostsGetSortByEnum =
   (typeof TeamIdPostsGetSortByEnum)[keyof typeof TeamIdPostsGetSortByEnum];
