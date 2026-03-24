@@ -37,12 +37,12 @@ export const MeetingFilterBar = ({
   return (
     <div
       className={cn(
-        'flex h-10 w-full max-w-[1140px] flex-row flex-nowrap items-center justify-between px-1',
+        'flex min-h-10 w-full max-w-[1140px] flex-row flex-wrap items-center justify-between gap-y-2 px-1 md:flex-nowrap md:gap-y-0',
         className
       )}
     >
       {/* Frame 2610400 — w 283, 탭 간 space-between (피그마 gap 60 대응) */}
-      <div className="flex h-10 w-[283px] max-w-[min(283px,100%)] shrink-0 items-center justify-between">
+      <div className="flex h-10 max-w-[min(283px,100%)] shrink-0 items-center justify-between gap-[24.5px]">
         <MeetingFilterBarButton
           filterType="all"
           label="전체"
