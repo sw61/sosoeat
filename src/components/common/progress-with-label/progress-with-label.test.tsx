@@ -4,7 +4,7 @@ import { ProgressWithLabel } from '@/components/common/progress-with-label';
 
 describe('ProgressWithLabel', () => {
   it('전체인원이 찼을 시 마감이 나온다.', () => {
-    render(<ProgressWithLabel current={10} max={10} variant="groupEat" />);
+    render(<ProgressWithLabel id="progress-test-full" current={10} max={10} variant="groupEat" />);
 
     const peopleNumberText = screen.getByText('마감');
 
@@ -15,7 +15,14 @@ describe('ProgressWithLabel', () => {
     const current = 5;
     const max = 10;
 
-    render(<ProgressWithLabel current={current} max={max} variant="groupEat" />);
+    render(
+      <ProgressWithLabel
+        id="progress-test-partial"
+        current={current}
+        max={max}
+        variant="groupEat"
+      />
+    );
 
     const peopleNumberText = screen.getByText('5/10 참여중');
 
