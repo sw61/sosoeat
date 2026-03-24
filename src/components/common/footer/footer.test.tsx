@@ -3,10 +3,10 @@ import { render, screen } from '@testing-library/react';
 import { Footer } from './footer';
 
 describe('Footer', () => {
-  it('서비스 로고와 저작권 텍스트가 렌더링된다', () => {
+  it('소소잇 로고와 저작권 텍스트가 렌더링된다', () => {
     render(<Footer />);
 
-    const logoImage = screen.getByAltText('서비스 로고');
+    const logoImage = screen.getByAltText('소소잇 로고');
     expect(logoImage).toBeInTheDocument();
 
     const copyrightText = screen.getByText('© 2026 소소잇. All rights reserved.');

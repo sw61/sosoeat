@@ -7,7 +7,7 @@ interface FooterProps {
 }
 
 const LOGO_SRC = '/images/logo.svg';
-const LOGO_ALT = '서비스 로고';
+const LOGO_ALT = '소소잇 로고';
 const COPYRIGHT_TEXT = '© 2026 소소잇. All rights reserved.';
 
 export const Footer = ({ className }: FooterProps) => {
