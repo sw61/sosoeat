@@ -1,7 +1,8 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { NavigationBar } from '@/components/common/navigation-bar';
 import { useAuthStore } from '@/store/auth-store';
+
+import { NavigationBar } from './navigation-bar';
 
 const meta: Meta<typeof NavigationBar> = {
   title: 'components/common/navigation-bar',
@@ -40,6 +41,14 @@ export const NotLoggedInActiveMenu: Story = {
   },
 };
 
+export const NotLoggedInWishList: Story = {
+  name: '비로그인 / 찜한 모임 클릭 → 로그인 이동',
+  decorators: [withAuthState({ user: null })],
+  parameters: {
+    nextjs: { navigation: { pathname: '/mypage?tab=liked' } },
+  },
+};
+
 // ── 로그인 ────────────────────────────────────────────
 
 export const LoggedIn: Story = {
@@ -51,7 +60,7 @@ export const LoggedInActiveMenu: Story = {
   name: '로그인 / 활성메뉴',
   decorators: [withAuthState({ user: MOCK_USER })],
   parameters: {
-    nextjs: { navigation: { pathname: '/together' } },
+    nextjs: { navigation: { pathname: '/meetings' } },
   },
 };
 
