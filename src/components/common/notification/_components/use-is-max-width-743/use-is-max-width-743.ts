@@ -2,8 +2,6 @@
 
 import { useSyncExternalStore } from 'react';
 
-import type { UseIsMaxWidth743Result } from './use-is-max-width-743.types';
-
 const QUERY = '(max-width: 743px)';
 
 function getSnapshot(): boolean {
@@ -23,6 +21,6 @@ function getServerSnapshot(): boolean {
 }
 
 /** 뷰포트 너비가 743px 이하인지 */
-export function useIsMaxWidth743(): UseIsMaxWidth743Result {
+export function useIsMaxWidth743(): boolean {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
