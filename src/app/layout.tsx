@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>
+      <body className="min-w-[375px]">
         <Providers>{children}</Providers>
         <Toaster />
       </body>

@@ -1,2 +1,2 @@
-export { DropdownSub } from './dropdown-sub';
-export type { DropdownSubProp } from './dropdown-sub.type';
+export * from './dropdown-sub';
+export * from './dropdown-sub.types';

@@ -1,2 +1,2 @@
-export { Progress } from './progress';
-export type { ProgressProps } from './progress.type';
+export * from './progress';
+export type { ProgressProps } from './progress.types';
