@@ -78,7 +78,7 @@ export function MainPageCard(meeting: Meeting) {
         >
           {meeting.name}
         </h3>
-        <HeartButton />
+        <HeartButton isLiked={false} onToggle={() => {}} />
       </CardHeader>
 
       <CardContent className="flex min-h-0 flex-1 flex-col gap-0 overflow-y-auto px-4 pt-0 pb-0">

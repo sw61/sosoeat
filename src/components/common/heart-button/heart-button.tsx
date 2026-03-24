@@ -10,13 +10,15 @@ import { cn } from '@/lib/utils';
 
 import type { HeartButtonProps } from './heart-button.types';
 
-export function HeartButton({ className }: HeartButtonProps) {
+export function HeartButton({ isLiked, onToggle, className }: HeartButtonProps) {
   return (
     <CardAction className={cn('absolute top-4 right-[17px] z-10 m-0 shrink-0', className)}>
       <Button
         variant="ghost"
         size="icon"
-        className="border-sosoeat-gray-300 h-[50px] w-[50px] cursor-pointer rounded-full border bg-white/90 hover:bg-white/90"
+        aria-label={isLiked ? '찜 취소' : '찜하기'}
+        onClick={onToggle}
+        className="bg-sosoeat-gray-500 hover:bg-sosoeat-gray-500 h-[60px] w-[60px] cursor-pointer rounded-full"
       >
         <motion.div
           animate={{ scale: 1 }}
@@ -27,7 +29,11 @@ export function HeartButton({ className }: HeartButtonProps) {
           }}
           className="flex items-center justify-center"
         >
-          <Image src="/icons/main-page-heart.svg" alt="좋아요" width={40} height={40} />
+          {isLiked ? (
+            <Image src="/icons/main-page-heart.svg" alt="찜 취소" width={40} height={40} />
+          ) : (
+            <Image src="/icons/empty_heart.svg" alt="찜하기" width={32} height={32} />
+          )}
         </motion.div>
       </Button>
     </CardAction>

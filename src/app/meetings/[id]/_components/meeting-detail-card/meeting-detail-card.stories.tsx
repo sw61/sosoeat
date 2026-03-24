@@ -53,10 +53,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// ── 모바일 (아코디언) ────────────────────────────────
+// ── 모바일 (접힘/펼침) ────────────────────────────────
 
 export const MobileDefault: Story = {
-  name: '모바일 — 기본 (아코디언 닫힘)',
+  name: '모바일 — 기본 (접힘)',
   parameters: {
     viewport: { defaultViewport: 'mobile1' },
   },
@@ -139,15 +139,17 @@ export const GroupBuyCategory: Story = {
   },
 };
 
-export const WithSlots: Story = {
-  name: 'timerBadge + likeButton 슬롯 사용',
+export const LikedState: Story = {
+  name: '찜한 상태',
   args: {
-    timerBadge: (
-      <span className="bg-sosoeat-orange-100 text-sosoeat-orange-600 rounded-full px-2 py-0.5 text-xs font-medium">
-        D-3
-      </span>
-    ),
-    likeButton: <button className="text-sosoeat-gray-500">♡</button>,
+    isLiked: true,
+  },
+};
+
+export const UnlikedState: Story = {
+  name: '찜 안 한 상태',
+  args: {
+    isLiked: false,
   },
 };
 

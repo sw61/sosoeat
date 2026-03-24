@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-
 import type { Meeting } from '@/types/meeting';
 
 export type MeetingRole = 'guest' | 'participant' | 'host';
@@ -11,12 +9,11 @@ export interface MeetingDetailCardProps {
   status: MeetingStatus;
   isJoined: boolean;
   isLiked: boolean;
-  timerBadge?: ReactNode;
-  likeButton?: ReactNode;
   onJoin?: () => void;
   onCancel?: () => void;
   onConfirm?: () => void;
   onShare?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  onLikeToggle?: () => void;
 }

@@ -91,11 +91,11 @@ describe('MainPageCard', () => {
       expect(screen.getByText('홍길동')).toBeInTheDocument();
     });
 
-    it('좋아요 버튼이 렌더링된다', () => {
+    it('찜하기 버튼이 렌더링된다', () => {
       const meeting = createMockMeeting();
       render(<MainPageCard {...meeting} />);
 
-      expect(screen.getByRole('button', { name: '좋아요' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '찜하기' })).toBeInTheDocument();
     });
   });
 
