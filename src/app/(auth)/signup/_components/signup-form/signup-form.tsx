@@ -32,7 +32,7 @@ export const SignupForm = ({ onSubmit, isLoading, defaultStep = 'email' }: Signu
   const currentStepNumber = STEP_TO_NUMBER[step];
 
   return (
-    <div className="relative flex w-full max-w-[450px] min-w-[375px] flex-col rounded-[24px] border border-gray-100 bg-white p-8 shadow-sm">
+    <div className="border-sosoeat-gray-100 relative flex w-full max-w-[450px] min-w-[375px] flex-col rounded-[24px] border bg-white p-8 shadow-sm">
       <div className="flex h-full flex-col gap-y-6">
         <SignupHeader />
 
@@ -70,7 +70,7 @@ export const SignupForm = ({ onSubmit, isLoading, defaultStep = 'email' }: Signu
       <div className="flex justify-center pt-6">
         <Link
           href="/login"
-          className="group text-sm font-medium text-gray-400 transition-colors hover:text-gray-500"
+          className="group hover:text-sosoeat-gray-900 text-sosoeat-gray-700 text-sm font-medium transition-colors"
         >
           이미 계정이 있으신가요?{' '}
           <span className="text-sosoeat-orange-600 font-bold group-hover:underline">로그인</span>

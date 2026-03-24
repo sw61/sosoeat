@@ -4,15 +4,15 @@ import { useForm, useWatch } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-
 import {
+  AuthSubmitButton,
   getAuthFieldError,
   getErrorAnimationClasses,
   getInputClasses,
-} from '../../../../_components';
-import { AuthSubmitButton } from '../../../../_components/auth-submit-button';
+} from '@/app/(auth)/_components';
+import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+
 import { emailSchema, EmailValues } from '../signup-form.schema';
 import { FirstStepProps } from '../signup-form.types';
 

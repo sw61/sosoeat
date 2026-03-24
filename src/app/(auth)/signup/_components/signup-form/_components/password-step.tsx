@@ -6,16 +6,16 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronLeft, Eye, EyeOff } from 'lucide-react';
 
+import {
+  AuthSubmitButton,
+  getAuthFieldError,
+  getErrorAnimationClasses,
+  getInputClasses,
+} from '@/app/(auth)/_components';
 import { Button } from '@/components/ui/button';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import {
-  getAuthFieldError,
-  getErrorAnimationClasses,
-  getInputClasses,
-} from '../../../../_components';
-import { AuthSubmitButton } from '../../../../_components/auth-submit-button';
 import { passwordSchema, PasswordValues } from '../signup-form.schema';
 import { MiddleStepProps } from '../signup-form.types';
 

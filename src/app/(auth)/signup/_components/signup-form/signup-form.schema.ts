@@ -34,8 +34,9 @@ export const passwordSchema = z
 export const nicknameSchema = z.object({
   nickname: z
     .string()
-    .max(20, '닉네임은 최대 20자까지 입력할 수 있습니다.')
-    .regex(/^[가-힣a-zA-Z0-9]+$/, '특수문자, 공백, 자음/모음 단일 사용은 불가합니다.'),
+    .min(1, '')
+    .regex(/^[가-힣a-zA-Z0-9]+$/, '특수문자, 공백, 자음/모음 단일 사용은 불가합니다.')
+    .max(20, '닉네임은 최대 20자까지 입력할 수 있습니다.'),
 });
 
 // 스키마로부터 타입 추론 (Single Source of Truth)

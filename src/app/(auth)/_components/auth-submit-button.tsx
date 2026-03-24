@@ -24,7 +24,7 @@ export const AuthSubmitButton = ({
       type="submit"
       disabled={!isActive || isLoading}
       className={cn(
-        'mt-2 h-14 w-full rounded-[16px] text-base font-semibold transition-all duration-200 disabled:pointer-events-auto disabled:cursor-not-allowed',
+        'mt-2 h-[52px] w-full rounded-[16px] text-base font-semibold transition-all duration-200 disabled:pointer-events-auto disabled:cursor-not-allowed',
         isActive
           ? 'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 text-white'
           : 'bg-sosoeat-gray-300 text-sosoeat-gray-700',

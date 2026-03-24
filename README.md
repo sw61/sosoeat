@@ -4,22 +4,23 @@
 
 ### 핵심 기술 (Core)
 
+- **상태 및 최적화**: React Compiler 1.0 (별도의 `React.memo`, `useMemo`, `useCallback` 불필요)
 - **프레임워크**: Next.js 16 (App Router)
-- **언어**: TypeScript
+- **언어**: TypeScript 5
 - **스타일링**: Tailwind CSS v4
 
 ### 상태 및 데이터 관리 (State & Data)
 
-- **상태 관리**: Zustand (전역 상태 관리)
+- **상태 관리**: Zustand 5 (전역 상태 관리)
 - **서버 상태 관리**: TanStack Query v5 (데이터 페칭 및 캐싱)
 
 ### 테스트 및 개발 도구 (Testing & Tooling)
 
-- **단위 테스트**: Jest, React Testing Library
-- **E2E 테스트**: Playwright
-- **컴포넌트 문서화**: Storybook
-- **코드 품질 관리**: ESLint 9 (Flat Config), Prettier
-- **Git 작업 자동화**: Husky, Commitlint, lint-staged
+- **단위 테스트**: Jest 30, React Testing Library 16
+- **E2E 테스트**: Playwright 1.58
+- **컴포넌트 문서화**: Storybook 10.2
+- **코드 품질 관리**: ESLint 9 (Flat Config), Prettier 3
+- **Git 작업 자동화**: Husky 9, Commitlint 20, lint-staged 16
 
 ---
 
@@ -48,17 +49,6 @@
 ---
 
 ## 🛠️ 개발 및 실행 방법 (Available Commands)
-
-### 📌 핵심 명령어 요약 (Quick Start)
-
-| 명령어               | 용도                       |
-| :------------------- | :------------------------- |
-| `npm run dev`        | 로컬 개발 서버 실행        |
-| `npm run build`      | 프로덕션 빌드 및 최종 점검 |
-| `npm run format`     | 코드 스타일 자동 정렬      |
-| `npm run type-check` | TypeScript 타입 체크       |
-| `npm run test`       | 단위 테스트 실행           |
-| `npm run storybook`  | UI 컴포넌트 개별 개발      |
 
 ### 🚀 상세 명령어 목록
 
@@ -128,28 +118,88 @@
 
 ```text
 src/
-├── app/                # Next.js App Router (라우팅 및 페이지 레이아웃)
-│   ├── (auth)/         # 라우팅 그룹 (login, signup 등)
-│   ├── [route]/        # 개별 페이지 라우트
-│   │   ├── _components/# 해당 페이지 전용 컴포넌트 (Colocation)
-│   │   └── page.tsx    # 페이지 엔트리포인트
-│   ├── layout.tsx      # 전역 레이아웃
-│   ├── providers.tsx   # 전역 컨텍스트 프로바이더 (QueryClient 등)
-│   └── globals.css     # 전역 스타일
-├── components/         # 재사용 가능한 공통 UI 컴포넌트
-│   ├── ui/             # [Level 1] 원자(Atomic) 단위 컴포넌트 (shadcn 기반)
-│   │   └── [name]/     # 폴더 단위 관리 (예: button/button.tsx)
-│   └── common/         # [Level 2] UI 조각들을 조합한 공통 패턴 컴포넌트
-│       └── [name]/     # 폴더 단위 관리 (예: labeled-input/labeled-input.tsx)
-├── services/           # API fetch 함수 + TanStack Query 커스텀 훅
-├── store/              # Zustand 기반 클라이언트 전역 상태 관리
-├── hooks/              # 전역 공통 커스텀 훅
-├── lib/                # 외부 라이브러리 설정 (axios 인스턴스 등)
-├── types/              # 전역 공통 타입 정의 및 API 응답 타입
-└── utils/              # 순수 함수 및 유틸리티 로직
-
-tests/e2e               # Playwright E2E 테스트 시나리오
-.github/workflows/      # CI/CD (GitHub Actions)
+├── app/
+│   ├── _components/                  # 루트 layout 전용 컴포넌트
+│   │   ├── header/                   # 컴포넌트별 폴더화 (kebab-case)
+│   │   │   ├── header.tsx            # 파일명 (kebab-case)
+│   │   │   ├── header.test.tsx       # 테스트 파일 함께 관리
+│   │   │   ├── header.stories.tsx    # 스토리북 파일 함께 관리
+│   │   │   └── index.ts              # 외부 노출을 위한 export 관리
+│   │   └── ...
+│   ├── layout.tsx                    # RootLayout — Provider, Header, Sidebar 주입
+│   ├── providers.tsx                 # QueryClientProvider, 전역 설정
+│   ├── globals.css                   # Tailwind base import
+│   ├── page.tsx                      # → /
+│   │
+│   ├── (auth)/                       # 라우팅 그룹 — /login, /signup
+│   │   ├── layout.tsx
+│   │   ├── login/
+│   │   │   ├── _components/
+│   │   │   │   ├── login-form/
+│   │   │   │   │   ├── login-form.tsx
+│   │   │   │   │   ├── login-form.test.tsx
+│   │   │   │   │   ├── login-form.stories.tsx
+│   │   │   │   │   └── index.ts      # export 관리
+│   │   │   │   └── ...
+│   │   │   └── page.tsx              # → /login
+│   │   └── signup/
+│   │       ├── _components/
+│   │       │   └── signup-form/
+│   │       │       └── ...
+│   │       └── page.tsx              # → /signup
+│   │
+│   ├── my-page/                      # URL: /my-page
+│   │   ├── _components/
+│   │   │   ├── profile-card/
+│   │   │   └── order-history/
+│   │   ├── page.tsx                  # → /my-page
+│   │   └── settings/
+│   │       ├── _components/
+│   │       │   ├── password-form/    # /my-page/settings 전용
+│   │       │   │   ├── password-form.tsx
+│   │       │   │   ├── password-form.test.tsx
+│   │       │   │   └── password-form.stories.tsx
+│   │       │   └── notification-toggle/
+│   │       └── page.tsx              # → /my-page/settings
+│
+├── components/
+│   ├── ui/                           # [Level 1] shadcn 기본 컴포넌트
+│   │   ├── button/
+│   │   │   ├── button.tsx
+│   │   │   ├── button.test.tsx
+│   │   │   ├── button.stories.tsx
+│   │   │   └── index.ts              # export 관리
+│   │   ├── input/
+│   │   │   └── ...
+│   │   └── modal/
+│   │       └── ...
+│   └── common/                       # [Level 2] UI 조각들을 조합한 공통 컴포넌트
+│       ├── labeled-input/            # Label + Input + Error 조합
+│       │   ├── labeled-input.tsx
+│       │   ├── labeled-input.test.tsx
+│       │   ├── labeled-input.stories.tsx
+│       │   └── index.ts              # export 관리
+│       ├── status-badge/
+│       └── custom-spinner/
+│
+├── services/                         # API fetch 함수 + React Query 훅
+│   └── auth-service.ts              # fetch-auth + use-auth
+│
+├── store/                            # Zustand — 클라이언트 전역 상태
+│   └── auth-store.ts
+│
+├── hooks/                            # 전역 커스텀 훅
+│   └── use-modal.ts
+│
+├── lib/
+│   └── query-client.ts               # QueryClient 기본 설정
+│
+├── types/
+│   └── common-types.ts               # 공용 인터페이스, Enum
+│
+├── utils/                            # 순수 함수 및 유틸리티 로직
+├── tests/e2e                         # Playwright E2E 테스트 시나리오
+└── .github/workflows/                # CI/CD (GitHub Actions)
 ```
 
 ---
