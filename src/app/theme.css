@@ -22,6 +22,7 @@
   --color-sosoeat-orange-800: var(--sosoeat-orange-800);
   --color-sosoeat-orange-900: var(--sosoeat-orange-900);
   --color-sosoeat-orange-1000: var(--sosoeat-orange-1000);
+  --background-image-sosoeat-orange-gradation: var(--sosoeat-orange-gradation);
 
   --color-sosoeat-blue-50: var(--sosoeat-blue-50);
   --color-sosoeat-blue-100: var(--sosoeat-blue-100);
@@ -136,6 +137,7 @@
   --sosoeat-orange-800: #b93901;
   --sosoeat-orange-900: #862b00;
   --sosoeat-orange-1000: #471601;
+  --sosoeat-orange-gradation: linear-gradient(90deg, #ff4000 0%, #ffb62d 100%);
 
   /* ── Blue ──────────────────────────────────────── */
   --sosoeat-blue-50: #e8f3ff;

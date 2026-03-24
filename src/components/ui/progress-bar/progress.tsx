@@ -9,6 +9,7 @@ import type { ProgressProps } from './progress.types';
 
 export const Progress = ({ className, value, variant, ...props }: ProgressProps) => {
   const isFull = (value ?? 0) >= 100;
+
   return (
     <ProgressPrimitive.Root
       data-slot="progress"

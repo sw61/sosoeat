@@ -39,19 +39,12 @@ export const getInputClasses = (hasError: boolean = false, className?: string) =
  * 인증 관련 필드의 에러를 표시할지 여부를 결정하는 헬퍼 함수입니다.
  *
  * @param {object} error - React Hook Form의 필드 에러 객체
- * @param {boolean} isTouched - 해당 필드가 터치되었는지 여부
- * @param {boolean} isSubmitted - 폼이 제출되었는지 여부
  * @param {string} value - 현재 필드의 값 (watch 값)
  * @returns {object | undefined} 표시할 에러 객체 또는 undefined
  */
-export const getAuthFieldError = (
-  error?: { message?: string },
-  isTouched: boolean = false,
-  isSubmitted: boolean = false,
-  value?: string
-) => {
-  // 노출 조건: (제출되었거나 필드에서 포커스가 나갔을 때) && 에러가 존재함 && 값이 비어있지 않음
-  if ((isSubmitted || isTouched) && error && !!value) {
+export const getAuthFieldError = (error?: { message?: string }, value?: string) => {
+  // mode: 'onTouched'로 인해 에러가 발생했다는 것은 이미 터치되었거나 제출되었음을 의미하므로 검사를 생략합니다.
+  if (error && !!value) {
     return error;
   }
   return undefined;

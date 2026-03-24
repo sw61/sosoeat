@@ -6,14 +6,14 @@ import { cn } from '@/lib/utils';
 interface AuthSubmitButtonProps
   extends React.ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
   isActive: boolean;
-  isLoading: boolean;
+  isLoading?: boolean;
   loadingText?: string;
   label: string;
 }
 
 export const AuthSubmitButton = ({
   isActive,
-  isLoading,
+  isLoading = false,
   loadingText,
   label,
   className,
@@ -24,13 +24,15 @@ export const AuthSubmitButton = ({
       type="submit"
       disabled={!isActive || isLoading}
       className={cn(
-        'mt-2 h-14 w-full rounded-[16px] text-base font-semibold transition-all duration-200 hover:opacity-90 disabled:pointer-events-auto disabled:cursor-not-allowed',
-        isActive ? 'bg-sosoeat-orange-600 text-white' : 'bg-sosoeat-gray-300 text-sosoeat-gray-700',
+        'mt-2 h-[52px] w-full rounded-[16px] text-base font-semibold transition-all duration-200 disabled:pointer-events-auto disabled:cursor-not-allowed',
+        isActive
+          ? 'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 text-white'
+          : 'bg-sosoeat-gray-300 text-sosoeat-gray-700',
         className
       )}
       {...props}
     >
-      {isLoading ? (loadingText ? loadingText : `${label} 중...`) : label}
+      {isLoading ? (loadingText ?? `${label} 중...`) : label}
     </Button>
   );
 };
