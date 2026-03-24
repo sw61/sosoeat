@@ -25,7 +25,7 @@ export const Default: Story = {
   render: function SearchBarStory(args) {
     const [value, setValue] = useState('');
     return (
-      <div className="w-[1140px] px-4">
+      <div className="w-full max-w-[1140px] px-4">
         <SearchBar placeholder={args.placeholder} value={value} onChange={setValue} />
       </div>
     );
