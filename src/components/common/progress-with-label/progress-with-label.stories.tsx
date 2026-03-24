@@ -10,10 +10,29 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
+export const GroupBuy: Story = {
   args: {
+    id: 'progress-group-buy',
     current: 5,
     max: 10,
     variant: 'groupBuy',
+  },
+};
+
+export const GroupEat: Story = {
+  args: {
+    id: 'progress-group-eat',
+    current: 3,
+    max: 8,
+    variant: 'groupEat',
+  },
+};
+
+export const Full: Story = {
+  args: {
+    id: 'progress-full',
+    current: 10,
+    max: 10,
+    variant: 'groupEat',
   },
 };
