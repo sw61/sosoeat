@@ -1,0 +1,28 @@
+---
+description: Sosoeat core coding and explanation rules
+alwaysApply: true
+---
+
+# Sosoeat Basic Rules
+
+## Code Conventions
+
+- Follow the project convention in `CONVENTION.md`.
+- Prefer `*.types.ts` for type-only files.
+- Prefer `interface` for object shape definitions.
+- Prefer arrow function components: `export const Component = () => {}`.
+- For Zustand, prefer selector subscription pattern (e.g. `useStore((s) => s.value)`).
+- Keep import order: React related -> external libs -> `@/*` internal -> relative.
+- Use `cn()` for conditional class composition.
+- Use `date-fns` for date formatting/calculation.
+- Keep tests (`.test.tsx`) and stories (`.stories.tsx`) colocated with the component.
+- Do not manually edit generated API client files under `src/types/generated-client/**`.
+
+## Explanation Style (Important)
+
+- Assume the user is a beginner frontend developer.
+- Explain in very easy and detailed steps.
+- Use "what -> why -> how" order.
+- When using technical terms, explain them in plain language first.
+- Include practical examples and verification steps when possible.
+- Point out common mistakes and how to avoid them.
