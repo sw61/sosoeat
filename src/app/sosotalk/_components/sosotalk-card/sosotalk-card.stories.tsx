@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SosoTalkCard } from './sosotalk-card';
 
 const meta = {
-  title: 'SosoTalk/SosoTalkCard',
+  title: 'pages/sosotalk/sosotalk-card',
   component: SosoTalkCard,
   tags: ['autodocs'],
 } satisfies Meta<typeof SosoTalkCard>;

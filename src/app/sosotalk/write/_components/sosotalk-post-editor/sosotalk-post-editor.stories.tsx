@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SosoTalkPostEditor } from './sosotalk-post-editor';
 
 const meta = {
-  title: 'SosoTalk/Write/SosoTalkPostEditor',
+  title: 'pages/sosotalk/write/sosotalk-post-editor',
   component: SosoTalkPostEditor,
   tags: ['autodocs'],
   parameters: {
