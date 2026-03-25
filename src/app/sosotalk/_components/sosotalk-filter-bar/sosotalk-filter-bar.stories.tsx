@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SosoTalkFilterBar, type SosoTalkSortValue, type SosoTalkTabValue } from './index';
 
 const meta = {
-  title: 'SosoTalk/SosoTalkFilterBar',
+  title: 'pages/sosotalk/sosotalk-filterbar',
   component: SosoTalkFilterBar,
   tags: ['autodocs'],
   parameters: {
