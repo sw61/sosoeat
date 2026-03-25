@@ -1,5 +1,7 @@
+import { NotificationsApi } from '@/types/generated-client';
 import { AuthApi } from '@/types/generated-client/apis/AuthApi';
 import { MeetingsApi } from '@/types/generated-client/apis/MeetingsApi';
+import { PostsApi } from '@/types/generated-client/apis/PostsApi';
 import { UsersApi } from '@/types/generated-client/apis/UsersApi';
 import { Configuration } from '@/types/generated-client/runtime';
 
@@ -17,4 +19,6 @@ const apiConfig = new Configuration({
 // 각 Api 클래스에 같은 설정을 넘긴다
 export const authApi = new AuthApi(apiConfig);
 export const meetingsApi = new MeetingsApi(apiConfig);
+export const postsApi = new PostsApi(apiConfig);
 export const usersApi = new UsersApi(apiConfig);
+export const notificationsApi = new NotificationsApi(apiConfig);
