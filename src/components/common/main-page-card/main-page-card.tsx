@@ -130,16 +130,33 @@ export const MainPageCard = ({ meeting }: MainPageCardProps) => {
       </CardContent>
 
       <CardFooter className="gap-1.5 rounded-none border-t border-[#F9FAFB] bg-transparent px-4 pt-1.5 pb-4 shadow-none ring-0">
-        <Image
-          src={meeting.host.image}
-          alt={meeting.host.name}
-          width={32}
-          height={32}
-          className="border-sosoeat-gray-300 overflow-hidden rounded-full border object-cover"
-        />
-        <span className="text-base leading-6 font-semibold text-[#6B7280]">
-          {meeting.host.name}
-        </span>
+        {meeting.host && meeting.host.image ? (
+          <>
+            <Image
+              src={meeting.host.image}
+              alt={meeting.host.name}
+              width={32}
+              height={32}
+              className="border-sosoeat-gray-300 overflow-hidden rounded-full border object-cover"
+            />
+            <span className="text-base leading-6 font-semibold text-[#6B7280]">
+              {meeting.host.name}
+            </span>
+          </>
+        ) : (
+          <>
+            <Image
+              src="/icons/human-basic.svg"
+              alt="empty-user"
+              width={32}
+              height={32}
+              className="border-sosoeat-gray-300 overflow-hidden rounded-full border object-cover"
+            />
+            <span className="text-base leading-6 font-semibold text-[#6B7280]">
+              {meeting.host.name}
+            </span>
+          </>
+        )}
       </CardFooter>
     </Card>
   );
