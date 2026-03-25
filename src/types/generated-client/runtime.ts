@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-export const BASE_PATH = 'https://dallaem-backend.vercel.app'.replace(/\/+$/, '');
+export const BASE_PATH = 'https://together-dallaem-api.vercel.app'.replace(/\/+$/, '');
 
 export interface ConfigurationParameters {
   basePath?: string; // override base path

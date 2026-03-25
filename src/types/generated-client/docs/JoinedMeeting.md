@@ -25,6 +25,7 @@
 | `createdAt`        | Date            |
 | `updatedAt`        | Date            |
 | `host`             | [Host](Host.md) |
+| `isFavorited`      | boolean         |
 | `joinedAt`         | Date            |
 | `isReviewed`       | boolean         |
 | `isCompleted`      | boolean         |
@@ -57,6 +58,7 @@ const example = {
   "createdAt": 2026-02-01T10:00:00.000Z,
   "updatedAt": 2026-02-01T10:00:00.000Z,
   "host": null,
+  "isFavorited": false,
   "joinedAt": 2026-02-01T10:00:00.000Z,
   "isReviewed": false,
   "isCompleted": false,

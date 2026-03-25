@@ -5,7 +5,9 @@
 | Name       | Type   |
 | ---------- | ------ |
 | `id`       | number |
+| `type`     | string |
 | `name`     | string |
+| `image`    | string |
 | `dateTime` | Date   |
 
 ## Example
@@ -16,7 +18,9 @@ import type { UserReviewMeeting } from ''
 // TODO: Update the object below with actual values
 const example = {
   "id": 123,
+  "type": DALLAEMFIT,
   "name": 달램핏 모임,
+  "image": https://example.com/image.jpg,
   "dateTime": 2026-02-01T14:00:00Z,
 } satisfies UserReviewMeeting
 

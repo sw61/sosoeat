@@ -27,6 +27,7 @@ export * from './MeetingWithHost';
 export * from './Notification';
 export * from './NotificationData';
 export * from './NotificationList';
+export * from './OgMetadata';
 export * from './PaginatedReview';
 export * from './Participant';
 export * from './ParticipantList';

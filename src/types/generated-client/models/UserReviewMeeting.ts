@@ -26,11 +26,23 @@ export interface UserReviewMeeting {
    */
   id: number;
   /**
+   * 모임 타입
+   * @type {string}
+   * @memberof UserReviewMeeting
+   */
+  type: string;
+  /**
    *
    * @type {string}
    * @memberof UserReviewMeeting
    */
   name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserReviewMeeting
+   */
+  image: string;
   /**
    *
    * @type {Date}
@@ -44,7 +56,9 @@ export interface UserReviewMeeting {
  */
 export function instanceOfUserReviewMeeting(value: object): value is UserReviewMeeting {
   if (!('id' in value) || value['id'] === undefined) return false;
+  if (!('type' in value) || value['type'] === undefined) return false;
   if (!('name' in value) || value['name'] === undefined) return false;
+  if (!('image' in value) || value['image'] === undefined) return false;
   if (!('dateTime' in value) || value['dateTime'] === undefined) return false;
   return true;
 }
@@ -62,7 +76,9 @@ export function UserReviewMeetingFromJSONTyped(
   }
   return {
     id: json['id'],
+    type: json['type'],
     name: json['name'],
+    image: json['image'],
     dateTime: new Date(json['dateTime']),
   };
 }
@@ -81,7 +97,9 @@ export function UserReviewMeetingToJSONTyped(
 
   return {
     id: value['id'],
+    type: value['type'],
     name: value['name'],
+    image: value['image'],
     dateTime: value['dateTime'].toISOString(),
   };
 }

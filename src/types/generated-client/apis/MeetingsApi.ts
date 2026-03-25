@@ -201,7 +201,7 @@ export class MeetingsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 모임 목록을 조회합니다. 취소되지 않은 모임만 반환됩니다.
+   * 모임 목록을 조회합니다. 취소되지 않은 모임만 반환됩니다. 로그인 시 각 모임의 찜 여부(isFavorited)가 포함됩니다.
    * 모임 목록
    */
   async teamIdMeetingsGetRaw(
@@ -215,7 +215,7 @@ export class MeetingsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 모임 목록을 조회합니다. 취소되지 않은 모임만 반환됩니다.
+   * 모임 목록을 조회합니다. 취소되지 않은 모임만 반환됩니다. 로그인 시 각 모임의 찜 여부(isFavorited)가 포함됩니다.
    * 모임 목록
    */
   async teamIdMeetingsGet(

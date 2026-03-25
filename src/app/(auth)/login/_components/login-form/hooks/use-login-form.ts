@@ -19,7 +19,7 @@ export const useLoginForm = ({ onSubmit, isLoading, defaultValues }: LoginFormPr
     control,
     getFieldState,
     formState,
-    formState: { isSubmitted, isSubmitting, isValid },
+    formState: { isSubmitting, isValid },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
@@ -52,19 +52,9 @@ export const useLoginForm = ({ onSubmit, isLoading, defaultValues }: LoginFormPr
   const emailState = getFieldState('email', formState);
   const passwordState = getFieldState('password', formState);
 
-  const emailError = getAuthFieldError(
-    emailState.error,
-    emailState.isTouched,
-    isSubmitted,
-    watchEmail
-  );
+  const emailError = getAuthFieldError(emailState.error, watchEmail);
 
-  const passwordError = getAuthFieldError(
-    passwordState.error,
-    passwordState.isTouched,
-    isSubmitted,
-    watchPassword
-  );
+  const passwordError = getAuthFieldError(passwordState.error, watchPassword);
 
   const isButtonActive = isValid;
 

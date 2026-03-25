@@ -1,6 +1,6 @@
 # AuthApi
 
-All URIs are relative to *https://dallaem-backend.vercel.app*
+All URIs are relative to *https://together-dallaem-api.vercel.app*
 
 | Method                                                        | HTTP request                    | Description       |
 | ------------------------------------------------------------- | ------------------------------- | ----------------- |

@@ -149,6 +149,12 @@ export interface JoinedMeeting {
    */
   host: Host;
   /**
+   * 로그인한 사용자의 찜 여부 (비로그인 시 미포함)
+   * @type {boolean}
+   * @memberof JoinedMeeting
+   */
+  isFavorited?: boolean;
+  /**
    *
    * @type {Date}
    * @memberof JoinedMeeting
@@ -229,6 +235,7 @@ export function JoinedMeetingFromJSONTyped(json: any, ignoreDiscriminator: boole
     createdAt: new Date(json['createdAt']),
     updatedAt: new Date(json['updatedAt']),
     host: HostFromJSON(json['host']),
+    isFavorited: json['isFavorited'] == null ? undefined : json['isFavorited'],
     joinedAt: new Date(json['joinedAt']),
     isReviewed: json['isReviewed'],
     isCompleted: json['isCompleted'],
@@ -269,6 +276,7 @@ export function JoinedMeetingToJSONTyped(
     createdAt: value['createdAt'].toISOString(),
     updatedAt: value['updatedAt'].toISOString(),
     host: HostToJSON(value['host']),
+    isFavorited: value['isFavorited'],
     joinedAt: value['joinedAt'].toISOString(),
     isReviewed: value['isReviewed'],
     isCompleted: value['isCompleted'],

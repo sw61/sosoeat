@@ -1,6 +1,6 @@
 # PostsApi
 
-All URIs are relative to *https://dallaem-backend.vercel.app*
+All URIs are relative to *https://together-dallaem-api.vercel.app*
 
 | Method                                                                                               | HTTP request                                             | Description |
 | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ----------- |
@@ -22,7 +22,7 @@ All URIs are relative to *https://dallaem-backend.vercel.app*
 
 게시글 목록
 
-게시글 목록을 조회합니다. **조회 타입:** - type&#x3D;all: 전체 게시글 (기본값, 최신순) - type&#x3D;best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순) **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
+게시글 목록을 조회합니다. **조회 타입:** - type&#x3D;all: 전체 게시글 (기본값, 최신순) - type&#x3D;best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순) **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순 **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
 
 ### Example
 
@@ -45,7 +45,7 @@ async function example() {
     type: type_example,
     // string | 제목/내용 검색 (optional)
     keyword: keyword_example,
-    // 'createdAt' | 'viewCount' | 'likeCount' | 정렬 기준 (optional)
+    // 'createdAt' | 'viewCount' | 'likeCount' | 'commentCount' | 정렬 기준 (optional)
     sortBy: sortBy_example,
     // 'asc' | 'desc' | 정렬 순서 (optional)
     sortOrder: sortOrder_example,
@@ -69,15 +69,15 @@ example().catch(console.error);
 
 ### Parameters
 
-| Name          | Type                                  | Description                           | Notes                                                                                  |
-| ------------- | ------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------- |
-| **teamId**    | `string`                              |                                       | [Defaults to `undefined`]                                                              |
-| **type**      | `all`, `best`                         | 게시글 타입 (all: 전체, best: 베스트) | [Optional] [Defaults to `&#39;all&#39;`] [Enum: all, best]                             |
-| **keyword**   | `string`                              | 제목/내용 검색                        | [Optional] [Defaults to `undefined`]                                                   |
-| **sortBy**    | `createdAt`, `viewCount`, `likeCount` | 정렬 기준                             | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, viewCount, likeCount] |
-| **sortOrder** | `asc`, `desc`                         | 정렬 순서                             | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                            |
-| **cursor**    | `string`                              | 다음 페이지를 위한 커서               | [Optional] [Defaults to `undefined`]                                                   |
-| **size**      | `number`                              | 페이지 크기 (1-100)                   | [Optional] [Defaults to `10`]                                                          |
+| Name          | Type                                                  | Description                           | Notes                                                                                                |
+| ------------- | ----------------------------------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **teamId**    | `string`                                              |                                       | [Defaults to `undefined`]                                                                            |
+| **type**      | `all`, `best`                                         | 게시글 타입 (all: 전체, best: 베스트) | [Optional] [Defaults to `&#39;all&#39;`] [Enum: all, best]                                           |
+| **keyword**   | `string`                                              | 제목/내용 검색                        | [Optional] [Defaults to `undefined`]                                                                 |
+| **sortBy**    | `createdAt`, `viewCount`, `likeCount`, `commentCount` | 정렬 기준                             | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, viewCount, likeCount, commentCount] |
+| **sortOrder** | `asc`, `desc`                                         | 정렬 순서                             | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                                          |
+| **cursor**    | `string`                                              | 다음 페이지를 위한 커서               | [Optional] [Defaults to `undefined`]                                                                 |
+| **size**      | `number`                                              | 페이지 크기 (1-100)                   | [Optional] [Defaults to `10`]                                                                        |
 
 ### Return type
 

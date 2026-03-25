@@ -269,4 +269,4 @@ if (page1.hasMore && cursor) {
 
 - API 클라이언트: `src/lib/api-client.ts`
 - 생성된 타입: `src/types/generated-client/`
-- OpenAPI 스펙: https://dallaem-backend.vercel.app/doc
+- OpenAPI 스펙: https://together-dallaem-api.vercel.app/docs

@@ -17,7 +17,7 @@
     "test:watchAll": "jest --watchAll",
     "test:changed": "jest --onlyChanged",
     "test:coverage": "jest --coverage",
-    "generate:api": "docker run --rm -v \"%cd%:/local\" openapitools/openapi-generator-cli generate -i https://dallaem-backend.vercel.app/doc -g typescript-fetch -o /local/src/types/generated-client"
+    "generate:api": "docker run --rm -v \"%cd%:/local\" openapitools/openapi-generator-cli generate -i https://together-dallaem-api.vercel.app/openapi.json -g typescript-fetch -o /local/src/types/generated-client"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

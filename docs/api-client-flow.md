@@ -8,15 +8,15 @@
 
 ```
 [같이 달램 백엔드 서버]
-https://dallaem-backend.vercel.app
+https://together-dallaem-api.vercel.app
          │
          │  "내 API는 이렇게 생겼어" 라고 정리한 문서
          │  (어떤 URL에, 어떤 데이터 보내고 받는지)
          ▼
-  /doc 경로에서 JSON 형태로 제공
+  /docs 경로에서 OpenAPI 문서 제공
 ```
 
-- `/doc`에 접속하면 **OpenAPI 스펙(JSON)** 이 보입니다.
+- `/docs`에 접속하면 **OpenAPI 문서**를 확인할 수 있습니다.
 - 여기에 **모든 API 경로, DTO, 요청/응답 형식**이 정의되어 있습니다.
 
 ---
@@ -36,7 +36,7 @@ https://dallaem-backend.vercel.app
 `package.json` 예시:
 
 ```json
-"generate:api": "docker run ... openapitools/openapi-generator-cli generate -i https://dallaem-backend.vercel.app/doc -g typescript-fetch -o /local/src/types/generated-client"
+"generate:api": "docker run ... openapitools/openapi-generator-cli generate -i https://together-dallaem-api.vercel.app/docs -g typescript-fetch -o /local/src/types/generated-client"
 ```
 
 - `-i`: 스펙 위치(URL)

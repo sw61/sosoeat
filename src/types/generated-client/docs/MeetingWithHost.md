@@ -25,6 +25,7 @@
 | `createdAt`        | Date            |
 | `updatedAt`        | Date            |
 | `host`             | [Host](Host.md) |
+| `isFavorited`      | boolean         |
 
 ## Example
 
@@ -54,6 +55,7 @@ const example = {
   "createdAt": 2026-02-01T10:00:00.000Z,
   "updatedAt": 2026-02-01T10:00:00.000Z,
   "host": null,
+  "isFavorited": false,
 } satisfies MeetingWithHost
 
 console.log(example)

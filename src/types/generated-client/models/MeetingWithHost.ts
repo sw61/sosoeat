@@ -148,6 +148,12 @@ export interface MeetingWithHost {
    * @memberof MeetingWithHost
    */
   host: Host;
+  /**
+   * 로그인한 사용자의 찜 여부 (비로그인 시 미포함)
+   * @type {boolean}
+   * @memberof MeetingWithHost
+   */
+  isFavorited?: boolean;
 }
 
 /**
@@ -211,6 +217,7 @@ export function MeetingWithHostFromJSONTyped(
     createdAt: new Date(json['createdAt']),
     updatedAt: new Date(json['updatedAt']),
     host: HostFromJSON(json['host']),
+    isFavorited: json['isFavorited'] == null ? undefined : json['isFavorited'],
   };
 }
 
@@ -248,5 +255,6 @@ export function MeetingWithHostToJSONTyped(
     createdAt: value['createdAt'].toISOString(),
     updatedAt: value['updatedAt'].toISOString(),
     host: HostToJSON(value['host']),
+    isFavorited: value['isFavorited'],
   };
 }

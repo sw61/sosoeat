@@ -53,3 +53,5 @@ storybook-static
 # swc
 .swc/
 
+# cursor
+.cursor/
