@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 import { Send } from 'lucide-react';
 
@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
-import { CommentInputProps } from './comment-input.types';
+import type { CommentInputProps } from './comment-input.types';
 
 export function CommentInput({
   value = '',
@@ -25,7 +25,7 @@ export function CommentInput({
 }: CommentInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const textarea = textareaRef.current;
 
     if (!textarea) {
@@ -62,9 +62,14 @@ export function CommentInput({
           placeholder={placeholder}
           disabled={disabled}
           rows={1}
-          onChange={event => onChange?.(event.target.value)}
-          onKeyDown={event => {
-            if (!submitOnEnter || event.key !== 'Enter' || event.shiftKey) {
+          onChange={(event) => onChange?.(event.target.value)}
+          onKeyDown={(event) => {
+            if (
+              !submitOnEnter ||
+              event.key !== 'Enter' ||
+              event.shiftKey ||
+              event.nativeEvent.isComposing
+            ) {
               return;
             }
 
