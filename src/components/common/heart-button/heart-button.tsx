@@ -29,16 +29,10 @@ const ringSizeClass = {
 export function HeartButton({ className, size = 'lg', isFavorited }: HeartButtonProps) {
   const iconPx = sizeIcon[size];
   const [isFavoritedState, setIsFavoritedState] = useState(() => isFavorited ?? false);
-  const [src, setSrc] = useState(() =>
-    isFavoritedState ? '/icons/main-page-heart.svg' : '/icons/main-page-not-heart.svg'
-  );
+  const src = isFavoritedState ? '/icons/main-page-heart.svg' : '/icons/main-page-not-heart.svg';
 
   const handleClick = () => {
     setIsFavoritedState((prev) => !prev);
-    setSrc(isFavoritedState ? '/icons/main-page-heart.svg' : '/icons/main-page-not-heart.svg');
-    // setInterval(() => {
-    //   //API 부분
-    // }, 1000);
   };
 
   return (
