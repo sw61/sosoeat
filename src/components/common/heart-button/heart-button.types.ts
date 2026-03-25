@@ -1,6 +1,8 @@
+export type HeartSize = 'large' | 'medium' | 'small';
+
 export interface HeartButtonProps {
-  isLiked: boolean;
-  onToggle: () => void;
+  size?: HeartSize;
+  isLiked?: boolean;
+  onToggle?: (isLiked: boolean) => void;
   className?: string;
-  iconSize?: number;
 }
