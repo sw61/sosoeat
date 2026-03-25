@@ -19,8 +19,18 @@ jest.mock('framer-motion', () => ({
 }));
 
 describe('HeartButton', () => {
-  it('좋아요 이미지와 버튼이 렌더링된다', () => {
-    render(<HeartButton />);
+  it('기본 상태에서 빈 하트 아이콘이 렌더링된다', () => {
+    render(<HeartButton isFavorited={false} />);
+
+    expect(screen.getByRole('button', { name: '좋아요' })).toBeInTheDocument();
+    expect(screen.getByTestId('heart-button-image')).toHaveAttribute(
+      'src',
+      '/icons/main-page-not-heart.svg'
+    );
+  });
+
+  it('찜 상태에서 채운 하트 아이콘이 렌더링된다', () => {
+    render(<HeartButton isFavorited />);
 
     expect(screen.getByRole('button', { name: '좋아요' })).toBeInTheDocument();
     expect(screen.getByTestId('heart-button-image')).toHaveAttribute(
