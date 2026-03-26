@@ -9,13 +9,12 @@ import { MeetingTabsList } from './meeting-tabs-list';
 
 export function MeetingTabs() {
   const [activeTab, setActiveTab] = useState<TabValue>('all');
-
   // 추후 실제 데이터로 교체
   const isEmpty = true;
 
   return (
     <Tabs
-      className="p-6 px-2 max-md:w-[674px] max-sm:flex max-sm:flex-col max-sm:items-center md:w-[1108px]"
+      className="max-w-[1108px] p-6 px-2 max-sm:flex max-sm:w-full max-sm:flex-col max-sm:items-center md:w-[674px]"
       value={activeTab}
       onValueChange={(v) => setActiveTab(v as TabValue)}
     >
