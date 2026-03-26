@@ -8,13 +8,13 @@ import {
 } from '@/app/meetings/[id]/_components/meeting-detail-card/date-badge';
 import { DeadlineBadge } from '@/components/common/deadline-badge';
 import { HeartButton } from '@/components/common/heart-button';
-import { ProgressWithLabel } from '@/components/common/progress-with-label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import type { MeetingCategory } from '@/types/meeting';
 
 import { ActionButton } from './_components/action-button';
 import { EllipsisMenu } from './_components/ellipsis-menu';
+import { MeetingDetailProgress } from './_components/meeting-detail-progress';
 import { useMeetingDetailCard } from './hooks/use-meeting-detail-card';
 import { iconBgVariants, iconColorVariants } from './meeting-detail-card.constants';
 import type { MeetingDetailCardProps } from './meeting-detail-card.types';
@@ -66,7 +66,7 @@ function ParticipantsRow({ meetingId, current, max, category, className }: Parti
       </div>
       <div className="flex-1">
         <p className="text-sosoeat-gray-600 mb-1 text-xs font-semibold lg:text-sm">참여 현황</p>
-        <ProgressWithLabel
+        <MeetingDetailProgress
           id={`meeting-${meetingId}-progress`}
           current={current}
           max={max}

@@ -24,7 +24,7 @@ describe('ProgressWithLabel', () => {
       />
     );
 
-    const peopleNumberText = screen.getByText('5/10');
+    const peopleNumberText = screen.getByText('5/10 참여중');
 
     expect(peopleNumberText).toBeInTheDocument();
   });
