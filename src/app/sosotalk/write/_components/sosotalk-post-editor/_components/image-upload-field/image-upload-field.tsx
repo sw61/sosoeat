@@ -33,7 +33,7 @@ export function ImageUploadField({
           type="button"
           onClick={onRemove}
           disabled={disabled}
-          className="absolute top-8 right-8 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white transition-opacity hover:opacity-85 disabled:pointer-events-none disabled:opacity-50"
+          className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/70 text-white transition-opacity hover:opacity-85 disabled:pointer-events-none disabled:opacity-50"
           aria-label="업로드한 이미지 삭제"
         >
           <X className="h-3.5 w-3.5" />
