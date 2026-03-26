@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Providers } from '@/app/providers';
-import { NavigationBar } from '@/components/common/navigation-bar/navigation-bar';
+import { NavigationBarClient } from '@/components/common/navigation-bar/navigation-bar-client';
 import { Toaster } from '@/components/ui/sonner/index';
 
 import '@/app/globals.css';
@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className="min-w-[375px]">
         <Providers>
-          <NavigationBar />
+          <NavigationBarClient />
           <main>{children}</main>
         </Providers>
         <Toaster />
