@@ -15,8 +15,9 @@ import type { SearchBarProps } from './search-bar.types';
  * shadcn `Input`에 `className`으로 스펙을 덮어씀 (`cn` tailwind-merge).
  */
 const searchInputClassName = cn(
-  'box-border h-[47px] w-full min-w-0 rounded-[14px] border border-solid border-[#E5E8EB] bg-white dark:bg-white',
-  'py-[12px] pr-4 pl-10',
+  // mobile-first; no arbitrary px
+  'box-border h-12 w-full min-w-0 rounded-xl border border-solid border-[#E5E8EB] bg-white dark:bg-white',
+  'px-4 py-3 pl-10',
   'text-sm leading-5 font-normal text-[#191F28]',
   'placeholder:text-[rgba(25,31,40,0.5)]',
   'transition-colors',
@@ -46,10 +47,10 @@ export const SearchBar = ({
   };
 
   return (
-    <div className={cn('w-full max-w-[1140px]', className)}>
+    <div className={cn('w-full', className)}>
       <div className="relative w-full min-w-0">
         <Search
-          className="pointer-events-none absolute top-1/2 left-3 size-[18px] -translate-y-1/2 text-[rgba(25,31,40,0.5)]"
+          className="pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-[rgba(25,31,40,0.5)]"
           aria-hidden
           strokeWidth={2}
         />
