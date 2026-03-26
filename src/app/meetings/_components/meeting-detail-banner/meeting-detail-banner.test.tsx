@@ -13,7 +13,8 @@ describe('MeetingDetailBanner', () => {
   const defaultProps = {
     imageUrl: 'https://example.com/banner.jpg',
     alt: '모임 배너',
-    titleContent: <h2>함께하면 더 맛있어요</h2>,
+    titleContent: '함께하면',
+    subtitleContent: '더 맛있어요',
   };
 
   it('배너 이미지와 대체 텍스트가 렌더링된다', () => {

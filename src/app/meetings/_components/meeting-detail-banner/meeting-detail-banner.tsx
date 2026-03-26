@@ -1,30 +1,57 @@
 import Image from 'next/image';
 
+import { cn } from '@/lib/utils';
+
 import type { MeetingDetailBannerProps } from './meeting-detail-banner.type';
+
+// mobile-first (no arbitrary px): base layout first, scale with sm/md/lg.
+const bannerShellClass =
+  'relative w-full max-w-6xl overflow-hidden rounded-none mt-11 h-48 sm:mt-24 sm:h-56 sm:rounded-3xl lg:h-60';
+
+const headlineClass =
+  'font-sans text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl';
+
+const subtitleWrapClass =
+  'mt-4 hidden max-w-md text-base font-normal leading-7 text-white/80 md:block';
 
 export default function MeetingDetailBanner({
   imageUrl,
   alt,
   titleContent,
+  subtitleContent,
   subtitle,
   className,
 }: MeetingDetailBannerProps) {
   return (
-    <div
-      className={`flex w-full items-start justify-center px-4 max-[375px]:px-0 sm:px-6 ${className ?? ''}`}
-    >
-      <div className="relative box-border w-full max-w-[1140px] shrink-0 overflow-hidden rounded-none max-[375px]:mt-[44px] max-[375px]:h-[192px] max-[375px]:max-h-[192px] max-[375px]:min-h-[192px] min-[376px]:mt-[94px] min-[376px]:h-[220px] min-[376px]:max-h-[220px] min-[376px]:min-h-[220px] min-[376px]:rounded-[25px] min-[744px]:h-[244px] min-[744px]:max-h-[244px] min-[744px]:min-h-[244px] min-[1920px]:h-[280px] min-[1920px]:max-h-[280px] min-[1920px]:min-h-[280px]">
+    <div className={cn('flex w-full items-start justify-center', className)}>
+      <div className={bannerShellClass}>
         <Image
           src={imageUrl}
           alt={alt}
           fill
           className="object-cover"
-          sizes="(max-width: 375px) 375px, (max-width: 743px) 100vw, (max-width: 1919px) 1140px, 1140px"
+          sizes="(max-width: 768px) 100vw, 1140px"
+          priority
         />
-        <div className="absolute inset-0 bg-[rgba(0,0,0,0.55)]" aria-hidden />
-        <div className="absolute inset-0 z-10">
-          {titleContent}
-          {subtitle != null ? <div className="max-[490px]:hidden">{subtitle}</div> : null}
+        <div
+          className="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,0,0,0.55),rgba(0,0,0,0.55))]"
+          aria-hidden
+        />
+        <div className="absolute inset-0 z-10 flex flex-col justify-start p-6 sm:p-10">
+          <h2 className={headlineClass}>
+            {titleContent} <span className="text-sosoeat-orange-500">{subtitleContent}</span>
+          </h2>
+
+          {subtitle != null ? (
+            <div
+              className={subtitleWrapClass}
+              style={{
+                fontFamily: "'Noto Sans KR', var(--font-pretendard-local), sans-serif",
+              }}
+            >
+              {subtitle}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
