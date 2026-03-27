@@ -1,13 +1,12 @@
 'use client';
 
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronLeft } from 'lucide-react';
 
 import {
   AuthSubmitButton,
-  getAuthFieldError,
   getErrorAnimationClasses,
   getInputClasses,
 } from '@/app/(auth)/_components';
@@ -15,37 +14,29 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import { nicknameSchema, NicknameValues } from '../signup-form.schema';
-import { MiddleStepProps } from '../signup-form.types';
+import { nameSchema } from '../signup-form.schema';
+import { MiddleStepProps, NameValues } from '../signup-form.types';
 
-export const NicknameStep = ({
+export const NameStep = ({
   onNext,
   onPrev,
   isLoading,
   defaultValues,
-}: MiddleStepProps<NicknameValues>) => {
+}: MiddleStepProps<NameValues>) => {
   const {
     register,
     handleSubmit,
-    control,
-    formState: { errors, isValid },
-  } = useForm<NicknameValues>({
-    resolver: zodResolver(nicknameSchema),
-    mode: 'onTouched',
-    delayError: 1000,
+    formState: { errors, isValid, touchedFields },
+  } = useForm<NameValues>({
+    resolver: zodResolver(nameSchema),
+    mode: 'all',
     defaultValues,
   });
 
-  const nicknameValue = useWatch({
-    control,
-    name: 'nickname',
-  });
+  const nameError = touchedFields.name ? errors.name : undefined;
+  const hasError = !!nameError?.message?.trim();
 
-  // 공통 헬퍼 함수를 사용하여 에러 노출 여부 결정
-  const nicknameError = getAuthFieldError(errors.nickname, nicknameValue);
-  const hasError = !!nicknameError;
-
-  const onSubmit = (data: NicknameValues) => {
+  const onSubmit = (data: NameValues) => {
     onNext(data);
   };
 
@@ -53,20 +44,20 @@ export const NicknameStep = ({
     <form onSubmit={handleSubmit(onSubmit)} className="flex h-full flex-col">
       <div className="flex-1">
         <Field className="gap-0">
-          <FieldLabel htmlFor="nickname" className="mb-1 ml-1 gap-0 text-sm font-normal">
-            닉네임<span className="text-destructive ml-0.5">*</span>
+          <FieldLabel htmlFor="name" className="mb-1 ml-1 gap-0 text-sm font-normal">
+            이름<span className="text-destructive ml-0.5">*</span>
           </FieldLabel>
           <FieldContent className="gap-1.5">
             <Input
-              id="nickname"
-              placeholder="닉네임을 입력하세요"
+              id="name"
+              placeholder="이름을 입력하세요"
               className={getInputClasses(hasError)}
-              {...register('nickname')}
+              {...register('name')}
               aria-invalid={hasError}
             />
             <div className={getErrorAnimationClasses(hasError)}>
               <div className="overflow-hidden">
-                <FieldError errors={[nicknameError]} className="ml-1" />
+                <FieldError errors={[nameError]} className="ml-1" />
               </div>
             </div>
           </FieldContent>

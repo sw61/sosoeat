@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 
-export type MeetingDetailBannerProps = {
+export type MeetingSearchBannerProps = {
   imageUrl: string;
   alt: string;
-  titleContent: ReactNode;
+  titleContent: string;
+  subtitleContent: string;
   /** 376px 이상에서만 표시 (375px 이하는 숨김) */
   subtitle?: ReactNode;
   className?: string;

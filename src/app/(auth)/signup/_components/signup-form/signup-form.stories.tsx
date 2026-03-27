@@ -38,7 +38,7 @@ export const Loading: Story = {
   args: {
     ...EmailStep.args,
     isLoading: true,
-    defaultStep: 'nickname',
+    defaultStep: 'name',
   },
 };
 
@@ -52,6 +52,6 @@ export const PasswordStep: Story = {
 export const NicknameStep: Story = {
   args: {
     ...EmailStep.args,
-    defaultStep: 'nickname',
+    defaultStep: 'name',
   },
 };

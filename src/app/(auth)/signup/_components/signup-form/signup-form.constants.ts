@@ -13,9 +13,9 @@ export const STEP_HEADING_MAP: Record<SignupStep, { title: string; description: 
     title: '비밀번호를 설정하세요',
     description: '로그인 시 사용할 수 있는 안전한 비밀번호를 입력해주세요',
   },
-  nickname: {
+  name: {
     title: '프로필을 설정하세요',
-    description: '모임에서 사용할 닉네임을 설정해주세요',
+    description: '모임에서 사용할 이름을 설정해주세요',
   },
 };
 
@@ -25,7 +25,7 @@ export const STEP_HEADING_MAP: Record<SignupStep, { title: string; description: 
 export const STEP_TO_NUMBER: Record<SignupStep, number> = {
   email: 1,
   password: 2,
-  nickname: 3,
+  name: 3,
 };
 
 /**
@@ -34,5 +34,5 @@ export const STEP_TO_NUMBER: Record<SignupStep, number> = {
 export const SIGNUP_STEPS = [
   { id: 'email', label: '이메일', number: 1 },
   { id: 'password', label: '비밀번호', number: 2 },
-  { id: 'nickname', label: '프로필', number: 3 },
+  { id: 'name', label: '이름', number: 3 },
 ] as const;
