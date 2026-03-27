@@ -1,36 +1,64 @@
 import { create } from 'zustand';
 
-/**
- * 로그인한 사용자 정보
- * TODO: 실제 인증 구현 시 백엔드 응답 스펙에 맞게 필드 수정 필요
- */
-interface User {
-  id: string;
+export interface AuthUser {
+  id: number;
+  email: string;
   name: string;
-  profileImage?: string;
+  teamId?: string;
+  companyName?: string;
+  image?: string | null;
 }
+
+interface AuthState {
+  accessToken: string | null;
+  isAuthenticated: boolean;
+  user: AuthUser | null;
+  isInitialized: boolean;
+}
+
+interface AuthActions {
+  login: (token: string, user: AuthUser) => void;
+  logout: () => void;
+  updateToken: (newToken: string) => void;
+  setInitialized: (val: boolean) => void;
+}
+
+export type AuthStore = AuthState & AuthActions;
 
 /**
- * 인증 스토어 상태 및 액션 타입
- *
- * [교체 가이드 - auth 담당자에게]
- * 이 store는 NavigationBar 개발을 위한 임시 mock입니다.
- * 실제 인증 구현 시 아래 인터페이스를 유지한 채로 내부 로직만 교체해 주세요.
- * - user: 로그인 사용자 정보 (비로그인 시 null)
- * - logout: 로그아웃 처리 함수
+ * [Application Layer] useAuthStore
+ * 클라이언트 사이드 인증 상태 관리
+ * BFF로부터 직접 토큰과 유저 정보를 주입받아 관리합니다.
  */
-interface AuthState {
-  user: User | null;
-  setUser: (user: User | null) => void;
-  logout: () => void;
-}
-
-export const useAuthStore = create<AuthState>((set) => ({
-  // 초기값: 비로그인 상태
+export const useAuthStore = create<AuthStore>()((set) => ({
+  // State
+  accessToken: null,
+  isAuthenticated: false,
   user: null,
+  isInitialized: false,
 
-  setUser: (user) => set({ user }),
+  // Actions
+  login: (token: string, userData: AuthUser) => {
+    set({
+      accessToken: token,
+      isAuthenticated: true,
+      user: userData,
+    });
+  },
 
-  // TODO: 실제 구현 시 localStorage/cookie 초기화, 서버 세션 만료 처리 등 추가 필요
-  logout: () => set({ user: null }),
+  logout: () => {
+    set({ accessToken: null, isAuthenticated: false, user: null });
+  },
+
+  /**
+   * 토큰 갱신 시 호출 (Refresh 시 토큰 정보만 업데이트)
+   */
+  updateToken: (newToken: string) => {
+    set({
+      accessToken: newToken,
+      isAuthenticated: true, // 토큰이 존재하면 인증됨으로 간주
+    });
+  },
+
+  setInitialized: (val: boolean) => set({ isInitialized: val }),
 }));
