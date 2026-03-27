@@ -1,7 +1,0 @@
-export const SOSOTALK_POST_EDITOR_WIDTH = 860;
-export const SOSOTALK_POST_EDITOR_MIN_HEIGHT = 780;
-export const SOSOTALK_POST_EDITOR_TITLE_MAX_LENGTH = 30;
-export const SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH = 680;
-export const SOSOTALK_POST_EDITOR_IMAGE_MAX_COUNT = 1;
-export const SOSOTALK_POST_EDITOR_ACCEPTED_IMAGE_TYPES =
-  'image/png,image/jpeg,image/webp,image/gif';

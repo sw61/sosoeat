@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown/index';
 
-import type { DropdownSubProp } from './dropdown-sub.types';
+import type { DropdownSubProp } from './dropdown-sub.type';
 
 export function DropdownSub({
   data,
@@ -26,6 +26,7 @@ export function DropdownSub({
             <DropdownMenuCheckboxItem
               key={district}
               checked={selectedOption === district}
+              onSelect={(e) => e.preventDefault()}
               onCheckedChange={(checked) => {
                 onChange(
                   checked
