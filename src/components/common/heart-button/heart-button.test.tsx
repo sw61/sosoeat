@@ -18,6 +18,7 @@ jest.mock('framer-motion', () => ({
   },
 }));
 
+//하트버튼
 describe('HeartButton', () => {
   it('기본 상태에서 빈 하트 아이콘이 렌더링된다', () => {
     render(<HeartButton isFavorited={false} />);
