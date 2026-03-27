@@ -1,11 +1,6 @@
-import { LoginFormValues } from '@/app/(auth)/login/_components/login-form/login-form.types';
-import { SignupApiPayload } from '@/app/(auth)/signup/_components/signup-form/signup-form.types';
-import { AuthUser } from '@/store/auth-store';
+import { LoginRequest, LoginResponse, SignupRequest } from '@/types/generated-client/models';
 
-export interface AuthResponse {
-  accessToken: string;
-  user: AuthUser;
-}
+export type AuthResponse = Omit<LoginResponse, 'refreshToken'>;
 
 /**
  * [Service Layer] authApi
@@ -15,7 +10,7 @@ export const authApi = {
   /**
    * 로그인 실행 (BFF 호출)
    */
-  async login(payload: LoginFormValues): Promise<AuthResponse> {
+  async login(payload: LoginRequest): Promise<AuthResponse> {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -33,7 +28,7 @@ export const authApi = {
   /**
    * 회원가입 실행 (BFF 호출)
    */
-  async signUp(payload: SignupApiPayload): Promise<void> {
+  async signUp(payload: SignupRequest): Promise<void> {
     const response = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

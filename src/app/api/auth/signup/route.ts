@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import { SignupRequest, User } from '@/types/generated-client/models';
+
 const BASE_URL = process.env.API_BASE_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
 
@@ -9,7 +11,7 @@ const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
  */
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body: SignupRequest = await request.json();
 
     const response = await fetch(`${BASE_URL}/${TEAM_ID}/auth/signup`, {
       method: 'POST',
@@ -17,7 +19,7 @@ export async function POST(request: Request) {
       body: JSON.stringify(body),
     });
 
-    const data = await response.json();
+    const data: User = await response.json();
 
     if (!response.ok) {
       return NextResponse.json(data, { status: response.status });

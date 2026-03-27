@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { CookieStorage } from '@/lib/auth/cookie-storage';
+import { LoginRequest, LoginResponse } from '@/types/generated-client/models';
 
 const BASE_URL = process.env.API_BASE_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
@@ -12,7 +13,7 @@ const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
  */
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body: LoginRequest = await request.json();
 
     // 일반 로그인 (백엔드 API 호출)
     const response = await fetch(`${BASE_URL}/${TEAM_ID}/auth/login`, {
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
       body: JSON.stringify(body),
     });
 
-    const data = await response.json();
+    const data: LoginResponse = await response.json();
 
     if (!response.ok) {
       return NextResponse.json(data, { status: response.status });
