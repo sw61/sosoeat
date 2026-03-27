@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { XIcon } from 'lucide-react';
 
-import { DropdownSub, type DropdownSubProp } from '@/components/common/dropdown-sub';
+import { DropdownSub } from '@/components/common/dropdown-sub';
 import { Button } from '@/components/ui/button/button';
 import {
   Dialog,
@@ -17,32 +17,14 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
+import { useRegionSelectModal } from './hooks/use-region-select-modal';
+import {
+  omitRegionModalValueOnChange,
+  recordToSelection,
+  selectionToRecord,
+} from './services/region-select-modal.service';
 import { RegionCascadeSelect } from './region-cascade-select';
-import type {
-  RegionModalDropdownSub,
-  RegionSelection,
-  RegionSelectModalProps,
-} from './region-select-modal.type';
-
-function selectionToRecord(s: RegionSelection): Record<string, string> {
-  if (s == null) return {};
-  return { [s.province]: s.district };
-}
-
-function recordToSelection(r: Record<string, string>): RegionSelection {
-  const keys = Object.keys(r).sort();
-  if (keys.length === 0) return null;
-  return { province: keys[0], district: r[keys[0]]! };
-}
-
-function omitRegionModalValueOnChange(
-  sub: RegionModalDropdownSub
-): Omit<DropdownSubProp, 'value' | 'onChange'> {
-  const { value, onChange, ...rest } = sub;
-  void value;
-  void onChange;
-  return rest;
-}
+import type { RegionSelectModalProps } from './region-select-modal.types';
 
 /**
  * 피그마 Region Select modal — shell 544×724, padding 48, gap 48, radius 40,
@@ -93,42 +75,13 @@ export const RegionSelectModal = ({
 }: RegionSelectModalProps) => {
   const triggerAsChild = React.isValidElement(trigger);
 
-  const draftControlled = draftValueProp !== undefined && onDraftChange !== undefined;
-
-  const [open, setOpen] = React.useState(false);
-  const [internalDraft, setInternalDraft] = React.useState<RegionSelection>(null);
-
-  const draftValue = draftControlled ? draftValueProp : internalDraft;
-
-  const handleOpenChange = React.useCallback(
-    (next: boolean) => {
-      setOpen(next);
-      if (!next) return;
-      if (dropdownSub != null) {
-        const v = dropdownSub.value;
-        const seed = v == null ? null : { province: v.province, district: v.district };
-        if (draftControlled) {
-          onDraftChange(seed);
-        } else {
-          setInternalDraft(seed);
-        }
-      } else if (draftControlled) {
-        onDraftChange(null);
-      } else {
-        setInternalDraft(null);
-      }
-    },
-    [dropdownSub, draftControlled, onDraftChange]
-  );
-
-  const showCascade = regionCascade != null && dropdownSub != null;
-
-  const handleConfirm = React.useCallback(() => {
-    if (dropdownSub != null) {
-      dropdownSub.onChange(draftValue);
-    }
-    setOpen(false);
-  }, [dropdownSub, draftValue]);
+  const { open, draftValue, setDraft, handleOpenChange, handleConfirm, showCascade } =
+    useRegionSelectModal({
+      dropdownSub,
+      regionCascade,
+      draftValueProp,
+      onDraftChange,
+    });
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -164,21 +117,14 @@ export const RegionSelectModal = ({
               <RegionCascadeSelect
                 regions={regionCascade.regions}
                 value={draftValue}
-                onChange={draftControlled ? onDraftChange : setInternalDraft}
+                onChange={setDraft}
               />
             ) : null}
             {!showCascade && dropdownSub != null ? (
               <DropdownSub
                 {...omitRegionModalValueOnChange(dropdownSub)}
                 value={selectionToRecord(draftValue)}
-                onChange={(rec) => {
-                  const next = recordToSelection(rec);
-                  if (draftControlled) {
-                    onDraftChange(next);
-                  } else {
-                    setInternalDraft(next);
-                  }
-                }}
+                onChange={(rec) => setDraft(recordToSelection(rec))}
                 triggerClassName={cn(
                   regionSelectDropdownTriggerClass,
                   dropdownSub.triggerClassName

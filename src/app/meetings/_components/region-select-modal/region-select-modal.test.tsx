@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { RegionSelectModal } from '@/app/meetings/_components/region-select-modal';
-import type { RegionSelection } from '@/app/meetings/_components/region-select-modal/region-select-modal.type';
+import type { RegionSelection } from '@/app/meetings/_components/region-select-modal/region-select-modal.types';
 import { Button } from '@/components/ui/button/button';
 
 const dropdownFixture = {

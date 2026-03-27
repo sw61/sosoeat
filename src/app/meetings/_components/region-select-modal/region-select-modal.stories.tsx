@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { RegionSelectModal } from '@/app/meetings/_components/region-select-modal';
-import type { RegionSelection } from '@/app/meetings/_components/region-select-modal/region-select-modal.type';
+import type { RegionSelection } from '@/app/meetings/_components/region-select-modal/region-select-modal.types';
 import { Button } from '@/components/ui/button/button';
 import regionData from '@/data/korea-regions-districts.json';
 

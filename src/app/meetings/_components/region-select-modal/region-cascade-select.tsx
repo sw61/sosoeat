@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dropdown/index';
 import { cn } from '@/lib/utils';
 
-import type { KoreaRegionRegion, RegionSelection } from './region-select-modal.type';
+import type { KoreaRegionRegion, RegionSelection } from './region-select-modal.types';
 
 /** 피그마 Input 행 — h 48, p 12, bg gray/50 #F9FAFB, 본문 slate/800 #333333, radius 12 */
 const triggerClass =
