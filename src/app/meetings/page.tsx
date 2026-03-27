@@ -4,9 +4,9 @@ import { Footer } from '@/components/common/footer';
 import { MainPageCard } from '@/components/common/main-page-card';
 import { NavigationBar } from '@/components/common/navigation-bar';
 
-import { MeetingDetailBanner } from './_components/meeting-detail-banner';
 import { MeetingFilterBar, MeetingFilterBarProps } from './_components/meeting-filter-bar';
 import { MeetingMakeButton } from './_components/meeting-make-button.tsx';
+import { MeetingSearchBanner } from './_components/meeting-search-banner';
 import useMeetingPage from './usehooks/use-meeting-page';
 
 export default function MeetingsPage() {
@@ -30,8 +30,7 @@ export default function MeetingsPage() {
 
   return (
     <div className="mx-auto flex max-w-[1140px] flex-col justify-center gap-4 sm:px-4">
-      <NavigationBar />
-      <MeetingDetailBanner
+      <MeetingSearchBanner
         alt="모임 배너"
         imageUrl="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80"
         titleContent={
@@ -40,7 +39,7 @@ export default function MeetingsPage() {
             <br />더 맛있어요
           </span>
         }
-        subtitle={
+        subtitleContent={
           <p>가고 싶었던 맛집, 혼자 가기 아쉬웠죠? 모여요에서 같이 먹을 사람을 찾아보세요.</p>
         }
       />
@@ -62,7 +61,6 @@ export default function MeetingsPage() {
         </div>
         <MeetingMakeButton onClick={() => {}} />
       </div>
-      <Footer />
     </div>
   );
 }
