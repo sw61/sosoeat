@@ -42,9 +42,7 @@ export const useSignUp = () => {
       toast.success('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
       router.push('/login');
     },
-    onError: (error: Error) => {
-      toast.error(error.message || '회원가입 중 오류가 발생했습니다.');
-    },
+    // 에러 처리는 mutateAsync를 사용하는 쪽(handleNameNext)에서 담당
   });
 };
 

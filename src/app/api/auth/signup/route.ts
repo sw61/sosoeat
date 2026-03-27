@@ -19,12 +19,12 @@ export async function POST(request: Request) {
       body: JSON.stringify(body),
     });
 
-    const data: User = await response.json();
-
     if (!response.ok) {
-      return NextResponse.json(data, { status: response.status });
+      const errorData = await response.json().catch(() => ({}));
+      return NextResponse.json(errorData, { status: response.status });
     }
 
+    const data: User = await response.json();
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error('[AuthSignupBFF] Error:', error);

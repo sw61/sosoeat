@@ -23,11 +23,18 @@ interface SignupFormProps {
 }
 
 export const SignupForm = ({ onSubmit, isLoading, defaultStep = 'email' }: SignupFormProps) => {
-  const { step, formData, handleEmailNext, handlePasswordNext, handleNameNext, handlePrev } =
-    useSignupForm({
-      onSubmit,
-      defaultStep,
-    });
+  const {
+    step,
+    formData,
+    emailServerError,
+    handleEmailNext,
+    handlePasswordNext,
+    handleNameNext,
+    handlePrev,
+  } = useSignupForm({
+    onSubmit,
+    defaultStep,
+  });
 
   const currentStepNumber = STEP_TO_NUMBER[step];
 
@@ -43,7 +50,11 @@ export const SignupForm = ({ onSubmit, isLoading, defaultStep = 'email' }: Signu
         <div className="flex-1">
           <Funnel step={step}>
             <Step name="email">
-              <EmailStep onNext={handleEmailNext} defaultValues={{ email: formData.email }} />
+              <EmailStep
+                onNext={handleEmailNext}
+                defaultValues={{ email: formData.email }}
+                serverError={emailServerError}
+              />
             </Step>
             <Step name="password">
               <PasswordStep

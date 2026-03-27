@@ -25,9 +25,12 @@ export const useSignupForm = ({ onSubmit, defaultStep = 'email' }: UseSignupForm
   const [step, setStep] = useState<SignupStep>(defaultStep);
   // 각 스텝에서 수집된 유저의 입력값들을 임시 보관하는 상태
   const [formData, setFormData] = useState<Partial<SignupFormValues>>({});
+  // 이메일 중복 등 서버에서 반환된 이메일 관련 에러 메시지
+  const [emailServerError, setEmailServerError] = useState<string | null>(null);
 
-  // [1단계] 이메일 작성 완료 ➔ 비밀번호 단계로 전환
+  // [1단계] 이메일 작성 완료 ➔ 비밀번호 단계로 전환 (이메일 서버 에러 초기화)
   const handleEmailNext = (data: EmailValues) => {
+    setEmailServerError(null);
     setFormData((prev) => ({ ...prev, ...data }));
     setStep('password');
   };
@@ -54,7 +57,13 @@ export const useSignupForm = ({ onSubmit, defaultStep = 'email' }: UseSignupForm
       name: data.name,
     };
 
-    await onSubmit(apiPayload);
+    try {
+      await onSubmit(apiPayload);
+    } catch (error) {
+      // 이메일 중복 등 서버 에러 시 step-1(이메일)로 복귀
+      setEmailServerError(error instanceof Error ? error.message : '이미 사용 중인 이메일입니다.');
+      setStep('email');
+    }
   };
 
   // 이전 버튼 동작: 현재 스텝을 확인하여 직전 뷰로 단계 변경
@@ -66,6 +75,7 @@ export const useSignupForm = ({ onSubmit, defaultStep = 'email' }: UseSignupForm
   return {
     step,
     formData,
+    emailServerError,
     handleEmailNext,
     handlePasswordNext,
     handleNameNext,

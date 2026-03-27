@@ -15,7 +15,11 @@ import { Input } from '@/components/ui/input';
 import { emailSchema } from '../signup-form.schema';
 import { EmailValues, FirstStepProps } from '../signup-form.types';
 
-export const EmailStep = ({ onNext, defaultValues }: FirstStepProps<EmailValues>) => {
+interface EmailStepProps extends FirstStepProps<EmailValues> {
+  serverError?: string | null;
+}
+
+export const EmailStep = ({ onNext, defaultValues, serverError }: EmailStepProps) => {
   const {
     register,
     handleSubmit,
@@ -27,7 +31,7 @@ export const EmailStep = ({ onNext, defaultValues }: FirstStepProps<EmailValues>
   });
 
   const emailError = errors.email;
-  const hasError = !!emailError;
+  const hasError = !!emailError || !!serverError;
 
   const onSubmit = (data: EmailValues) => {
     onNext(data);
@@ -51,7 +55,10 @@ export const EmailStep = ({ onNext, defaultValues }: FirstStepProps<EmailValues>
             />
             <div className={getErrorAnimationClasses(hasError)}>
               <div className="overflow-hidden">
-                <FieldError errors={[emailError]} className="ml-1" />
+                <FieldError
+                  errors={[emailError ?? (serverError ? { message: serverError } : undefined)]}
+                  className="ml-1"
+                />
               </div>
             </div>
           </FieldContent>
