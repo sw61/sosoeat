@@ -36,7 +36,7 @@ export function HeartButton({ className, size = 'lg', isFavorited }: HeartButton
   };
 
   return (
-    <div className={cn('absolute top-4 right-[17px] z-10 m-0 shrink-0', className)}>
+    <div className={cn('top-4 right-[17px] z-10 m-0 shrink-0', className)}>
       <Button
         variant="ghost"
         size="icon"
