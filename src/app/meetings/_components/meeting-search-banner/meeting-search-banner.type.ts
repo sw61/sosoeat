@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export type MeetingDetailBannerProps = {
+export type MeetingSearchBannerProps = {
   imageUrl: string;
   alt: string;
   titleContent: string;

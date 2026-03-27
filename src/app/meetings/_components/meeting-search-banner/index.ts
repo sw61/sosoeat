@@ -1,2 +1,2 @@
-export { default as MeetingDetailBanner } from './meeting-search-banner';
-export type { MeetingDetailBannerProps } from './meeting-search-banner.type';
+export { default as MeetingSearchBanner } from './meeting-search-banner';
+export type { MeetingSearchBannerProps } from './meeting-search-banner.type';

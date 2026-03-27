@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import MeetingDetailBanner from './meeting-search-banner';
+import MeetingSearchBanner from './meeting-search-banner';
 
 const BANNER_IMAGE = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80';
 
@@ -8,8 +8,8 @@ const defaultSubtitleText =
   '가고 싶었던 맛집, 혼자 가기 아쉬웠죠? 모여요에서 같이 먹을 사람을 찾아보세요.';
 
 const meta = {
-  title: 'app/meetings/meeting-detail-banner',
-  component: MeetingDetailBanner,
+  title: 'app/meetings/meeting-search-banner',
+  component: MeetingSearchBanner,
   parameters: {
     layout: 'fullscreen',
     nextjs: {
@@ -33,7 +33,7 @@ const meta = {
     subtitleContent: { control: 'text' },
     subtitle: { control: false },
   },
-} satisfies Meta<typeof MeetingDetailBanner>;
+} satisfies Meta<typeof MeetingSearchBanner>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

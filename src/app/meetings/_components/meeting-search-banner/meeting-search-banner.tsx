@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { cn } from '@/lib/utils';
 
-import type { MeetingDetailBannerProps } from './meeting-search-banner.type';
+import type { MeetingSearchBannerProps } from './meeting-search-banner.type';
 
 // mobile-first (no arbitrary px): base layout first, scale with sm/md/lg.
 const bannerShellClass =
@@ -14,14 +14,14 @@ const headlineClass =
 const subtitleWrapClass =
   'mt-4 hidden max-w-md text-base font-normal leading-7 text-white/80 md:block';
 
-export default function MeetingDetailBanner({
+export default function MeetingSearchBanner({
   imageUrl,
   alt,
   titleContent,
   subtitleContent,
   subtitle,
   className,
-}: MeetingDetailBannerProps) {
+}: MeetingSearchBannerProps) {
   return (
     <div className={cn('flex w-full items-start justify-center', className)}>
       <div className={bannerShellClass}>
