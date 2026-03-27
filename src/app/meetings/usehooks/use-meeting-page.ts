@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { format } from 'date-fns';
+
 import { MeetingWithHost, TeamIdMeetingsGetRequest } from '@/types/generated-client';
 
 import { MeetingFilterBarProps } from '../_components/meeting-filter-bar';
@@ -33,15 +35,19 @@ const useMeetingPage = () => {
   };
 
   const handleDateChange = (value: Date | null) => {
-    setDate(value);
+    const formattedDate = value ? format(value, 'yyyy-MM-dd') : undefined;
+    setDate(formattedDate ? new Date(formattedDate) : null);
   };
 
   const handleRegionChange = (value: RegionSelection) => {
     setRegionCommitted(value);
   };
 
-  const handleSortChange = (value: 'participantCount' | 'dateTime' | 'registrationEnd') => {
-    setSort(value);
+  const handleSortChange = (
+    sortBy: 'participantCount' | 'dateTime' | 'registrationEnd',
+    sortOrder: 'asc' | 'desc'
+  ) => {
+    setSort(sortBy);
     setSortOrder(sortOrder);
   };
 

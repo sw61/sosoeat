@@ -22,13 +22,6 @@ export default function MeetingsPage() {
     sort,
   } = useMeetingPage();
 
-  const options: MeetingFilterBarProps['options'] = [
-    { label: '인기순', sortBy: 'participantCount', sortOrder: 'desc' },
-    { label: '모임일 임박순', sortBy: 'dateTime', sortOrder: 'asc' },
-    { label: '모집 마감 임박 순', sortBy: 'registrationEnd', sortOrder: 'asc' },
-    { label: '모집 마감 먼 순', sortBy: 'registrationEnd', sortOrder: 'desc' },
-  ];
-
   //sort는 dateTime, registrationEnd, participantCount를 가짐
 
   //근데 options는 인기순, 모임일 임박순, 모집 마감 임박 순, 모집 마감 먼 순을 가짐
@@ -60,7 +53,6 @@ export default function MeetingsPage() {
           onDateChange={handleDateChange}
           onRegionChange={handleRegionChange}
           onSortChange={handleSortChange}
-          options={options}
           sort={sort}
         />
         <div className="grid grid-cols-1 justify-center gap-1 md:grid-cols-2 md:gap-[20px] lg:grid-cols-3 lg:gap-[27px]">

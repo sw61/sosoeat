@@ -13,11 +13,6 @@ export interface MeetingFilterBarProps {
     sortBy: 'participantCount' | 'dateTime' | 'registrationEnd',
     sortOrder: 'asc' | 'desc'
   ) => void;
-  options: {
-    label: '인기순' | '모임일 임박순' | '모집 마감 임박 순' | '모집 마감 먼 순';
-    sortBy: 'participantCount' | 'dateTime' | 'registrationEnd';
-    sortOrder: 'asc' | 'desc';
-  }[];
   sort: 'participantCount' | 'dateTime' | 'registrationEnd';
   regionCommitted: RegionSelection;
   typeFilter: 'all' | 'groupEat' | 'groupBuy';
