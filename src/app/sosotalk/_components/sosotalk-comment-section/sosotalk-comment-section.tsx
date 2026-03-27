@@ -45,6 +45,8 @@ export function SosoTalkCommentSection({
             relativeTime={comment.relativeTime}
             content={comment.content}
             isAuthorComment={comment.isAuthorComment}
+            onEditClick={comment.onEditClick}
+            onDeleteClick={comment.onDeleteClick}
           />
         ))}
       </div>

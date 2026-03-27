@@ -2,22 +2,23 @@ import type { CommentItemData } from '@/components/common/comment-item';
 
 export interface SosoTalkPostDetailProps {
   title: string;
-  content: string;
+  contentHtml: string;
   contentCharacterCount?: number;
   imageUrl?: string;
   authorName: string;
   authorImageUrl?: string;
-  categoryLabel?: string;
-  statusLabel?: string;
   likeCount?: number;
   commentCount?: number;
   createdAt: string;
   createdAtDateTime?: string;
   isAuthor?: boolean;
+  isLiked?: boolean;
   onMoreClick?: () => void;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
-  onShareClick?: () => void;
+  onLikeClick?: () => void;
+  onCommentClick?: () => void;
+  onShareClick?: () => void | Promise<void>;
   comments?: CommentItemData[];
   inputValue?: string;
   inputPlaceholder?: string;
@@ -31,8 +32,6 @@ export interface SosoTalkPostHeaderProps {
   title: string;
   authorName: string;
   authorImageUrl?: string;
-  categoryLabel?: string;
-  statusLabel?: string;
   createdAt: string;
   createdAtDateTime?: string;
   isAuthor?: boolean;
@@ -43,7 +42,7 @@ export interface SosoTalkPostHeaderProps {
 
 export interface SosoTalkPostBodyProps {
   title: string;
-  content: string;
+  contentHtml: string;
   imageUrl?: string;
 }
 
@@ -51,5 +50,8 @@ export interface SosoTalkPostActionsProps {
   contentCharacterCount?: number;
   likeCount?: number;
   commentCount?: number;
-  onShareClick?: () => void;
+  isLiked?: boolean;
+  onLikeClick?: () => void;
+  onCommentClick?: () => void;
+  onShareClick?: () => void | Promise<void>;
 }

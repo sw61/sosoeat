@@ -9,21 +9,22 @@ import { SosoTalkPostDetailHeader } from './sosotalk-post-detail-header';
 
 export function SosoTalkPostDetail({
   title,
-  content,
+  contentHtml,
   contentCharacterCount,
   imageUrl,
   authorName,
   authorImageUrl,
-  categoryLabel,
-  statusLabel,
   likeCount = 0,
   commentCount = 0,
   createdAt,
   createdAtDateTime,
   isAuthor = false,
+  isLiked = false,
   onMoreClick,
   onEditClick,
   onDeleteClick,
+  onLikeClick,
+  onCommentClick,
   onShareClick,
   comments = [],
   inputValue,
@@ -41,8 +42,6 @@ export function SosoTalkPostDetail({
             title={title}
             authorName={authorName}
             authorImageUrl={authorImageUrl}
-            categoryLabel={categoryLabel}
-            statusLabel={statusLabel}
             createdAt={createdAt}
             createdAtDateTime={createdAtDateTime}
             isAuthor={isAuthor}
@@ -50,11 +49,14 @@ export function SosoTalkPostDetail({
             onEditClick={onEditClick}
             onDeleteClick={onDeleteClick}
           />
-          <SosoTalkPostDetailBody title={title} content={content} imageUrl={imageUrl}>
+          <SosoTalkPostDetailBody title={title} contentHtml={contentHtml} imageUrl={imageUrl}>
             <SosoTalkPostDetailActions
               contentCharacterCount={contentCharacterCount}
               likeCount={likeCount}
               commentCount={commentCount}
+              isLiked={isLiked}
+              onLikeClick={onLikeClick}
+              onCommentClick={onCommentClick}
               onShareClick={onShareClick}
             />
           </SosoTalkPostDetailBody>

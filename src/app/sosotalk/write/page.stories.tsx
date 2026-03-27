@@ -1,4 +1,8 @@
+'use client';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+
+import { useAuthStore } from '@/store/auth-store';
 
 import SosoTalkWritePage from './page';
 
@@ -19,4 +23,29 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const LoggedOut: Story = {
+  decorators: [
+    (Story) => {
+      useAuthStore.setState({ user: null });
+
+      return <Story />;
+    },
+  ],
+};
+
+export const LoggedIn: Story = {
+  decorators: [
+    (Story) => {
+      useAuthStore.setState({
+        user: {
+          id: '1',
+          name: '김민준',
+          profileImage:
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop',
+        },
+      });
+
+      return <Story />;
+    },
+  ],
+};

@@ -1,4 +1,12 @@
+import { MoreHorizontal } from 'lucide-react';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown';
 import { cn } from '@/lib/utils';
 
 import type { CommentItemProps } from './comment-item.types';
@@ -10,6 +18,8 @@ export function CommentItem({
   relativeTime,
   content,
   isAuthorComment = false,
+  onEditClick,
+  onDeleteClick,
   className,
 }: CommentItemProps) {
   return (
@@ -26,20 +36,46 @@ export function CommentItem({
       </Avatar>
 
       <div className="min-w-0 flex-1 pt-1">
-        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="text-sosoeat-gray-900 text-base leading-5 font-bold">{authorName}</span>
-          <div className="text-sosoeat-gray-500 flex items-center gap-1 text-xs leading-4 font-semibold">
-            <time>{createdAt}</time>
-            {relativeTime ? (
-              <>
-                <span aria-hidden="true">·</span>
-                <span>{relativeTime}</span>
-              </>
-            ) : null}
+        <div className="flex min-w-0 items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+              <span className="text-sosoeat-gray-900 text-base leading-5 font-bold">
+                {authorName}
+              </span>
+              <div className="text-sosoeat-gray-500 flex items-center gap-1 text-xs leading-4 font-semibold">
+                <time>{createdAt}</time>
+                {relativeTime ? (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span>{relativeTime}</span>
+                  </>
+                ) : null}
+              </div>
+            </div>
           </div>
+
+          {isAuthorComment ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="text-sosoeat-gray-500 hover:text-sosoeat-gray-700 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
+                  aria-label="댓글 메뉴"
+                >
+                  <MoreHorizontal className="h-5 w-5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[120px]">
+                <DropdownMenuItem onClick={onEditClick}>수정하기</DropdownMenuItem>
+                <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
+                  삭제하기
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
         </div>
 
-        <p className="text-sosoeat-gray-900 text-base leading-6 font-normal break-words whitespace-pre-wrap">
+        <p className="text-sosoeat-gray-900 mt-1 text-base leading-6 font-normal break-words whitespace-pre-wrap">
           {content}
         </p>
       </div>

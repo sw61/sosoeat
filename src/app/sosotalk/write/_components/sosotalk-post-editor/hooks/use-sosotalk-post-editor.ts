@@ -60,6 +60,7 @@ export const useSosoTalkPostEditor = ({
     normalizePlainText(initialContent).length
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
+  // Preview URL is UI-only state for local rendering and should not be sent to the API.
   const [imagePreviewUrl, setImagePreviewUrl] = useState(initialImageUrl);
   const [activeFormats, setActiveFormats] = useState<ActiveFormats>(DEFAULT_ACTIVE_FORMATS);
 
@@ -216,12 +217,12 @@ export const useSosoTalkPostEditor = ({
       return;
     }
 
+    // Submit only the fields the server actually needs.
     onSubmit?.({
       title: title.trim(),
       contentHtml,
       contentText,
       imageFile,
-      imagePreviewUrl,
     });
   };
 

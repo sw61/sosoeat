@@ -6,6 +6,8 @@ export interface CommentItemData {
   relativeTime?: string;
   content: string;
   isAuthorComment?: boolean;
+  onEditClick?: () => void;
+  onDeleteClick?: () => void;
 }
 
 export interface CommentItemProps extends Omit<CommentItemData, 'id'> {

@@ -36,7 +36,7 @@ describe('SosoTalkPostEditor', () => {
     expect(screen.getByRole('button', { name: '등록' })).not.toBeDisabled();
   });
 
-  it('초기 이미지가 있으면 삭제 버튼으로 제거할 수 있다', async () => {
+  it('초기 이미지가 있으면 제거 버튼으로 삭제할 수 있다', async () => {
     const user = userEvent.setup();
 
     render(<SosoTalkPostEditor initialImageUrl="https://example.com/image.jpg" />);
@@ -48,7 +48,7 @@ describe('SosoTalkPostEditor', () => {
     expect(screen.queryByAltText('업로드한 이미지')).not.toBeInTheDocument();
   });
 
-  it('본문 공백 포함 글자 수 제한을 넘기면 마지막 유효 상태를 유지한다', () => {
+  it('본문 공백 포함 글자 수가 제한을 넘기면 마지막 유효 상태를 유지한다', () => {
     render(
       <SosoTalkPostEditor initialContent={'가'.repeat(SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH)} />
     );
@@ -63,7 +63,7 @@ describe('SosoTalkPostEditor', () => {
     ).toBeInTheDocument();
   });
 
-  it('제목이나 본문이 비어 있으면 등록되지 않는다', async () => {
+  it('제목이나 본문이 비어 있으면 등록하지 않는다', async () => {
     const user = userEvent.setup();
     const onSubmit = jest.fn();
 
@@ -74,7 +74,7 @@ describe('SosoTalkPostEditor', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it('등록 시 작성한 내용이 onSubmit payload로 전달된다', async () => {
+  it('등록 시 API에 필요한 데이터만 onSubmit payload로 전달한다', async () => {
     const user = userEvent.setup();
     const onSubmit = jest.fn();
 
@@ -93,7 +93,6 @@ describe('SosoTalkPostEditor', () => {
       contentHtml: '<p>안녕하세요.</p><p><br></p><p>같이 식사하실 분 계실까요?</p>',
       contentText: '안녕하세요.\n\n같이 식사하실 분 계실까요?',
       imageFile: null,
-      imagePreviewUrl: '',
     });
   });
 
