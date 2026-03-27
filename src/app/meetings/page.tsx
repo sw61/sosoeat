@@ -27,7 +27,7 @@ export default function MeetingsPage() {
   //근데 options는 인기순, 모임일 임박순, 모집 마감 임박 순, 모집 마감 먼 순을 가짐
 
   //근데 vlaue===sort value === options 즉 sort === options임
-
+  //sortBy는 dateTime, registrationEnd, participantCount
   return (
     <div className="mx-auto flex max-w-[1140px] flex-col justify-center gap-4 sm:px-4">
       <MeetingSearchBanner
