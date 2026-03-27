@@ -35,6 +35,9 @@
   --color-sosoeat-blue-800: var(--sosoeat-blue-800);
   --color-sosoeat-blue-900: var(--sosoeat-blue-900);
 
+  /* ── Shadow ────────────────────────────────────── */
+  --shadow-sosoeat-inset: 0 0 7px 1px rgba(0, 0, 0, 0.48) inset;
+
   /* ── Colors (shadcn) ───────────────────────────── */
   --color-background: var(--background);
   --color-foreground: var(--foreground);

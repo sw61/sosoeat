@@ -9,7 +9,7 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof SosoTalkBanner>;
+} as Meta<typeof SosoTalkBanner>;
 
 export default meta;
 

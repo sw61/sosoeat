@@ -18,7 +18,7 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof SosoTalkPostDetail>;
+} as Meta<typeof SosoTalkPostDetail>;
 
 export default meta;
 

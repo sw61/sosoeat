@@ -5,7 +5,7 @@ import { notificationListDemoData } from '../notification-list/notification-list
 
 import { NotificationPopover } from './notification-popover';
 
-const meta: Meta<typeof NotificationPopover> = {
+const meta = {
   title: 'components/common/notification/Popover',
   component: NotificationPopover,
 } satisfies Meta<typeof NotificationPopover>;

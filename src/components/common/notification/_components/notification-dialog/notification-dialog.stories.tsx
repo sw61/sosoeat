@@ -5,7 +5,7 @@ import { notificationListDemoData } from '../notification-list/notification-list
 
 import { NotificationDialog } from './notification-dialog';
 
-const meta: Meta<typeof NotificationDialog> = {
+const meta = {
   title: 'components/common/notification/Dialog',
   component: NotificationDialog,
 } satisfies Meta<typeof NotificationDialog>;
