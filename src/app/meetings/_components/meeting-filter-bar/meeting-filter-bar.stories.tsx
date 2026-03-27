@@ -5,13 +5,6 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { MeetingFilterBar } from './meeting-filter-bar';
 import type { MeetingFilterBarProps, RegionSelection } from './meeting-filter-bar.types';
 
-const storyOptions: MeetingFilterBarProps['options'] = [
-  { label: '인기순', sortBy: 'participantCount', sortOrder: 'desc' },
-  { label: '모임일 임박순', sortBy: 'dateTime', sortOrder: 'asc' },
-  { label: '모집 마감 임박 순', sortBy: 'registrationEnd', sortOrder: 'asc' },
-  { label: '모집 마감 먼 순', sortBy: 'registrationEnd', sortOrder: 'desc' },
-];
-
 const meta = {
   title: 'app/meetings/meeting-filter-bar',
   component: MeetingFilterBar,
@@ -30,7 +23,6 @@ export const Default: Story = {
     regionCommitted: null,
     typeFilter: 'all',
     sort: 'participantCount',
-    options: storyOptions,
   },
   render: function MeetingFilterBarStory() {
     const [date, setDate] = useState<Date | null>(null);
@@ -47,7 +39,6 @@ export const Default: Story = {
           onRegionChange={setRegionCommitted}
           typeFilter={typeFilter}
           onTypeFilterChange={setTypeFilter}
-          options={storyOptions}
           sort={sort}
           onSortChange={(sortBy) => {
             setSort(sortBy);
