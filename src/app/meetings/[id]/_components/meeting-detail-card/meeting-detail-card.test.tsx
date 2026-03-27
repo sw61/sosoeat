@@ -6,6 +6,9 @@ import type { Meeting } from '@/types/meeting';
 import { MeetingDetailCard } from './meeting-detail-card';
 import type { MeetingStatus } from './meeting-detail-card.types';
 
+// 타임존을 KST로 고정해서 날짜 포맷팅 테스트 일관성 보장
+process.env.TZ = 'Asia/Seoul';
+
 const mockMeeting: Meeting = {
   id: '1',
   name: '강남 맛집 탐방 함께해요!',
