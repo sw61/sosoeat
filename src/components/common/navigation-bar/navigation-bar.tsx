@@ -27,7 +27,8 @@ const NAV_ITEMS = [
 export function NavigationBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
 
   const visibleNavItems = NAV_ITEMS;
 
@@ -152,7 +153,7 @@ export function NavigationBar() {
                     aria-label="프로필 메뉴"
                   >
                     <Avatar className="bg-sosoeat-gray-200 shrink-0">
-                      <AvatarImage src={user.profileImage ?? undefined} alt={user.name} />
+                      <AvatarImage src={user.image ?? user.profileImage ?? undefined} alt={user.name} />
                       <AvatarFallback className="text-sosoeat-gray-500 text-sm font-medium">
                         {user.name[0]}
                       </AvatarFallback>

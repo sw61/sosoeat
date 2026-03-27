@@ -26,8 +26,7 @@ type Story = StoryObj<typeof meta>;
 export const LoggedOut: Story = {
   decorators: [
     (Story) => {
-      useAuthStore.setState({ user: null });
-
+      useAuthStore.setState({ user: null, isAuthenticated: false, isInitialized: true });
       return <Story />;
     },
   ],
@@ -37,10 +36,12 @@ export const LoggedIn: Story = {
   decorators: [
     (Story) => {
       useAuthStore.setState({
+        isAuthenticated: true,
+        isInitialized: true,
         user: {
           id: '1',
-          name: '김민준',
-          profileImage:
+          name: '김민주',
+          image:
             'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop',
         },
       });
