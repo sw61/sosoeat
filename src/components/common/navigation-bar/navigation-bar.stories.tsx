@@ -24,7 +24,7 @@ const withAuthState =
     return <Story />;
   };
 
-const MOCK_USER = { id: '1', name: '홍길동' };
+const MOCK_USER = { id: 1, name: '홍길동', email: 'test@example.com', teamId: 'dallaem' };
 
 // ── 비로그인 ──────────────────────────────────────────
 
@@ -68,7 +68,13 @@ export const LoggedInWithProfileImage: Story = {
   name: '로그인 / 프로필이미지',
   decorators: [
     withAuthState({
-      user: { id: '2', name: '김소소', profileImage: 'https://i.pravatar.cc/32?img=47' },
+      user: {
+        id: 1,
+        name: '김철수',
+        email: 'test@example.com',
+        image: 'https://i.pravatar.cc/32?img=47',
+        teamId: 'dallaem',
+      },
     }),
   ],
 };

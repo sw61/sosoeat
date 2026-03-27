@@ -24,27 +24,21 @@ describe('LoginForm (로그인 폼)', () => {
     fireEvent.change(emailInput, { target: { value: '' } });
     fireEvent.blur(emailInput);
 
-    await waitFor(
-      () => {
-        expect(screen.queryByText('올바른 이메일 형식이 아닙니다.')).not.toBeInTheDocument();
-      },
-      { timeout: 3000 }
-    );
+    await waitFor(() => {
+      expect(screen.queryByText('올바른 이메일 형식이 아닙니다.')).not.toBeInTheDocument();
+    });
   });
 
-  test('올바르지 않은 이메일 형식 입력 후 포커스 이동(blur) 시 1초 뒤 에러 메시지를 표시해야 한다', async () => {
+  test('올바르지 않은 이메일 형식 입력 후 포커스 이동(blur) 시 에러 메시지를 표시해야 한다', async () => {
     render(<LoginForm onSubmit={mockSubmit} />);
 
     const emailInput = screen.getByLabelText(/이메일/i);
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
     fireEvent.blur(emailInput);
 
-    await waitFor(
-      () => {
-        expect(screen.getByText('올바른 이메일 형식이 아닙니다.')).toBeInTheDocument();
-      },
-      { timeout: 3000 }
-    );
+    await waitFor(() => {
+      expect(screen.getByText('올바른 이메일 형식이 아닙니다.')).toBeInTheDocument();
+    });
   });
 
   test('비밀번호가 8자 미만일 때 "비밀번호가 8자 이상이 되도록 해 주세요." 에러를 표시해야 한다', async () => {
@@ -54,12 +48,9 @@ describe('LoginForm (로그인 폼)', () => {
     fireEvent.change(passwordInput, { target: { value: 'short' } });
     fireEvent.blur(passwordInput);
 
-    await waitFor(
-      () => {
-        expect(screen.getByText('비밀번호가 8자 이상이 되도록 해 주세요.')).toBeInTheDocument();
-      },
-      { timeout: 3000 }
-    );
+    await waitFor(() => {
+      expect(screen.getByText('비밀번호가 8자 이상이 되도록 해 주세요.')).toBeInTheDocument();
+    });
   });
 
   test('비밀번호 표시/숨기기 버튼 클릭 시 input 타입이 변경되어야 한다', () => {
@@ -97,12 +88,9 @@ describe('LoginForm (로그인 폼)', () => {
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { value: 'validpassword123' } });
 
-    await waitFor(
-      () => {
-        expect(submitButton).toHaveClass('bg-sosoeat-orange-600');
-      },
-      { timeout: 3000 }
-    );
+    await waitFor(() => {
+      expect(submitButton).toHaveClass('bg-sosoeat-orange-600');
+    });
 
     fireEvent.click(submitButton);
 
@@ -122,15 +110,13 @@ describe('LoginForm (로그인 폼)', () => {
     // 잘못된 입력
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
     fireEvent.blur(emailInput);
-    await waitFor(
-      () => {
-        expect(screen.getByText('올바른 이메일 형식이 아닙니다.')).toBeInTheDocument();
-      },
-      { timeout: 2000 }
-    );
+    await waitFor(() => {
+      expect(screen.getByText('올바른 이메일 형식이 아닙니다.')).toBeInTheDocument();
+    });
 
-    // 입력 삭제
+    // 입력 삭제 후 blur
     fireEvent.change(emailInput, { target: { value: '' } });
+    fireEvent.blur(emailInput);
     await waitFor(
       () => {
         expect(screen.queryByText('올바른 이메일 형식이 아닙니다.')).not.toBeInTheDocument();
@@ -147,15 +133,13 @@ describe('LoginForm (로그인 폼)', () => {
     // 잘못된 입력 (8자 미만)
     fireEvent.change(passwordInput, { target: { value: 'short' } });
     fireEvent.blur(passwordInput);
-    await waitFor(
-      () => {
-        expect(screen.getByText('비밀번호가 8자 이상이 되도록 해 주세요.')).toBeInTheDocument();
-      },
-      { timeout: 3000 }
-    );
+    await waitFor(() => {
+      expect(screen.getByText('비밀번호가 8자 이상이 되도록 해 주세요.')).toBeInTheDocument();
+    });
 
-    // 입력 삭제
+    // 입력 삭제 후 blur
     fireEvent.change(passwordInput, { target: { value: '' } });
+    fireEvent.blur(passwordInput);
     await waitFor(
       () => {
         expect(

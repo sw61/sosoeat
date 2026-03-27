@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dropdown';
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { useLogout } from '@/services/auth';
 import { useAuthStore } from '@/store/auth-store';
 
 const NAV_ITEMS = [
@@ -27,7 +28,8 @@ const NAV_ITEMS = [
 export function NavigationBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const { mutate: performLogout } = useLogout();
 
   const visibleNavItems = NAV_ITEMS;
 
@@ -38,11 +40,6 @@ export function NavigationBar() {
   // TODO: 찜 컴포넌트 분리 시 아래 상수 제거 후 컴포넌트로 교체
   // ex) import { WishGroupBadge } from '@/components/common/wish-group-badge'
   const wishGroupCount = 0;
-
-  function handleLogout() {
-    logout();
-    router.push('/');
-  }
 
   return (
     <header className="bg-background w-full">
@@ -152,7 +149,7 @@ export function NavigationBar() {
                     aria-label="프로필 메뉴"
                   >
                     <Avatar className="bg-sosoeat-gray-200 shrink-0">
-                      <AvatarImage src={user.profileImage ?? undefined} alt={user.name} />
+                      <AvatarImage src={user.image ?? undefined} alt={user.name} />
                       <AvatarFallback className="text-sosoeat-gray-500 text-sm font-medium">
                         {user.name[0]}
                       </AvatarFallback>
@@ -165,7 +162,7 @@ export function NavigationBar() {
                   <DropdownMenuItem onClick={() => router.push('/mypage')}>
                     마이페이지
                   </DropdownMenuItem>
-                  <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+                  <DropdownMenuItem variant="destructive" onClick={() => performLogout()}>
                     로그아웃
                   </DropdownMenuItem>
                 </DropdownMenuContent>

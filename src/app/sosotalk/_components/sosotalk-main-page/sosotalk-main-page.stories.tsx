@@ -30,9 +30,10 @@ export const Default: Story = {
   decorators: [
     withAuthState({
       user: {
-        id: '1',
+        id: 1,
+        email: 'user@example.com',
         name: '김민준',
-        profileImage: 'https://i.pravatar.cc/80?img=12',
+        image: 'https://i.pravatar.cc/80?img=12',
       },
     }),
   ],

@@ -36,7 +36,7 @@ export function HeartButton({ className, size = 'lg', isFavorited }: HeartButton
   };
 
   return (
-    <CardAction className={cn('absolute top-4 right-[17px] z-10 m-0 shrink-0', className)}>
+    <div className={cn('top-4 right-[17px] z-10 m-0 shrink-0', className)}>
       <Button
         variant="ghost"
         size="icon"
@@ -50,7 +50,7 @@ export function HeartButton({ className, size = 'lg', isFavorited }: HeartButton
           animate={{ scale: 1 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
           whileTap={{
-            scale: isFavoritedState ? [0.1, 1.15, 0.6, 1] : 1,
+            scale: isFavoritedState ? 1 : [0.1, 1.15, 0.6, 1],
             transition: { duration: 1, ease: 'easeOut' },
           }}
           className="flex size-full items-center justify-center"
@@ -58,6 +58,6 @@ export function HeartButton({ className, size = 'lg', isFavorited }: HeartButton
           <Image src={src} alt="좋아요" width={iconPx} height={iconPx} />
         </motion.div>
       </Button>
-    </CardAction>
+    </div>
   );
 }

@@ -31,21 +31,21 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
         </div>
 
         <div className="mt-6 flex flex-col items-center gap-[12px] sm:flex-row sm:gap-[16px]">
-          <button
-            type="button"
+          <Link
+            href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_TEAM_ID}/auth/google`}
             className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] border border-gray-300 bg-white text-base font-semibold text-slate-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 focus:outline-none sm:flex-1"
           >
             <GoogleIcon />
             구글로 계속하기
-          </button>
+          </Link>
 
-          <button
-            type="button"
+          <Link
+            href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_TEAM_ID}/auth/kakao`}
             className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] bg-[#FEE500] text-base font-semibold text-slate-800 opacity-90 hover:opacity-100 focus:ring-2 focus:ring-[#FFEE01] focus:ring-offset-1 focus:outline-none sm:flex-1"
           >
             <KakaoIcon />
             카카오로 계속하기
-          </button>
+          </Link>
         </div>
 
         <div className="flex justify-center pt-10">

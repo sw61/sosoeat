@@ -1,46 +1,38 @@
 'use client';
 
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   AuthSubmitButton,
-  getAuthFieldError,
   getErrorAnimationClasses,
   getInputClasses,
 } from '@/app/(auth)/_components';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import { emailSchema, EmailValues } from '../signup-form.schema';
-import { FirstStepProps } from '../signup-form.types';
+import { emailSchema } from '../signup-form.schema';
+import { EmailValues, FirstStepProps } from '../signup-form.types';
 
-export const EmailStep = ({ onNext, defaultValues }: FirstStepProps<EmailValues>) => {
+interface EmailStepProps extends FirstStepProps<EmailValues> {
+  serverError?: string | null;
+}
+
+export const EmailStep = ({ onNext, defaultValues, serverError }: EmailStepProps) => {
   const {
     register,
     handleSubmit,
-    control,
-    formState: { errors, isValid },
+    formState: { errors, isValid, touchedFields },
   } = useForm<EmailValues>({
     resolver: zodResolver(emailSchema),
-    mode: 'onTouched',
-    delayError: 1000,
+    mode: 'all',
     defaultValues,
   });
 
-  const emailValue = useWatch({
-    control,
-    name: 'email',
-  });
+  const emailError = touchedFields.email ? errors.email : undefined;
+  const hasError = !!emailError?.message?.trim() || !!serverError;
 
-  // 공통 헬퍼 함수를 사용하여 에러 노출 여부 결정
-  const emailError = getAuthFieldError(errors.email, emailValue);
-  const hasError = !!emailError;
-
-  /**
-   * TODO: 추후 API 연동 시 실제 이메일 중복 확인 로직 구현 필요
-   */
   const onSubmit = (data: EmailValues) => {
     onNext(data);
   };
@@ -55,7 +47,7 @@ export const EmailStep = ({ onNext, defaultValues }: FirstStepProps<EmailValues>
           <FieldContent className="gap-1.5">
             <Input
               id="email"
-              type="email"
+              type="text"
               placeholder="example@email.com"
               className={getInputClasses(hasError)}
               {...register('email')}
@@ -63,7 +55,10 @@ export const EmailStep = ({ onNext, defaultValues }: FirstStepProps<EmailValues>
             />
             <div className={getErrorAnimationClasses(hasError)}>
               <div className="overflow-hidden">
-                <FieldError errors={[emailError]} className="ml-1" />
+                <FieldError
+                  errors={[emailError ?? (serverError ? { message: serverError } : undefined)]}
+                  className="ml-1"
+                />
               </div>
             </div>
           </FieldContent>

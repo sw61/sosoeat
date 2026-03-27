@@ -43,7 +43,14 @@
    npm install
    ```
 
-3. **개발 서버 실행**
+3. **환경 변수 설정**
+   `.env.example` 파일을 복사하여 `.env` 파일을 생성하고 필요한 값을 채워넣습니다.
+
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **개발 서버 실행**
    ```bash
    npm run dev
    ```
