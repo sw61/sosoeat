@@ -1050,7 +1050,7 @@ export class MeetingsApi extends runtime.BaseAPI {
 export const TeamIdMeetingsGetSortByEnum = {
   DateTime: 'dateTime',
   RegistrationEnd: 'registrationEnd',
-  ParticipantCount: 'participantCount',
+  ParticipantCount: '',
 } as const;
 export type TeamIdMeetingsGetSortByEnum =
   (typeof TeamIdMeetingsGetSortByEnum)[keyof typeof TeamIdMeetingsGetSortByEnum];

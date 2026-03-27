@@ -10,10 +10,6 @@ import type { DetailDatePickerProps } from '@/components/common/date-picker/deta
 import { Button } from '@/components/ui/button/button';
 import { Calendar } from '@/components/ui/calendar/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/popover';
-import {
-  meetingFilterPillLabelClass,
-  meetingFilterPillTriggerClass,
-} from '@/lib/meeting-filter-pill';
 import { cn } from '@/lib/utils';
 
 const variantStyles: Record<
@@ -41,7 +37,7 @@ const variantStyles: Record<
 };
 
 function formatTriggerLabel(value: Date | null): string {
-  if (value == null) return '날짜 전체';
+  if (!value) return '날짜 전체';
   return format(value, 'yyyy-MM-dd');
 }
 
@@ -49,7 +45,7 @@ export function DetailDatePicker({
   variant = 'groupEat',
   value,
   onChange,
-  triggerClassName,
+  className,
 }: DetailDatePickerProps) {
   const styles = variantStyles[variant];
 
@@ -75,11 +71,8 @@ export function DetailDatePicker({
 
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
-      <PopoverTrigger
-        type="button"
-        className={cn(meetingFilterPillTriggerClass, 'min-w-[93px]', triggerClassName)}
-      >
-        <span className={meetingFilterPillLabelClass(value != null)}>{triggerLabel}</span>
+      <PopoverTrigger type="button" className={cn('min-w-[93px]', className)}>
+        <span>{triggerLabel}</span>
         <ChevronDown className="text-sosoeat-gray-600 size-[17px] shrink-0" aria-hidden />
       </PopoverTrigger>
       <PopoverContent className="w-[298px] p-4">

@@ -4,9 +4,14 @@ import userEvent from '@testing-library/user-event';
 import { MeetingFilterBar } from './meeting-filter-bar';
 import type { MeetingFilterBarProps } from './meeting-filter-bar.types';
 
-const defaultProps: Pick<MeetingFilterBarProps, 'date' | 'regionCommitted'> = {
+const defaultProps: Pick<
+  MeetingFilterBarProps,
+  'date' | 'regionCommitted' | 'typeFilter' | 'sort'
+> = {
   date: null,
   regionCommitted: null,
+  typeFilter: 'all',
+  sort: 'participantCount',
 };
 
 describe('MeetingFilterBar', () => {

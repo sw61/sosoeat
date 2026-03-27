@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
-import { CardAction } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 import type { HeartButtonProps } from './heart-button.types';
