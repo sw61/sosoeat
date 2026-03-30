@@ -37,7 +37,7 @@ export const LoginForm = (props: LoginFormProps) => {
           <FieldContent>
             <Input
               id="email"
-              type="email"
+              type="text"
               placeholder="이메일을 입력해주세요"
               disabled={isPending}
               className={getInputClasses(hasEmailError)}

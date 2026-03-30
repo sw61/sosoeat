@@ -5,76 +5,80 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 import { DetailDatePicker } from '@/components/common/date-picker';
-import regionData from '@/data/korea-regions-districts.json';
 import {
-  meetingFilterPillLabelClass,
-  meetingFilterPillTriggerClass,
-} from '@/lib/meeting-filter-pill';
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown';
+import regionData from '@/data/korea-regions-districts.json';
+import { meetingFilterPillTriggerClass } from '@/lib/meeting-filter-pill';
 import { cn } from '@/lib/utils';
 
 import { RegionSelectModal } from '../region-select-modal';
 
 import { MeetingFilterBarButton } from './_components/meeting-filter-bar-button';
+import { options } from './repositories/options';
 import type { MeetingFilterBarProps } from './meeting-filter-bar.types';
 
 export const MeetingFilterBar = ({
+  onTypeFilterChange = () => {},
   regionCommitted,
   date,
   className,
-  onFilterButtonClick = () => {},
+  typeFilter,
+  sort: _sort,
+  onSortChange = () => {},
   onDateChange = () => {},
   onRegionChange = () => {},
 }: MeetingFilterBarProps) => {
-  const [activeTab, setActiveTab] = useState<'all' | 'groupEat' | 'groupBuy'>('all');
-
-  const handleTabClick = (filterType: string) => {
-    if (filterType === 'all' || filterType === 'groupEat' || filterType === 'groupBuy') {
-      setActiveTab(filterType);
-    }
-    onFilterButtonClick(filterType);
-  };
-
+  const [checked, setChecked] = useState<string | null>(null);
   return (
     <div
       className={cn(
-        'flex min-h-10 w-full max-w-[1140px] flex-row flex-wrap items-center justify-between gap-y-2 px-1 md:flex-nowrap md:gap-y-0',
+        // mobile-first: base = stacked rows, md+ = single row
+        'flex w-full flex-col justify-start gap-2 sm:justify-between md:flex-row md:items-center md:gap-0',
         className
       )}
     >
       {/* Frame 2610400 — w 283, 탭 간 space-between (피그마 gap 60 대응) */}
-      <div className="flex h-10 max-w-[min(283px,100%)] shrink-0 items-center justify-between gap-[24.5px]">
+      <div className="flex h-10 w-full max-w-xs items-center gap-[24.5px]">
         <MeetingFilterBarButton
           filterType="all"
           label="전체"
-          selected={activeTab === 'all'}
-          onClick={handleTabClick}
+          selected={typeFilter === 'all'}
+          onClick={() => onTypeFilterChange('all')}
         />
         <MeetingFilterBarButton
           filterType="groupEat"
           label="함께먹기"
-          selected={activeTab === 'groupEat'}
-          onClick={handleTabClick}
+          selected={typeFilter === 'groupEat'}
+          onClick={() => onTypeFilterChange('groupEat')}
         />
         <MeetingFilterBarButton
           filterType="groupBuy"
           label="공동구매"
-          selected={activeTab === 'groupBuy'}
-          onClick={handleTabClick}
+          selected={typeFilter === 'groupBuy'}
+          onClick={() => onTypeFilterChange('groupBuy')}
         />
       </div>
 
       {/* Frame 2610402 — h 32 필터 행 */}
-      <div className="flex h-8 shrink-0 items-center justify-end gap-2">
-        <DetailDatePicker value={date} onChange={onDateChange} />
+      <div className="flex h-8 w-full items-center justify-start gap-2 sm:justify-end md:w-auto">
+        <DetailDatePicker
+          value={date}
+          onChange={onDateChange}
+          className={cn(meetingFilterPillTriggerClass, 'min-w-24')}
+        />
         <RegionSelectModal
           trigger={
-            <button type="button" className={cn(meetingFilterPillTriggerClass, 'min-w-[93px]')}>
-              <span className={meetingFilterPillLabelClass(regionCommitted != null)}>
+            <button type="button" className={cn(meetingFilterPillTriggerClass, 'min-w-24')}>
+              <span>
                 {regionCommitted == null
                   ? '지역 전체'
                   : `${regionCommitted.province} ${regionCommitted.district}`}
               </span>
-              <ChevronDown className="text-sosoeat-gray-600 size-[17px] shrink-0" aria-hidden />
+              <ChevronDown className="text-sosoeat-gray-600 size-4 shrink-0" aria-hidden />
             </button>
           }
           title="지역"
@@ -86,9 +90,62 @@ export const MeetingFilterBar = ({
             onChange: onRegionChange,
           }}
         />
-        <button type="button" className={cn(meetingFilterPillTriggerClass, 'min-w-[71px]')}>
-          <span className={meetingFilterPillLabelClass(false)}>인기순</span>
-        </button>
+        {
+          <DropdownMenu>
+            <DropdownMenuTrigger className={cn(meetingFilterPillTriggerClass, 'min-w-24')}>
+              <span>{checked ? checked : '정렬'}</span>
+              <ChevronDown className="size-4 shrink-0" aria-hidden />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className={cn(
+                'flex h-40 w-[134px] flex-col items-stretch overflow-hidden rounded-xl border border-[#E8E8E8] bg-white p-0',
+                'shadow-[0_4px_16px_rgba(0,0,0,0.04)]'
+              )}
+            >
+              {options.map(
+                (option: {
+                  label: string;
+                  sortBy: 'participantCount' | 'dateTime' | 'registrationEnd';
+                  sortOrder: 'asc' | 'desc';
+                }) => {
+                  const isSelected = checked === option.label;
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={option.label}
+                      checked={isSelected}
+                      onCheckedChange={() => {
+                        setChecked(option.label);
+                        if (checked === option.label) {
+                          setChecked(null);
+                        } else {
+                          setChecked(option.label);
+                        }
+                        onSortChange(option.sortBy, option.sortOrder);
+                      }}
+                      className={cn(
+                        'relative flex h-10 min-h-10 w-full flex-none cursor-pointer items-center gap-[6px] rounded-none border-0 py-0 pr-3 pl-[11px] text-sm leading-5 font-medium text-[#333333] outline-none select-none',
+                        'focus:text-[#333333] data-[highlighted]:text-[#333333]',
+                        isSelected
+                          ? 'bg-[#E8F3FF] focus:bg-[#E8F3FF] data-[highlighted]:bg-[#E8F3FF]'
+                          : 'bg-white focus:bg-white data-[highlighted]:bg-white',
+                        '[&_[data-slot=dropdown-menu-checkbox-item-indicator]]:hidden'
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          'size-[6px] shrink-0 rounded-full',
+                          isSelected ? 'bg-[#3182F6]' : 'bg-[#D9D9D9]'
+                        )}
+                        aria-hidden
+                      />
+                      <span>{option.label}</span>
+                    </DropdownMenuCheckboxItem>
+                  );
+                }
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        }
       </div>
     </div>
   );

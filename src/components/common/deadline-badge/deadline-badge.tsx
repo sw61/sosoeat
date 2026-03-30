@@ -60,7 +60,7 @@ export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineB
     <Badge
       variant="outline"
       className={cn(
-        'mt-3.5 h-auto min-h-0 w-61.75 items-center gap-1 rounded-[14px] border-0 py-1.5 pr-3 pl-1.5 text-sm leading-5 font-medium shadow-none',
+        'h-auto min-h-0 w-61.75 items-center gap-1 rounded-[14px] border-0 py-1.5 pr-3 pl-1.5 text-sm leading-5 font-medium shadow-none',
         variantBadgeClassName[variant],
         className
       )}

@@ -8,7 +8,7 @@ describe('Progress', () => {
 
     const indicate = container.querySelector('[data-slot="progress-indicator"]');
 
-    expect(indicate).toHaveClass('bg-sosoeat-orange-500');
+    expect(indicate).toHaveClass('bg-sosoeat-orange-600');
   });
 
   it("variant='groupBuy'일 때 groupBuy 색상 클래스가 적용된다", () => {
@@ -16,7 +16,7 @@ describe('Progress', () => {
 
     const indicate = container.querySelector('[data-slot="progress-indicator"]');
 
-    expect(indicate).toHaveClass('bg-sosoeat-blue-500');
+    expect(indicate).toHaveClass('bg-sosoeat-blue-600');
   });
 
   it('progressbar role로 렌더링된다', () => {

@@ -29,7 +29,11 @@ jobs:
 
       - name: 단위 테스트 실행
         run: npm test
-        
+        env:
+          LANG: ko_KR.UTF-8
+          LC_ALL: ko_KR.UTF-8
+          TZ: Asia/Seoul
+
       - name: 프로젝트 빌드 실행
         run: npm run build
 

@@ -5,7 +5,7 @@ import { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { DetailDatePicker } from '@/components/common/date-picker/detail-date-picker';
 
 const meta = {
-  title: 'components/common/date-picker',
+  title: 'components/common/detail-date-picker',
   component: DetailDatePicker,
 } satisfies Meta<typeof DetailDatePicker>;
 

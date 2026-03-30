@@ -5,5 +5,5 @@ export interface DetailDatePickerProps {
   value: Date | null;
   onChange: (date: Date | null) => void;
   /** 트리거 버튼에 합쳐진다 (필터 바 등 레이아웃용) */
-  triggerClassName?: string;
+  className?: string;
 }

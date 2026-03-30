@@ -1,7 +1,6 @@
 import { CalendarDays, MoreHorizontal } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar/avatar';
-import { Badge } from '@/components/ui/badge/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +14,6 @@ export function SosoTalkPostDetailHeader({
   title,
   authorName,
   authorImageUrl,
-  categoryLabel,
-  statusLabel,
   createdAt,
   createdAtDateTime,
   isAuthor = false,
@@ -27,25 +24,7 @@ export function SosoTalkPostDetailHeader({
   return (
     <header className="flex flex-col gap-4 md:gap-5">
       <div className="flex items-start justify-between gap-6">
-        <div className="flex flex-1 flex-col gap-4 md:gap-5">
-          {(categoryLabel || statusLabel) && (
-            <div className="flex flex-wrap items-center gap-3">
-              {categoryLabel && (
-                <Badge
-                  variant="outline"
-                  className="border-sosoeat-orange-600 text-sosoeat-orange-600 h-7 rounded-full px-3 text-sm font-semibold"
-                >
-                  {categoryLabel}
-                </Badge>
-              )}
-              {statusLabel && (
-                <Badge className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-600 h-7 rounded-full px-3 text-sm font-semibold text-white">
-                  {statusLabel}
-                </Badge>
-              )}
-            </div>
-          )}
-
+        <div className="flex flex-1 flex-col">
           <h1 className="text-sosoeat-gray-900 text-2xl font-semibold md:text-3xl">{title}</h1>
         </div>
 

@@ -1,6 +1,6 @@
 export const variantStyles = {
-  groupBuy: 'bg-sosoeat-blue-500',
-  groupEat: 'bg-sosoeat-orange-500',
+  groupBuy: 'bg-sosoeat-blue-600',
+  groupEat: 'bg-sosoeat-orange-600',
   error: 'bg-red-600',
 } as const;
 

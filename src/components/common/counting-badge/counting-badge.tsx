@@ -6,12 +6,12 @@ interface CountingBadgeProps {
 }
 
 const badgeVariants = cva(
-  'bg-sosoeat-orange-600 flex items-center justify-center rounded-full font-semibold text-white',
+  'bg-sosoeat-orange-600 inline-flex items-center justify-center rounded-full font-semibold text-white',
   {
     variants: {
       size: {
-        small: 'h-3 text-[8px]',
-        large: 'h-4 text-xs',
+        small: 'h-4 min-w-4 px-1 text-[10px] leading-none',
+        large: 'h-6 min-w-6 px-2 text-sm leading-none',
       },
       overMax: {
         true: 'w-auto',
@@ -19,10 +19,10 @@ const badgeVariants = cva(
       },
     },
     compoundVariants: [
-      { size: 'small', overMax: false, className: 'w-3 px-0' },
-      { size: 'large', overMax: false, className: 'px-[7px]' },
-      { size: 'small', overMax: true, className: 'px-1' },
-      { size: 'large', overMax: true, className: 'px-[5px]' },
+      { size: 'small', overMax: false, className: 'w-4 px-0' },
+      { size: 'large', overMax: false, className: 'w-6 px-0' },
+      { size: 'small', overMax: true, className: 'px-1.5' },
+      { size: 'large', overMax: true, className: 'px-2.5' },
     ],
     defaultVariants: {
       size: 'large',

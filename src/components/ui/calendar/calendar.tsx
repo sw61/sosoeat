@@ -1,14 +1,24 @@
 'use client';
 
 import * as React from 'react';
-import { type DayButton, DayPicker, getDefaultClassNames, type Locale } from 'react-day-picker';
+import {
+  type DayButton,
+  DayPicker,
+  getDefaultClassNames,
+  type Locale as DayPickerLocale,
+} from 'react-day-picker';
 
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { format, type Locale as DateFnsLocale } from 'date-fns';
+import { ChevronDown, Triangle } from 'lucide-react';
 
 import { Button, buttonVariants } from '@/components/ui/button/button';
 import { cn } from '@/lib/utils';
 
-function Calendar({
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  buttonVariant?: React.ComponentProps<typeof Button>['variant'];
+};
+
+export const Calendar = ({
   className,
   classNames,
   showOutsideDays = true,
@@ -18,9 +28,7 @@ function Calendar({
   formatters,
   components,
   ...props
-}: React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>['variant'];
-}) {
+}: CalendarProps) => {
   const defaultClassNames = getDefaultClassNames();
 
   return (
@@ -35,7 +43,7 @@ function Calendar({
       captionLayout={captionLayout}
       locale={locale}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString(locale?.code, { month: 'short' }),
+        formatMonthDropdown: (date) => format(date, 'MMM', { locale: locale as DateFnsLocale }),
         ...formatters,
       }}
       classNames={{
@@ -119,14 +127,26 @@ function Calendar({
         },
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === 'left') {
-            return <ChevronLeftIcon className={cn('size-4', className)} {...props} />;
+            return (
+              <Triangle
+                className={cn('h-[7px] w-[15px] -rotate-90 fill-current', className)}
+                strokeWidth={0}
+                {...props}
+              />
+            );
           }
 
           if (orientation === 'right') {
-            return <ChevronRightIcon className={cn('size-4', className)} {...props} />;
+            return (
+              <Triangle
+                className={cn('h-[7px] w-[15px] rotate-90 fill-current', className)}
+                strokeWidth={0}
+                {...props}
+              />
+            );
           }
 
-          return <ChevronDownIcon className={cn('size-4', className)} {...props} />;
+          return <ChevronDown className={cn('size-4', className)} {...props} />;
         },
         DayButton: ({ ...props }) => <CalendarDayButton locale={locale} {...props} />,
         WeekNumber: ({ children, ...props }) => {
@@ -143,15 +163,17 @@ function Calendar({
       {...props}
     />
   );
-}
+};
 
-function CalendarDayButton({
+export const CalendarDayButton = ({
   className,
   day,
   modifiers,
   locale,
   ...props
-}: React.ComponentProps<typeof DayButton> & { locale?: Partial<Locale> }) {
+}: React.ComponentProps<typeof DayButton> & {
+  locale?: Partial<DayPickerLocale> | DateFnsLocale;
+}) => {
   const defaultClassNames = getDefaultClassNames();
 
   const ref = React.useRef<HTMLButtonElement>(null);
@@ -164,7 +186,7 @@ function CalendarDayButton({
       ref={ref}
       variant="ghost"
       size="icon"
-      data-day={day.date.toLocaleDateString(locale?.code)}
+      data-day={format(day.date, 'yyyy-MM-dd', { locale: locale as DateFnsLocale })}
       data-selected-single={
         modifiers.selected &&
         !modifiers.range_start &&
@@ -182,6 +204,4 @@ function CalendarDayButton({
       {...props}
     />
   );
-}
-
-export { Calendar, CalendarDayButton };
+};

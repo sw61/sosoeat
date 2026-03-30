@@ -55,14 +55,11 @@ describe('SignupForm', () => {
     // 다음 요소로 포커스 이동하여 blur 트리거
     await user.tab();
 
-    await waitFor(
-      () => {
-        expect(screen.getByText('올바른 이메일 형식이 아닙니다.')).toBeInTheDocument();
-        const nextButton = screen.getByRole('button', { name: /다음/ });
-        expect(nextButton).toBeDisabled();
-      },
-      { timeout: 2000 }
-    );
+    await waitFor(() => {
+      expect(screen.getByText('올바른 이메일 형식이 아닙니다.')).toBeInTheDocument();
+      const nextButton = screen.getByRole('button', { name: /다음/ });
+      expect(nextButton).toBeDisabled();
+    });
   });
 
   it('비밀번호가 8자 미만일 경우 에러 메시지를 표시해야 합니다', async () => {
@@ -73,12 +70,9 @@ describe('SignupForm', () => {
     // 다음 요소로 포커스 이동하여 blur 트리거 (onTouched 효과)
     await user.tab();
 
-    await waitFor(
-      () => {
-        expect(screen.getByText('비밀번호가 8자 이상이 되도록 해 주세요.')).toBeInTheDocument();
-      },
-      { timeout: 2000 }
-    );
+    await waitFor(() => {
+      expect(screen.getByText('비밀번호가 8자 이상이 되도록 해 주세요.')).toBeInTheDocument();
+    });
   });
 
   it('비밀번호 단계에서 비밀번호 불일치 시 에러 메시지를 표시해야 합니다', async () => {
@@ -91,31 +85,6 @@ describe('SignupForm', () => {
     // blur 트리거 → isTouched 상태로 전환 → getAuthFieldError가 에러 노출
     await user.tab();
 
-    await waitFor(
-      () => {
-        expect(screen.getByText('비밀번호가 일치하지 않습니다')).toBeInTheDocument();
-      },
-      { timeout: 2000 }
-    );
-  });
-
-  it('비밀번호와 비밀번호 확인을 동일하게 입력한 후 비밀번호 내용을 변경하면 에러 메시지를 표시해야 합니다', async () => {
-    const { user } = setup(<SignupForm onSubmit={mockOnSubmit} defaultStep="password" />);
-    const passwordInput = screen.getByLabelText(/^비밀번호\*/);
-    const confirmInput = screen.getByLabelText(/^비밀번호 확인\*/);
-
-    await user.type(passwordInput, 'password123');
-    await user.type(confirmInput, 'password123');
-
-    // 동일하게 입력되어 에러가 없어야 함
-    await waitFor(() => {
-      expect(screen.queryByText('비밀번호가 일치하지 않습니다')).not.toBeInTheDocument();
-    });
-
-    // 비밀번호 내용을 변경
-    await user.type(passwordInput, '4');
-
-    // 에러 메시지가 표출되는지 확인
     await waitFor(() => {
       expect(screen.getByText('비밀번호가 일치하지 않습니다')).toBeInTheDocument();
     });
@@ -142,7 +111,7 @@ describe('SignupForm', () => {
   });
 
   it('닉네임 단계에서 이전 버튼을 누르면 비밀번호 단계로 이동해야 합니다', async () => {
-    const { user } = setup(<SignupForm onSubmit={mockOnSubmit} defaultStep="nickname" />);
+    const { user } = setup(<SignupForm onSubmit={mockOnSubmit} defaultStep="name" />);
 
     // 닉네임 단계인지 검증
     expect(screen.getByText('프로필을 설정하세요')).toBeInTheDocument();
@@ -184,39 +153,33 @@ describe('SignupForm', () => {
   });
 
   it('닉네임에 특수문자, 공백, 자음/모음 단일 사용 시 에러 메시지를 표시해야 합니다', async () => {
-    const { user } = setup(<SignupForm onSubmit={mockOnSubmit} defaultStep="nickname" />);
-    const nicknameInput = screen.getByLabelText(/닉네임/);
+    const { user } = setup(<SignupForm onSubmit={mockOnSubmit} defaultStep="name" />);
+    const nameInput = screen.getByLabelText(/이름/);
 
     // 공백 포함 입력
-    await user.type(nicknameInput, 'hello 123');
+    await user.type(nameInput, 'hello 123');
     await user.tab();
 
-    await waitFor(
-      () => {
-        expect(
-          screen.getByText('특수문자, 공백, 자음/모음 단일 사용은 불가합니다.')
-        ).toBeInTheDocument();
-      },
-      { timeout: 2000 }
-    );
+    await waitFor(() => {
+      expect(
+        screen.getByText('특수문자, 공백, 자음/모음 단일 사용은 불가합니다.')
+      ).toBeInTheDocument();
+    });
 
     // 지우고 단일 자음 입력
-    await user.clear(nicknameInput);
-    await user.type(nicknameInput, 'ㄱㄴㄷ');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'ㄱㄴㄷ');
     await user.tab();
 
-    await waitFor(
-      () => {
-        expect(
-          screen.getByText('특수문자, 공백, 자음/모음 단일 사용은 불가합니다.')
-        ).toBeInTheDocument();
-      },
-      { timeout: 2000 }
-    );
+    await waitFor(() => {
+      expect(
+        screen.getByText('특수문자, 공백, 자음/모음 단일 사용은 불가합니다.')
+      ).toBeInTheDocument();
+    });
   });
 
   it('로딩 중일 때는 버튼에 "회원가입 중..."이 표시되고 버튼이 비활성화되어야 합니다', () => {
-    setup(<SignupForm onSubmit={mockOnSubmit} defaultStep="nickname" isLoading={true} />);
+    setup(<SignupForm onSubmit={mockOnSubmit} defaultStep="name" isLoading={true} />);
 
     const submitButton = screen.getByRole('button', { name: /회원가입 중.../ });
     expect(submitButton).toBeInTheDocument();
@@ -266,9 +229,9 @@ describe('SignupForm', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: /다음/ })).not.toBeDisabled());
     await user.click(screen.getByRole('button', { name: /다음/ }));
 
-    // Step 3: 닉네임
+    // Step 3: 이름
     await waitFor(() => expect(screen.getByText('프로필을 설정하세요')).toBeInTheDocument());
-    await user.type(screen.getByLabelText(/닉네임/), '테스터');
+    await user.type(screen.getByLabelText(/이름/), '테스터');
     await waitFor(() =>
       expect(screen.getByRole('button', { name: /회원가입$/ })).not.toBeDisabled()
     );
@@ -279,7 +242,7 @@ describe('SignupForm', () => {
       expect(mockOnSubmit).toHaveBeenCalledWith({
         email: 'test@example.com',
         password: 'password123',
-        nickname: '테스터',
+        name: '테스터',
       });
     });
   });

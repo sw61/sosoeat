@@ -9,7 +9,7 @@ import { MapPin, Users } from 'lucide-react';
 import { DeadlineBadge } from '@/components/common/deadline-badge';
 import { EstablishmentStatusBadge } from '@/components/common/establishment-status-badge';
 import { HeartButton } from '@/components/common/heart-button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardAction, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Progress, type ProgressProps } from '@/components/ui/progress-bar';
 import { cn } from '@/lib/utils';
 
@@ -44,7 +44,7 @@ export const MainPageCard = ({ meeting }: MainPageCardProps) => {
   return (
     <Card
       className={cn(
-        'h-105 w-90 gap-0 overflow-hidden rounded-2xl border border-[#F3F4F6] bg-white py-0 font-medium shadow-none ring-0'
+        'h-105 w-full max-w-90 gap-0 overflow-hidden rounded-2xl border border-[#F3F4F6] bg-white py-0 font-medium shadow-none ring-0'
       )}
     >
       <div className="relative h-[180px] w-full shrink-0 overflow-hidden rounded-2xl">
@@ -86,7 +86,10 @@ export const MainPageCard = ({ meeting }: MainPageCardProps) => {
         >
           {meeting.name}
         </h3>
-        <HeartButton />
+        <CardAction className="absolute top-4 right-4 z-10">
+          {' '}
+          <HeartButton />
+        </CardAction>
       </CardHeader>
 
       <CardContent className="flex min-h-0 flex-1 flex-col gap-0 px-4 pt-0 pb-0">

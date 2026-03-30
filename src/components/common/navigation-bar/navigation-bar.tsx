@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dropdown';
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { useLogout } from '@/services/auth';
 import { useAuthStore } from '@/store/auth-store';
 
 const NAV_ITEMS = [
@@ -27,7 +28,8 @@ const NAV_ITEMS = [
 export function NavigationBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const { mutate: performLogout } = useLogout();
 
   const visibleNavItems = NAV_ITEMS;
 
@@ -39,11 +41,6 @@ export function NavigationBar() {
   // ex) import { WishGroupBadge } from '@/components/common/wish-group-badge'
   const wishGroupCount = 0;
 
-  function handleLogout() {
-    logout();
-    router.push('/');
-  }
-
   return (
     <header className="bg-background w-full">
       <div
@@ -53,12 +50,10 @@ export function NavigationBar() {
           'md:px-[37px]'
         )}
       >
-        {/* 로고 */}
         <Link href="/" className="shrink-0">
           <Image src="/images/logo.svg" alt="sosoeat" width={72} height={22.64} priority />
         </Link>
 
-        {/* 메뉴 링크 — 태블릿 이상 */}
         <nav className="hidden items-center gap-1 md:flex">
           {visibleNavItems.map((item) => {
             const isActive = pathname === item.href;
@@ -69,11 +64,10 @@ export function NavigationBar() {
                 className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
                   isActive
                     ? 'text-sosoeat-orange-600 bg-sosoeat-orange-100'
-                    : 'text-sosoeat-gray-900 hover:text-foreground' // TODO: 기본 text 색상 변경 시 text-sosoeat-gray-900 제거
+                    : 'text-sosoeat-gray-900 hover:text-foreground'
                 }`}
               >
                 {item.label}
-                {/* TODO: 찜 컴포넌트 분리 시 <WishGroupBadge />로 교체 */}
                 {'showBadge' in item && !!user && (
                   <span className="bg-sosoeat-orange-600 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white">
                     {wishGroupCount}
@@ -84,14 +78,9 @@ export function NavigationBar() {
           })}
         </nav>
 
-        {/* 우측 영역 */}
         <div className="flex items-center gap-2">
-          {/* 로그인 상태 */}
           {user ? (
             <>
-              {/* 알림 버튼 — Mobile: Sheet / PC·Tablet: Dropdown */}
-
-              {/* Mobile 알림 (md 미만) */}
               <Sheet>
                 <SheetTrigger asChild>
                   <button className="relative cursor-pointer p-1 md:hidden" aria-label="알림">
@@ -103,30 +92,9 @@ export function NavigationBar() {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-64 p-0 pt-12">
                   <SheetTitle className="sr-only">알림</SheetTitle>
-                  {/* TODO: 알림 패널 구현 후 아래 방식으로 연결
-                  - 알림 컴포넌트를 import한 뒤 이 자리에 렌더링하면 됩니다.
-                  ex) import { 알림컴포넌트 } from '...'
-                      <알림컴포넌트 /> */}
                 </SheetContent>
               </Sheet>
 
-              {/* PC·Tablet 알림 (md 이상) — 알림 구현 후 아래 방식으로 연결
-                1. import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog' 추가
-                2. 아래 주석 해제 후 알림 컴포넌트 자리에 렌더링
-                ex) import { 알림컴포넌트 } from '...'
-              <Dialog>
-                <DialogTrigger asChild>
-                  <button className="relative hidden p-1 md:block" aria-label="알림">
-                    <Bell className="text-sosoeat-orange-600 h-5 w-5" />
-                    {hasUnread && (
-                      <span className="bg-sosoeat-orange-600 absolute top-0 right-0 h-2 w-2 rounded-full" />
-                    )}
-                  </button>
-                </DialogTrigger>
-                <DialogContent>
-                  <알림컴포넌트 />
-                </DialogContent>
-              </Dialog> */}
               <button className="relative hidden cursor-pointer p-1 md:block" aria-label="알림">
                 <Bell className="text-sosoeat-orange-600 h-5 w-5" />
                 {hasUnread && (
@@ -134,17 +102,14 @@ export function NavigationBar() {
                 )}
               </button>
 
-              {/* 모임 만들기 — lg 이상 */}
               <Button
                 size="lg"
                 className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white lg:mr-1 lg:flex"
-                // TODO: 모임 만들기 모달 컴포넌트 완성 시 연결할 것
               >
                 <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
                 모임 만들기
               </Button>
 
-              {/* 프로필 — md 이상만: md: 사진만, lg: 이름+드롭다운 */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -152,7 +117,7 @@ export function NavigationBar() {
                     aria-label="프로필 메뉴"
                   >
                     <Avatar className="bg-sosoeat-gray-200 shrink-0">
-                      <AvatarImage src={user.profileImage ?? undefined} alt={user.name} />
+                      <AvatarImage src={user.image ?? undefined} alt={user.name} />
                       <AvatarFallback className="text-sosoeat-gray-500 text-sm font-medium">
                         {user.name[0]}
                       </AvatarFallback>
@@ -165,14 +130,13 @@ export function NavigationBar() {
                   <DropdownMenuItem onClick={() => router.push('/mypage')}>
                     마이페이지
                   </DropdownMenuItem>
-                  <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+                  <DropdownMenuItem variant="destructive" onClick={() => performLogout()}>
                     로그아웃
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
           ) : (
-            /* 비로그인 상태 */
             <Link
               href="/login"
               className="text-muted-foreground hover:text-foreground hidden text-sm font-medium transition-colors md:block"
@@ -181,7 +145,6 @@ export function NavigationBar() {
             </Link>
           )}
 
-          {/* 햄버거 버튼 — md 미만 */}
           <Sheet>
             <SheetTrigger asChild>
               <button className="p-1 md:hidden" aria-label="메뉴 열기">

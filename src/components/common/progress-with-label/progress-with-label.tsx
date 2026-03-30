@@ -17,8 +17,8 @@ export interface ProgressWithLabelProps {
 const progressStateClasses = cva('mr-1 ml-auto text-xs font-bold', {
   variants: {
     variant: {
-      groupEat: 'text-sosoeat-orange-500',
-      groupBuy: 'text-sosoeat-blue-500',
+      groupEat: 'text-sosoeat-orange-600',
+      groupBuy: 'text-sosoeat-blue-600',
     },
   },
 });
