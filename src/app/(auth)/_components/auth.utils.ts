@@ -34,18 +34,3 @@ export const getInputClasses = (hasError: boolean = false, className?: string) =
     hasError && 'border-destructive focus:border-destructive',
     className
   );
-
-/**
- * 인증 관련 필드의 에러를 표시할지 여부를 결정하는 헬퍼 함수입니다.
- *
- * @param {object} error - React Hook Form의 필드 에러 객체
- * @param {string} value - 현재 필드의 값 (watch 값)
- * @returns {object | undefined} 표시할 에러 객체 또는 undefined
- */
-export const getAuthFieldError = (error?: { message?: string }, value?: string) => {
-  // mode: 'onTouched'로 인해 에러가 발생했다는 것은 이미 터치되었거나 제출되었음을 의미하므로 검사를 생략합니다.
-  if (error && !!value) {
-    return error;
-  }
-  return undefined;
-};

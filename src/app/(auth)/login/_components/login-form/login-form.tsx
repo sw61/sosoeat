@@ -1,5 +1,7 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import { Eye, EyeOff } from 'lucide-react';
 
 import {
@@ -9,11 +11,15 @@ import {
 } from '@/app/(auth)/_components';
 import { Field, FieldContent, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { LoginRequest } from '@/types/generated-client/models';
 
-import { useLoginForm } from './hooks';
-import { LoginFormProps } from './login-form.types';
+import { useLoginForm } from './hooks/use-login-form';
 
-export const LoginForm = (props: LoginFormProps) => {
+interface LoginFormProps {
+  defaultValues?: Partial<LoginRequest>;
+}
+
+const LoginFormContent = (props: LoginFormProps) => {
   const {
     register,
     handleFormSubmit,
@@ -92,3 +98,9 @@ export const LoginForm = (props: LoginFormProps) => {
     </form>
   );
 };
+
+export const LoginForm = (props: LoginFormProps) => (
+  <Suspense>
+    <LoginFormContent {...props} />
+  </Suspense>
+);
