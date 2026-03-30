@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 export function CtaSection() {
   return (
-    <section className="bg-sosoeat-orange-600 flex w-full flex-col items-center justify-center gap-6 py-20 text-white">
+    <section className="bg-sosoeat-orange-600 mt-[100px] flex w-full flex-col items-center justify-center gap-6 py-20 text-white">
       <div className="flex flex-col items-center gap-3">
         <h2 className="text-3xl font-bold">지금 바로 시작해볼까요?</h2>
         <p className="text-base font-medium text-white/80">
