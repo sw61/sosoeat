@@ -3,7 +3,6 @@ export interface SosoTalkPostSubmitPayload {
   contentHtml: string;
   contentText: string;
   imageFile: File | null;
-  imagePreviewUrl: string;
 }
 
 export interface SosoTalkPostEditorProps {

@@ -7,6 +7,7 @@ import {
   SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH,
   SOSOTALK_POST_EDITOR_TITLE_MAX_LENGTH,
 } from '../sosotalk-post-editor.constants';
+import type { ActiveFormats } from '../sosotalk-post-editor.internal-types';
 import type { SosoTalkPostEditorProps } from '../sosotalk-post-editor.types';
 import {
   calculateEffectiveContentLength,
@@ -15,16 +16,7 @@ import {
   toInitialHtml,
 } from '../sosotalk-post-editor.utils';
 
-type ActiveKey =
-  | 'bold'
-  | 'italic'
-  | 'underline'
-  | 'unorderedList'
-  | 'orderedList'
-  | 'alignLeft'
-  | 'alignCenter';
-
-type ActiveFormats = Record<ActiveKey, boolean>;
+import { useSosoTalkPostEditorImage } from './use-sosotalk-post-editor-image';
 
 const DEFAULT_ACTIVE_FORMATS: ActiveFormats = {
   bold: false,
@@ -59,9 +51,12 @@ export const useSosoTalkPostEditor = ({
   const [effectiveContentLength, setEffectiveContentLength] = useState(
     normalizePlainText(initialContent).length
   );
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(initialImageUrl);
   const [activeFormats, setActiveFormats] = useState<ActiveFormats>(DEFAULT_ACTIVE_FORMATS);
+  const { handleImageChange, handleImageRemove, imageFile, imagePreviewUrl } =
+    useSosoTalkPostEditorImage({
+      fileInputRef,
+      initialImageUrl,
+    });
 
   useEffect(() => {
     setTitle(initialTitle);
@@ -83,23 +78,6 @@ export const useSosoTalkPostEditor = ({
       editorRef.current.innerHTML = nextHtml;
     }
   }, [initialContent]);
-
-  useEffect(() => {
-    setImagePreviewUrl(initialImageUrl);
-  }, [initialImageUrl]);
-
-  useEffect(() => {
-    if (!imageFile) {
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(imageFile);
-    setImagePreviewUrl(objectUrl);
-
-    return () => {
-      URL.revokeObjectURL(objectUrl);
-    };
-  }, [imageFile]);
 
   const updateToolbarState = () => {
     if (!editorRef.current || typeof document === 'undefined') {
@@ -187,24 +165,6 @@ export const useSosoTalkPostEditor = ({
     }
   };
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const nextFile = event.target.files?.[0] ?? null;
-    setImageFile(nextFile);
-
-    if (!nextFile) {
-      setImagePreviewUrl('');
-    }
-  };
-
-  const handleImageRemove = () => {
-    setImageFile(null);
-    setImagePreviewUrl('');
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -216,12 +176,12 @@ export const useSosoTalkPostEditor = ({
       return;
     }
 
+    // Submit only the fields the server actually needs.
     onSubmit?.({
       title: title.trim(),
       contentHtml,
       contentText,
       imageFile,
-      imagePreviewUrl,
     });
   };
 
