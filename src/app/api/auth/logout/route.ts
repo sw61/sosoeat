@@ -25,13 +25,12 @@ export async function POST() {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       },
     });
-
-    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('[AuthLogoutBFF] Error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   } finally {
     // 2. 서버 세션(쿠키) 파기 — 백엔드 로그아웃 성공 여부와 무관하게 항상 실행
     await CookieStorage.clearSession();
   }
+
+  return NextResponse.json({ success: true });
 }

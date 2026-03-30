@@ -1,17 +1,43 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useSearchParams } from 'next/navigation';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
+
+import { useLogin } from '@/services/auth';
 import { LoginRequest } from '@/types/generated-client/models';
 
 import { loginSchema } from '../login-form.schema';
-import { LoginFormProps } from '../login-form.types';
 
-export const useLoginForm = ({ onSubmit, isLoading, defaultValues }: LoginFormProps) => {
+interface LoginFormProps {
+  defaultValues?: Partial<LoginRequest>;
+}
+
+export const useLoginForm = ({ defaultValues }: LoginFormProps) => {
+  const { mutateAsync: login, isPending: isLoginPending } = useLogin();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
+  // 동일한 에러 토스트 중복 실행 방지
+  const isErrorToastShown = useRef(false);
+
+  const errorCode = searchParams.get('error');
+
+  useEffect(() => {
+    if (!errorCode || isErrorToastShown.current) return;
+
+    isErrorToastShown.current = true;
+
+    const errorMessages: Record<string, string> = {
+      social_login_failed: '소셜 로그인에 실패했습니다. 다시 시도해주세요.',
+      session_error: '세션 설정 중 오류가 발생했습니다. 다시 시도해주세요.',
+    };
+
+    toast.error(errorMessages[errorCode] ?? '로그인 중 오류가 발생했습니다.');
+  }, [errorCode]);
 
   const {
     register,
@@ -23,22 +49,16 @@ export const useLoginForm = ({ onSubmit, isLoading, defaultValues }: LoginFormPr
     defaultValues,
   });
 
-  const isPending = isLoading || isSubmitting;
+  const isPending = isLoginPending || isSubmitting;
 
   const handleFormSubmit = handleSubmit(async (data: LoginRequest) => {
-    if (onSubmit) {
-      await onSubmit(data);
-    }
+    await login(data);
   });
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
-  // useWatch를 제거하고 formState.errors를 직접 사용합니다.
-  // react-hook-form의 errors 객체는 에러 상태가 변할 때만 리렌더링을 유발하므로 훨씬 효율적입니다.
   const emailError = touchedFields.email ? errors.email : undefined;
   const passwordError = touchedFields.password ? errors.password : undefined;
-
-  const isButtonActive = isValid;
 
   return {
     register,
@@ -48,7 +68,7 @@ export const useLoginForm = ({ onSubmit, isLoading, defaultValues }: LoginFormPr
     showPassword,
     toggleShowPassword,
     isPending,
-    isButtonActive,
+    isButtonActive: isValid,
     hasEmailError: !!emailError?.message?.trim(),
     hasPasswordError: !!passwordError?.message?.trim(),
   };

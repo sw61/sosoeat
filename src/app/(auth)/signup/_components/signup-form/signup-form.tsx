@@ -3,7 +3,9 @@
 import Link from 'next/link';
 
 import { Funnel, Step } from '@/components/common/funnel/funnel';
+import { useSignUp } from '@/services/auth';
 
+import { useSignupForm } from './hooks/use-signup-form';
 import {
   EmailStep,
   NameStep,
@@ -12,17 +14,15 @@ import {
   SignupStepHeader,
   SignupStepper,
 } from './_components';
-import { useSignupForm } from './hooks';
 import { STEP_TO_NUMBER } from './signup-form.constants';
-import { SignupApiPayload, SignupStep } from './signup-form.types';
+import { SignupStep } from './signup-form.types';
 
 interface SignupFormProps {
-  onSubmit: (data: SignupApiPayload) => Promise<void>;
-  isLoading?: boolean;
   defaultStep?: SignupStep;
 }
 
-export const SignupForm = ({ onSubmit, isLoading, defaultStep = 'email' }: SignupFormProps) => {
+export const SignupForm = ({ defaultStep = 'email' }: SignupFormProps) => {
+  const { mutateAsync: signUp, isPending } = useSignUp();
   const {
     step,
     formData,
@@ -32,7 +32,7 @@ export const SignupForm = ({ onSubmit, isLoading, defaultStep = 'email' }: Signu
     handleNameNext,
     handlePrev,
   } = useSignupForm({
-    onSubmit,
+    onSubmit: signUp,
     defaultStep,
   });
 
@@ -70,7 +70,7 @@ export const SignupForm = ({ onSubmit, isLoading, defaultStep = 'email' }: Signu
               <NameStep
                 onNext={handleNameNext}
                 onPrev={handlePrev}
-                isLoading={isLoading} // 최종 제출이 발생하는 단계이므로 isLoading 전달
+                isLoading={isPending}
                 defaultValues={{ name: formData.name }}
               />
             </Step>

@@ -49,6 +49,8 @@ async function proxyRequest(
   });
 
   // 401 발생 시 토큰 갱신 후 1회 재시도
+  // silentRefresh 실패 시 401을 그대로 클라이언트에 반환합니다.
+  // fetchClient에서 /api/proxy/의 401을 감지하여 /login으로 리다이렉트 처리합니다.
   if (response.status === 401 && !retry) {
     const refreshed = await silentRefresh();
     if (refreshed) {

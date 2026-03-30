@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 import { MEETING_CATEGORY_LABELS } from '../meeting-create-modal.constants';
-import type { StepProps } from '../meeting-create-modal.types';
+import type { MeetingFormData, StepProps } from '../meeting-create-modal.types';
 
 const CATEGORY_ICONS: Record<string, string> = {
   groupEat: '/images/group-eat-modal.png',
@@ -32,11 +32,11 @@ const CATEGORY_SELECTED_TEXTS: Record<string, string> = {
 /**
  * 1단계: 모임 카테고리 선택
  */
-export const StepCategory = ({ form }: StepProps) => {
+export const StepCategory = ({ form }: StepProps<MeetingFormData>) => {
   const { register, control } = form;
   const currentType = useWatch({
     control,
-    name: 'type',
+    compute: (values) => values.type,
   });
 
   return (

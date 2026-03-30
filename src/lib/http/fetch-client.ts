@@ -1,4 +1,15 @@
 /**
+ * 세션 만료 시 실행할 콜백입니다.
+ * fetchClient는 store를 직접 참조하지 않고, 앱 초기화 시점에 외부에서 주입받습니다.
+ * (의존성 역전 방지)
+ */
+let onSessionExpired: (() => void) | null = null;
+
+export const setSessionExpiredHandler = (handler: () => void) => {
+  onSessionExpired = handler;
+};
+
+/**
  * [Client-only] fetchClient
  * - 모든 API 요청을 /api/proxy/[...path]를 통해 백엔드로 전달합니다.
  * - Authorization 헤더 삽입 및 토큰 갱신은 프록시 Route Handler에서 처리합니다.
@@ -21,6 +32,7 @@ const request = async (url: string, options: RequestInit = {}): Promise<Response
   // proxy를 경유한 요청에서 silentRefresh까지 실패한 401 → 세션 만료 → 로그인 페이지로
   // /api/auth/* 등 BFF 직접 호출은 제외 (로그인 실패 등 정상적인 401 포함)
   if (response.status === 401 && fullUrl.startsWith('/api/proxy/')) {
+    onSessionExpired?.();
     window.location.href = '/login';
   }
 

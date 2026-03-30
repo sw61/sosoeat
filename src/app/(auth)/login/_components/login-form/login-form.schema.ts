@@ -18,7 +18,10 @@ export const loginSchema = z.object({
     .min(1, ' ')
     .superRefine((val, ctx) => {
       if (val && val.length < 8) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: '비밀번호가 8자 이상이 되도록 해 주세요.' });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: '비밀번호가 8자 이상이 되도록 해 주세요.',
+        });
       }
     }),
 });

@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { SignupForm } from './signup-form';
+
+const queryClient = new QueryClient();
 
 const meta: Meta<typeof SignupForm> = {
   title: 'pages/auth/signup/signupForm',
@@ -14,9 +17,11 @@ const meta: Meta<typeof SignupForm> = {
   },
   decorators: [
     (Story) => (
-      <div className="bg-sosoeat-gray-100 flex h-screen w-screen items-center justify-center">
-        <Story />
-      </div>
+      <QueryClientProvider client={queryClient}>
+        <div className="bg-sosoeat-gray-100 flex h-screen w-screen items-center justify-center">
+          <Story />
+        </div>
+      </QueryClientProvider>
     ),
   ],
   tags: ['autodocs'],
@@ -26,32 +31,13 @@ export default meta;
 type Story = StoryObj<typeof SignupForm>;
 
 export const EmailStep: Story = {
-  args: {
-    onSubmit: async (data) => {
-      console.log('Submitted data:', data);
-    },
-    defaultStep: 'email',
-  },
-};
-
-export const Loading: Story = {
-  args: {
-    ...EmailStep.args,
-    isLoading: true,
-    defaultStep: 'name',
-  },
+  args: { defaultStep: 'email' },
 };
 
 export const PasswordStep: Story = {
-  args: {
-    ...EmailStep.args,
-    defaultStep: 'password',
-  },
+  args: { defaultStep: 'password' },
 };
 
 export const NicknameStep: Story = {
-  args: {
-    ...EmailStep.args,
-    defaultStep: 'name',
-  },
+  args: { defaultStep: 'name' },
 };
