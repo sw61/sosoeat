@@ -1,4 +1,4 @@
-import type { RegionSelection } from '../region-select-modal/region-select-modal.type';
+import type { RegionSelection } from '../region-select-modal/region-select-modal.types';
 
 export type { RegionSelection };
 

@@ -4,4 +4,4 @@ export type {
   RegionModalDropdownSub,
   RegionSelection,
   RegionSelectModalProps,
-} from './region-select-modal.type';
+} from './region-select-modal.types';

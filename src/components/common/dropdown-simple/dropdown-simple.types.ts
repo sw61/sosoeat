@@ -1,8 +1,9 @@
 export interface DropdownSimpleProp {
   options: string[];
-  placeholder?: string;
+  placeholder?: React.ReactNode;
   value: string | null;
-  onChange: (value: string | null) => void;
+  onChange: (value: string) => void;
   triggerClassName?: string;
+  contentClassName?: string;
   itemClassName?: string;
 }

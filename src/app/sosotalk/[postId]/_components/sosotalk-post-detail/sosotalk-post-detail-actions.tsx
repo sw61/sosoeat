@@ -1,5 +1,8 @@
-import type { ComponentType, ReactNode } from 'react';
+'use client';
 
+import type { ReactNode } from 'react';
+
+import { motion } from 'framer-motion';
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
 
 import type { SosoTalkPostActionsProps } from './sosotalk-post-detail.types';
@@ -8,6 +11,9 @@ export function SosoTalkPostDetailActions({
   contentCharacterCount,
   likeCount = 0,
   commentCount = 0,
+  isLiked = false,
+  onLikeClick,
+  onCommentClick,
   onShareClick,
 }: SosoTalkPostActionsProps) {
   return (
@@ -23,8 +29,43 @@ export function SosoTalkPostDetailActions({
       ) : null}
 
       <div className="flex items-center gap-4 md:gap-6">
-        <PostMetaItem icon={Heart} label="좋아요" value={likeCount} />
-        <PostMetaItem icon={MessageCircle} label="댓글" value={commentCount} />
+        <motion.button
+          type="button"
+          aria-pressed={isLiked}
+          aria-label={`좋아요 ${likeCount}개`}
+          onClick={onLikeClick}
+          whileHover={{ y: -2, scale: 1.04 }}
+          whileTap={{ scale: 0.92 }}
+          className={`inline-flex items-center gap-2 transition-colors duration-150 ${
+            isLiked
+              ? 'text-sosoeat-orange-600'
+              : 'text-sosoeat-gray-900 hover:text-sosoeat-orange-600'
+          }`}
+        >
+          <motion.span
+            animate={
+              isLiked
+                ? { scale: [1, 1.28, 0.96, 1], rotate: [0, -10, 10, 0] }
+                : { scale: 1, rotate: 0 }
+            }
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            className="inline-flex"
+          >
+            <Heart className={`h-6 w-6 shrink-0 ${isLiked ? 'fill-current' : ''}`} />
+          </motion.span>
+          <span>{likeCount}</span>
+        </motion.button>
+
+        <button
+          type="button"
+          aria-label={`댓글 ${commentCount}개`}
+          onClick={onCommentClick}
+          className="text-sosoeat-gray-900 hover:text-sosoeat-orange-600 inline-flex items-center gap-2 transition-[transform,color] duration-150 hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+        >
+          <MessageCircle className="h-6 w-6 shrink-0" />
+          <span>{commentCount}</span>
+        </button>
+
         <ActionIcon
           className="text-sosoeat-gray-900 hover:text-sosoeat-orange-600 inline-flex"
           label="공유"
@@ -37,34 +78,16 @@ export function SosoTalkPostDetailActions({
   );
 }
 
-interface PostMetaItemProps {
-  icon: ComponentType<{ className?: string }>;
-  label: string;
-  value: number;
-}
-
-function PostMetaItem({ icon: Icon, label, value }: PostMetaItemProps) {
-  return (
-    <span
-      className="text-sosoeat-gray-900 inline-flex items-center gap-2"
-      aria-label={`${label} ${value}개`}
-    >
-      <Icon className="h-6 w-6 shrink-0" />
-      <span>{value}</span>
-    </span>
-  );
-}
-
 interface ActionIconProps {
   children: ReactNode;
   className: string;
   label: string;
-  onClick?: () => void;
+  onClick?: () => void | Promise<void>;
 }
 
 function ActionIcon({ children, className, label, onClick }: ActionIconProps) {
   const baseClassName =
-    'h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors';
+    'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-[transform,color,background-color] duration-150 hover:-translate-y-0.5 active:translate-y-0 active:scale-95';
 
   if (!onClick) {
     return (
