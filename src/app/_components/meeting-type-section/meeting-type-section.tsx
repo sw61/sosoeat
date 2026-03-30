@@ -2,7 +2,7 @@ import { ShoppingCart, UtensilsCrossed } from 'lucide-react';
 
 export function MeetingTypeSection() {
   return (
-    <section className="py-6">
+    <section className="px-4 py-6">
       <h2 className="mb-3 text-lg font-bold md:text-xl lg:text-2xl">어떤 모임을 원하세요?</h2>
       <div className="flex gap-9">
         {/* 함께먹기 */}

@@ -1,12 +1,13 @@
 'use client';
-
 import { useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
 import Autoplay from 'embla-carousel-autoplay';
+import { ArrowRight } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import {
   Carousel,
   CarouselApi,
@@ -126,6 +127,35 @@ export function MainBanner() {
           </div>
         )}
       </Carousel>
+
+      <div className="absolute inset-0 z-20 flex flex-col justify-center">
+        <div className="mx-auto w-full max-w-[1140px] px-6 md:px-20 lg:px-24">
+          <span className="mb-3 inline-flex w-fit items-center gap-1 rounded-full border border-white/30 px-3 py-1 text-sm text-white">
+            🍽 함께먹기
+          </span>
+          <h2 className="text-[28px] leading-tight font-extrabold tracking-[-1.38px] text-white md:text-[36px] lg:text-[48px]">
+            함께하면 <span className="text-sosoeat-orange-600">더</span>
+            <br />
+            <span className="text-sosoeat-orange-600">맛있어요</span>
+          </h2>
+          <p className="mt-3 text-[13px] font-medium text-white/80 md:text-[15px] lg:text-base">
+            가고 싶었던 맛집, 혼자 가기 아쉬웠죠? <br />
+            소소잇에서 같이 먹을 사람을 찾아보세요.
+          </p>
+          <div className="mt-3 flex gap-2 text-[13px] font-semibold md:mt-4 md:gap-3 md:text-[15px] lg:mt-4.5 lg:gap-4 lg:text-base lg:font-bold">
+            <Button className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 flex h-[52.5px] items-center gap-2 rounded-2xl px-6 py-[14px] text-white lg:gap-3">
+              함께먹기 모임 보기
+              <ArrowRight className="size-3.5 lg:size-4" />
+            </Button>
+            <Button
+              variant="outline"
+              className="h-[52.5px] rounded-2xl border-white/25 bg-white/12 px-6 py-[14px] text-white hover:bg-white/20"
+            >
+              모임 만들기
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* 중앙 콘텐츠(인디케이터/카운터) 영역 */}
       <div className="pointer-events-none absolute bottom-10 left-1/2 z-40 w-full -translate-x-1/2 px-4">
