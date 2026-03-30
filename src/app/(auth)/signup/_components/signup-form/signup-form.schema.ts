@@ -32,15 +32,9 @@ export const passwordSchema = z
       .superRefine((val, ctx) => {
         if (!val) return;
         if (val.length < 8) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: '비밀번호가 8자 이상이 되도록 해 주세요.',
-          });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: '비밀번호가 8자 이상이 되도록 해 주세요.' });
         } else if (/\s/.test(val)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: '비밀번호에 공백을 포함할 수 없습니다.',
-          });
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: '비밀번호에 공백을 포함할 수 없습니다.' });
         }
       }),
     passwordConfirm: z.string().min(1, ' '),
@@ -62,15 +56,9 @@ export const nameSchema = z.object({
     .superRefine((val, ctx) => {
       if (!val) return;
       if (!/^[가-힣a-zA-Z0-9]+$/.test(val)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: '특수문자, 공백, 자음/모음 단일 사용은 불가합니다.',
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: '특수문자, 공백, 자음/모음 단일 사용은 불가합니다.' });
       } else if (val.length > 20) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: '이름은 최대 20자까지 입력할 수 있습니다.',
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: '이름은 최대 20자까지 입력할 수 있습니다.' });
       }
     }),
 });
