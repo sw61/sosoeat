@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { CountCard } from './count-card';
 
 const meta: Meta<typeof CountCard> = {
-  title: 'COMPONENTS/common/card-count',
+  title: 'APP/mypage/card-count',
   component: CountCard,
   tags: ['autodocs'],
   argTypes: {
