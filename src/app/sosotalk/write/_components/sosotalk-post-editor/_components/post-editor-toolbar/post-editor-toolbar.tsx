@@ -15,7 +15,7 @@ export function PostEditorToolbar({
 }: PostEditorToolbarProps) {
   return (
     <div className="bg-sosoeat-gray-200 rounded-[18px] px-2 py-2 md:rounded-[22px] md:px-4 md:py-2.5">
-      <div className="grid grid-cols-9 items-center gap-0.5 md:gap-1">
+      <div className="grid grid-cols-7 items-center gap-0.5 md:gap-1">
         {POST_EDITOR_TOOLBAR_ACTIONS.map((action) => {
           const Icon = action.icon;
           const isActive = action.activeKey ? activeFormats[action.activeKey] : false;

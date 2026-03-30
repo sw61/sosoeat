@@ -24,7 +24,6 @@ const DEFAULT_ACTIVE_FORMATS: ActiveFormats = {
   underline: false,
   unorderedList: false,
   orderedList: false,
-  alignLeft: true,
   alignCenter: false,
 };
 
@@ -99,7 +98,6 @@ export const useSosoTalkPostEditor = ({
       underline: document.queryCommandState('underline'),
       unorderedList: document.queryCommandState('insertUnorderedList'),
       orderedList: document.queryCommandState('insertOrderedList'),
-      alignLeft: !document.queryCommandState('justifyCenter'),
       alignCenter: document.queryCommandState('justifyCenter'),
     });
   };

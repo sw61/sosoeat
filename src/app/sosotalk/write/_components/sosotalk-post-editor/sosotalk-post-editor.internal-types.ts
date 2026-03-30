@@ -4,7 +4,6 @@ export type ActiveFormatKey =
   | 'underline'
   | 'unorderedList'
   | 'orderedList'
-  | 'alignLeft'
   | 'alignCenter';
 
 export type ActiveFormats = Record<ActiveFormatKey, boolean>;

@@ -10,7 +10,6 @@ import { SosoTalkPostDetailHeader } from './sosotalk-post-detail-header';
 export function SosoTalkPostDetail({
   title,
   contentHtml,
-  contentCharacterCount,
   imageUrl,
   authorName,
   authorImageUrl,
@@ -18,6 +17,8 @@ export function SosoTalkPostDetail({
   commentCount = 0,
   createdAt,
   createdAtDateTime,
+  createdDateLabel,
+  viewCount,
   isAuthor = false,
   isLiked = false,
   onMoreClick,
@@ -51,7 +52,8 @@ export function SosoTalkPostDetail({
           />
           <SosoTalkPostDetailBody title={title} contentHtml={contentHtml} imageUrl={imageUrl}>
             <SosoTalkPostDetailActions
-              contentCharacterCount={contentCharacterCount}
+              createdDateLabel={createdDateLabel}
+              viewCount={viewCount}
               likeCount={likeCount}
               commentCount={commentCount}
               isLiked={isLiked}

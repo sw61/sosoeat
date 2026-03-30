@@ -3,12 +3,13 @@
 import type { ReactNode } from 'react';
 
 import { motion } from 'framer-motion';
-import { Heart, MessageCircle, Share2 } from 'lucide-react';
+import { Eye, Heart, MessageCircle, Share2 } from 'lucide-react';
 
 import type { SosoTalkPostActionsProps } from './sosotalk-post-detail.types';
 
 export function SosoTalkPostDetailActions({
-  contentCharacterCount,
+  createdDateLabel,
+  viewCount,
   likeCount = 0,
   commentCount = 0,
   isLiked = false,
@@ -16,15 +17,24 @@ export function SosoTalkPostDetailActions({
   onCommentClick,
   onShareClick,
 }: SosoTalkPostActionsProps) {
+  const hasMeta = Boolean(createdDateLabel) || typeof viewCount === 'number';
+
   return (
     <div
       className={`border-sosoeat-gray-300 flex items-center gap-4 border-t pt-4 ${
-        typeof contentCharacterCount === 'number' ? 'justify-between' : 'justify-end'
+        hasMeta ? 'justify-between' : 'justify-end'
       }`}
     >
-      {typeof contentCharacterCount === 'number' ? (
-        <div className="text-sosoeat-gray-500 text-sm font-medium md:text-base">
-          {contentCharacterCount}자
+      {hasMeta ? (
+        <div className="text-sosoeat-gray-500 flex items-center gap-2 text-sm font-medium md:text-base">
+          {createdDateLabel ? <span>{createdDateLabel}</span> : null}
+          {createdDateLabel && typeof viewCount === 'number' ? <span aria-hidden>·</span> : null}
+          {typeof viewCount === 'number' ? (
+            <span className="inline-flex items-center gap-1.5">
+              <Eye className="h-4 w-4 shrink-0" />
+              <span>{viewCount}</span>
+            </span>
+          ) : null}
         </div>
       ) : null}
 
