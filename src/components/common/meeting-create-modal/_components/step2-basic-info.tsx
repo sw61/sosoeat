@@ -1,21 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import Image from 'next/image';
 
-import { ImagePlus, MapPin } from 'lucide-react';
+import { ImagePlus, Loader2, MapPin } from 'lucide-react';
 
 import { Input } from '@/components/ui/input/input';
 import { cn } from '@/lib/utils';
+import { MIME_TO_EXT, useUploadImage } from '@/services/images';
 
 import type { StepProps } from '../meeting-create-modal.types';
 
-import { ImageSubmit } from './_components/step2-basic-info/image-submit/image-submit';
+const ACCEPTED_IMAGE_TYPES = Object.keys(MIME_TO_EXT).join(',');
 
 /**
  * 2단계: 모임 기본 정보 입력 (이름, 장소, 이미지)
  */
 export const StepBasicInfo = ({ form }: StepProps) => {
-  const { register } = form;
+  const { register, setValue } = form;
+  const {
+    mutateAsync,
+    data: publicUrl,
+    isPending,
+    error: uploadError,
+  } = useUploadImage('meetings');
+
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = await mutateAsync(file).catch(() => null);
+    if (url) setValue('image', url, { shouldDirty: true, shouldValidate: true });
+  };
 
   const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
   const inputClassName =
@@ -58,7 +72,46 @@ export const StepBasicInfo = ({ form }: StepProps) => {
         <label className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
           이미지{requiredIndicator}
         </label>
-        <ImageSubmit form={form} />
+        <div className="relative h-[147px] w-[147px]">
+          {publicUrl && !isPending ? (
+            <Image
+              src={publicUrl}
+              alt="모임 이미지"
+              width={147}
+              height={147}
+              className="rounded-2xl object-cover"
+            />
+          ) : (
+            <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-full w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
+              {isPending ? (
+                <Loader2 className="h-6 w-6 animate-spin" />
+              ) : (
+                <ImagePlus className="h-6 w-6" />
+              )}
+            </div>
+          )}
+          {/* 이미지가 없을 때만 영역 전체를 클릭 가능하게 overlay */}
+          {!publicUrl && (
+            <label
+              htmlFor="image"
+              className="absolute inset-0 cursor-pointer rounded-2xl"
+              aria-label="이미지 선택"
+            />
+          )}
+          <input
+            type="file"
+            id="image"
+            className="sr-only"
+            accept={ACCEPTED_IMAGE_TYPES}
+            disabled={isPending}
+            onChange={onFileChange}
+          />
+        </div>
+        {uploadError && (
+          <p className="text-destructive text-xs">
+            {uploadError instanceof Error ? uploadError.message : '이미지 업로드에 실패했습니다.'}
+          </p>
+        )}
       </div>
     </div>
   );

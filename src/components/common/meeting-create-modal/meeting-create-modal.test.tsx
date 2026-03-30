@@ -1,7 +1,34 @@
+import React from 'react';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { MeetingCreateModal } from './meeting-create-modal';
+
+// useUploadImage mock — 이미지 업로드를 즉시 성공으로 처리
+jest.mock('@/services/images', () => ({
+  useUploadImage: () => ({
+    mutateAsync: jest.fn().mockResolvedValue('https://s3.example.com/image.jpg'),
+    data: undefined,
+    isPending: false,
+    error: null,
+  }),
+  MIME_TO_EXT: {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+  },
+}));
+
+const createWrapper = () => {
+  const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
+  return ({ children }: { children: React.ReactNode }) =>
+    React.createElement(QueryClientProvider, { client: queryClient }, children);
+};
+
+const renderWithClient = (ui: React.ReactElement) => render(ui, { wrapper: createWrapper() });
 
 // Radix UI Dialog needs ResizeObserver
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
@@ -33,7 +60,7 @@ describe('MeetingCreateModal', () => {
   });
 
   it('open이 true일 때 모달이 렌더링된다', () => {
-    render(<MeetingCreateModal {...DEFAULT_PROPS} />);
+    renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
     const dialog = screen.getByRole('dialog');
     expect(dialog).toBeInTheDocument();
     expect(within(dialog).getByText((_, el) => el?.textContent === '1/4')).toBeInTheDocument();
@@ -42,7 +69,7 @@ describe('MeetingCreateModal', () => {
 
   it('전체 폼을 작성하고 제출하면 onSubmit이 호출된다', async () => {
     const user = userEvent.setup();
-    render(<MeetingCreateModal {...DEFAULT_PROPS} />);
+    renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
     const dialog = screen.getByRole('dialog');
 
     // Step 1: Category
@@ -62,6 +89,15 @@ describe('MeetingCreateModal', () => {
       '서울 강남구'
     );
     await user.type(within(dialog).getByPlaceholderText('상세주소'), '테헤란로 123');
+
+    // 이미지 업로드 (mock: 즉시 publicUrl 반환)
+    const imageInput = dialog.querySelector('input[type="file"]') as HTMLInputElement;
+    const mockImageFile = new File(['image'], 'test.jpg', { type: 'image/jpeg' });
+    await user.upload(imageInput, mockImageFile);
+    await waitFor(() => {
+      expect(within(dialog).getByRole('button', { name: '다음' })).toBeEnabled();
+    });
+
     await user.click(within(dialog).getByRole('button', { name: '다음' }));
 
     // Step 3: Description
@@ -122,11 +158,10 @@ describe('MeetingCreateModal', () => {
         name: '맛있는 삼겹살 모임',
         region: '서울 강남구',
         address: '테헤란로 123',
+        image: 'https://s3.example.com/image.jpg',
         description: '같이 삼겹살 먹어요!',
-        meetingDate: '2026-12-31',
-        meetingTime: '19:00',
-        registrationEndDate: '2026-12-30',
-        registrationEndTime: '18:00',
+        dateTime: new Date('2026-12-31T19:00'),
+        registrationEnd: new Date('2026-12-30T18:00'),
         capacity: 10,
       })
     );
@@ -134,7 +169,7 @@ describe('MeetingCreateModal', () => {
 
   it('이전 버튼을 누르면 이전 단계로 돌아간다', async () => {
     const user = userEvent.setup();
-    render(<MeetingCreateModal {...DEFAULT_PROPS} />);
+    renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
     const dialog = screen.getByRole('dialog');
 
     await user.click(within(dialog).getByLabelText('함께먹기'));
@@ -154,7 +189,7 @@ describe('MeetingCreateModal', () => {
 
   it('닫기 버튼을 누르면 onClose가 호출되고 폼이 리셋된다', async () => {
     const user = userEvent.setup();
-    const { rerender } = render(<MeetingCreateModal {...DEFAULT_PROPS} />);
+    const { rerender } = renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
 
     await user.click(screen.getByLabelText('함께먹기'));
 
