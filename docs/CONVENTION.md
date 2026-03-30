@@ -28,7 +28,12 @@
 
 ### 📝 파일 구성 규칙
 
-- **Barrel Pattern**: 각 컴포넌트 폴더의 `index.ts`에서 `export * from './파일명'` 형식을 지향합니다.
+- **Barrel Pattern**: `index.ts`에서 외부에 공개할 심볼을 관리합니다.
+  - **공용 컴포넌트** (`components/common/`, `components/ui/`): `export * from` 허용 — 사용처가 다양하고 어떤 심볼이 필요할지 미리 알기 어렵습니다.
+  - **페이지 내부 컴포넌트** (`app/**/`): 외부에서 실제로 사용하는 심볼만 named export로 명시합니다. `.types`, `.schema`, `.constants`는 내부 전용이면 노출하지 않습니다.
+  - ✅ `export { MyComponent } from './my-component';`
+  - ✅ `export type { MyComponentProps } from './my-component.types';` (외부에서 실제로 사용하는 타입만)
+  - ❌ 페이지 내부 컴포넌트에서 `export * from` 사용
 - **관심사 분리 (Suffix)**: 파일이 복잡해질 경우 다음 접미사를 활용해 파일을 세분화합니다.
   - `*.types.ts`: 타입 정의 전용
   - `*.schema.ts`: 데이터 유효성 검사(Zod) 전용
