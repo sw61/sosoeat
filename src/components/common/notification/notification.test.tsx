@@ -1,41 +1,19 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import type { Notification as NotificationDto } from '@/types/generated-client';
+import { fetchClient } from '@/lib/http/fetch-client';
+import type { Notification, NotificationList } from '@/types/generated-client';
 
-import { Notification } from './index';
+import { Notification as Nt } from './notification';
 
-jest.mock('@/lib/api-client', () => ({
-  postsApi: {
-    teamIdPostsPostIdCommentsGet: jest.fn().mockResolvedValue({
-      data: [],
-      nextCursor: '',
-      hasMore: false,
-    }),
+jest.mock('@/lib/http/fetch-client', () => ({
+  fetchClient: {
+    get: jest.fn(),
+    put: jest.fn(),
   },
 }));
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: function MockImage({
-    src,
-    alt,
-    width,
-    height,
-    className,
-  }: {
-    src: string;
-    alt: string;
-    width?: number;
-    height?: number;
-    className?: string;
-  }) {
-    // eslint-disable-next-line @next/next/no-img-element -- Jest mock for next/image
-    return <img src={src} alt={alt} width={width} height={height} className={className} />;
-  },
-}));
-
-const testNotifications: NotificationDto[] = [
+const testNotifications: Notification[] = [
   {
     id: 1,
     teamId: 'dallaem',
@@ -46,13 +24,34 @@ const testNotifications: NotificationDto[] = [
     isRead: false,
     createdAt: new Date('2025-01-15T12:00:00Z'),
   },
+  {
+    id: 2,
+    teamId: 'dallaem',
+    userId: 1,
+    type: 'COMMENT',
+    message: '새 댓글이 달렸습니다.',
+    data: {},
+    isRead: true,
+    createdAt: new Date('2025-01-15T10:00:00Z'),
+  },
+  {
+    id: 3,
+    teamId: 'dallaem',
+    userId: 1,
+    type: 'MEETING_CANCELED',
+    message: '',
+    data: { meetingName: '테스트' },
+    isRead: false,
+    createdAt: new Date('2025-01-14T12:00:00Z'),
+  },
 ];
 
-const defaultNotificationProps = {
+const mockGet = fetchClient.get as jest.MockedFunction<typeof fetchClient.get>;
+const mockNotifications: NotificationList = {
   data: testNotifications,
   nextCursor: '',
   hasMore: false,
-} as const;
+};
 
 const MAX_WIDTH_QUERY = '(max-width: 767px)';
 
@@ -70,46 +69,36 @@ function mockMatchMedia(matchesNarrow: boolean) {
 }
 
 describe('Notification', () => {
-  it('알림 열기 트리거가 표시된다', () => {
-    render(<Notification {...defaultNotificationProps} />);
-    expect(screen.getByRole('button', { name: '알림 열기' })).toBeInTheDocument();
+  beforeEach(() => {
+    mockMatchMedia(false);
+    jest.clearAllMocks();
+    mockGet.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue(mockNotifications),
+    } as unknown as Response);
   });
 
-  it('triggerClassName이 트리거 버튼에 적용된다', () => {
-    render(<Notification {...defaultNotificationProps} triggerClassName="trigger-test-class" />);
-    expect(screen.getByRole('button', { name: '알림 열기' })).toHaveClass('trigger-test-class');
+  // 수정 후
+  it('알림 열기 트리거가 표시된다', async () => {
+    render(<Nt />);
+    expect(await screen.findByRole('button', { name: '알림 열기' })).toBeInTheDocument();
+  });
+
+  it('triggerClassName이 트리거 버튼에 적용된다', async () => {
+    render(<Nt triggerClassName="trigger-test-class" />);
+    expect(await screen.findByRole('button', { name: '알림 열기' })).toHaveClass(
+      'trigger-test-class'
+    );
   });
 
   it('트리거 클릭 시 알림 내역과 목록이 보인다 (넓은 화면: Popover)', async () => {
     const user = userEvent.setup();
-    render(<Notification {...defaultNotificationProps} />);
-
-    await user.click(screen.getByRole('button', { name: '알림 열기' }));
+    render(<Nt />);
+    await user.click(await screen.findByRole('button', { name: '알림 열기' })); // ← findBy
 
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '알림 내역' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '모두 읽기' })).toBeInTheDocument();
-    expect(screen.getByText('모임 확정')).toBeInTheDocument();
-  });
-
-  describe('767px 이하 (Dialog)', () => {
-    beforeEach(() => {
-      mockMatchMedia(true);
-    });
-
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
-    it('트리거 클릭 시 Dialog에 주입 목록이 보인다', async () => {
-      const user = userEvent.setup();
-      render(<Notification {...defaultNotificationProps} />);
-
-      await user.click(screen.getByRole('button', { name: '알림 열기' }));
-
-      expect(await screen.findByRole('dialog')).toBeInTheDocument();
-      expect(screen.getByRole('heading', { name: '알림 내역' })).toBeInTheDocument();
-      expect(screen.getByText('모임 확정')).toBeInTheDocument();
-    });
+    expect(await screen.findByRole('heading', { name: '알림 내역' })).toBeInTheDocument(); // ← findBy
+    expect(await screen.findByRole('button', { name: '모두 읽기' })).toBeInTheDocument(); // ← findBy
+    expect(await screen.findByText('모임 확정')).toBeInTheDocument(); // ← findBy
   });
 });

@@ -1,6 +1,9 @@
 'use client';
 
 import { CountingBadge } from '@/components/common/counting-badge';
+import type { Notification } from '@/types/generated-client';
+
+import { NotificationTab } from '../notification-list/_components/notification-tab';
 
 import type { NotificationPanelBodyProps } from './notification-panel-body.types';
 
@@ -11,7 +14,6 @@ export const NotificationPanelBody = ({
   unreadCount,
 }: NotificationPanelBodyProps) => {
   const showBadge = unreadCount != null && unreadCount > 0;
-  const badgeLabel = unreadCount != null && unreadCount > 99 ? '99+' : String(unreadCount ?? '');
 
   return (
     <div className="flex h-full min-h-0 flex-col pt-6 pb-4">
@@ -36,7 +38,11 @@ export const NotificationPanelBody = ({
       </div>
 
       <div className="mt-6 flex min-h-0 flex-1 flex-col">
-        <div className={listScrollClassName}>{list}</div>
+        <div className={listScrollClassName}>
+          {list.map((notification: Notification) => (
+            <NotificationTab key={notification.id} {...notification} />
+          ))}
+        </div>
       </div>
     </div>
   );

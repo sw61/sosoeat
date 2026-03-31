@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
+import type { Notification } from '@/types/generated-client';
 
 export interface NotificationPopoverProps {
   triggerClassName?: string;
-  list: ReactNode;
+  list: Notification[];
   unreadCount?: number;
 }

@@ -37,13 +37,13 @@ export default function MeetingsPage() {
       <MeetingSearchBanner
         alt="모임 배너"
         imageUrl="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80"
-        titleContent={
-          <span>
-            함께하면
-            <br />더 맛있어요
-          </span>
-        }
+        titleContent={<span>함께하면</span>}
         subtitleContent={
+          <>
+            <br />더 맛있어요
+          </>
+        }
+        subtitle={
           <p>가고 싶었던 맛집, 혼자 가기 아쉬웠죠? 모여요에서 같이 먹을 사람을 찾아보세요.</p>
         }
       />
