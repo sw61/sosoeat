@@ -5,6 +5,5 @@ import { makeQueryString } from '../../services/meeting-page.services';
 
 export const fetchMeetingByFilter = async (filter: Omit<TeamIdMeetingsGetRequest, 'teamId'>) => {
   const data = await fetchClient.get(`/meetings${makeQueryString(filter)}`);
-  console.log('fetching with options:', filter);
   return data.json();
 };
