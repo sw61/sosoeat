@@ -5,7 +5,7 @@ import type { Meeting } from '@/types/meeting';
 import RecommendedMeetingCard from './meeting-recommended-card';
 
 const mockMeeting: Meeting = {
-  id: '1',
+  id: 1,
   name: '강남 맛집 탐방 함께해요!',
   type: 'groupEat',
   region: '서울 강남구',

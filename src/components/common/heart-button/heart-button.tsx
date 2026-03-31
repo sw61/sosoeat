@@ -44,7 +44,18 @@ export function HeartButton({
           'border-sosoeat-gray-300 cursor-pointer rounded-full border bg-white/90 p-0 hover:bg-white/90',
           ringSizeClass[size]
         )}
-        onClick={() => toggleFavorite(meetingId)}
+        onClick={() => {
+          if (meetingId === undefined) {
+            if (process.env.NODE_ENV !== 'production') {
+               
+              console.error(
+                'HeartButton: meetingId is required for toggleFavorite but was undefined.'
+              );
+            }
+            return;
+          }
+          toggleFavorite(meetingId);
+        }}
       >
         <motion.div
           animate={{ scale: 1 }}

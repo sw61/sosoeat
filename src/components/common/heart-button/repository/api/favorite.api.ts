@@ -1,5 +1,3 @@
-import { fa } from 'zod/v4/locales';
-
 import { fetchClient } from '@/lib/http/fetch-client';
 
 const favoriteApi = {
