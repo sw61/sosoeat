@@ -69,7 +69,7 @@ export const MeetingMakeButton = ({
     >
       <span className="flex h-8 flex-row items-center gap-1.5 self-stretch pr-1">
         <span className="flex size-8 shrink-0 items-center justify-center" aria-hidden>
-          <Plus className="size-7 text-white" strokeWidth={2} />
+          <Plus className="size-7 text-white" strokeWidth={2.5} />
         </span>
         <span className="w-22.5 shrink-0 text-center text-xl leading-7.5 font-bold tracking-[-0.02em] text-white">
           {label}
