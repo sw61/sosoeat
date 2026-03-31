@@ -9,12 +9,12 @@ describe('EstablishmentStatusBadge', () => {
     expect(screen.getByText('개설대기')).toBeInTheDocument();
   });
 
-  it('confirmedAt이 있으면 개설완료가 표시된다', () => {
+  it('confirmedAt이 있으면 개설확정이 표시된다', () => {
     render(
       <EstablishmentStatusBadge confirmedAt={new Date('2025-03-22T12:00:00')} variant="groupEat" />
     );
 
-    expect(screen.getByText('개설완료')).toBeInTheDocument();
+    expect(screen.getByText('개설확정')).toBeInTheDocument();
   });
 
   it('groupBuy variant에서도 개설대기가 표시된다', () => {
@@ -23,11 +23,11 @@ describe('EstablishmentStatusBadge', () => {
     expect(screen.getByText('개설대기')).toBeInTheDocument();
   });
 
-  it('groupBuy variant에서도 개설완료가 표시된다', () => {
+  it('groupBuy variant에서도 개설확정이 표시된다', () => {
     render(
       <EstablishmentStatusBadge confirmedAt={new Date('2025-03-22T12:00:00')} variant="groupBuy" />
     );
 
-    expect(screen.getByText('개설완료')).toBeInTheDocument();
+    expect(screen.getByText('개설확정')).toBeInTheDocument();
   });
 });
