@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
@@ -85,7 +84,7 @@ export function MainBanner() {
           {BANNERS.map((banner, index) => (
             <CarouselItem
               key={`${banner.imageUrl}-${index}`}
-              className="relative h-140 w-full min-w-0 shrink-0 grow-0 basis-full p-0"
+              className="relative h-[450px] w-full min-w-0 shrink-0 grow-0 basis-full p-0"
             >
               {banner.href ? (
                 <Link href={banner.href} className="relative block size-full">
