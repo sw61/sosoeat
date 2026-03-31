@@ -57,9 +57,9 @@ export const MeetingMakeButton = ({
       type="button"
       variant="default"
       className={cn(
-        'box-border h-16 w-[188px] shrink-0 rounded-[24px] border-0',
+        'box-border h-16 w-47 shrink-0 rounded-[24px] border-0',
         'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-600/90 active:bg-sosoeat-orange-700 px-7 py-4',
-        'flex flex-row items-center justify-center gap-0',
+        'flex flex-col items-start justify-start gap-2.5',
         'text-white [&_svg]:text-white',
         focusRingClass,
         fixedDesktop,
@@ -67,11 +67,11 @@ export const MeetingMakeButton = ({
       )}
       onClick={onClick}
     >
-      <span className="flex h-8 w-[132px] flex-row items-center gap-1.5 pr-1">
+      <span className="flex h-8 flex-row items-center gap-1.5 self-stretch pr-1">
         <span className="flex size-8 shrink-0 items-center justify-center" aria-hidden>
-          <Plus className="size-4 text-white" strokeWidth={2} />
+          <Plus className="size-7 text-white" strokeWidth={2.5} />
         </span>
-        <span className="w-[90px] shrink-0 text-center text-xl leading-[30px] font-bold tracking-[-0.02em] text-white">
+        <span className="w-22.5 shrink-0 text-center text-xl leading-7.5 font-bold tracking-[-0.02em] text-white">
           {label}
           {/* 차후 모임 만들기 모달 뜨도록 */}
         </span>
