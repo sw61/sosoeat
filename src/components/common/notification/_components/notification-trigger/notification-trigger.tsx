@@ -18,7 +18,7 @@ export const NotificationTrigger = React.forwardRef<HTMLButtonElement, Notificat
         type={type}
         className={cn('relative inline-flex cursor-pointer border-0 bg-transparent p-0', className)}
         {...props}
-        aria-label={'알림 열기'}
+        aria-label={props['aria-label'] ?? '알림 열기'}
       >
         <Bell
           className={`${unreadCount > 0 ? 'text-sosoeat-orange-600' : 'text-sosoeat-gray-600'} h-5 w-5`}

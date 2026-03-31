@@ -58,7 +58,6 @@ export const useNotificationService = () => {
     let cancelled = false;
     const fetchLatestNotifications = async () => {
       try {
-        const teamId: string | undefined = process.env.NEXT_PUBLIC_TEAM_ID;
         const { data, unread } = await notificationRepository.fetchLatestNotifications({});
         if (!cancelled) {
           setList(data);

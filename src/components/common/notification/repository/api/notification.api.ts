@@ -36,6 +36,12 @@ export const notificationApi = {
     const data: NotificationList = await fetchClient
       .get(`/notifications?${params.toString()}`)
       .then((res) => res.json());
+
+    // API에서 받은 데이터의 createdAt은 string이므로 Date 객체로 변환
+    data.data.map((n) => {
+      n.createdAt = new Date(n.createdAt);
+    });
+
     const unread = data.data.filter((n: Notification) => !n.isRead).length;
     return { data: data.data, unread };
   },
