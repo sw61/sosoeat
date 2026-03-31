@@ -62,13 +62,38 @@ describe('imagesApi', () => {
 
   describe('uploadToS3', () => {
     const presignedUrl = 'https://s3.example.com/presigned';
+    let fetchSpy: jest.SpyInstance;
+    let originalFetch: typeof global.fetch;
+
+    beforeAll(() => {
+      originalFetch = global.fetch;
+    });
+
+    beforeEach(() => {
+      if (!global.fetch) {
+        Object.defineProperty(global, 'fetch', {
+          value: jest.fn(),
+          writable: true,
+          configurable: true,
+        });
+      }
+      fetchSpy = jest.spyOn(global, 'fetch');
+    });
+
+    afterEach(() => {
+      fetchSpy.mockRestore();
+      if (!originalFetch) {
+        // @ts-expect-error global.fetch 제거
+        delete global.fetch;
+      }
+    });
 
     it('presignedUrl로 PUT 요청을 보낸다', async () => {
-      global.fetch = jest.fn().mockResolvedValue({ ok: true });
+      fetchSpy.mockResolvedValue({ ok: true } as unknown as Response);
 
       await imagesApi.uploadToS3(presignedUrl, mockFile);
 
-      expect(global.fetch).toHaveBeenCalledWith(presignedUrl, {
+      expect(fetchSpy).toHaveBeenCalledWith(presignedUrl, {
         method: 'PUT',
         headers: { 'Content-Type': 'image/jpeg' },
         body: mockFile,
@@ -76,7 +101,7 @@ describe('imagesApi', () => {
     });
 
     it('응답이 ok가 아니면 에러를 throw한다', async () => {
-      global.fetch = jest.fn().mockResolvedValue({ ok: false });
+      fetchSpy.mockResolvedValue({ ok: false } as unknown as Response);
 
       await expect(imagesApi.uploadToS3(presignedUrl, mockFile)).rejects.toThrow(
         '이미지 업로드에 실패했습니다.'

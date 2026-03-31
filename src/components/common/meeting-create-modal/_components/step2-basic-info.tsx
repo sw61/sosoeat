@@ -1,8 +1,10 @@
 'use client';
 
+import { Controller } from 'react-hook-form';
+
 import Image from 'next/image';
 
-import { ImagePlus, Loader2, MapPin } from 'lucide-react';
+import { ImagePlus, Loader2 } from 'lucide-react';
 
 import { Input } from '@/components/ui/input/input';
 import { cn } from '@/lib/utils';
@@ -16,24 +18,27 @@ const ACCEPTED_IMAGE_TYPES = Object.keys(MIME_TO_EXT).join(',');
  * 2단계: 모임 기본 정보 입력 (이름, 장소, 이미지)
  */
 export const StepBasicInfo = ({ form }: StepProps) => {
-  const { register, setValue } = form;
-  const {
-    mutateAsync,
-    data: publicUrl,
-    isPending,
-    error: uploadError,
-  } = useUploadImage('meetings');
+  const { register } = form;
+  const { mutateAsync, isPending, error: uploadError } = useUploadImage('meetings');
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onChange: (value: string) => void
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const url = await mutateAsync(file).catch(() => null);
-    if (url) setValue('image', url, { shouldDirty: true, shouldValidate: true });
+
+    try {
+      const url = await mutateAsync(file).catch(() => null);
+      if (url) onChange(url);
+    } finally {
+      e.target.value = ''; // 성공이나 실패 모두 초기화하여 재시도 가능하도록 처리
+    }
   };
 
   const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
   const inputClassName =
-    'bg-sosoeat-gray-100 text-sm md:text-base font-normal text-sosoeat-gray-900 border-transparent placeholder:text-sosoeat-gray-600 transition-all focus:border-sosoeat-gray-200';
+    'bg-sosoeat-gray-100 text-sm md:text-base font-normal text-sosoeat-gray-900 border border-transparent placeholder:text-sosoeat-gray-600 transition-all focus:border-sosoeat-orange-500 focus-visible:border-sosoeat-orange-500';
 
   return (
     <div className="flex flex-col gap-5">
@@ -61,58 +66,72 @@ export const StepBasicInfo = ({ form }: StepProps) => {
               className={cn(inputClassName, 'pr-10')}
               {...register('region')}
             />
-            <MapPin className="text-sosoeat-gray-700 absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2" />
+            <Image
+              src="/icons/location.svg"
+              alt="위치 아이콘"
+              width={24}
+              height={24}
+              className="absolute top-1/2 right-3 -translate-y-1/2"
+            />
           </div>
           <Input placeholder="상세주소" className={inputClassName} {...register('address')} />
         </div>
       </div>
 
       {/* 이미지 업로드 */}
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
-          이미지{requiredIndicator}
-        </label>
-        <div className="relative h-[147px] w-[147px]">
-          {publicUrl && !isPending ? (
-            <Image
-              src={publicUrl}
-              alt="모임 이미지"
-              width={147}
-              height={147}
-              className="rounded-2xl object-cover"
-            />
-          ) : (
-            <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-full w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
-              {isPending ? (
-                <Loader2 className="h-6 w-6 animate-spin" />
+      <Controller
+        control={form.control}
+        name="image"
+        render={({ field, fieldState: { error } }) => (
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
+              이미지{requiredIndicator}
+            </label>
+            <div className="relative h-[147px] w-[147px]">
+              {field.value && !isPending ? (
+                <Image
+                  src={field.value as string}
+                  alt="모임 이미지"
+                  width={147}
+                  height={147}
+                  className="rounded-2xl object-cover"
+                />
               ) : (
-                <ImagePlus className="h-6 w-6" />
+                <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-full w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
+                  {isPending ? (
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                  ) : (
+                    <ImagePlus className="h-6 w-6" />
+                  )}
+                </div>
               )}
+              {/* 이미지가 없을 때만 영역 전체를 클릭 가능하게 overlay */}
+              {!field.value && (
+                <label
+                  htmlFor="image"
+                  className="absolute inset-0 cursor-pointer rounded-2xl"
+                  aria-label="이미지 선택"
+                />
+              )}
+              <input
+                type="file"
+                id="image"
+                className="sr-only"
+                accept={ACCEPTED_IMAGE_TYPES}
+                disabled={isPending}
+                onChange={(e) => handleFileChange(e, field.onChange)}
+              />
             </div>
-          )}
-          {/* 이미지가 없을 때만 영역 전체를 클릭 가능하게 overlay */}
-          {!publicUrl && (
-            <label
-              htmlFor="image"
-              className="absolute inset-0 cursor-pointer rounded-2xl"
-              aria-label="이미지 선택"
-            />
-          )}
-          <input
-            type="file"
-            id="image"
-            className="sr-only"
-            accept={ACCEPTED_IMAGE_TYPES}
-            disabled={isPending}
-            onChange={onFileChange}
-          />
-        </div>
-        {uploadError && (
-          <p className="text-destructive text-xs">
-            {uploadError instanceof Error ? uploadError.message : '이미지 업로드에 실패했습니다.'}
-          </p>
+            {(error || uploadError) && (
+              <p className="animate-in fade-in slide-in-from-top-1 text-destructive text-xs">
+                {uploadError instanceof Error
+                  ? uploadError.message
+                  : error?.message || '이미지 업로드에 실패했습니다.'}
+              </p>
+            )}
+          </div>
         )}
-      </div>
+      />
     </div>
   );
 };

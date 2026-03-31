@@ -1,15 +1,18 @@
 import { fetchClient } from '@/lib/http/fetch-client';
+import {
+  PresignedUrlRequestContentTypeEnum,
+  PresignedUrlRequestFolderEnum,
+} from '@/types/generated-client/models/PresignedUrlRequest';
+import type { PresignedUrlResponse } from '@/types/generated-client/models/PresignedUrlResponse';
 
-export interface PresignedUrlResponse {
-  presignedUrl: string;
-  publicUrl: string;
-}
+export type { PresignedUrlResponse };
+export { PresignedUrlRequestFolderEnum };
 
 /**
  * 지원하는 이미지 MIME 타입과 확장자 매핑.
  * ACCEPTED_IMAGE_TYPES(input accept 속성)와 fileName 생성에 공통으로 사용합니다.
  */
-export const MIME_TO_EXT: Record<string, string> = {
+export const MIME_TO_EXT: Record<PresignedUrlRequestContentTypeEnum, string> = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
   'image/webp': 'webp',
@@ -29,13 +32,22 @@ export const imagesApi = {
    * fileName은 한글 등 특수문자로 인한 확장자 파싱 오류를 방지하기 위해 MIME 타입 기반으로 생성합니다.
    *
    * @param file - 업로드할 이미지 파일
-   * @param folder - S3 저장 폴더 경로 (예: 'meetings', 'profiles')
-   * @throws 서버 에러 메시지 또는 기본 에러
+   * @param folder - S3 저장 폴더 (meetings/users/posts)
+   * @throws 지원하지 않는 MIME 타입이거나 서버 에러 시
    */
-  async getPresignedUrl(file: File, folder: string): Promise<PresignedUrlResponse> {
+  async getPresignedUrl(
+    file: File,
+    folder: PresignedUrlRequestFolderEnum
+  ): Promise<PresignedUrlResponse> {
+    const mimeType = file.type.trim();
+    if (!(mimeType in MIME_TO_EXT)) {
+      throw new Error(`지원하지 않는 이미지 형식입니다. (${mimeType})`);
+    }
+    const contentType = mimeType as PresignedUrlRequestContentTypeEnum;
+
     const response = await fetchClient.post('/images', {
-      fileName: `image.${MIME_TO_EXT[file.type.trim()] ?? 'jpg'}`,
-      contentType: file.type.trim(),
+      fileName: `image.${MIME_TO_EXT[contentType]}`,
+      contentType,
       folder,
     });
 
