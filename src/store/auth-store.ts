@@ -8,12 +8,16 @@ interface AuthState {
   isAuthenticated: boolean;
   user: AuthUser | null;
   isInitialized: boolean;
+  isLoginRequired: boolean;
+  isSessionExpired: boolean;
 }
 
 interface AuthActions {
   login: (user: AuthUser) => void;
   logout: () => void;
   setInitialized: (val: boolean) => void;
+  setLoginRequired: (val: boolean) => void;
+  setSessionExpired: (val: boolean) => void;
 }
 
 export type AuthStore = AuthState & AuthActions;
@@ -28,6 +32,8 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   isAuthenticated: false,
   user: null,
   isInitialized: false,
+  isLoginRequired: false,
+  isSessionExpired: false,
 
   // Actions
   login: (userData: AuthUser) => {
@@ -38,8 +44,10 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   },
 
   logout: () => {
-    set({ isAuthenticated: false, user: null });
+    set({ isAuthenticated: false, user: null, isLoginRequired: false, isSessionExpired: false });
   },
 
   setInitialized: (val: boolean) => set({ isInitialized: val }),
+  setLoginRequired: (val: boolean) => set({ isLoginRequired: val }),
+  setSessionExpired: (val: boolean) => set({ isSessionExpired: val }),
 }));
