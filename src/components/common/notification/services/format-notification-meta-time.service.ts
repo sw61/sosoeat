@@ -1,6 +1,7 @@
-import { DAY_MS, HOUR_MS, MINUTE_MS } from './format-notification-meta-time.constants';
+const MINUTE_MS = 60_000;
+const HOUR_MS = 3_600_000;
+const DAY_MS = 86_400_000;
 
-/** 알림 탭 우측 메타: 경과 시간(분·시간·일) */
 export const formatNotificationMetaRelativeTime = (
   createdAt: Date,
   now: Date = new Date()
