@@ -1,7 +1,7 @@
 export type MeetingCategory = 'groupEat' | 'groupBuy';
 
 export type Meeting = {
-  id: string;
+  id: number;
   name: string;
   type: MeetingCategory;
   region: string;

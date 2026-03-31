@@ -5,7 +5,7 @@ export interface MeetingHost {
 }
 
 export interface Meeting {
-  id: number;
+  id: number | string;
   isFavorited: boolean;
   teamId: string;
   name: string;

@@ -61,20 +61,23 @@ function InfoItem({ Icon, text }: { Icon: LucideIcon; text: string }) {
 function StatusBadgeGroup({
   confirmedAt,
   variant,
+  meetingId,
 }: {
   confirmedAt: Date | null;
   variant: Variant;
+  meetingId: number;
 }) {
   return (
     <div className="flex items-center gap-2">
       <UseStateBadge variant={variant}></UseStateBadge>
       <EstablishmentStatusBadge confirmedAt={confirmedAt} variant={variant} />
-      <HeartButton className="relative -top-2 left-1 ml-16 max-md:hidden" />
+      <HeartButton className="relative -top-2 left-1 ml-16 max-md:hidden" meetingId={meetingId} />
     </div>
   );
 }
 
 export function MyPageCard({
+  meetingId,
   title,
   currentCount,
   maxCount,
@@ -104,7 +107,7 @@ export function MyPageCard({
         {/* 이미지 위 오버레이 (모바일 전용) */}
         <div className="absolute top-1 right-4 left-4 flex items-center justify-between md:hidden">
           <VariantBadge variant={variant} />
-          <HeartButton className="relative top-3 left-1" />
+          <HeartButton className="relative top-3 left-1" meetingId={meetingId} />
         </div>
       </div>
 
@@ -117,7 +120,7 @@ export function MyPageCard({
 
         {/* 상태 뱃지 (모바일) */}
         <div className="py-2 md:hidden">
-          <StatusBadgeGroup confirmedAt={confirmedAt} variant={variant} />
+          <StatusBadgeGroup confirmedAt={confirmedAt} variant={variant} meetingId={meetingId} />
         </div>
 
         {/* 제목 / 인원 */}
@@ -140,7 +143,7 @@ export function MyPageCard({
 
         {/* 상태 뱃지 (웹) */}
         <div className="mt-4 hidden md:block">
-          <StatusBadgeGroup confirmedAt={confirmedAt} variant={variant} />
+          <StatusBadgeGroup confirmedAt={confirmedAt} variant={variant} meetingId={meetingId} />
         </div>
       </div>
     </Card>

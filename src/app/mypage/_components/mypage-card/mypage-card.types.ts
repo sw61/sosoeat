@@ -1,4 +1,5 @@
 export interface MyPageCardProps {
+  meetingId: number;
   title: string;
   currentCount: number;
   maxCount: number;
