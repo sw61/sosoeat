@@ -3,6 +3,7 @@ export interface SosoTalkPostSubmitPayload {
   contentHtml: string;
   contentText: string;
   imageFile: File | null;
+  imageUrl: string;
 }
 
 export interface SosoTalkPostEditorProps {
@@ -11,5 +12,6 @@ export interface SosoTalkPostEditorProps {
   initialContent?: string;
   initialImageUrl?: string;
   submitLabel?: string;
+  isSubmitting?: boolean;
   onSubmit?: (payload: SosoTalkPostSubmitPayload) => void;
 }

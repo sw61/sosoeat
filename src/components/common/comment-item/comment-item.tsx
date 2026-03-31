@@ -1,6 +1,8 @@
 import { MoreHorizontal } from 'lucide-react';
 
+import { CommentInput } from '@/components/common/comment-input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,8 +20,14 @@ export function CommentItem({
   relativeTime,
   content,
   isAuthorComment = false,
+  isEditing = false,
+  editValue = '',
+  isEditPending = false,
   onEditClick,
   onDeleteClick,
+  onEditValueChange,
+  onEditSubmit,
+  onEditCancel,
   className,
 }: CommentItemProps) {
   return (
@@ -54,7 +62,7 @@ export function CommentItem({
             </div>
           </div>
 
-          {isAuthorComment ? (
+          {isAuthorComment && !isEditing ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
@@ -75,9 +83,40 @@ export function CommentItem({
           ) : null}
         </div>
 
-        <p className="text-sosoeat-gray-900 mt-1 text-base leading-6 font-normal break-words whitespace-pre-wrap">
-          {content}
-        </p>
+        {isEditing ? (
+          <div className="mt-3 space-y-3">
+            <CommentInput
+              value={editValue}
+              onChange={onEditValueChange}
+              onSubmit={onEditSubmit}
+              disabled={isEditPending}
+              submitLabel="댓글 수정"
+              currentUserName={authorName}
+              currentUserImageUrl={authorImageUrl}
+            />
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onEditCancel}
+                disabled={isEditPending}
+              >
+                취소
+              </Button>
+              <Button
+                type="button"
+                onClick={onEditSubmit}
+                disabled={isEditPending || editValue.trim().length === 0}
+              >
+                수정
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sosoeat-gray-900 mt-1 text-base leading-6 font-normal break-words whitespace-pre-wrap">
+            {content}
+          </p>
+        )}
       </div>
     </article>
   );

@@ -1,12 +1,23 @@
 'use client';
 
+import { type ReactNode, useRef, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { type ReactNode, useEffect, useRef, useState } from 'react';
 
+import {
+  useCreateSosoTalkComment,
+  useCreateSosoTalkPostLike,
+  useDeleteSosoTalkComment,
+  useDeleteSosoTalkPost,
+  useDeleteSosoTalkPostLike,
+  useGetSosoTalkPostDetail,
+  useUpdateSosoTalkComment,
+} from '@/app/sosotalk/_services';
 import type { CommentItemData } from '@/components/common/comment-item';
 import { Footer } from '@/components/common/footer';
-import { useGetSosoTalkPostDetail } from '@/services/sosotalk';
 import { useAuthStore } from '@/store/auth-store';
 import type { Comment } from '@/types/generated-client/models/Comment';
 
@@ -20,28 +31,137 @@ const SOSOTALK_AUTHOR_IMAGE_FALLBACK =
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop';
 
 export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) {
+  const router = useRouter();
   const [commentInput, setCommentInput] = useState('');
-  const [isLiked, setIsLiked] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editingCommentInput, setEditingCommentInput] = useState('');
+  const [optimisticIsLiked, setOptimisticIsLiked] = useState<boolean | null>(null);
   const commentSectionRef = useRef<HTMLDivElement>(null);
   const currentUser = useAuthStore((state) => state.user);
   const numericPostId = Number(postId);
   const isValidPostId = Number.isInteger(numericPostId) && numericPostId > 0;
+  const createCommentMutation = useCreateSosoTalkComment();
+  const updateCommentMutation = useUpdateSosoTalkComment();
+  const deleteCommentMutation = useDeleteSosoTalkComment();
+  const createLikeMutation = useCreateSosoTalkPostLike();
+  const deletePostMutation = useDeleteSosoTalkPost();
+  const deleteLikeMutation = useDeleteSosoTalkPostLike();
   const { data, isLoading, isError } = useGetSosoTalkPostDetail(
     isValidPostId ? numericPostId : undefined
   );
 
   const commentCount = data?.count?.comments ?? data?.comments?.length ?? 0;
   const comments = data?.comments ?? [];
-
-  useEffect(() => {
-    setIsLiked(data?.isLiked ?? false);
-  }, [data?.id, data?.isLiked]);
+  const isLiked = optimisticIsLiked ?? data?.isLiked ?? false;
+  const displayedLikeCount = (data?.likeCount ?? 0) + (isLiked ? 1 : 0) - (data?.isLiked ? 1 : 0);
+  const isEditingCommentMissing =
+    editingCommentId != null && !comments.some((comment) => comment.id === editingCommentId);
 
   const handleCommentClick = () => {
     commentSectionRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     });
+  };
+
+  const handleLikeClick = async () => {
+    if (!isValidPostId || createLikeMutation.isPending || deleteLikeMutation.isPending || !data) {
+      return;
+    }
+
+    const nextIsLiked = !isLiked;
+    setOptimisticIsLiked(nextIsLiked);
+
+    try {
+      if (nextIsLiked) {
+        await createLikeMutation.mutateAsync(numericPostId);
+      } else {
+        await deleteLikeMutation.mutateAsync(numericPostId);
+      }
+    } catch {
+      setOptimisticIsLiked(data.isLiked);
+    }
+  };
+
+  const handleSubmitComment = async () => {
+    const trimmedComment = commentInput.trim();
+
+    if (!isValidPostId || !trimmedComment || createCommentMutation.isPending) {
+      return;
+    }
+
+    try {
+      await createCommentMutation.mutateAsync({
+        postId: numericPostId,
+        payload: {
+          content: trimmedComment,
+        },
+      });
+      setCommentInput('');
+    } catch {
+      // 댓글 입력값을 유지해서 다시 시도할 수 있도록 둡니다.
+    }
+  };
+
+  const handleStartEditComment = (comment: Comment) => {
+    setEditingCommentId(comment.id);
+    setEditingCommentInput(comment.content);
+  };
+
+  const handleCancelEditComment = () => {
+    setEditingCommentId(null);
+    setEditingCommentInput('');
+  };
+
+  const handleSubmitEditComment = async () => {
+    const trimmedComment = editingCommentInput.trim();
+
+    if (
+      !isValidPostId ||
+      editingCommentId == null ||
+      !trimmedComment ||
+      updateCommentMutation.isPending ||
+      isEditingCommentMissing
+    ) {
+      return;
+    }
+
+    try {
+      await updateCommentMutation.mutateAsync({
+        postId: numericPostId,
+        commentId: editingCommentId,
+        payload: {
+          content: trimmedComment,
+        },
+      });
+      handleCancelEditComment();
+    } catch {
+      // 수정 실패 시 입력값을 유지해서 다시 시도할 수 있도록 둡니다.
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    if (!isValidPostId || deleteCommentMutation.isPending || typeof window === 'undefined') {
+      return;
+    }
+
+    const shouldDelete = window.confirm('댓글을 삭제할까요?');
+    if (!shouldDelete) {
+      return;
+    }
+
+    try {
+      await deleteCommentMutation.mutateAsync({
+        postId: numericPostId,
+        commentId,
+      });
+
+      if (editingCommentId === commentId) {
+        handleCancelEditComment();
+      }
+    } catch {
+      // 삭제 실패 시 현재 화면을 유지합니다.
+    }
   };
 
   const handleShareClick = async () => {
@@ -69,6 +189,32 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
         return;
       }
     }
+  };
+
+  const handleDeleteClick = async () => {
+    if (!isValidPostId || deletePostMutation.isPending || typeof window === 'undefined') {
+      return;
+    }
+
+    const shouldDelete = window.confirm('게시글을 삭제할까요?');
+    if (!shouldDelete) {
+      return;
+    }
+
+    try {
+      await deletePostMutation.mutateAsync({ postId: numericPostId });
+      router.push('/sosotalk');
+    } catch {
+      // 삭제 실패 시 현재 화면을 유지합니다.
+    }
+  };
+
+  const handleEditClick = () => {
+    if (!isValidPostId) {
+      return;
+    }
+
+    router.push(`/sosotalk/write?postId=${numericPostId}`);
   };
 
   if (!isValidPostId) {
@@ -104,7 +250,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           imageUrl={data.image || undefined}
           authorName={data.author.name}
           authorImageUrl={data.author.image || SOSOTALK_AUTHOR_IMAGE_FALLBACK}
-          likeCount={data.likeCount + (isLiked ? 1 : 0) - (data.isLiked ? 1 : 0)}
+          likeCount={displayedLikeCount}
           commentCount={commentCount}
           createdAt={formatSosoTalkRelativeTime(data.createdAt)}
           createdAtDateTime={data.createdAt.toISOString()}
@@ -112,14 +258,28 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           viewCount={data.viewCount}
           isAuthor={currentUser?.id === data.author.id}
           isLiked={isLiked}
-          onLikeClick={() => setIsLiked((prev) => !prev)}
+          onEditClick={handleEditClick}
+          onDeleteClick={() => void handleDeleteClick()}
+          onLikeClick={() => void handleLikeClick()}
           onCommentClick={handleCommentClick}
           onShareClick={handleShareClick}
-          comments={comments.map((comment) => mapCommentToCommentItemData(comment, currentUser?.id))}
+          comments={comments.map((comment) =>
+            mapCommentToCommentItemData(comment, {
+              currentUserId: currentUser?.id,
+              editingCommentId,
+              editingCommentInput,
+              isEditPending: updateCommentMutation.isPending,
+              onEditClick: () => handleStartEditComment(comment),
+              onDeleteClick: () => void handleDeleteComment(comment.id),
+              onEditValueChange: setEditingCommentInput,
+              onEditSubmit: () => void handleSubmitEditComment(),
+              onEditCancel: handleCancelEditComment,
+            })
+          )}
           inputValue={commentInput}
-          inputPlaceholder="댓글을 입력해 주세요"
+          inputPlaceholder="댓글을 입력해 주세요."
           onChangeInput={setCommentInput}
-          onSubmitComment={() => setCommentInput('')}
+          onSubmitComment={() => void handleSubmitComment()}
           currentUserName={currentUser?.name}
           currentUserImageUrl={currentUser?.image ?? undefined}
         />
@@ -152,7 +312,32 @@ function StatusMessage({ message }: { message: string }) {
   );
 }
 
-function mapCommentToCommentItemData(comment: Comment, currentUserId?: number): CommentItemData {
+interface MapCommentToCommentItemDataOptions {
+  currentUserId?: number;
+  editingCommentId: number | null;
+  editingCommentInput: string;
+  isEditPending: boolean;
+  onEditClick: () => void;
+  onDeleteClick: () => void;
+  onEditValueChange: (value: string) => void;
+  onEditSubmit: () => void;
+  onEditCancel: () => void;
+}
+
+function mapCommentToCommentItemData(
+  comment: Comment,
+  {
+    currentUserId,
+    editingCommentId,
+    editingCommentInput,
+    isEditPending,
+    onEditClick,
+    onDeleteClick,
+    onEditValueChange,
+    onEditSubmit,
+    onEditCancel,
+  }: MapCommentToCommentItemDataOptions
+): CommentItemData {
   return {
     id: String(comment.id),
     authorName: comment.author.name,
@@ -161,6 +346,14 @@ function mapCommentToCommentItemData(comment: Comment, currentUserId?: number): 
     relativeTime: formatSosoTalkRelativeTime(comment.createdAt),
     content: comment.content,
     isAuthorComment: currentUserId === comment.author.id,
+    isEditing: editingCommentId === comment.id,
+    editValue: editingCommentId === comment.id ? editingCommentInput : comment.content,
+    isEditPending,
+    onEditClick,
+    onDeleteClick,
+    onEditValueChange,
+    onEditSubmit,
+    onEditCancel,
   };
 }
 

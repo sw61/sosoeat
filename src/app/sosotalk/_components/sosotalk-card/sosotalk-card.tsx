@@ -1,12 +1,12 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { useQueryClient } from '@tanstack/react-query';
+
+import { getSosoTalkPostDetail } from '@/app/sosotalk/_services';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar/avatar';
-import { getSosoTalkPostDetail } from '@/services/sosotalk';
 
 import type { SosoTalkCardProps } from './sosotalk-card.types';
 
@@ -36,11 +36,16 @@ export function SosoTalkCard({
       href={`/sosotalk/${id}`}
       onMouseEnter={prefetchPostDetail}
       onFocus={prefetchPostDetail}
-      className="focus-visible:ring-ring block rounded-[14px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+      className="focus-visible:ring-ring block rounded-[14px] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
     >
       <article className="border-border bg-card flex h-[352px] w-[302px] flex-col overflow-hidden rounded-[14px] border transition-transform hover:-translate-y-0.5">
         <div className="relative h-[170px] w-full">
-          <Image src={imageUrl} alt="소소톡 게시글 이미지" fill className="object-cover object-center" />
+          <Image
+            src={imageUrl}
+            alt="소소톡 게시글 이미지"
+            fill
+            className="object-cover object-center"
+          />
         </div>
 
         <div className="px-[14px] pt-[14px] pb-[14px]">

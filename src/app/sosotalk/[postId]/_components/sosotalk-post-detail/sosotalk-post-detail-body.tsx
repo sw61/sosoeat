@@ -19,7 +19,7 @@ export function SosoTalkPostDetailBody({
   return (
     <section className="border-sosoeat-gray-300 mt-6 flex flex-col gap-5 border-t pt-5 md:mt-8 md:gap-6 md:pt-6">
       <div
-        className="text-sosoeat-gray-800 prose prose-p:my-0 prose-p:min-h-[1.85em] prose-strong:font-bold prose-em:italic prose-u:underline prose-ul:my-0 prose-ul:list-disc prose-ul:pl-6 prose-ol:my-0 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1 max-w-none text-lg font-normal [&_p]:whitespace-pre-wrap [&_p+ol]:mt-3 [&_p+ul]:mt-3"
+        className="text-sosoeat-gray-800 prose prose-p:my-0 prose-p:min-h-[1.85em] prose-strong:font-bold prose-em:italic prose-u:underline prose-ul:my-0 prose-ul:ml-6 prose-ul:list-outside prose-ul:pl-0 prose-ol:my-0 prose-ol:ml-6 prose-ol:list-outside prose-ol:pl-0 prose-li:my-1 prose-li:list-item max-w-none text-lg font-normal [&_ol>li]:list-decimal [&_p]:whitespace-pre-wrap [&_p+ol]:mt-3 [&_p+ul]:mt-3 [&_ul>li]:list-disc"
         dangerouslySetInnerHTML={{ __html: normalizedContentHtml }}
       />
 

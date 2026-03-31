@@ -6,10 +6,10 @@ import Link from 'next/link';
 
 import { Plus } from 'lucide-react';
 
+import type { GetSosoTalkPostListParams } from '@/app/sosotalk/_services';
+import { mapPostToSosoTalkCardItem, useGetSosoTalkPostList } from '@/app/sosotalk/_services';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { GetSosoTalkPostListParams } from '@/services/sosotalk';
-import { mapPostToSosoTalkCardItem, useGetSosoTalkPostList } from '@/services/sosotalk';
 
 import { SosoTalkBanner } from '../sosotalk-banner';
 import { SosoTalkCard } from '../sosotalk-card';
