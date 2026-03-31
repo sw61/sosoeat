@@ -1,10 +1,14 @@
 'use client';
 
+import { useState } from 'react';
+
 import { MessageSquareText } from 'lucide-react';
 
+import { CommentInput } from '@/components/common/comment-input';
 import { CountingBadge } from '@/components/common/counting-badge/counting-badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/store/auth-store';
 
 import { buildCommentTree } from './comment-tree';
 import { MeetingCommentItem } from './meeting-comment-item';
@@ -18,6 +22,10 @@ export function MeetingCommentSection({
   commentCount,
   className,
 }: MeetingCommentSectionProps) {
+  const [commentText, setCommentText] = useState('');
+  const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   const totalCommentCount = commentCount ?? comments.length;
   const treeComments = buildCommentTree(comments);
   const shouldScroll = treeComments.length > MAX_VISIBLE_COMMENTS;
@@ -55,8 +63,19 @@ export function MeetingCommentSection({
       )}
 
       {/* 댓글 입력창 */}
-      {/* TODO: CommentInput 컴포넌트 연결 */}
-      <div className="bg-sosoeat-gray-100 -mx-6 mt-4 rounded-b-[24px] px-6 py-4" />
+      <div className="bg-sosoeat-gray-100 -mx-6 mt-4 rounded-b-[24px] px-6 py-4">
+        <CommentInput
+          value={commentText}
+          onChange={setCommentText}
+          onSubmit={() => setCommentText('')}
+          disabled={!isAuthenticated}
+          placeholder={
+            isAuthenticated ? '댓글을 입력하세요.' : '로그인 후 댓글을 작성할 수 있습니다.'
+          }
+          currentUserName={user?.name}
+          currentUserImageUrl={user?.image ?? undefined}
+        />
+      </div>
     </section>
   );
 }
