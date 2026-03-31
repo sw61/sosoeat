@@ -11,8 +11,8 @@ import {
   useUpdateSosoTalkPost,
 } from '@/app/sosotalk/_services';
 
-import type { SosoTalkPostSubmitPayload } from './sosotalk-post-editor';
 import { SosoTalkPostEditor } from './sosotalk-post-editor';
+import type { SosoTalkPostSubmitPayload } from './sosotalk-post-editor';
 
 interface SosoTalkWritePageClientProps {
   editPostId?: number;
@@ -26,14 +26,24 @@ export function SosoTalkWritePageClient({ editPostId }: SosoTalkWritePageClientP
   const createPostMutation = useCreateSosoTalkPost();
   const updatePostMutation = useUpdateSosoTalkPost();
 
-  const resolveImageUrl = async (
+  const resolveCreateImageUrl = async (
     payload: SosoTalkPostSubmitPayload
   ): Promise<string | undefined> => {
     if (payload.imageFile) {
       return uploadSosoTalkPostImage(payload.imageFile);
     }
 
-    return payload.imageUrl || undefined;
+    return payload.displayImageUrl || undefined;
+  };
+
+  const resolveUpdateImageValue = async (payload: SosoTalkPostSubmitPayload): Promise<string> => {
+    if (payload.imageFile) {
+      return uploadSosoTalkPostImage(payload.imageFile);
+    }
+
+    // Keep the explicit empty string so the server can distinguish
+    // "remove image" from "field omitted".
+    return payload.displayImageUrl;
   };
 
   const handleCreateSubmit = async (payload: SosoTalkPostSubmitPayload) => {
@@ -44,7 +54,7 @@ export function SosoTalkWritePageClient({ editPostId }: SosoTalkWritePageClientP
     setIsSubmitting(true);
 
     try {
-      const image = await resolveImageUrl(payload);
+      const image = await resolveCreateImageUrl(payload);
       const createdPost = await createPostMutation.mutateAsync({
         payload: {
           title: payload.title,
@@ -62,14 +72,14 @@ export function SosoTalkWritePageClient({ editPostId }: SosoTalkWritePageClientP
   };
 
   const handleEditSubmit = async (payload: SosoTalkPostSubmitPayload) => {
-    if (!editPostId || isSubmitting || updatePostMutation.isPending) {
+    if (editPostId == null || editPostId <= 0 || isSubmitting || updatePostMutation.isPending) {
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const image = await resolveImageUrl(payload);
+      const image = await resolveUpdateImageValue(payload);
 
       await updatePostMutation.mutateAsync({
         postId: editPostId,
@@ -98,18 +108,12 @@ export function SosoTalkWritePageClient({ editPostId }: SosoTalkWritePageClientP
   }
 
   if (isLoading) {
-    return (
-      <div className="py-20 text-center text-sm text-gray-500">
-        게시글 정보를 불러오는 중이에요.
-      </div>
-    );
+    return <div className="py-20 text-center text-sm text-gray-500">게시글 정보를 불러오는 중이에요.</div>;
   }
 
   if (isError || !data) {
     return (
-      <div className="py-20 text-center text-sm text-gray-500">
-        수정할 게시글 정보를 불러오지 못했어요.
-      </div>
+      <div className="py-20 text-center text-sm text-gray-500">수정할 게시글 정보를 불러오지 못했어요.</div>
     );
   }
 

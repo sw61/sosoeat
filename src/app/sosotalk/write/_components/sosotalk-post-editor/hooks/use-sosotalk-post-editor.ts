@@ -189,7 +189,10 @@ export const useSosoTalkPostEditor = ({
       contentHtml,
       contentText,
       imageFile,
-      imageUrl: imagePreviewUrl,
+      // This is the currently displayed image source.
+      // When a new file is selected it can be a local blob URL, so callers
+      // must ignore it whenever imageFile exists.
+      displayImageUrl: imagePreviewUrl,
     });
   };
 

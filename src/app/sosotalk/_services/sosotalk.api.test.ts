@@ -30,6 +30,8 @@ const createSuccessResponse = (jsonValue: unknown) =>
     json: jest.fn().mockResolvedValue(jsonValue),
   }) as unknown as Response;
 
+const originalFetch = global.fetch;
+
 describe('getSosoTalkPostList', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -226,6 +228,7 @@ describe('post actions', () => {
   });
 
   afterEach(() => {
+    global.fetch = originalFetch;
     jest.restoreAllMocks();
   });
 

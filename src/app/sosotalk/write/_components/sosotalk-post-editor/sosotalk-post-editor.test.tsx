@@ -97,7 +97,7 @@ describe('SosoTalkPostEditor', () => {
       contentHtml: '<p>안녕하세요.</p><p><br></p><p>같이 식사하실 분 계실까요?</p>',
       contentText: '안녕하세요.\n\n같이 식사하실 분 계실까요?',
       imageFile: null,
-      imageUrl: '',
+      displayImageUrl: '',
     });
   });
 
