@@ -88,7 +88,7 @@ export const MainPageCard = ({ meeting }: MainPageCardProps) => {
         </h3>
         <CardAction className="absolute top-4 right-4 z-10">
           {' '}
-          <HeartButton />
+          <HeartButton meetingId={meeting.id} />
         </CardAction>
       </CardHeader>
 
