@@ -42,29 +42,29 @@ describe('MeetingCommentSection', () => {
         screen.getByPlaceholderText('로그인 후 댓글을 작성할 수 있습니다.')
       ).toBeInTheDocument();
     });
-  });
 
-  describe('로그인 상태', () => {
-    beforeEach(() => {
-      useAuthStore.setState({ user: MOCK_USER, isAuthenticated: true });
-    });
+    describe('로그인 상태', () => {
+      beforeEach(() => {
+        useAuthStore.setState({ user: MOCK_USER, isAuthenticated: true });
+      });
 
-    it('입력창이 활성화된다', () => {
-      render(<MeetingCommentSection comments={mockComments} />);
+      it('입력창이 활성화된다', () => {
+        render(<MeetingCommentSection comments={mockComments} />);
 
-      expect(screen.getByRole('textbox')).not.toBeDisabled();
-    });
+        expect(screen.getByRole('textbox')).not.toBeDisabled();
+      });
 
-    it('텍스트 입력 후 제출하면 입력창이 초기화된다', async () => {
-      const user = userEvent.setup();
-      render(<MeetingCommentSection comments={mockComments} />);
+      it('텍스트 입력 후 제출하면 입력창이 초기화된다', async () => {
+        const user = userEvent.setup();
+        render(<MeetingCommentSection comments={mockComments} />);
 
-      const textarea = screen.getByRole('textbox');
-      await user.type(textarea, '새 댓글입니다');
-      expect(textarea).toHaveValue('새 댓글입니다');
+        const textarea = screen.getByRole('textbox');
+        await user.type(textarea, '새 댓글입니다');
+        expect(textarea).toHaveValue('새 댓글입니다');
 
-      await user.click(screen.getByRole('button', { name: '댓글 전송' }));
-      expect(textarea).toHaveValue('');
+        await user.click(screen.getByRole('button', { name: '댓글 전송' }));
+        expect(textarea).toHaveValue('');
+      });
     });
   });
 });

@@ -14,7 +14,6 @@ import { buildCommentTree } from './comment-tree';
 import { MeetingCommentItem } from './meeting-comment-item';
 import type { MeetingCommentSectionProps } from './meeting-comment-section.types';
 
-// 댓글이 이 수를 초과하면 ScrollArea 적용
 const MAX_VISIBLE_COMMENTS = 5;
 
 export function MeetingCommentSection({
@@ -55,15 +54,17 @@ export function MeetingCommentSection({
 
       {/* 댓글 목록 */}
       {shouldScroll ? (
-        <ScrollArea className="mt-4 h-[994px]">
-          <div className="space-y-4 pr-4">{commentList}</div>
-        </ScrollArea>
+        <div className="mt-4 h-[994px]">
+          <ScrollArea className="h-full">
+            <div className="space-y-4 pr-4">{commentList}</div>
+          </ScrollArea>
+        </div>
       ) : (
         <div className="mt-4 space-y-4">{commentList}</div>
       )}
 
       {/* 댓글 입력창 */}
-      <div className="bg-sosoeat-gray-100 -mx-6 mt-4 rounded-b-[24px] px-6 py-4">
+      <div className="mt-4 rounded-[24px] px-6 py-4">
         <CommentInput
           value={commentText}
           onChange={setCommentText}
