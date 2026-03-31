@@ -12,7 +12,7 @@ import { NotificationTrigger } from '../notification-trigger';
 import type { NotificationPopoverProps } from './notification-popover.types';
 
 const popoverPanelClass = cn(
-  'flex max-w-none flex-col gap-0 overflow-hidden rounded-[24px] bg-white p-0 shadow-[0px_4px_16px_rgba(0,0,0,0.04)] ring-0',
+  'flex max-w-none flex-col gap-0 overflow-hidden rounded-[24px] border bg-white p-0 shadow-[0px_4px_16px_rgba(0,0,0,0.04)] ring-0',
   'h-[448px] w-[314px]'
 );
 
@@ -26,7 +26,7 @@ export const NotificationPopover = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <NotificationTrigger className={triggerClassName} />
+        <NotificationTrigger className={triggerClassName} unreadCount={unreadCount ?? 0} />
       </PopoverTrigger>
       <PopoverContent
         side="bottom"

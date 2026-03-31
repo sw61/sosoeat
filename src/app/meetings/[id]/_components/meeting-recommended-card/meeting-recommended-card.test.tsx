@@ -20,7 +20,7 @@ jest.mock('@/components/common/heart-button', () => ({
 }));
 
 const mockMeeting: Meeting = {
-  id: '1',
+  id: 1,
   name: '강남 맛집 탐방 함께해요!',
   type: 'groupEat',
   region: '서울 강남구',
@@ -56,7 +56,7 @@ describe('RecommendedMeetingCard', () => {
 
     await userEvent.click(screen.getByText('강남 맛집 탐방 함께해요!'));
 
-    expect(onClick).toHaveBeenCalledWith('1');
+    expect(onClick).toHaveBeenCalledWith(1);
   });
 
   it('isFavorited가 false이면 좋아요 버튼이 렌더링된다', () => {

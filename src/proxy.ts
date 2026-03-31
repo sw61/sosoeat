@@ -14,8 +14,8 @@ export function proxy(request: NextRequest) {
   const isProtectedRoute = pathname.startsWith('/mypage');
 
   if (isProtectedRoute && !hasSession) {
-    // 세션이 없는데 마이페이지 진입 시 로그인 페이지로 리다이렉트
-    return NextResponse.redirect(new URL('/login', request.url));
+    const callbackUrl = encodeURIComponent(pathname);
+    return NextResponse.redirect(new URL(`/login?callbackUrl=${callbackUrl}`, request.url));
   }
 
   // 그 외 모든 경로는 자유롭게 접근 가능

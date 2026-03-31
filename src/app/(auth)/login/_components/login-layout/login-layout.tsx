@@ -1,6 +1,11 @@
+'use client';
+
 import React from 'react';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+
+import { isSafeCallbackUrl, SOCIAL_CALLBACK_URL_KEY } from '@/utils/url';
 
 import { GoogleIcon, KakaoIcon } from '../icons';
 
@@ -16,6 +21,18 @@ interface LoginLayoutProps {
  * @param {React.ReactNode} props.children - 레이아웃 내부의 폼 또는 본문 콘텐츠
  */
 export const LoginLayout = ({ children }: LoginLayoutProps) => {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
+
+  const buildSocialUrl = (provider: string) =>
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_TEAM_ID}/auth/${provider}`;
+
+  const handleSocialLogin = () => {
+    if (callbackUrl && isSafeCallbackUrl(callbackUrl)) {
+      sessionStorage.setItem(SOCIAL_CALLBACK_URL_KEY, callbackUrl);
+    }
+  };
+
   return (
     <div className="bg-sosoeat-gray-100 flex min-h-screen items-center justify-center px-4 py-10">
       <div className="flex w-full max-w-[568px] flex-col rounded-[24px] bg-white px-4 py-6 shadow-sm transition-all duration-200 ease-in-out sm:rounded-[40px] sm:px-[56px] sm:pt-[48px] sm:pb-[44px]">
@@ -32,7 +49,8 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
 
         <div className="mt-6 flex flex-col items-center gap-[12px] sm:flex-row sm:gap-[16px]">
           <Link
-            href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_TEAM_ID}/auth/google`}
+            href={buildSocialUrl('google')}
+            onClick={handleSocialLogin}
             className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] border border-gray-300 bg-white text-base font-semibold text-slate-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 focus:outline-none sm:flex-1"
           >
             <GoogleIcon />
@@ -40,7 +58,8 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
           </Link>
 
           <Link
-            href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_TEAM_ID}/auth/kakao`}
+            href={buildSocialUrl('kakao')}
+            onClick={handleSocialLogin}
             className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] bg-[#FEE500] text-base font-semibold text-slate-800 opacity-90 hover:opacity-100 focus:ring-2 focus:ring-[#FFEE01] focus:ring-offset-1 focus:outline-none sm:flex-1"
           >
             <KakaoIcon />

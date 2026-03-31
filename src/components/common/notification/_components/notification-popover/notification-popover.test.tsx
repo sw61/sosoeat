@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { Notification } from '@/types/generated-client';
+
 import { NotificationPopover } from './notification-popover';
 
 jest.mock('next/image', () => ({
@@ -22,15 +24,36 @@ jest.mock('next/image', () => ({
     return <img src={src} alt={alt} width={width} height={height} className={className} />;
   },
 }));
-
+const mockData: Notification[] = [
+  {
+    id: 1,
+    teamId: 'dallaem',
+    userId: 1,
+    type: 'MEETING_CONFIRMED',
+    message: '모임이 확정되었습니다.',
+    data: { meetingName: 'Team Sync' },
+    isRead: false,
+    createdAt: new Date('2025-01-15T12:00:00Z'),
+  },
+  {
+    id: 2,
+    teamId: 'dallaem',
+    userId: 1,
+    type: 'COMMENT',
+    message: '새 댓글이 달렸습니다.',
+    data: {},
+    isRead: true,
+    createdAt: new Date('2025-01-15T10:00:00Z'),
+  },
+];
 describe('NotificationPopover', () => {
   it('열었을 때 주입한 list가 보인다', async () => {
     const user = userEvent.setup();
-    render(<NotificationPopover list={<span data-testid="popover-list">팝오버 목록</span>} />);
+    render(<NotificationPopover list={mockData} />);
 
     await user.click(screen.getByRole('button', { name: '알림 열기' }));
 
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByTestId('popover-list')).toHaveTextContent('팝오버 목록');
+    expect(screen.getByText('모임 확정')).toBeInTheDocument();
   });
 });

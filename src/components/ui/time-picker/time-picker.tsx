@@ -53,7 +53,8 @@ export const TimePicker = ({ value = '00:00', onChange, className }: TimePickerP
       {/* Hours Column */}
       <div
         ref={hourRef}
-        className="[&::-webkit-scrollbar-thumb]:bg-sosoeat-gray-200 flex-1 overflow-y-auto pr-1 [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:rounded-full"
+        onWheelCapture={(e) => e.stopPropagation()}
+        className="[&::-webkit-scrollbar-thumb]:bg-sosoeat-gray-200 h-full min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1 [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:rounded-full"
       >
         <div className="flex flex-col items-center gap-1.5">
           {HOURS.map((h) => {
@@ -83,7 +84,8 @@ export const TimePicker = ({ value = '00:00', onChange, className }: TimePickerP
       {/* Minutes Column */}
       <div
         ref={minuteRef}
-        className="[&::-webkit-scrollbar-thumb]:bg-sosoeat-gray-200 flex-1 overflow-y-auto pl-1 [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:rounded-full"
+        onWheelCapture={(e) => e.stopPropagation()}
+        className="[&::-webkit-scrollbar-thumb]:bg-sosoeat-gray-200 h-full min-h-0 flex-1 overflow-y-auto overscroll-contain pl-1 [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:rounded-full"
       >
         <div className="flex flex-col items-center gap-1.5">
           {MINUTES.map((m) => {

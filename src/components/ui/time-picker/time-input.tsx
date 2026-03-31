@@ -79,7 +79,7 @@ const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
               className={cn(
                 'bg-sosoeat-gray-100 text-sosoeat-gray-900 h-10 w-full justify-start gap-2 rounded-[12px] border border-transparent px-3.5 py-2 text-left text-sm font-normal transition-all md:h-12 md:text-base',
                 'hover:border-sosoeat-gray-200 hover:bg-sosoeat-gray-100 hover:text-inherit',
-                'focus:border-sosoeat-gray-200 focus:ring-sosoeat-gray-300 focus-visible:ring-sosoeat-gray-300 focus:ring-2 focus:outline-none focus-visible:ring-2',
+                'focus:border-sosoeat-orange-500 focus-visible:border-sosoeat-orange-500 focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
                 !value && 'text-sosoeat-gray-600',
                 errorMessage && 'border-destructive',
                 className

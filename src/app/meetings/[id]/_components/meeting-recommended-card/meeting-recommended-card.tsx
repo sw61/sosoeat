@@ -11,7 +11,7 @@ import type { Meeting } from '@/types/meeting';
 
 interface RecommendedMeetingCardProps {
   meeting: Meeting;
-  onClick?: (id: string) => void;
+  onClick?: (id: number) => void;
 }
 
 export default function RecommendedMeetingCard({ meeting, onClick }: RecommendedMeetingCardProps) {

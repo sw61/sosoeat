@@ -1,12 +1,4 @@
-import {
-  AlignCenter,
-  Bold,
-  ImagePlus,
-  Italic,
-  List,
-  ListOrdered,
-  Underline,
-} from 'lucide-react';
+import { AlignCenter, Bold, ImagePlus, Italic, List, ListOrdered, Underline } from 'lucide-react';
 
 import type { PostEditorToolbarAction } from './post-editor-toolbar.types';
 

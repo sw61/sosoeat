@@ -1,4 +1,4 @@
-import { EllipsisIcon } from 'lucide-react';
+import { EllipsisVerticalIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,7 +18,7 @@ export function EllipsisMenu({ onEdit, onDelete }: EllipsisMenuProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon-sm" aria-label="더보기">
-          <EllipsisIcon className="text-sosoeat-gray-500 size-[26px]" />
+          <EllipsisVerticalIcon className="text-sosoeat-gray-500 size-5" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

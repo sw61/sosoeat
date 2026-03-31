@@ -4,7 +4,7 @@ import { Providers } from '@/app/providers';
 import { NavigationBarClient } from '@/components/common/navigation-bar/navigation-bar-client';
 import { Toaster } from '@/components/ui/sonner/index';
 
-import '@/app/globals.css';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: '소소잇 | 일상과 만남을 잇다',

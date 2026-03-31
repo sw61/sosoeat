@@ -6,6 +6,7 @@ const meta = {
   title: 'components/common/heart-button',
   component: HeartButton,
   args: {
+    meetingId: 1,
     size: 'lg',
   },
 } satisfies Meta<typeof HeartButton>;

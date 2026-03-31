@@ -29,11 +29,10 @@ const request = async (url: string, options: RequestInit = {}): Promise<Response
 
   const response = await fetch(fullUrl, { ...options, headers });
 
-  // proxy를 경유한 요청에서 silentRefresh까지 실패한 401 → 세션 만료 → 로그인 페이지로
+  // proxy를 경유한 요청에서 silentRefresh까지 실패한 401 → 세션 만료 알림 모달 띄우기
   // /api/auth/* 등 BFF 직접 호출은 제외 (로그인 실패 등 정상적인 401 포함)
   if (response.status === 401 && fullUrl.startsWith('/api/proxy/')) {
     onSessionExpired?.();
-    window.location.href = '/login';
   }
 
   return response;

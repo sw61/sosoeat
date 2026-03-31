@@ -2,7 +2,13 @@
 
 import * as React from 'react';
 
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
 import { NotificationPanelBody } from '../notification-panel-body';
@@ -14,7 +20,7 @@ import type { NotificationDialogProps } from './notification-dialog.types';
 const mobileDialogContentClass = cn(
   'flex max-w-[314px] flex-col gap-0 overflow-hidden bg-white p-0 ring-0',
   'shadow-[0px_4px_16px_rgba(0,0,0,0.04)]',
-  'fixed inset-x-0 top-auto bottom-0 left-0 z-50 translate-x-0 translate-y-0',
+  'fixed top-0 right-0 bottom-auto left-auto z-50 m-0 translate-x-0 translate-y-0',
   'h-[min(812px,100dvh)] max-h-[100dvh] w-full rounded-t-[24px] rounded-r-none sm:max-w-[314px]'
 );
 
@@ -23,21 +29,18 @@ export const NotificationDialog = ({
   list,
   unreadCount,
 }: NotificationDialogProps) => {
-  const titleId = React.useId();
+  const panelId = React.useId();
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <NotificationTrigger className={triggerClassName} />
+        <NotificationTrigger className={triggerClassName} unreadCount={unreadCount ?? 0} />
       </DialogTrigger>
-      <DialogContent
-        className={mobileDialogContentClass}
-        showCloseButton={false}
-        aria-labelledby={titleId}
-        aria-describedby={undefined}
-      >
+      <DialogContent className={mobileDialogContentClass} showCloseButton={false}>
+        <DialogTitle className="sr-only">알림</DialogTitle>
+        <DialogDescription className="sr-only">알림 목록</DialogDescription>
         <NotificationPanelBody
-          titleId={titleId}
+          titleId={panelId}
           listScrollClassName={scrollAreaMobileClass}
           list={list}
           unreadCount={unreadCount}
