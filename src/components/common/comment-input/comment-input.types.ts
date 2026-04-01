@@ -7,6 +7,7 @@ export interface CommentInputProps {
   submitLabel?: string;
   currentUserName?: string;
   currentUserImageUrl?: string;
+  showAvatar?: boolean;
   submitOnEnter?: boolean;
   className?: string;
 }
