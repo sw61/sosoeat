@@ -3,6 +3,16 @@ import { cn } from '@/lib/utils';
 import { metaDot } from '../icons/meta-dot/meta-dot';
 import { ReadCheckIcon } from '../icons/read-check-icon';
 
+import {
+  NOTIFICATION_TAB_BODY_CLASS,
+  NOTIFICATION_TAB_BODY_CONTENT_CLASS,
+  NOTIFICATION_TAB_BODY_DESCRIPTION_CLASS,
+  NOTIFICATION_TAB_BODY_META_RIGHT_CLASS,
+  NOTIFICATION_TAB_BODY_META_ROW_CLASS,
+  NOTIFICATION_TAB_BODY_META_TEXT_CLASS,
+  NOTIFICATION_TAB_BODY_TITLE_CLASS,
+  NOTIFICATION_TAB_BODY_TITLE_ROW_CLASS,
+} from './notification-tab-body.constants';
 import { NotificationTabBodyProps } from './notification-tab-body.types';
 
 export const NotificationTabBody = ({
@@ -14,27 +24,20 @@ export const NotificationTabBody = ({
   highlighted,
 }: NotificationTabBodyProps) => {
   return (
-    <div
-      className={cn(
-        'flex min-h-[90px] w-[314px] shrink-0 flex-row items-start gap-4 pt-3 pr-7 pb-4 pl-5',
-        highlighted ? 'bg-[#FFF2EC]' : 'bg-white'
-      )}
-    >
+    <div className={cn(NOTIFICATION_TAB_BODY_CLASS, highlighted ? 'bg-[#FFF2EC]' : 'bg-white')}>
       <div className="shrink-0">{thumbnail}</div>
-      <div className="flex w-52 min-w-0 shrink-0 flex-col items-stretch gap-1 self-stretch">
-        <div className="flex min-h-4.5 shrink-0 flex-row items-center justify-between gap-0.5 self-stretch">
-          <div className="flex min-w-0 flex-row items-center gap-0.5">
-            <span className="text-xs leading-4 font-semibold text-[#333333]">{title}</span>
+      <div className={NOTIFICATION_TAB_BODY_CONTENT_CLASS}>
+        <div className={NOTIFICATION_TAB_BODY_META_ROW_CLASS}>
+          <div className={NOTIFICATION_TAB_BODY_TITLE_ROW_CLASS}>
+            <span className={NOTIFICATION_TAB_BODY_TITLE_CLASS}>{title}</span>
             {isMeetingConfirmed ? <ReadCheckIcon /> : null}
           </div>
-          <div className="flex shrink-0 flex-row items-center justify-center gap-1">
+          <div className={NOTIFICATION_TAB_BODY_META_RIGHT_CLASS}>
             {metaDot}
-            <span className="text-xs leading-4 font-normal text-[#BBBBBB]">{metaRight}</span>
+            <span className={NOTIFICATION_TAB_BODY_META_TEXT_CLASS}>{metaRight}</span>
           </div>
         </div>
-        <p className="min-h-0 w-full self-stretch text-sm leading-5 font-normal tracking-[-0.02em] text-[#737373]">
-          {description}
-        </p>
+        <p className={NOTIFICATION_TAB_BODY_DESCRIPTION_CLASS}>{description}</p>
       </div>
     </div>
   );

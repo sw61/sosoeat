@@ -6,6 +6,12 @@ import type { ProgressProps } from '@/components/ui/progress-bar/index';
 import { Progress } from '@/components/ui/progress-bar/index';
 import { cn } from '@/lib/utils';
 
+import {
+  PROGRESS_WITH_LABEL_FIELD_CLASS,
+  PROGRESS_WITH_LABEL_FIELD_LABEL_CLASS,
+  PROGRESS_WITH_LABEL_INFO_ROW_CLASS,
+} from './progress-with-label.constants';
+
 export interface ProgressWithLabelProps {
   id: string;
   current: number;
@@ -34,9 +40,9 @@ export const ProgressWithLabel = ({
   const progress = max > 0 ? (clampedCurrent / max) * 100 : 0;
 
   return (
-    <Field className={cn('text-sosoeat-gray-700 w-full max-w-sm gap-1', className)}>
-      <FieldLabel htmlFor={id} className="flex w-full items-center justify-between gap-1">
-        <div className="flex items-center gap-1">
+    <Field className={cn(PROGRESS_WITH_LABEL_FIELD_CLASS, className)}>
+      <FieldLabel htmlFor={id} className={PROGRESS_WITH_LABEL_FIELD_LABEL_CLASS}>
+        <div className={PROGRESS_WITH_LABEL_INFO_ROW_CLASS}>
           <Users className="h-3 w-3 shrink-0" />
           <span className="text-xs font-medium">{`${clampedCurrent}/${max} 참여중`}</span>
         </div>

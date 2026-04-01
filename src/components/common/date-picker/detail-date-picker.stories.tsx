@@ -21,8 +21,10 @@ export const Primary: Story = {
         {...args}
         valueStart={valueStart}
         valueEnd={valueEnd}
-        onStartDateChange={setValueStart}
-        onEndDateChange={setValueEnd}
+        onDateChange={({ valueStart, valueEnd }) => {
+          setValueStart(valueStart);
+          setValueEnd(valueEnd);
+        }}
       />
     );
   },
@@ -30,8 +32,7 @@ export const Primary: Story = {
     variant: 'groupBuy',
     valueStart: null,
     valueEnd: null,
-    onStartDateChange: () => {},
-    onEndDateChange: () => {},
+    onDateChange: () => {},
   },
 };
 
@@ -44,8 +45,10 @@ export const GroupEat: Story = {
         {...args}
         valueStart={valueStart}
         valueEnd={valueEnd}
-        onStartDateChange={setValueStart}
-        onEndDateChange={setValueEnd}
+        onDateChange={({ valueStart, valueEnd }) => {
+          setValueStart(valueStart);
+          setValueEnd(valueEnd);
+        }}
       />
     );
   },
@@ -53,7 +56,6 @@ export const GroupEat: Story = {
     variant: 'groupEat',
     valueStart: null,
     valueEnd: null,
-    onStartDateChange: () => {},
-    onEndDateChange: () => {},
+    onDateChange: () => {},
   },
 };

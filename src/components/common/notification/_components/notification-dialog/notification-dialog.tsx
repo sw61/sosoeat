@@ -15,14 +15,8 @@ import { NotificationPanelBody } from '../notification-panel-body';
 import { scrollAreaMobileClass } from '../notification-scroll-area';
 import { NotificationTrigger } from '../notification-trigger';
 
+import { MOBILE_DIALOG_CONTENT_CLASS } from './notification-dialog.constants';
 import type { NotificationDialogProps } from './notification-dialog.types';
-
-const mobileDialogContentClass = cn(
-  'flex max-w-[314px] flex-col gap-0 overflow-hidden bg-white p-0 ring-0',
-  'shadow-[0px_4px_16px_rgba(0,0,0,0.04)]',
-  'fixed top-0 right-0 bottom-auto left-auto z-50 m-0 translate-x-0 translate-y-0',
-  'h-[min(812px,100dvh)] max-h-[100dvh] w-full rounded-t-[24px] rounded-r-none sm:max-w-[314px]'
-);
 
 export const NotificationDialog = ({
   triggerClassName,
@@ -36,7 +30,7 @@ export const NotificationDialog = ({
       <DialogTrigger asChild>
         <NotificationTrigger className={triggerClassName} unreadCount={unreadCount ?? 0} />
       </DialogTrigger>
-      <DialogContent className={mobileDialogContentClass} showCloseButton={false}>
+      <DialogContent className={cn(MOBILE_DIALOG_CONTENT_CLASS)} showCloseButton={false}>
         <DialogTitle className="sr-only">알림</DialogTitle>
         <DialogDescription className="sr-only">알림 목록</DialogDescription>
         <NotificationPanelBody

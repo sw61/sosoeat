@@ -14,29 +14,16 @@ import { Calendar } from '@/components/ui/calendar/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/popover';
 import { cn } from '@/lib/utils';
 
-const variantStyles: Record<
-  NonNullable<DetailDatePickerProps['variant']>,
-  {
-    calendarSelected: string;
-    resetButton: string;
-    applyButton: string;
-  }
-> = {
-  groupEat: {
-    calendarSelected:
-      '[&_button[data-range-start=true][data-range-end=true]]:!rounded-[var(--radius-md)] [&_button[data-range-start=true][data-range-end=true]]:!bg-sosoeat-orange-500 [&_button[data-range-start=true][data-range-end=true]]:!text-white [&_button[data-range-start=true]:not([data-range-end=true])]:!bg-sosoeat-orange-500 [&_button[data-range-start=true]:not([data-range-end=true])]:!text-white [&_button[data-range-end=true]:not([data-range-start=true])]:!bg-sosoeat-orange-500 [&_button[data-range-end=true]:not([data-range-start=true])]:!text-white [&_button[data-range-middle=true]]:!bg-sosoeat-orange-100 [&_button[data-range-middle=true]]:!text-sosoeat-orange-900',
-    resetButton:
-      'bg-white border border-sosoeat-orange-600 text-sosoeat-orange-700 rounded-xl hover:bg-sosoeat-orange-50',
-    applyButton: 'bg-sosoeat-orange-600 text-white rounded-xl hover:bg-sosoeat-orange-700',
-  },
-  groupBuy: {
-    calendarSelected:
-      '[&_button[data-range-start=true][data-range-end=true]]:!rounded-[var(--radius-md)] [&_button[data-range-start=true][data-range-end=true]]:!bg-sosoeat-blue-500 [&_button[data-range-start=true][data-range-end=true]]:!text-white [&_button[data-range-start=true]:not([data-range-end=true])]:!bg-sosoeat-blue-500 [&_button[data-range-start=true]:not([data-range-end=true])]:!text-white [&_button[data-range-end=true]:not([data-range-start=true])]:!bg-sosoeat-blue-500 [&_button[data-range-end=true]:not([data-range-start=true])]:!text-white [&_button[data-range-middle=true]]:!bg-sosoeat-blue-100 [&_button[data-range-middle=true]]:!text-sosoeat-blue-900',
-    resetButton:
-      'bg-white border border-sosoeat-blue-500 text-sosoeat-blue-600 rounded-xl hover:bg-sosoeat-blue-50',
-    applyButton: 'bg-sosoeat-blue-500 text-white rounded-xl hover:bg-sosoeat-blue-600',
-  },
-};
+import {
+  DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS,
+  DETAIL_DATE_PICKER_ACTIONS_CLASS,
+  DETAIL_DATE_PICKER_CALENDAR_CLASS,
+  DETAIL_DATE_PICKER_CHEVRON_CLASS,
+  DETAIL_DATE_PICKER_POPOVER_CONTENT_CLASS,
+  DETAIL_DATE_PICKER_TRIGGER_CLASS,
+  DETAIL_DATE_PICKER_TRIGGER_CONTENT_CLASS,
+  DETAIL_DATE_PICKER_VARIANT_STYLES,
+} from './detail-date-picker.constants';
 
 function formatTriggerLabel({
   valueStart,
@@ -60,7 +47,7 @@ export function DetailDatePicker({
   onDateChange = () => {},
   className,
 }: DetailDatePickerProps) {
-  const styles = variantStyles[variant];
+  const styles = DETAIL_DATE_PICKER_VARIANT_STYLES[variant];
 
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<{
@@ -96,14 +83,14 @@ export function DetailDatePicker({
   const triggerLabel = formatTriggerLabel({ valueStart, valueEnd });
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
-      <PopoverTrigger type="button" className={cn('min-w-[170px]', className)}>
-        <span className="flex min-w-[93px] items-center justify-end gap-1 text-base font-medium">
+      <PopoverTrigger type="button" className={cn(DETAIL_DATE_PICKER_TRIGGER_CLASS, className)}>
+        <span className={DETAIL_DATE_PICKER_TRIGGER_CONTENT_CLASS}>
           <Image src={'icons/deadline-calendar.svg'} alt="Calendar" width={20} height={20} />
           {triggerLabel}
           <ChevronDown className="size-4 shrink-0" aria-hidden />
         </span>
       </PopoverTrigger>
-      <PopoverContent className="w-[298px] p-4">
+      <PopoverContent className={DETAIL_DATE_PICKER_POPOVER_CONTENT_CLASS}>
         <Calendar
           locale={ko}
           mode="range"
@@ -115,16 +102,13 @@ export function DetailDatePicker({
               valueEnd: d?.to,
             })
           }
-          className={cn(
-            'w-[250px] text-sm font-semibold [&_button]:focus-visible:!border-transparent [&_button]:focus-visible:!ring-0 [&_button:not([data-range-start=true]):not([data-range-end=true]):not([data-range-middle=true])]:hover:!bg-transparent [&_button:not([data-range-start=true]):not([data-range-end=true]):not([data-range-middle=true])]:active:!bg-transparent [&_button[data-range-end=true]:not([data-range-start=true])]:!rounded-l-none [&_button[data-range-middle=true]]:!rounded-none [&_button[data-range-start=true]:not([data-range-end=true])]:!rounded-r-none [&_td[data-focused=true]_button]:!border-transparent [&_td[data-focused=true]_button]:!ring-0 [&_td[data-focused=true]_button:not([data-range-start=true]):not([data-range-end=true]):not([data-range-middle=true])]:!bg-transparent [&_td[data-today=true]]:!bg-transparent [&_td[data-today=true]_button:not([data-range-start=true]):not([data-range-end=true]):not([data-range-middle=true])]:!bg-transparent',
-            styles.calendarSelected
-          )}
+          className={cn(DETAIL_DATE_PICKER_CALENDAR_CLASS, styles.calendarSelected)}
           buttonVariant={'ghost'}
           components={{
             Chevron: ({ orientation, className, ...props }) =>
               orientation === 'left' ? (
                 <Triangle
-                  className={cn('text-foreground h-[7px] w-[15px]', className)}
+                  className={cn(DETAIL_DATE_PICKER_CHEVRON_CLASS, className)}
                   fill="currentColor"
                   strokeWidth={0}
                   style={{ transform: 'rotate(-90deg)' }}
@@ -132,7 +116,7 @@ export function DetailDatePicker({
                 />
               ) : (
                 <Triangle
-                  className={cn('text-foreground h-[7px] w-[15px]', className)}
+                  className={cn(DETAIL_DATE_PICKER_CHEVRON_CLASS, className)}
                   fill="currentColor"
                   strokeWidth={0}
                   style={{ transform: 'rotate(90deg)' }}
@@ -141,17 +125,17 @@ export function DetailDatePicker({
               ),
           }}
         />
-        <div className="flex w-full justify-center gap-2">
+        <div className={DETAIL_DATE_PICKER_ACTIONS_CLASS}>
           <Button
             variant="outline"
-            className={cn('h-10 w-[118px] text-sm font-semibold', styles.resetButton)}
+            className={cn(DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS, styles.resetButton)}
             onClick={handleReset}
             type="button"
           >
             초기화
           </Button>
           <Button
-            className={cn('h-10 w-[118px] text-sm font-semibold', styles.applyButton)}
+            className={cn(DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS, styles.applyButton)}
             onClick={handleApply}
             type="button"
           >
