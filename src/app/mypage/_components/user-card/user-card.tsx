@@ -43,7 +43,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
       >
         <CardHeader>
           <div className="flex items-center gap-6 md:hidden">
-            <Avatar className="r h-[83px] w-[83px] shrink-0 border-2 border-white">
+            <Avatar className="h-[83px] w-[83px] shrink-0 border-2 border-white">
               <AvatarImage src={localImageUrl} />
               <AvatarFallback></AvatarFallback>
             </Avatar>

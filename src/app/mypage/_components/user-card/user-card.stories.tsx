@@ -20,7 +20,7 @@ export const Default: Story = {
   args: {
     name: '김민준',
     joinedAt: '2024-01-15',
-    email: '1인 가구 3년차입니다. 식재료 낭비 없이 알뜰하게 살고 싶어요!',
+    email: 'minjun.kim@example.com',
     className: 'bg-sosoeat-gray-100',
   },
 };

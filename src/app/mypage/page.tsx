@@ -28,7 +28,6 @@ export default async function MyPage() {
           imageUrl={user?.image}
           className="lg:max-w-276"
         />
-        <div className="absolute top-15 right-25"></div>
       </div>
 
       <div className="flex flex-row justify-center gap-5 md:p-5">
