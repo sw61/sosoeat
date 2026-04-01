@@ -62,7 +62,7 @@ export const MeetingCreateForm = ({ onClose, onSubmit }: Omit<MeetingCreateModal
   };
 
   return (
-    <div className="flex h-full w-full flex-col gap-0 px-6 pt-8 pb-6 md:p-12">
+    <div className="flex min-h-0 w-full flex-col gap-0 px-6 pt-8 pb-6 md:p-12">
       {/* ── 헤더: 단계 표시 + 제목 ── */}
       <div className="flex items-center gap-2 text-xl font-semibold md:text-2xl">
         <h2 className="text-sosoeat-gray-900">{STEP_TITLES[currentStep]}</h2>

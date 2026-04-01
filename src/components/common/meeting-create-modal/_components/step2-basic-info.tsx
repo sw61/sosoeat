@@ -87,17 +87,18 @@ export const StepBasicInfo = ({ form }: StepProps) => {
             <label className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
               이미지{requiredIndicator}
             </label>
-            <div className="relative h-[147px] w-[147px]">
+            <div className="relative w-full">
               {field.value && !isPending ? (
                 <Image
                   src={field.value as string}
                   alt="모임 이미지"
-                  width={147}
-                  height={147}
-                  className="rounded-2xl object-cover"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="h-auto w-full rounded-2xl"
                 />
               ) : (
-                <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-full w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
+                <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-[147px] w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
                   {isPending ? (
                     <Loader2 className="h-6 w-6 animate-spin" />
                   ) : (
@@ -105,8 +106,8 @@ export const StepBasicInfo = ({ form }: StepProps) => {
                   )}
                 </div>
               )}
-              {/* 이미지가 없을 때만 영역 전체를 클릭 가능하게 overlay */}
-              {!field.value && (
+              {/* 이미지 업로드/변경을 위한 클릭 overlay */}
+              {!isPending && (
                 <label
                   htmlFor="image"
                   className="absolute inset-0 cursor-pointer rounded-2xl"

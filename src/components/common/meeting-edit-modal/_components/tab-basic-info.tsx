@@ -185,17 +185,18 @@ export const TabBasicInfo = ({ form, isUploadPending, uploadError, onFileChange 
           name="image"
           control={control}
           render={({ field }) => (
-            <div className="relative h-[147px] w-[147px]">
+            <div className="relative w-full">
               {field.value && !isUploadPending ? (
                 <Image
                   src={field.value}
                   alt="모임 이미지"
-                  width={147}
-                  height={147}
-                  className="rounded-2xl object-cover"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="h-auto w-full rounded-2xl"
                 />
               ) : (
-                <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-full w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
+                <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-[147px] w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
                   {isUploadPending ? (
                     <Loader2 className="h-6 w-6 animate-spin" />
                   ) : (
@@ -203,11 +204,13 @@ export const TabBasicInfo = ({ form, isUploadPending, uploadError, onFileChange 
                   )}
                 </div>
               )}
-              <label
-                htmlFor="edit-image"
-                className="absolute inset-0 cursor-pointer rounded-2xl"
-                aria-label={field.value ? '이미지 변경' : '이미지 선택'}
-              />
+              {!isUploadPending && (
+                <label
+                  htmlFor="edit-image"
+                  className="absolute inset-0 cursor-pointer rounded-2xl"
+                  aria-label={field.value ? '이미지 변경' : '이미지 선택'}
+                />
+              )}
               <input
                 type="file"
                 id="edit-image"

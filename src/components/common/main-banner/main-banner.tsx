@@ -161,7 +161,8 @@ function BannerImage({ banner, index }: { banner: Banner; index: number }) {
         fill
         priority={index === 0}
         className="object-cover"
-        sizes="100vw"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+        quality={index === 0 ? 85 : 75}
       />
       {/* 가독성을 위한 오버레이 */}
       <div className="absolute inset-0 bg-black/55" />
