@@ -17,7 +17,7 @@ interface RecommendedMeetingCardProps {
 export default function RecommendedMeetingCard({ meeting, onClick }: RecommendedMeetingCardProps) {
   return (
     <Card
-      className="h-[286px] w-[302px] cursor-pointer border-none bg-transparent pt-0 shadow-none ring-0"
+      className="h-[286px] w-[302px] cursor-pointer border-none pt-0 shadow-none ring-0"
       onClick={() => onClick?.(meeting.id)}
     >
       <CardContent className="flex flex-col p-0">
