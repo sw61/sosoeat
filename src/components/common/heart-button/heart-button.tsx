@@ -47,7 +47,6 @@ export function HeartButton({
         onClick={() => {
           if (meetingId === undefined) {
             if (process.env.NODE_ENV !== 'production') {
-               
               console.error(
                 'HeartButton: meetingId is required for toggleFavorite but was undefined.'
               );

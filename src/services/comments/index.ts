@@ -1,7 +1,6 @@
 export type {
   Comment,
   CommentCountResponse,
-  CommentUser,
   CreateCommentRequest,
   SyncMeetingRequest,
   UpdateCommentRequest,
