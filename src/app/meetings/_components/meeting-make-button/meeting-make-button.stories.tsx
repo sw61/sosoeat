@@ -14,6 +14,6 @@ export default meta;
 
 export const Default: StoryObj<typeof MeetingMakeButton> = {
   render: function MeetingMakeButtonStory() {
-    return <MeetingMakeButton />;
+    return <MeetingMakeButton onClick={() => {}} />;
   },
 };
