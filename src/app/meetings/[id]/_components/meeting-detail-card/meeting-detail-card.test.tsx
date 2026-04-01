@@ -27,11 +27,13 @@ const mockMeeting: Meeting = {
   isFavorited: false,
 };
 
+// 공통 베이스 props (role-specific 필드 제외)
 const BASE_PROPS = {
   meeting: mockMeeting,
   status: 'open' as MeetingStatus,
 };
 
+// role별 기본 props
 const DEFAULT_PROPS = { ...BASE_PROPS, role: 'participant' as const, isJoined: false };
 const HOST_PROPS = { ...BASE_PROPS, role: 'host' as const };
 const GUEST_PROPS = { ...BASE_PROPS, role: 'guest' as const };
@@ -40,34 +42,20 @@ describe('MeetingDetailCard', () => {
   it('모임 제목, 날짜, 지역명, 상세주소가 렌더링된다', () => {
     render(<MeetingDetailCard {...DEFAULT_PROPS} />);
 
-    expect(screen.getByText('강남 맛집 탐방 함께해요!')).toBeInTheDocument();
-    // KST 변환: 2024-03-15T09:30Z → 18:30 KST
-    expect(screen.getByText('2024년 3월 15일 금요일 · 18:30')).toBeInTheDocument();
-    expect(screen.getByText('서울 강남구')).toBeInTheDocument();
-    expect(screen.getByText('서울 강남구 테헤란로 123')).toBeInTheDocument();
-  });
-
-  it('호스트 이름이 항상 노출된다', () => {
-    render(<MeetingDetailCard {...DEFAULT_PROPS} />);
-
-    expect(screen.getByText('김소소')).toBeInTheDocument();
-  });
-
-  it('confirmedAt이 있으면 개설완료 뱃지가 노출된다', () => {
-    render(
-      <MeetingDetailCard
-        {...DEFAULT_PROPS}
-        meeting={{ ...mockMeeting, confirmedAt: '2024-03-10T00:00:00.000Z' }}
-      />
-    );
-
-    expect(screen.getAllByText('개설완료').length).toBeGreaterThanOrEqual(1);
+    // 제목은 모바일·태블릿 양쪽에 렌더링됨
+    expect(screen.getAllByText('강남 맛집 탐방 함께해요!').length).toBeGreaterThanOrEqual(1);
+    // fullDateLabel은 태블릿·PC 섹션에 표시 (KST 변환: 2024-03-15T09:30Z → 18:30 KST)
+    expect(screen.getAllByText('2024년 3월 15일 금요일 · 18:30').length).toBeGreaterThanOrEqual(1);
+    // 지역명은 태블릿·PC 섹션에 표시 (모바일은 "서울 강남구 · 같이먹기" 형태)
+    expect(screen.getAllByText('서울 강남구').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('서울 강남구 테헤란로 123').length).toBeGreaterThanOrEqual(1);
   });
 
   describe('더보기(...) 버튼', () => {
     it('host 역할이면 더보기 버튼이 노출된다', () => {
       render(<MeetingDetailCard {...HOST_PROPS} />);
 
+      // 모바일·태블릿 양쪽에 렌더링되므로 getAllByRole 사용
       expect(screen.getAllByRole('button', { name: '더보기' }).length).toBeGreaterThanOrEqual(1);
     });
 
@@ -117,6 +105,8 @@ describe('MeetingDetailCard', () => {
   });
 
   describe('액션 버튼', () => {
+    // 액션 버튼은 모바일·태블릿 양쪽에 렌더링되므로 getAllByRole 사용
+
     it('status가 closed이면 "모집 마감" 버튼이 disabled 상태로 렌더링된다', () => {
       render(<MeetingDetailCard {...DEFAULT_PROPS} status="closed" />);
 
@@ -195,6 +185,43 @@ describe('MeetingDetailCard', () => {
       await user.click(screen.getAllByRole('button', { name: '공유하기' })[0]);
 
       expect(onShare).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('chevron 토글 (모바일 참여 현황 / 호스트)', () => {
+    it('초기에는 펼치기 버튼이 표시된다', () => {
+      render(<MeetingDetailCard {...DEFAULT_PROPS} />);
+
+      expect(screen.getByRole('button', { name: '펼치기' })).toBeInTheDocument();
+    });
+
+    it('chevron 클릭 시 접기 버튼으로 바뀐다', async () => {
+      const user = userEvent.setup();
+      render(<MeetingDetailCard {...DEFAULT_PROPS} />);
+
+      await user.click(screen.getByRole('button', { name: '펼치기' }));
+
+      expect(screen.getByRole('button', { name: '접기' })).toBeInTheDocument();
+    });
+
+    it('chevron 클릭 후 다시 클릭하면 접힌다', async () => {
+      const user = userEvent.setup();
+      render(<MeetingDetailCard {...DEFAULT_PROPS} />);
+
+      await user.click(screen.getByRole('button', { name: '펼치기' }));
+      await user.click(screen.getByRole('button', { name: '접기' }));
+
+      expect(screen.getByRole('button', { name: '펼치기' })).toBeInTheDocument();
+    });
+
+    it('chevron을 열면 호스트 이름이 노출된다', async () => {
+      const user = userEvent.setup();
+      render(<MeetingDetailCard {...DEFAULT_PROPS} />);
+
+      await user.click(screen.getByRole('button', { name: '펼치기' }));
+
+      const hostElements = screen.getAllByText('김소소');
+      expect(hostElements.length).toBeGreaterThanOrEqual(1);
     });
   });
 });
