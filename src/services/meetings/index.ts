@@ -1,2 +1,2 @@
 export { meetingsApi } from './meetings.api';
-export { useCreateMeeting } from './meetings.queries';
+export { useCreateMeeting, useUpdateMeeting } from './meetings.queries';

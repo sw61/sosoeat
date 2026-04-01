@@ -7,7 +7,7 @@
 3. [토큰 저장소 및 관리](#3-토큰-저장소-및-관리)
 4. [HTTP 클라이언트](#4-http-클라이언트)
 5. [인증 흐름](#5-인증-흐름)
-   - [앱 초기화](#51-앱-초기화-hydration)
+   - [앱 초기화 (Hydration)](#51-앱-초기화-hydration)
    - [로그인](#52-로그인)
    - [회원가입](#53-회원가입)
    - [OAuth 소셜 로그인](#54-oauth-소셜-로그인)
@@ -74,7 +74,7 @@ src/
 │   │   └── signup/                    # 회원가입 페이지 + 다단계 폼
 │   ├── oauth/callback/page.tsx        # OAuth 콜백 처리
 │   └── _components/
-│       └── auth-initializer.tsx       # 앱 최초 로드 시 세션 복원
+│       └── auth-initializer.tsx       # initialUser prop으로 Zustand store 초기화
 │
 └── proxy.ts                           # Next.js 미들웨어 (라우트 보호)
 ```
@@ -170,20 +170,19 @@ export interface AuthUser {
 
 ### 5.1 앱 초기화 (Hydration)
 
-새로고침 시 Zustand 상태가 초기화되므로, `AuthInitializer`가 쿠키에서 유저 정보를 복원한다.
+새로고침 시 Zustand 상태가 초기화되므로, 서버에서 쿠키를 직접 읽어 `initialUser`로 전달하고 `AuthInitializer`가 store를 초기화한다.
 
 ```
 앱 로드
-  → providers.tsx에서 <AuthInitializer /> 마운트
-  → GET /api/auth/me 호출
-    → accessToken 쿠키 있음: user 쿠키 바로 반환 (백엔드 요청 없음)
-    → accessToken 없음 (만료): silentRefresh 후 user 쿠키 반환
-    → silentRefresh 실패 (세션 만료): 401 → router.push('/login')
-  → 성공: { user } 응답 → useAuthStore.login(user)
+  → RootLayout (서버 컴포넌트): CookieStorage.getUser()로 user 쿠키 직접 조회
+  → initialUser를 Providers → AuthInitializer로 prop 전달
+  → AuthInitializer (useEffect):
+      → initialUser 있음: useAuthStore.login(initialUser)
+      → initialUser 없음: 비로그인 상태 유지
   → setInitialized(true)
 ```
 
-`isInitialized`가 `false`인 동안에는 인증이 필요한 UI 렌더링을 지연시킬 수 있다.
+`isInitialized`가 `false`인 동안 NavigationBar는 서버에서 받은 `initialUser`를 사용해 FOUC(Flash of Unauthenticated Content)를 방지한다. `isInitialized`가 `true`가 되면 Zustand `storeUser`를 권위 있는 상태로 사용한다.
 
 ### 5.2 로그인
 
@@ -306,15 +305,14 @@ useLogout() [React Query mutation]
 
 ## 6. BFF API 엔드포인트
 
-| 엔드포인트                  | 메서드 | 요청                            | 응답          | 설명                                          |
-| --------------------------- | ------ | ------------------------------- | ------------- | --------------------------------------------- |
-| `/api/proxy/[...path]`      | ALL    | 원본 요청 그대로                | 백엔드 응답   | catch-all 프록시 (토큰 자동 삽입)             |
-| `/api/auth/login`           | POST   | `{ email, password }`           | `{ user }`    | 일반 로그인 및 세션 설정                      |
-| `/api/auth/social-callback` | POST   | `{ accessToken, refreshToken }` | `{ user }`    | 소셜 로그인 세션 설정                         |
-| `/api/auth/logout`          | POST   | -                               | `{ success }` | 세션 파기                                     |
-| `/api/auth/me`              | GET    | - (쿠키 자동 사용)              | `{ user }`    | 세션 복원 (accessToken 만료 시 silentRefresh) |
-| `/api/auth/refresh`         | POST   | - (쿠키 자동 사용)              | `{ success }` | 액세스 토큰 갱신                              |
-| `/api/auth/signup`          | POST   | `{ email, password, name }`     | -             | 회원가입 BFF 프록시                           |
+| 엔드포인트                  | 메서드 | 요청                            | 응답          | 설명                              |
+| --------------------------- | ------ | ------------------------------- | ------------- | --------------------------------- |
+| `/api/proxy/[...path]`      | ALL    | 원본 요청 그대로                | 백엔드 응답   | catch-all 프록시 (토큰 자동 삽입) |
+| `/api/auth/login`           | POST   | `{ email, password }`           | `{ user }`    | 일반 로그인 및 세션 설정          |
+| `/api/auth/social-callback` | POST   | `{ accessToken, refreshToken }` | `{ user }`    | 소셜 로그인 세션 설정             |
+| `/api/auth/logout`          | POST   | -                               | `{ success }` | 세션 파기                         |
+| `/api/auth/refresh`         | POST   | - (쿠키 자동 사용)              | `{ success }` | 액세스 토큰 갱신                  |
+| `/api/auth/signup`          | POST   | `{ email, password, name }`     | -             | 회원가입 BFF 프록시               |
 
 ---
 
@@ -383,9 +381,9 @@ accessToken을 Zustand 메모리에 보관하면 XSS 공격 시 JS로 접근 가
 
 토큰이 httpOnly 쿠키에만 존재하므로 Zustand가 토큰을 알 필요가 없다. Zustand는 네비게이션 바 유저 이름/이미지 표시, 로그인 여부 조건부 렌더링 등 UI 상태만 담당한다.
 
-### 새로고침 시 user를 쿠키에서 복원 (백엔드 요청 없음)
+### 새로고침 시 user를 서버에서 쿠키로 직접 복원 (네트워크 요청 없음)
 
-백엔드 refresh 응답은 토큰만 반환한다. 새로고침마다 `/users/me`를 호출하는 대신, 로그인/소셜 로그인 시 저장해둔 user 쿠키(7일)를 꺼내 반환한다. accessToken 쿠키(15분)가 존재하면 silentRefresh 없이 바로 user 쿠키를 반환하므로 네트워크 요청이 발생하지 않는다. user 정보가 변경(프로필 수정)되는 경우에만 쿠키의 user를 함께 업데이트한다.
+백엔드 refresh 응답은 토큰만 반환한다. 새로고침마다 `/users/me`를 호출하는 대신, 로그인/소셜 로그인 시 저장해둔 user 쿠키(7일)를 RootLayout(서버 컴포넌트)에서 `CookieStorage.getUser()`로 직접 읽어 `initialUser`로 전달한다. `/api/auth/me` BFF 호출 없이 서버 렌더링 시점에 user 정보가 확정되므로 네트워크 왕복이 발생하지 않고 FOUC도 방지된다. user 정보가 변경(프로필 수정)되는 경우에만 쿠키의 user를 함께 업데이트한다.
 
 ### BFF 패턴 (Backend-for-Frontend)
 
@@ -397,7 +395,7 @@ Next.js는 `fetch`를 확장해 캐싱·revalidation 기능을 제공한다. Axi
 
 ### AuthInitializer를 별도 컴포넌트로 분리
 
-`providers.tsx`에 세션 복원 로직을 직접 넣으면 Providers 자체가 비대해지고 테스트가 어렵다. UI 없이 로직만 담당하는 컴포넌트를 분리해 관심사를 나눴다. `useEffect` 안에서 `/api/auth/me`를 호출하므로 SSR 중 실행되지 않고, 클라이언트 마운트 직후에만 동작한다.
+`providers.tsx`에 세션 복원 로직을 직접 넣으면 Providers 자체가 비대해지고 테스트가 어렵다. UI 없이 로직만 담당하는 컴포넌트를 분리해 관심사를 나눴다. `useEffect` 안에서 `initialUser` prop을 받아 store를 초기화하므로 SSR 중 실행되지 않고 클라이언트 마운트 직후에만 동작한다.
 
 ### React Query mutation으로 로그인/로그아웃 처리
 
