@@ -1,9 +1,17 @@
+const HTML_TAG_PATTERN = /<\/?[a-z][\s\S]*>/i;
+
 export const normalizePlainText = (text: string) =>
   text.replace(/\u00A0/g, ' ').replace(/\n{3,}/g, '\n\n');
+
+export const isRichTextHtml = (content: string) => HTML_TAG_PATTERN.test(content);
 
 export const toInitialHtml = (content: string) => {
   if (!content.trim()) {
     return '';
+  }
+
+  if (isRichTextHtml(content)) {
+    return content;
   }
 
   return content
@@ -18,15 +26,37 @@ export const toInitialHtml = (content: string) => {
     .join('');
 };
 
+const stripHtmlToPlainTextFallback = (html: string) =>
+  normalizePlainText(
+    html
+      .replace(/<(\/p|\/div|\/li|br)\s*>/gi, '\n')
+      .replace(/<li\b[^>]*>/gi, '• ')
+      .replace(/<[^>]+>/g, '')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim()
+  );
+
 export const extractTextFromHtml = (html: string) => {
-  if (typeof window === 'undefined') {
+  if (!html.trim()) {
     return '';
+  }
+
+  if (typeof window === 'undefined') {
+    return stripHtmlToPlainTextFallback(html);
   }
 
   const container = window.document.createElement('div');
   container.innerHTML = html;
 
-  return normalizePlainText(container.innerText);
+  return normalizePlainText(container.innerText ?? container.textContent ?? '');
+};
+
+export const toInitialText = (content: string) => {
+  if (!content.trim()) {
+    return '';
+  }
+
+  return isRichTextHtml(content) ? extractTextFromHtml(content) : normalizePlainText(content);
 };
 
 const createTextMeasurer = (element: HTMLElement) => {

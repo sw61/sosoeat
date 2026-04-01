@@ -37,5 +37,5 @@ export const DEFAULT_FORM_VALUES = {
   meetingTime: '',
   registrationEndDate: '',
   registrationEndTime: '',
-  capacity: 5,
+  capacity: 1,
 } as const;

@@ -1,16 +1,20 @@
+import Image from 'next/image';
+
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
+import {
+  ESTABLISHED_BADGE_BASE_CLASS,
+  ESTABLISHED_LABEL_CLASS,
+  ESTABLISHED_VARIANT_CLASS,
+  ICON_SRC,
+  PENDING_BADGE_CLASS,
+} from './establishment-status-badge.constants';
 import type { EstablishmentStatusBadgeProps } from './establishment-status-badge.types';
-
-const establishedVariantClassName = {
-  groupEat: 'border-0 bg-sosoeat-orange-100 text-sosoeat-orange-700',
-  groupBuy: 'border-0 bg-sosoeat-blue-50 text-sosoeat-blue-700',
-} as const;
 
 export function EstablishmentStatusBadge({
   confirmedAt,
-  variant,
+  variant = 'groupEat',
   className,
 }: EstablishmentStatusBadgeProps) {
   const isEstablished = confirmedAt != null;
@@ -19,25 +23,18 @@ export function EstablishmentStatusBadge({
     return (
       <Badge
         variant="outline"
-        className={cn(
-          'h-auto shrink-0 rounded-full px-3 py-1.5 text-sm leading-5 font-medium shadow-none',
-          establishedVariantClassName[variant],
-          className
-        )}
+        className={cn(ESTABLISHED_BADGE_BASE_CLASS, ESTABLISHED_VARIANT_CLASS[variant], className)}
       >
-        개설완료
+        <span className={ESTABLISHED_LABEL_CLASS}>
+          <Image src={ICON_SRC[variant]} alt="" width={24} height={24} aria-hidden />
+          개설확정
+        </span>
       </Badge>
     );
   }
 
   return (
-    <Badge
-      variant="outline"
-      className={cn(
-        'border-sosoeat-gray-200 h-auto shrink-0 rounded-full bg-white px-3 py-1.5 text-sm leading-5 font-medium text-[#6B7280] shadow-none hover:bg-white',
-        className
-      )}
-    >
+    <Badge variant="outline" className={cn(PENDING_BADGE_CLASS, className)}>
       개설대기
     </Badge>
   );

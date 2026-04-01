@@ -14,3 +14,7 @@ export interface NotificationTabProps {
   /** 본문 (14px normal #737373, 2줄까지) */
   description: string;
 }
+
+export interface ReadCheckIconProps {
+  className?: string;
+}

@@ -1,15 +1,19 @@
 'use client';
 
-import { Footer } from '@/components/common/footer';
 import { MainPageCard } from '@/components/common/main-page-card';
-import { NavigationBar } from '@/components/common/navigation-bar';
+import { MeetingCreateModal } from '@/components/common/meeting-create-modal';
+import { useModal } from '@/hooks/use-modal';
+import { useCreateMeeting } from '@/services/meetings';
 
-import { MeetingFilterBar, MeetingFilterBarProps } from './_components/meeting-filter-bar';
+import { MeetingFilterBar } from './_components/meeting-filter-bar';
 import { MeetingMakeButton } from './_components/meeting-make-button.tsx';
 import { MeetingSearchBanner } from './_components/meeting-search-banner';
 import useMeetingPage from './usehooks/use-meeting-page';
 
 export default function MeetingsPage() {
+  const { isOpen, open, close } = useModal();
+  const { mutateAsync: createMeeting } = useCreateMeeting();
+
   const {
     regionCommitted,
     handleRegionChange,
@@ -33,13 +37,13 @@ export default function MeetingsPage() {
       <MeetingSearchBanner
         alt="모임 배너"
         imageUrl="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80"
-        titleContent={
-          <span>
-            함께하면
-            <br />더 맛있어요
-          </span>
-        }
+        titleContent={<span>함께하면</span>}
         subtitleContent={
+          <>
+            <br />더 맛있어요
+          </>
+        }
+        subtitle={
           <p>가고 싶었던 맛집, 혼자 가기 아쉬웠죠? 모여요에서 같이 먹을 사람을 찾아보세요.</p>
         }
       />
@@ -59,8 +63,9 @@ export default function MeetingsPage() {
             <MainPageCard key={meeting.id} meeting={meeting} />
           ))}
         </div>
-        <MeetingMakeButton onClick={() => {}} />
+        <MeetingMakeButton onClick={open} />
       </div>
+      <MeetingCreateModal open={isOpen} onClose={close} onSubmit={createMeeting} />
     </div>
   );
 }

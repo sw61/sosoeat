@@ -7,15 +7,18 @@ import { toast } from 'sonner';
 
 import { useAuthStore } from '@/store/auth-store';
 import { LoginRequest, SignupRequest } from '@/types/generated-client/models';
+import { getSafeCallbackUrl, SOCIAL_CALLBACK_URL_KEY } from '@/utils/url';
 
 import { authApi } from './auth.api';
 
 /**
  * [Hook] useLogin
  * 로그인을 위한 Mutation 훅입니다. 성공 시 전역 상태를 업데이트하고 홈으로 이동합니다.
+ * callbackUrl 쿼리 파라미터가 있으면 로그인 후 해당 경로로 이동합니다.
  */
 export const useLogin = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const login = useAuthStore((state) => state.login);
 
   return useMutation({
@@ -23,7 +26,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       login(data.user);
       toast.success('로그인에 성공했습니다.');
-      router.push('/');
+      router.push(getSafeCallbackUrl(searchParams.get('callbackUrl')));
     },
     onError: (error: Error) => {
       toast.error(error.message || '로그인 중 오류가 발생했습니다.');
@@ -75,11 +78,15 @@ export const useSocialLogin = () => {
       return;
     }
 
+    const storedCallbackUrl = sessionStorage.getItem(SOCIAL_CALLBACK_URL_KEY);
+    const callbackUrl = getSafeCallbackUrl(storedCallbackUrl);
+
     authApi
       .socialCallback({ accessToken, refreshToken })
       .then((data) => {
+        sessionStorage.removeItem(SOCIAL_CALLBACK_URL_KEY);
         login(data.user);
-        router.replace('/');
+        router.replace(callbackUrl);
       })
       .catch(() => {
         router.replace('/login?error=session_error');

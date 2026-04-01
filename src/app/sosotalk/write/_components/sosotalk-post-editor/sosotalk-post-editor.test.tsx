@@ -10,6 +10,10 @@ import {
 beforeEach(() => {
   document.execCommand = jest.fn();
   document.queryCommandState = jest.fn().mockReturnValue(false);
+  HTMLCanvasElement.prototype.getContext = jest.fn().mockReturnValue({
+    font: '',
+    measureText: jest.fn().mockReturnValue({ width: 10 }),
+  } as unknown as CanvasRenderingContext2D);
   URL.createObjectURL = jest.fn().mockReturnValue('blob:preview-image');
   URL.revokeObjectURL = jest.fn();
 });
@@ -59,7 +63,7 @@ describe('SosoTalkPostEditor', () => {
     fireEvent.input(editor);
 
     expect(
-      screen.getByText(new RegExp(`공백포함 : 총 ${SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH}자`))
+      screen.getByText(new RegExp(`공백 포함 : 총 ${SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH}자`))
     ).toBeInTheDocument();
   });
 
@@ -74,7 +78,7 @@ describe('SosoTalkPostEditor', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it('등록 시 API에 필요한 데이터만 onSubmit payload로 전달한다', async () => {
+  it('등록 시 API에 필요한 payload만 전달한다', async () => {
     const user = userEvent.setup();
     const onSubmit = jest.fn();
 
@@ -93,6 +97,7 @@ describe('SosoTalkPostEditor', () => {
       contentHtml: '<p>안녕하세요.</p><p><br></p><p>같이 식사하실 분 계실까요?</p>',
       contentText: '안녕하세요.\n\n같이 식사하실 분 계실까요?',
       imageFile: null,
+      displayImageUrl: '',
     });
   });
 
@@ -124,6 +129,37 @@ describe('SosoTalkPostEditor', () => {
     clickSpy.mockRestore();
   });
 
+  it('가운데 정렬 버튼은 다시 누르면 왼쪽 정렬로 토글된다', async () => {
+    const user = userEvent.setup();
+    const execCommandMock = jest.fn();
+    document.execCommand = execCommandMock;
+    document.queryCommandState = jest.fn().mockImplementation((command: string) => {
+      if (command === 'justifyCenter') {
+        return true;
+      }
+
+      return false;
+    });
+
+    render(<SosoTalkPostEditor />);
+
+    await user.click(screen.getByRole('button', { name: '가운데 정렬' }));
+
+    expect(execCommandMock).toHaveBeenCalledWith('justifyLeft', false, undefined);
+  });
+
+  it('HTML 초기값이 들어오면 리스트 구조를 유지한다', async () => {
+    const { container } = render(
+      <SosoTalkPostEditor initialContent="<ul><li>첫 번째 항목</li><li>두 번째 항목</li></ul>" />
+    );
+
+    await waitFor(() => {
+      const editor = container.querySelector('[contenteditable="true"]');
+      expect(editor?.querySelectorAll('li')).toHaveLength(2);
+      expect(editor?.querySelector('ul')).toBeInTheDocument();
+    });
+  });
+
   it('초기값이 바뀌면 에디터 상태가 함께 동기화된다', () => {
     const { container, rerender } = render(
       <SosoTalkPostEditor
@@ -151,5 +187,11 @@ describe('SosoTalkPostEditor', () => {
         expect.stringContaining('https://example.com/second.jpg')
       );
     });
+  });
+
+  it('제출 중에는 등록 버튼이 비활성화된다', () => {
+    render(<SosoTalkPostEditor initialTitle="제목" initialContent="본문" isSubmitting />);
+
+    expect(screen.getByRole('button', { name: '등록' })).toBeDisabled();
   });
 });

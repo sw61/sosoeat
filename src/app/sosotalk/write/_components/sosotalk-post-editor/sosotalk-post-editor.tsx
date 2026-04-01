@@ -19,6 +19,7 @@ export const SosoTalkPostEditor = ({
   initialContent = '',
   initialImageUrl = '',
   submitLabel = '등록',
+  isSubmitting = false,
   onSubmit,
 }: SosoTalkPostEditorProps) => {
   const {
@@ -60,7 +61,7 @@ export const SosoTalkPostEditor = ({
             id="sosotalk-post-title"
             value={title}
             onChange={handleTitleChange}
-            placeholder="게시글 제목을 입력해주세요. (최대 30자)"
+            placeholder={`게시글 제목을 입력해 주세요. (최대 ${SOSOTALK_POST_EDITOR_TITLE_MAX_LENGTH}자)`}
             className="border-sosoeat-gray-400 placeholder:text-sosoeat-gray-500 w-full border-b bg-transparent pb-2 text-sm font-semibold outline-none md:text-xl lg:text-3xl"
           />
         </div>
@@ -72,7 +73,7 @@ export const SosoTalkPostEditor = ({
 
         <Button
           type="submit"
-          disabled={isSubmitDisabled}
+          disabled={isSubmitDisabled || isSubmitting}
           className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 h-10 w-14 rounded-[14px] px-0 text-sm font-semibold text-white md:h-[48px] md:w-[80px] md:text-lg"
         >
           {submitLabel}
@@ -93,7 +94,7 @@ export const SosoTalkPostEditor = ({
         <div className="relative mt-4 min-h-[360px] flex-1 md:mt-6">
           {!contentText ? (
             <p className="text-sosoeat-gray-600 pointer-events-none absolute top-0 left-0 text-sm font-medium">
-              게시글 내용을 입력해주세요. (최대 {SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH}자)
+              {`게시글 내용을 입력해 주세요. (최대 ${SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH}자)`}
             </p>
           ) : null}
 
@@ -105,7 +106,7 @@ export const SosoTalkPostEditor = ({
             onBlur={syncEditorState}
             className={cn(
               'relative min-h-[360px] text-sm font-medium outline-none',
-              '[&_ol]:list-decimal [&_ol]:pl-6 [&_p]:min-h-[1.85em] [&_ul]:list-disc [&_ul]:pl-6'
+              '[&_li]:list-item [&_ol]:ml-6 [&_ol]:list-outside [&_ol]:pl-0 [&_ol>li]:list-decimal [&_p]:min-h-[1.85em] [&_ul]:ml-6 [&_ul]:list-outside [&_ul]:pl-0 [&_ul>li]:list-disc'
             )}
           />
         </div>
@@ -117,7 +118,7 @@ export const SosoTalkPostEditor = ({
             onRemove={handleImageRemove}
           />
           <p className="text-sosoeat-gray-600 mt-8 text-sm">
-            공백포함 : 총 {effectiveContentLength}자 | 공백제외 : 총 {contentLengthWithoutSpaces}자
+            {`공백 포함 : 총 ${effectiveContentLength}자 | 공백 제외 : 총 ${contentLengthWithoutSpaces}자`}
           </p>
         </div>
       </div>

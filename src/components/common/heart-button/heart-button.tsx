@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import Image from 'next/image';
 
 import { motion } from 'framer-motion';
@@ -9,6 +7,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+import useFavoriteMeeting from './hooks/use-heart-button';
 import type { HeartButtonProps } from './heart-button.types';
 
 /** 하트 SVG 크기 (픽셀) */
@@ -25,14 +24,16 @@ const ringSizeClass = {
   sm: 'size-10',
 } as const;
 
-export function HeartButton({ className, size = 'lg', isFavorited }: HeartButtonProps) {
-  const iconPx = sizeIcon[size];
-  const [isFavoritedState, setIsFavoritedState] = useState(() => isFavorited ?? false);
-  const src = isFavoritedState ? '/icons/main-page-heart.svg' : '/icons/main-page-not-heart.svg';
+export function HeartButton({
+  className,
+  size = 'lg',
+  isFavorited = false,
+  meetingId,
+}: HeartButtonProps) {
+  const { isFavorited: isFavoritedState, toggleFavorite } = useFavoriteMeeting(isFavorited);
 
-  const handleClick = () => {
-    setIsFavoritedState((prev) => !prev);
-  };
+  const src = isFavoritedState ? '/icons/main-page-heart.svg' : '/icons/main-page-not-heart.svg';
+  const iconPx = sizeIcon[size];
 
   return (
     <div className={cn('top-4 right-[17px] z-10 m-0 shrink-0', className)}>
@@ -43,7 +44,17 @@ export function HeartButton({ className, size = 'lg', isFavorited }: HeartButton
           'border-sosoeat-gray-300 cursor-pointer rounded-full border bg-white/90 p-0 hover:bg-white/90',
           ringSizeClass[size]
         )}
-        onClick={handleClick}
+        onClick={() => {
+          if (meetingId === undefined) {
+            if (process.env.NODE_ENV !== 'production') {
+              console.error(
+                'HeartButton: meetingId is required for toggleFavorite but was undefined.'
+              );
+            }
+            return;
+          }
+          toggleFavorite(meetingId);
+        }}
       >
         <motion.div
           animate={{ scale: 1 }}

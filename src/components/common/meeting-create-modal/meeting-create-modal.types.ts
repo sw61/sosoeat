@@ -1,5 +1,7 @@
 import type { FieldValues, UseFormReturn } from 'react-hook-form';
 
+import type { CreateMeeting } from '@/types/generated-client/models/CreateMeeting';
+
 /** 퍼널 단계 이름 */
 export type MeetingStep = 'category' | 'basicInfo' | 'description' | 'schedule';
 
@@ -12,6 +14,8 @@ export interface MeetingFormData {
   name: string;
   region: string;
   address: string;
+  latitude?: number;
+  longitude?: number;
   image: string;
 
   // Step 3: 설명
@@ -25,14 +29,13 @@ export interface MeetingFormData {
   capacity: number;
 }
 
-/** MeetingCreateModal Props */
 export interface MeetingCreateModalProps {
   /** 모달 표시 여부 */
   open: boolean;
   /** 모달 닫기 콜백 */
   onClose: () => void;
-  /** 모임 생성 콜백 — CreateMeeting 타입은 services 레이어에서 변환 */
-  onSubmit: (data: MeetingFormData) => void | Promise<void>;
+  /** 모임 생성 콜백 */
+  onSubmit: (data: CreateMeeting) => unknown;
 }
 
 /** 각 Step 컴포넌트 공통 Props */

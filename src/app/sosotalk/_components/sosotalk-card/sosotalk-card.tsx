@@ -1,10 +1,17 @@
-import Image from 'next/image';
+'use client';
 
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { useQueryClient } from '@tanstack/react-query';
+
+import { getSosoTalkPostDetail } from '@/app/sosotalk/_services';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar/avatar';
 
-import { SosoTalkCardProps } from './sosotalk-card.types';
+import type { SosoTalkCardProps } from './sosotalk-card.types';
 
 export function SosoTalkCard({
+  id,
   title,
   content,
   imageUrl,
@@ -14,46 +21,63 @@ export function SosoTalkCard({
   commentCount,
   createdAt,
 }: SosoTalkCardProps) {
+  const queryClient = useQueryClient();
+
+  const prefetchPostDetail = () => {
+    void queryClient.prefetchQuery({
+      queryKey: ['sosotalk-post-detail', id],
+      queryFn: () => getSosoTalkPostDetail(id),
+      staleTime: 30_000,
+    });
+  };
+
   return (
-    <article className="border-border bg-card flex h-[352px] w-[302px] flex-col overflow-hidden rounded-[14px] border">
-      {/* 상단 대표 이미지 */}
-      <div className="relative h-[170px] w-full">
-        <Image src={imageUrl} alt="대표 이미지" fill className="object-cover object-center" />
-      </div>
-
-      {/* 제목 + 내용 */}
-      <div className="px-[14px] pt-[14px] pb-[14px]">
-        <h3 className="pb-[4px] text-base font-bold">{title}</h3>
-        <p className="line-clamp-2 text-sm font-normal">{content}</p>
-      </div>
-
-      {/* 하단 정보 영역 */}
-      <div className="border-t px-[14px] pt-[8px] pb-[12px]">
-        <div className="flex items-center justify-between pb-[8px] text-xs font-medium">
-          {/* 프로필 이미지 + 작성자 이름 */}
-          <div className="flex items-center gap-[6px]">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={authorImageUrl} alt={authorName} />
-              <AvatarFallback>{authorName?.slice(0, 1)}</AvatarFallback>
-            </Avatar>
-            <span>{authorName}</span>
-          </div>
-
-          {/* 좋아요 + 댓글 수 */}
-          <div className="flex items-center gap-[10px]">
-            <span className="flex items-center gap-[2px]">
-              <span>❤️</span>
-              <span>{likeCount}</span>
-            </span>
-            <span className="flex items-center gap-[2px]">
-              <span>💬</span>
-              <span>{commentCount}</span>
-            </span>
-          </div>
+    <Link
+      href={`/sosotalk/${id}`}
+      onMouseEnter={prefetchPostDetail}
+      onFocus={prefetchPostDetail}
+      className="focus-visible:ring-ring block rounded-[14px] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+    >
+      <article className="border-border bg-card flex h-[352px] w-[302px] flex-col overflow-hidden rounded-[14px] border transition-transform hover:-translate-y-0.5">
+        <div className="relative h-[170px] w-full">
+          <Image
+            src={imageUrl}
+            alt="소소톡 게시글 이미지"
+            fill
+            className="object-cover object-center"
+          />
         </div>
 
-        <span className="bold mt-[14px] text-xs font-medium text-gray-500">{createdAt}</span>
-      </div>
-    </article>
+        <div className="px-[14px] pt-[14px] pb-[14px]">
+          <h3 className="pb-[4px] text-base font-bold">{title}</h3>
+          <p className="line-clamp-2 text-sm font-normal">{content}</p>
+        </div>
+
+        <div className="mt-auto border-t px-[14px] pt-[8px] pb-[12px]">
+          <div className="flex items-center justify-between pb-[8px] text-xs font-medium">
+            <div className="flex items-center gap-[6px]">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={authorImageUrl} alt={authorName} />
+                <AvatarFallback>{authorName?.slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              <span>{authorName}</span>
+            </div>
+
+            <div className="flex items-center gap-[10px]">
+              <span className="flex items-center gap-[2px]">
+                <span>♥</span>
+                <span>{likeCount}</span>
+              </span>
+              <span className="flex items-center gap-[2px]">
+                <span>💬</span>
+                <span>{commentCount}</span>
+              </span>
+            </div>
+          </div>
+
+          <span className="mt-[14px] text-xs font-medium text-gray-500">{createdAt}</span>
+        </div>
+      </article>
+    </Link>
   );
 }

@@ -3,7 +3,6 @@ import type { CommentItemData } from '@/components/common/comment-item';
 export interface SosoTalkPostDetailProps {
   title: string;
   contentHtml: string;
-  contentCharacterCount?: number;
   imageUrl?: string;
   authorName: string;
   authorImageUrl?: string;
@@ -11,6 +10,8 @@ export interface SosoTalkPostDetailProps {
   commentCount?: number;
   createdAt: string;
   createdAtDateTime?: string;
+  createdDateLabel?: string;
+  viewCount?: number;
   isAuthor?: boolean;
   isLiked?: boolean;
   onMoreClick?: () => void;
@@ -47,7 +48,8 @@ export interface SosoTalkPostBodyProps {
 }
 
 export interface SosoTalkPostActionsProps {
-  contentCharacterCount?: number;
+  createdDateLabel?: string;
+  viewCount?: number;
   likeCount?: number;
   commentCount?: number;
   isLiked?: boolean;

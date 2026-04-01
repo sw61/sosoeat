@@ -21,7 +21,7 @@ jest.mock('framer-motion', () => ({
 //하트버튼
 describe('HeartButton', () => {
   it('기본 상태에서 빈 하트 아이콘이 렌더링된다', () => {
-    render(<HeartButton isFavorited={false} />);
+    render(<HeartButton meetingId={1} isFavorited={false} />);
 
     expect(screen.getByRole('button', { name: '좋아요' })).toBeInTheDocument();
     expect(screen.getByTestId('heart-button-image')).toHaveAttribute(
@@ -31,7 +31,7 @@ describe('HeartButton', () => {
   });
 
   it('찜 상태에서 채운 하트 아이콘이 렌더링된다', () => {
-    render(<HeartButton isFavorited />);
+    render(<HeartButton meetingId={1} isFavorited />);
 
     expect(screen.getByRole('button', { name: '좋아요' })).toBeInTheDocument();
     expect(screen.getByTestId('heart-button-image')).toHaveAttribute(
@@ -41,7 +41,7 @@ describe('HeartButton', () => {
   });
 
   it('className이 CardAction에 합쳐진다', () => {
-    const { container } = render(<HeartButton className="custom-heart-class" />);
+    const { container } = render(<HeartButton meetingId={1} className="custom-heart-class" />);
 
     expect(container.querySelector('.custom-heart-class')).toBeInTheDocument();
   });

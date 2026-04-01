@@ -6,11 +6,10 @@ import Link from 'next/link';
 
 import { Plus } from 'lucide-react';
 
-import { NavigationBar } from '@/components/common/navigation-bar';
+import type { GetSosoTalkPostListParams } from '@/app/sosotalk/_services';
+import { mapPostToSosoTalkCardItem, useGetSosoTalkPostList } from '@/app/sosotalk/_services';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { GetSosoTalkPostListParams } from '@/services/sosotalk';
-import { mapPostToSosoTalkCardItem, useGetSosoTalkPostList } from '@/services/sosotalk';
 
 import { SosoTalkBanner } from '../sosotalk-banner';
 import { SosoTalkCard } from '../sosotalk-card';
@@ -52,10 +51,8 @@ export const SosoTalkMainPage = ({ className }: SosoTalkMainPageProps) => {
 
   return (
     <div className={cn('bg-background min-h-screen w-full bg-[#f9f9f9] pb-24 md:pb-28', className)}>
-      <NavigationBar />
-
       <main className="mx-auto flex w-full max-w-[1280px] flex-col px-4 pt-4 md:px-6 md:pt-6 xl:px-0">
-        <SosoTalkBanner imageUrl={SOSOTALK_BANNER_IMAGE} alt="소소토크 배너 이미지" />
+        <SosoTalkBanner imageUrl={SOSOTALK_BANNER_IMAGE} alt="소소톡 배너 이미지" />
 
         <SosoTalkFilterBar
           activeTab={activeTab}
@@ -74,7 +71,7 @@ export const SosoTalkMainPage = ({ className }: SosoTalkMainPageProps) => {
           {isError ? (
             <div className="flex min-h-[240px] items-center justify-center">
               <p className="text-sosoeat-gray-500 text-sm">
-                게시글 목록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.
+                게시글 목록을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.
               </p>
             </div>
           ) : null}
@@ -83,8 +80,8 @@ export const SosoTalkMainPage = ({ className }: SosoTalkMainPageProps) => {
             <>
               {posts.length > 0 ? (
                 <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:justify-items-stretch">
-                  {posts.map(({ id, ...post }) => (
-                    <SosoTalkCard key={id} {...post} />
+                  {posts.map((post) => (
+                    <SosoTalkCard key={post.id} {...post} />
                   ))}
                 </div>
               ) : (

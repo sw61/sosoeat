@@ -22,7 +22,7 @@ export const StepDescription = ({ form }: StepProps) => {
         </div>
         <Textarea
           placeholder="모임을 설명해주세요"
-          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 rounded-[12px] border-transparent text-sm font-normal md:text-base"
+          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 focus-visible:border-sosoeat-orange-500 focus:border-sosoeat-orange-500 rounded-[12px] border-transparent text-sm font-normal transition-colors focus-visible:ring-0 focus-visible:ring-offset-0 md:text-base"
           rows={6}
           {...register('description')}
         />

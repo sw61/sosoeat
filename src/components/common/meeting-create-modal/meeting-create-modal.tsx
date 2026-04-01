@@ -39,9 +39,26 @@ export const MeetingCreateForm = ({ onClose, onSubmit }: Omit<MeetingCreateModal
   } = useMeetingForm();
 
   const handleSubmit = async (data: MeetingFormData) => {
-    await onSubmit(data);
-    reset();
-    onClose();
+    const payload = {
+      name: data.name,
+      type: data.type,
+      region: data.region,
+      address: data.address,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      dateTime: new Date(`${data.meetingDate}T${data.meetingTime}`),
+      registrationEnd: new Date(`${data.registrationEndDate}T${data.registrationEndTime}`),
+      capacity: data.capacity,
+      image: data.image,
+      description: data.description,
+    };
+    try {
+      await onSubmit(payload);
+      reset();
+      onClose();
+    } catch {
+      // useCreateMeeting.onError에서 toast 처리 — 모달만 유지
+    }
   };
 
   return (
@@ -53,8 +70,11 @@ export const MeetingCreateForm = ({ onClose, onSubmit }: Omit<MeetingCreateModal
       </div>
 
       {/* ── 퍼널 본문 ── */}
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-1 flex-col">
-        <div className="py-6 md:py-8">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
+      >
+        <div className="min-h-0 flex-1 overflow-y-auto py-6 md:py-8">
           <Funnel step={currentStep}>
             <Step name="category">
               <StepCategory form={form} />
@@ -143,7 +163,7 @@ export const MeetingCreateModal = ({ open, onClose, onSubmit }: MeetingCreateMod
         showCloseButton
         aria-modal="true"
         className={cn(
-          'flex h-auto w-[343px] flex-col gap-0 overflow-hidden rounded-[24px] p-0 md:w-[544px] md:max-w-none md:rounded-[40px]',
+          'flex h-auto max-h-[90dvh] w-[343px] flex-col gap-0 overflow-hidden rounded-[24px] p-0 md:w-[544px] md:max-w-none md:rounded-[40px]',
           '[&_button[data-slot=dialog-close]]:text-sosoeat-gray-700',
           '[&_button[data-slot=dialog-close]]:top-8 [&_button[data-slot=dialog-close]]:right-8',
           '[&_button[data-slot=dialog-close]]:h-6 [&_button[data-slot=dialog-close]]:w-6',

@@ -3,6 +3,8 @@ import { CookieStorage } from '@/lib/auth/cookie-storage';
 const BASE_URL = process.env.API_BASE_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
 
+let refreshPromise: Promise<boolean> | null = null;
+
 /**
  * [Auth] silentRefresh
  * refreshToken으로 accessToken을 갱신합니다.
@@ -10,34 +12,49 @@ const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
  * 갱신 실패 시 세션을 파기하고 false를 반환합니다.
  */
 export async function silentRefresh(): Promise<boolean> {
-  const refreshToken = await CookieStorage.getRefreshToken();
-  if (!refreshToken) return false;
+  if (refreshPromise) return refreshPromise;
 
-  const response = await fetch(`${BASE_URL}/${TEAM_ID}/auth/refresh`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ refreshToken }),
-  });
+  refreshPromise = (async () => {
+    try {
+      const refreshToken = await CookieStorage.getRefreshToken();
+      if (!refreshToken) {
+        return false;
+      }
 
-  if (!response.ok) {
-    await CookieStorage.clearSession();
-    return false;
-  }
+      const response = await fetch(`${BASE_URL}/${TEAM_ID}/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken }),
+      });
 
-  const data = await response.json();
+      if (!response.ok) {
+        await CookieStorage.clearSession();
+        return false;
+      }
 
-  if (!data.accessToken || !data.refreshToken) {
-    await CookieStorage.clearSession();
-    return false;
-  }
+      const data = await response.json();
 
-  const user = await CookieStorage.getUser();
+      if (!data.accessToken || !data.refreshToken) {
+        await CookieStorage.clearSession();
+        return false;
+      }
 
-  await CookieStorage.setSession({
-    accessToken: data.accessToken,
-    refreshToken: data.refreshToken,
-    user: user ?? undefined,
-  });
+      const user = await CookieStorage.getUser();
 
-  return true;
+      await CookieStorage.setSession({
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        user: user ?? undefined,
+      });
+
+      return true;
+    } catch (error) {
+      console.error('[silentRefresh] error:', error);
+      return false;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
 }
