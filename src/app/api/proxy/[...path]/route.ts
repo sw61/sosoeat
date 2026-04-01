@@ -11,6 +11,7 @@ const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
  * 모든 API 요청을 백엔드로 프록시하며, httpOnly 쿠키의 accessToken을 Authorization 헤더에 삽입합니다.
  * 401 응답 시 refreshToken으로 토큰을 갱신하고 원래 요청을 1회 재시도합니다.
  */
+
 async function handler(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { path } = await params;
   const targetUrl = `${BASE_URL}/${TEAM_ID}/${path.join('/')}${request.nextUrl.search}`;

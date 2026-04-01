@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthInitializer } from '@/app/_components/auth-initializer';
 import { LoginRequireModal } from '@/components/common/login-require-modal/login-require-modal';
 import { SessionExpiredModal } from '@/components/common/session-expired-modal/session-expired-modal';
+import { setCommentSessionExpiredHandler } from '@/lib/http/comment-client';
 import { setSessionExpiredHandler } from '@/lib/http/fetch-client';
 import { useAuthStore } from '@/store/auth-store';
 
@@ -19,6 +20,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
     // - 비로그인 상태에서 401: 로그인 요구 모달
     // getState()로 직접 참조하여 stale closure 방지
     setSessionExpiredHandler(() => {
+      const { isAuthenticated, setSessionExpired, setLoginRequired } = useAuthStore.getState();
+      if (isAuthenticated) {
+        setSessionExpired(true);
+      } else {
+        setLoginRequired(true);
+      }
+    });
+    setCommentSessionExpiredHandler(() => {
       const { isAuthenticated, setSessionExpired, setLoginRequired } = useAuthStore.getState();
       if (isAuthenticated) {
         setSessionExpired(true);
