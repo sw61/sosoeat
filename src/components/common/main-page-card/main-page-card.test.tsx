@@ -3,6 +3,13 @@ import { render, screen } from '@testing-library/react';
 import { MainPageCard } from '@/components/common/main-page-card/main-page-card';
 import type { MeetingWithHost } from '@/types/generated-client';
 
+jest.mock('@/services/meetings/use-detail-router', () => ({
+  useDetailRouter: () => ({
+    handleCardClick: jest.fn(),
+    handleCardKeyDown: jest.fn(),
+  }),
+}));
+
 jest.mock('next/image', () => ({
   __esModule: true,
   default: ({

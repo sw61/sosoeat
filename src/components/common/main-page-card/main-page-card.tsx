@@ -1,6 +1,9 @@
 'use client';
 
+import { use } from 'react';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -12,6 +15,7 @@ import { HeartButton } from '@/components/common/heart-button';
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Progress, type ProgressProps } from '@/components/ui/progress-bar';
 import { cn } from '@/lib/utils';
+import { useDetailRouter } from '@/services/meetings/use-detail-router';
 
 import {
   MAIN_PAGE_CARD_BADGES_ROW_CLASS,
@@ -60,8 +64,14 @@ export const MainPageCard = ({ meeting }: MainPageCardProps) => {
 
   const hostImage = meeting.host?.image || '/icons/human-basic.svg';
 
+  const { handleCardClick, handleCardKeyDown } = useDetailRouter({ id: meeting.id });
+
   return (
-    <Card className={cn(MAIN_PAGE_CARD_CLASS)}>
+    <Card
+      className={cn(MAIN_PAGE_CARD_CLASS)}
+      onClick={handleCardClick}
+      onKeyDown={handleCardKeyDown}
+    >
       <div className={MAIN_PAGE_CARD_IMAGE_WRAPPER_CLASS}>
         <Image
           src={meeting.image}
@@ -93,9 +103,13 @@ export const MainPageCard = ({ meeting }: MainPageCardProps) => {
         <h3 data-slot="card-title" className={MAIN_PAGE_CARD_TITLE_CLASS}>
           {meeting.name}
         </h3>
-        <CardAction className="absolute top-4 right-4 z-10">
+        <CardAction
+          className="absolute top-4 right-4 z-10"
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
           {' '}
-          <HeartButton meetingId={meeting.id} isFavorited={meeting.isFavorited} />
+          <HeartButton meetingId={meeting.id} isFavorited={meeting.isFavorited} size="md" />
         </CardAction>
       </CardHeader>
 
