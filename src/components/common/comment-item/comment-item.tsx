@@ -1,5 +1,6 @@
 import { MoreHorizontal } from 'lucide-react';
 
+import { CommentInput } from '@/components/common/comment-input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -18,8 +19,14 @@ export function CommentItem({
   relativeTime,
   content,
   isAuthorComment = false,
+  isEditing = false,
+  editValue = '',
+  isEditPending = false,
   onEditClick,
   onDeleteClick,
+  onEditValueChange,
+  onEditSubmit,
+  onEditCancel,
   className,
 }: CommentItemProps) {
   return (
@@ -54,7 +61,7 @@ export function CommentItem({
             </div>
           </div>
 
-          {isAuthorComment ? (
+          {isAuthorComment && !isEditing ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
@@ -75,9 +82,33 @@ export function CommentItem({
           ) : null}
         </div>
 
-        <p className="text-sosoeat-gray-900 mt-1 text-base leading-6 font-normal break-words whitespace-pre-wrap">
-          {content}
-        </p>
+        {isEditing ? (
+          <div className="mt-3 space-y-3">
+            <CommentInput
+              value={editValue}
+              onChange={onEditValueChange}
+              onSubmit={onEditSubmit}
+              disabled={isEditPending}
+              submitLabel="댓글 수정"
+              currentUserName={authorName}
+              currentUserImageUrl={authorImageUrl}
+            />
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={onEditCancel}
+                disabled={isEditPending}
+                className="border-input bg-background ring-offset-background hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring inline-flex h-10 items-center justify-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sosoeat-gray-900 mt-1 text-base leading-6 font-normal break-words whitespace-pre-wrap">
+            {content}
+          </p>
+        )}
       </div>
     </article>
   );

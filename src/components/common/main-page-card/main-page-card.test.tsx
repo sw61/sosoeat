@@ -148,17 +148,17 @@ describe('MainPageCard', () => {
       } as unknown as MeetingWithHost;
       render(<MainPageCard meeting={meeting} />);
 
-      expect(screen.queryByText('개설완료')).not.toBeInTheDocument();
+      expect(screen.queryByText('개설확정')).not.toBeInTheDocument();
       expect(screen.getByText('개설대기')).toBeInTheDocument();
     });
 
-    it('confirmedAt이 있으면 개설완료가 표시된다', () => {
+    it('confirmedAt이 있으면 개설확정이 표시된다', () => {
       const meeting = createMockMeeting({
         confirmedAt: new Date('2025-03-22T12:00:00+09:00'),
       });
       render(<MainPageCard meeting={meeting} />);
 
-      expect(screen.getByText('개설완료')).toBeInTheDocument();
+      expect(screen.getByText('개설확정')).toBeInTheDocument();
     });
   });
 

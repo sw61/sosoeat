@@ -5,8 +5,8 @@ import Link from 'next/link';
 
 import { useQueryClient } from '@tanstack/react-query';
 
+import { getSosoTalkPostDetail } from '@/app/sosotalk/_services';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar/avatar';
-import { getSosoTalkPostDetail } from '@/services/sosotalk';
 
 import type { SosoTalkCardProps } from './sosotalk-card.types';
 

@@ -26,7 +26,7 @@ export function BestSoeatCard({
       {/* 썸네일 */}
       <div className="bg-muted relative w-full flex-1">
         <Image
-          src={thumbnailUrl ?? '/images/placeholder-food.png'}
+          src={thumbnailUrl ?? '/images/group-buy-modal.png'}
           alt={thumbnailAlt}
           fill
           className="object-cover"

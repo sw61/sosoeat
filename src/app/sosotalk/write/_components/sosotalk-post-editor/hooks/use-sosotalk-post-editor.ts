@@ -12,8 +12,8 @@ import type { SosoTalkPostEditorProps } from '../sosotalk-post-editor.types';
 import {
   calculateEffectiveContentLength,
   extractTextFromHtml,
-  normalizePlainText,
   toInitialHtml,
+  toInitialText,
 } from '../sosotalk-post-editor.utils';
 
 import { useSosoTalkPostEditorImage } from './use-sosotalk-post-editor-image';
@@ -41,14 +41,14 @@ export const useSosoTalkPostEditor = ({
   const editorRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const lastValidHtmlRef = useRef(toInitialHtml(initialContent));
-  const lastValidTextRef = useRef(normalizePlainText(initialContent));
-  const lastValidEffectiveLengthRef = useRef(normalizePlainText(initialContent).length);
+  const lastValidTextRef = useRef(toInitialText(initialContent));
+  const lastValidEffectiveLengthRef = useRef(toInitialText(initialContent).length);
 
   const [title, setTitle] = useState(initialTitle);
   const [contentHtml, setContentHtml] = useState(toInitialHtml(initialContent));
-  const [contentText, setContentText] = useState(normalizePlainText(initialContent));
+  const [contentText, setContentText] = useState(toInitialText(initialContent));
   const [effectiveContentLength, setEffectiveContentLength] = useState(
-    normalizePlainText(initialContent).length
+    toInitialText(initialContent).length
   );
   const [activeFormats, setActiveFormats] = useState<ActiveFormats>(DEFAULT_ACTIVE_FORMATS);
   const { handleImageChange, handleImageRemove, imageFile, imagePreviewUrl } =
@@ -63,7 +63,7 @@ export const useSosoTalkPostEditor = ({
 
   useEffect(() => {
     const nextHtml = toInitialHtml(initialContent);
-    const nextText = normalizePlainText(initialContent);
+    const nextText = toInitialText(initialContent);
     const nextEffectiveLength = nextText.length;
 
     setContentHtml(nextHtml);
@@ -158,7 +158,16 @@ export const useSosoTalkPostEditor = ({
     editorRef.current?.focus();
 
     if (command) {
-      document.execCommand(command, false, value);
+      const isCenterAligned =
+        command === 'justifyCenter' && typeof document !== 'undefined'
+          ? document.queryCommandState('justifyCenter')
+          : false;
+
+      if (command === 'justifyCenter' && isCenterAligned) {
+        document.execCommand('justifyLeft', false, value);
+      } else {
+        document.execCommand(command, false, value);
+      }
       syncEditorState();
     }
   };
@@ -180,6 +189,10 @@ export const useSosoTalkPostEditor = ({
       contentHtml,
       contentText,
       imageFile,
+      // This is the currently displayed image source.
+      // When a new file is selected it can be a local blob URL, so callers
+      // must ignore it whenever imageFile exists.
+      displayImageUrl: imagePreviewUrl,
     });
   };
 
