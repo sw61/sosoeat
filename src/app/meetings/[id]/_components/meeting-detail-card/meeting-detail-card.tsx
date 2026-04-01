@@ -1,14 +1,12 @@
 'use client';
 
-import { CalendarIcon, ChevronDownIcon, ChevronUpIcon, MapPinIcon, UsersIcon } from 'lucide-react';
+import { CalendarIcon, MapPinIcon, UserIcon, UsersIcon } from 'lucide-react';
 
-import {
-  DateBadge,
-  TimeBadge,
-} from '@/app/meetings/[id]/_components/meeting-detail-card/date-badge';
 import { DeadlineBadge } from '@/components/common/deadline-badge';
+import { EstablishmentStatusBadge } from '@/components/common/establishment-status-badge/establishment-status-badge';
 import { HeartButton } from '@/components/common/heart-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+// import { UseStateBadge } from '@/components/common/use-state-badge/use-state-badge'; // TODO: isScheduled 기준 논의 후 활성화
 import { cn } from '@/lib/utils';
 import type { MeetingCategory } from '@/types/meeting';
 
@@ -19,7 +17,10 @@ import { useMeetingDetailCard } from './hooks/use-meeting-detail-card';
 import { iconBgVariants, iconColorVariants } from './meeting-detail-card.constants';
 import type { MeetingDetailCardProps } from './meeting-detail-card.types';
 
-// 모임 정보 행 컴포넌트(날짜, 장소)
+// ─────────────────────────────────────────────────────────────
+// InfoRow
+// ─────────────────────────────────────────────────────────────
+
 interface InfoRowProps {
   icon: React.ReactNode;
   category: MeetingCategory;
@@ -30,7 +31,7 @@ interface InfoRowProps {
 
 function InfoRow({ icon, category, label, children, className }: InfoRowProps) {
   return (
-    <div className={cn('flex items-start gap-3', className)}>
+    <div className={cn('flex items-center gap-3', className)}>
       <div
         className={cn(
           'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
@@ -49,7 +50,10 @@ function InfoRow({ icon, category, label, children, className }: InfoRowProps) {
   );
 }
 
-// 참여 현황 행 컴포넌트
+// ─────────────────────────────────────────────────────────────
+// ParticipantsRow
+// ─────────────────────────────────────────────────────────────
+
 interface ParticipantsRowProps {
   meetingId: string;
   current: number;
@@ -60,12 +64,12 @@ interface ParticipantsRowProps {
 
 function ParticipantsRow({ meetingId, current, max, category, className }: ParticipantsRowProps) {
   return (
-    <div className={cn('flex items-start gap-3', className)}>
-      <div className="bg-sosoeat-gray-100 flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
-        <UsersIcon className="text-sosoeat-gray-700 h-4 w-4" />
+    <div className={cn('flex items-center gap-3', className)}>
+      <div className="bg-sosoeat-orange-100 flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
+        <UsersIcon className="text-sosoeat-orange-400 h-4 w-4" />
       </div>
       <div className="flex-1">
-        <p className="text-sosoeat-gray-600 mb-1 text-xs font-semibold lg:text-sm">참여 현황</p>
+        <p className="text-sosoeat-gray-600 mb-1 text-xs font-semibold">참여 현황</p>
         <MeetingDetailProgress
           id={`meeting-${meetingId}-progress`}
           current={current}
@@ -78,7 +82,10 @@ function ParticipantsRow({ meetingId, current, max, category, className }: Parti
   );
 }
 
-// 호스트 행 컴포넌트
+// ─────────────────────────────────────────────────────────────
+// HostRow
+// ─────────────────────────────────────────────────────────────
+
 interface HostRowProps {
   name: string;
   profileImage?: string;
@@ -90,15 +97,21 @@ function HostRow({ name, profileImage, className }: HostRowProps) {
     <div className={cn('flex items-center gap-3', className)}>
       <Avatar size="default">
         <AvatarImage src={profileImage} alt={name} />
-        <AvatarFallback>{name.charAt(0)}</AvatarFallback>
+        <AvatarFallback>
+          <UserIcon className="text-sosoeat-gray-400 h-4 w-4" />
+        </AvatarFallback>
       </Avatar>
       <div>
         <p className="text-sosoeat-gray-600 text-xs font-semibold">호스트</p>
-        <p className="text-xs font-bold">{name}</p>
+        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{name}</p>
       </div>
     </div>
   );
 }
+
+// ─────────────────────────────────────────────────────────────
+// InfoSection
+// ─────────────────────────────────────────────────────────────
 
 interface InfoSectionProps {
   meeting: MeetingDetailCardProps['meeting'];
@@ -109,16 +122,15 @@ interface InfoSectionProps {
 
 function InfoSection({ meeting, category, fullDateLabel, className }: InfoSectionProps) {
   return (
-    <div className={cn('flex flex-col gap-[10px]', className)}>
+    // sm: gap-1 (4px) / md: gap-1.5 (6px) / lg: gap-2 (8px)
+    <div className={cn('flex flex-col gap-1 md:gap-1.5 lg:gap-2', className)}>
       <InfoRow icon={<CalendarIcon />} category={category} label="날짜 및 시간">
-        <p className="text-sosoeat-gray-900 text-xs font-bold lg:text-sm">{fullDateLabel}</p>
+        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{fullDateLabel}</p>
       </InfoRow>
 
       <InfoRow icon={<MapPinIcon />} category={category} label="장소">
-        <p className="text-sosoeat-gray-900 text-xs font-bold lg:text-sm">{meeting.region}</p>
-        <p className="text-sosoeat-gray-600 text-xs font-bold lg:text-sm lg:font-semibold">
-          {meeting.address}
-        </p>
+        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{meeting.region}</p>
+        <p className="text-sosoeat-gray-600 text-xs font-semibold md:text-sm">{meeting.address}</p>
       </InfoRow>
 
       <ParticipantsRow
@@ -133,7 +145,10 @@ function InfoSection({ meeting, category, fullDateLabel, className }: InfoSectio
   );
 }
 
-// 버튼, 좋아요
+// ─────────────────────────────────────────────────────────────
+// ActionRow
+// ─────────────────────────────────────────────────────────────
+
 interface ActionRowProps {
   actionButton: React.ReactNode;
   isFavorited: boolean;
@@ -141,17 +156,15 @@ interface ActionRowProps {
 
 function ActionRow({ actionButton, isFavorited }: ActionRowProps) {
   return (
-    <div className="flex items-center gap-[10px] pt-[14px] md:pt-0 lg:gap-2">
-      <div className="h-[40px] w-[245px] md:w-[272px] lg:h-[62px] lg:w-full lg:max-w-[474px]">
-        {actionButton}
-      </div>
-      {/* 모바일·태블릿: 40×40 */}
+    <div className="flex items-center gap-2">
+      <div className="h-10 w-full lg:h-[62px]">{actionButton}</div>
+      {/* sm·md: 40×40 */}
       <HeartButton
         isFavorited={isFavorited}
         size="sm"
         className="border-sosoeat-gray-500 relative inset-auto m-0 lg:hidden"
       />
-      {/* PC: 60×60 */}
+      {/* lg: 60×60 */}
       <HeartButton
         isFavorited={isFavorited}
         size="lg"
@@ -166,17 +179,15 @@ function ActionRow({ actionButton, isFavorited }: ActionRowProps) {
 // ─────────────────────────────────────────────────────────────
 
 export function MeetingDetailCard(props: MeetingDetailCardProps) {
-  const {
-    category,
-    categoryLabel,
-    fullDateLabel,
-    isExpanded,
-    toggleExpanded,
-    activeConfig,
-    actionHandler,
-  } = useMeetingDetailCard(props);
+  const { category, fullDateLabel, activeConfig, actionHandler } = useMeetingDetailCard(props);
+  // NOTE: useMeetingDetailCard에서 isExpanded, toggleExpanded 반환 시 미사용 — 훅 정리 가능
 
   const { meeting } = props;
+
+  const isConfirmed = meeting.confirmedAt != null;
+  // TODO: isScheduled(이용예정) 뱃지 표시 기준 논의 필요 — 현재 비활성화
+  // const isScheduled = ...;
+  const hasSafetyBadge = isConfirmed; /* || isScheduled */
 
   const ellipsisMenu =
     props.role === 'host' ? <EllipsisMenu onEdit={props.onEdit} onDelete={props.onDelete} /> : null;
@@ -188,95 +199,76 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
   return (
     <div
       className={cn(
-        'relative transition-all duration-300',
-        'rounded-[20px] bg-white lg:rounded-[32px]',
-        'px-6 pt-[16px] pb-[40px] md:px-4 md:py-6 lg:px-6 lg:py-4',
-        'md:h-[378px] md:w-[358px] md:overflow-hidden lg:h-[460px] lg:w-[616px] lg:overflow-hidden',
-        'w-[343px]',
-        isExpanded && 'max-md:rounded-b-none'
+        'flex flex-col rounded-[20px] bg-white lg:rounded-[32px]',
+        // sm: p-4(16px) / md·lg: p-6(24px)
+        'p-4 md:p-6',
+        // sm: gap-3(12px) / md: gap-[14px] / lg: gap-4(16px)
+        'gap-3 md:gap-[14px] lg:gap-4'
       )}
     >
       {/* ════════════════════════════════════════
-          모바일 (~md)
+          sm 뱃지 섹션
+          - hasSafetyBadge O: 상태 뱃지(첫 줄) + deadline(둘째 줄)
+          - hasSafetyBadge X: deadline만 (첫 줄)
           ════════════════════════════════════════ */}
-      <div className="flex flex-col md:hidden">
-        <div>
+      <div className="flex flex-col gap-1 md:hidden">
+        {hasSafetyBadge && (
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <DateBadge date={meeting.dateTime} category={category} />
-              <TimeBadge date={meeting.dateTime} />
+            <div className="flex gap-1">
+              {isConfirmed && (
+                <EstablishmentStatusBadge
+                  confirmedAt={new Date(meeting.confirmedAt!)}
+                  variant={category}
+                />
+              )}
+              {/* {isScheduled && <UseStateBadge />} */}
             </div>
             {ellipsisMenu}
           </div>
-
-          <h2 className="mt-3 text-lg leading-snug font-semibold">{meeting.name}</h2>
-
-          <div className="mt-2 flex items-center gap-1">
-            <MapPinIcon className="text-sosoeat-gray-500 h-4 w-4 shrink-0" />
-            <span className="text-sosoeat-gray-500 text-sm font-medium">
-              {meeting.region} · {categoryLabel}
-            </span>
-          </div>
-        </div>
-
-        <ActionRow actionButton={actionButton} isFavorited={meeting.isFavorited ?? false} />
-
-        <div className="mt-2 flex justify-center">
-          <button
-            type="button"
-            aria-label={isExpanded ? '접기' : '펼치기'}
-            onClick={toggleExpanded}
-            className="text-sosoeat-gray-400"
-          >
-            {isExpanded ? (
-              <ChevronUpIcon className="h-5 w-5" />
-            ) : (
-              <ChevronDownIcon className="h-5 w-5" />
-            )}
-          </button>
-        </div>
-
-        <div
-          className={cn(
-            'absolute top-full right-0 left-0 z-10',
-            'rounded-b-2xl bg-white px-6',
-            'overflow-hidden transition-all duration-300 ease-in-out',
-            isExpanded ? 'max-h-[200px] py-4 opacity-100' : 'max-h-0 py-0 opacity-0'
-          )}
-        >
-          <div className="flex flex-col gap-[29px]">
-            <ParticipantsRow
-              meetingId={String(meeting.id)}
-              current={meeting.participantCount}
-              max={meeting.capacity}
-              category={category}
-            />
-            <HostRow name={meeting.host.name} profileImage={meeting.host.profileImage} />
-          </div>
+        )}
+        <div className={cn('flex items-center', !hasSafetyBadge && 'justify-between')}>
+          <DeadlineBadge registrationEnd={new Date(meeting.registrationEnd)} variant={category} />
+          {!hasSafetyBadge && ellipsisMenu}
         </div>
       </div>
 
       {/* ════════════════════════════════════════
-          태블릿 + PC (md ~)
+          md·lg 뱃지 섹션
+          - deadline + 상태 뱃지 한 줄
           ════════════════════════════════════════ */}
-      <div className="hidden md:flex md:h-full md:flex-col md:justify-between lg:h-full">
-        {/* 상단: 마감 배지 + 모임 제목 */}
-        <div className="flex flex-col gap-[10px]">
-          <div className="flex items-center justify-between">
-            <DeadlineBadge registrationEnd={new Date(meeting.registrationEnd)} variant={category} />
-            {ellipsisMenu}
-          </div>
-          <h2 className="line-clamp-2 text-xl leading-snug font-semibold lg:line-clamp-none lg:text-3xl lg:font-bold">
-            {meeting.name}
-          </h2>
+      <div className="hidden md:flex md:items-center md:justify-between">
+        <div className="flex items-center gap-1">
+          <DeadlineBadge registrationEnd={new Date(meeting.registrationEnd)} variant={category} />
+          {isConfirmed && (
+            <EstablishmentStatusBadge
+              confirmedAt={new Date(meeting.confirmedAt!)}
+              variant={category}
+            />
+          )}
+          {/* {isScheduled && <UseStateBadge />} */}
         </div>
-
-        {/* 중단: 날짜, 장소, 참여현황, 호스트 */}
-        <InfoSection meeting={meeting} category={category} fullDateLabel={fullDateLabel} />
-
-        {/* 하단: 액션버튼 + 좋아요 */}
-        <ActionRow actionButton={actionButton} isFavorited={meeting.isFavorited ?? false} />
+        {ellipsisMenu}
       </div>
+
+      {/* ════════════════════════════════════════
+          제목
+          sm: text-xl/semibold
+          md: text-2xl/bold
+          lg: text-3xl/bold
+          ════════════════════════════════════════ */}
+      <h2 className="line-clamp-2 text-xl leading-snug font-semibold md:text-2xl md:font-bold lg:line-clamp-none lg:text-3xl">
+        {meeting.name}
+      </h2>
+
+      {/* ════════════════════════════════════════
+          정보 (날짜, 장소, 참여현황, 호스트)
+          ════════════════════════════════════════ */}
+      <InfoSection meeting={meeting} category={category} fullDateLabel={fullDateLabel} />
+
+      {/* ════════════════════════════════════════
+          액션 버튼 + 좋아요
+          ════════════════════════════════════════ */}
+      <ActionRow actionButton={actionButton} isFavorited={meeting.isFavorited ?? false} />
     </div>
   );
 }

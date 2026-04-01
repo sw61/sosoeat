@@ -5,9 +5,6 @@ import type { Meeting } from '@/types/meeting';
 import { MeetingDetailCard } from './meeting-detail-card';
 import type { MeetingRole, MeetingStatus } from './meeting-detail-card.types';
 
-// Storybook은 discriminated union을 args composition에 사용할 수 없으므로
-// 스토리 전용 평탄화 타입을 정의합니다.
-// 컴포넌트 자체의 ISP(discriminated union)는 그대로 유지됩니다.
 type StoryArgs = {
   meeting: Meeting;
   role: MeetingRole;
@@ -38,10 +35,7 @@ const mockMeeting: Meeting = {
   hostId: 1,
   createdBy: '1',
   updatedAt: '2024/03/01T00:00:00.000Z',
-  host: {
-    id: 1,
-    name: '김소소',
-  },
+  host: { id: 1, name: '김소소' },
   isFavorited: false,
 };
 
@@ -58,8 +52,6 @@ const meta = {
       </div>
     ),
   ],
-  // isJoined는 participant 전용이므로 meta.args에서 제거하고
-  // 각 participant 스토리에서 명시적으로 지정합니다.
   args: {
     meeting: mockMeeting,
     role: 'participant',
@@ -70,41 +62,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<StoryArgs>;
 
-// ── 모바일 (접힘/펼침) ────────────────────────────────
-
-export const MobileDefault: Story = {
-  name: '모바일 — 기본 (접힘)',
-  parameters: {
-    viewport: { defaultViewport: 'mobile1' },
-  },
-  args: {
-    isJoined: false,
-  },
-};
-
-export const MobileHost: Story = {
-  name: '모바일 — Host (... 드롭다운)',
-  parameters: {
-    viewport: { defaultViewport: 'mobile1' },
-  },
-  args: {
-    role: 'host',
-    status: 'open',
-  },
-};
-
-export const MobileClosedMeeting: Story = {
-  name: '모바일 — 마감된 모임',
-  parameters: {
-    viewport: { defaultViewport: 'mobile1' },
-  },
-  args: {
-    isJoined: false,
-    status: 'closed',
-  },
-};
-
-// ── 데스크탑 (항상 펼침) ─────────────────────────────
+// ── 역할별 ────────────────────────────────────────────
 
 export const GuestView: Story = {
   name: 'Guest — 참여하기',
@@ -145,6 +103,8 @@ export const HostShare: Story = {
   },
 };
 
+// ── 상태별 ────────────────────────────────────────────
+
 export const ClosedMeeting: Story = {
   name: '마감된 모임',
   args: {
@@ -152,6 +112,26 @@ export const ClosedMeeting: Story = {
     status: 'closed',
   },
 };
+
+export const EstablishedMeeting: Story = {
+  name: '개설완료 뱃지',
+  args: {
+    meeting: { ...mockMeeting, confirmedAt: '2024-03-10T00:00:00.000Z' },
+    isJoined: false,
+    status: 'confirmed',
+  },
+};
+
+export const FullParticipants: Story = {
+  name: '참여 인원 가득 (100%)',
+  args: {
+    meeting: { ...mockMeeting, participantCount: 6, capacity: 6 },
+    isJoined: false,
+    status: 'full',
+  },
+};
+
+// ── 카테고리 / 찜 ─────────────────────────────────────
 
 export const GroupBuyCategory: Story = {
   name: '공동구매 카테고리',
@@ -175,14 +155,5 @@ export const UnlikedState: Story = {
   args: {
     isJoined: false,
     meeting: { ...mockMeeting, isFavorited: false },
-  },
-};
-
-export const FullParticipants: Story = {
-  name: '참여 인원 가득 (100%)',
-  args: {
-    meeting: { ...mockMeeting, participantCount: 6, capacity: 6 },
-    isJoined: false,
-    status: 'full',
   },
 };
