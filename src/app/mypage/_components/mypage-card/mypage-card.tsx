@@ -60,18 +60,34 @@ function InfoItem({ Icon, text }: { Icon: LucideIcon; text: string }) {
 // 상태 뱃지
 function StatusBadgeGroup({
   confirmedAt,
+  isCompleted,
+  isFavorited,
   variant,
   meetingId,
 }: {
   confirmedAt: Date | null;
+  isCompleted: boolean;
+  isFavorited: boolean;
   variant: Variant;
   meetingId: number;
 }) {
   return (
     <div className="flex items-center gap-2">
-      <UseStateBadge variant={variant}></UseStateBadge>
-      <EstablishmentStatusBadge confirmedAt={confirmedAt} variant={variant} />
-      <HeartButton className="relative -top-2 left-1 ml-16 max-md:hidden" meetingId={meetingId} />
+      {isCompleted ? (
+        <UseStateBadge variant={variant} status="completed" />
+      ) : confirmedAt ? (
+        <>
+          <UseStateBadge variant={variant} status="upcoming" />
+          <EstablishmentStatusBadge confirmedAt={confirmedAt} variant={variant} />
+        </>
+      ) : (
+        <EstablishmentStatusBadge confirmedAt={null} variant={variant} />
+      )}
+      <HeartButton
+        className="relative -top-3 left-0 ml-auto max-md:hidden"
+        meetingId={meetingId}
+        isFavorited={isFavorited}
+      />
     </div>
   );
 }
@@ -87,6 +103,8 @@ export function MyPageCard({
   hour,
   minute,
   confirmedAt = null,
+  isCompleted = false,
+  isFavorited = false,
   imageUrl = DEFAULT_IMAGE_URL,
   imageAlt,
   variant,
@@ -96,18 +114,22 @@ export function MyPageCard({
     <Card
       className={cn(
         'flex overflow-hidden rounded-4xl border-none p-0 shadow-none',
-        'gap-0 max-md:w-[343px] max-md:flex-col md:h-60 md:w-[530px] md:flex-row md:items-center md:gap-4 md:px-4',
+        'gap-0 max-md:w-85.75 max-md:flex-col md:h-60 md:w-132.5 md:flex-row md:items-center md:gap-4 md:px-4',
         className
       )}
     >
       {/* 이미지 */}
-      <div className="relative shrink-0 overflow-hidden max-md:h-[156px] max-md:w-full max-md:rounded-t-4xl md:size-47 md:rounded-2xl">
+      <div className="relative shrink-0 overflow-hidden max-md:h-39 max-md:w-full max-md:rounded-t-4xl md:size-47 md:rounded-2xl">
         <Image src={imageUrl} alt={imageAlt ?? title} fill className="object-cover" />
 
         {/* 이미지 위 오버레이 (모바일 전용) */}
         <div className="absolute top-1 right-4 left-4 flex items-center justify-between md:hidden">
           <VariantBadge variant={variant} />
-          <HeartButton className="relative top-3 left-1" meetingId={meetingId} />
+          <HeartButton
+            className="relative top-3 left-1"
+            meetingId={meetingId}
+            isFavorited={isFavorited}
+          />
         </div>
       </div>
 
@@ -120,7 +142,13 @@ export function MyPageCard({
 
         {/* 상태 뱃지 (모바일) */}
         <div className="py-2 md:hidden">
-          <StatusBadgeGroup confirmedAt={confirmedAt} variant={variant} meetingId={meetingId} />
+          <StatusBadgeGroup
+            confirmedAt={confirmedAt}
+            isCompleted={isCompleted}
+            isFavorited={isFavorited}
+            variant={variant}
+            meetingId={meetingId}
+          />
         </div>
 
         {/* 제목 / 인원 */}
@@ -143,7 +171,13 @@ export function MyPageCard({
 
         {/* 상태 뱃지 (웹) */}
         <div className="mt-4 hidden md:block">
-          <StatusBadgeGroup confirmedAt={confirmedAt} variant={variant} meetingId={meetingId} />
+          <StatusBadgeGroup
+            confirmedAt={confirmedAt}
+            isCompleted={isCompleted}
+            isFavorited={isFavorited}
+            variant={variant}
+            meetingId={meetingId}
+          />
         </div>
       </div>
     </Card>
