@@ -1,4 +1,4 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
@@ -11,13 +11,11 @@ import { NavigationBar } from './navigation-bar';
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(),
   useRouter: jest.fn(),
-  useSearchParams: jest.fn(),
 }));
 
 const mockPush = jest.fn();
 const mockUsePathname = usePathname as jest.Mock;
 const mockUseRouter = useRouter as jest.Mock;
-const mockUseSearchParams = useSearchParams as jest.Mock;
 
 const renderWithClient = (ui: React.ReactElement) => {
   const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
@@ -27,7 +25,6 @@ const renderWithClient = (ui: React.ReactElement) => {
 beforeEach(() => {
   mockUsePathname.mockReturnValue('/');
   mockUseRouter.mockReturnValue({ push: mockPush });
-  mockUseSearchParams.mockReturnValue(new URLSearchParams());
   useAuthStore.setState({ user: null });
   mockPush.mockClear();
   global.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
@@ -38,12 +35,12 @@ const MOCK_USER = { id: 1, name: '홍길동', email: 'test@example.com', teamId:
 describe('NavigationBar', () => {
   describe('공통', () => {
     it('로고가 렌더링된다', () => {
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.getByRole('link', { name: 'sosoeat' })).toBeInTheDocument();
     });
 
     it('카테고리 메뉴 링크가 렌더링된다', () => {
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.getAllByRole('link', { name: '모임찾기' }).length).toBeGreaterThan(0);
       expect(screen.getAllByRole('link', { name: /찜한 모임/ }).length).toBeGreaterThan(0);
       expect(screen.getAllByRole('link', { name: '소소토크' }).length).toBeGreaterThan(0);
@@ -52,12 +49,12 @@ describe('NavigationBar', () => {
 
   describe('비로그인 상태', () => {
     it('로그인 버튼이 표시된다', () => {
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.getAllByRole('link', { name: '로그인' }).length).toBeGreaterThan(0);
     });
 
     it('찜한 모임 메뉴가 표시되며 클릭 시 /login으로 이동한다', () => {
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
       const links = screen.getAllByRole('link', { name: /찜한 모임/ });
       links.forEach((link) => {
         expect(link).toHaveAttribute('href', '/login');
@@ -65,39 +62,43 @@ describe('NavigationBar', () => {
     });
 
     it('찜한 모임 배지가 표시되지 않는다', () => {
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.queryByText('0')).not.toBeInTheDocument();
     });
 
     it('알림 버튼이 표시되지 않는다', () => {
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.queryByRole('button', { name: '알림' })).not.toBeInTheDocument();
     });
 
     it('프로필 메뉴가 표시되지 않는다', () => {
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.queryByRole('button', { name: '프로필 메뉴' })).not.toBeInTheDocument();
     });
   });
 
   describe('로그인 상태', () => {
+    beforeEach(() => {
+      useAuthStore.setState({ user: MOCK_USER });
+    });
+
     it('알림 버튼이 표시된다', () => {
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.getAllByRole('button', { name: '알림' }).length).toBeGreaterThan(0);
     });
 
     it('프로필 메뉴가 표시된다', () => {
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.getByRole('button', { name: '프로필 메뉴' })).toBeInTheDocument();
     });
 
     it('로그인 버튼이 표시되지 않는다', () => {
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.queryByRole('link', { name: '로그인' })).not.toBeInTheDocument();
     });
 
     it('찜한 모임 메뉴와 배지가 표시되며 /mypage?tab=liked로 이동한다', () => {
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
+      renderWithClient(<NavigationBar />);
       const links = screen.getAllByRole('link', { name: /찜한 모임/ });
       expect(links.length).toBeGreaterThan(0);
       links.forEach((link) => {
@@ -107,31 +108,20 @@ describe('NavigationBar', () => {
     });
 
     it('모임 만들기 버튼이 표시된다', () => {
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.getByRole('button', { name: /모임 만들기/ })).toBeInTheDocument();
     });
 
     it('프로필 이미지가 없을 때 이름 첫 글자가 표시된다', () => {
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
+      renderWithClient(<NavigationBar />);
       expect(screen.getByText(MOCK_USER.name[0])).toBeInTheDocument();
     });
   });
 
   describe('모바일 메뉴', () => {
-    it('비로그인 상태에서 찜한 모임 클릭 시 /login으로 이동한다', async () => {
-      const user = userEvent.setup();
-      renderWithClient(<NavigationBar initialUser={null} />);
-
-      await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
-      const links = screen.getAllByRole('link', { name: /찜한 모임/ });
-      links.forEach((link) => {
-        expect(link).toHaveAttribute('href', '/login');
-      });
-    });
-
     it('햄버거 버튼 클릭 시 메뉴 패널이 열린다', async () => {
       const user = userEvent.setup();
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
 
       await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -139,7 +129,7 @@ describe('NavigationBar', () => {
 
     it('닫기 버튼 클릭 시 메뉴 패널이 닫힌다', async () => {
       const user = userEvent.setup();
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
 
       await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
       await user.click(screen.getByRole('button', { name: 'Close' }));
@@ -148,9 +138,13 @@ describe('NavigationBar', () => {
   });
 
   describe('프로필 드롭다운', () => {
+    beforeEach(() => {
+      useAuthStore.setState({ user: MOCK_USER });
+    });
+
     it('프로필 버튼 클릭 시 드롭다운이 열린다', async () => {
       const user = userEvent.setup();
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
+      renderWithClient(<NavigationBar />);
 
       await user.click(screen.getByRole('button', { name: '프로필 메뉴' }));
       expect(screen.getByRole('menuitem', { name: '로그아웃' })).toBeInTheDocument();
@@ -158,7 +152,7 @@ describe('NavigationBar', () => {
 
     it('로그아웃 클릭 시 user가 null이 되고 홈으로 이동한다', async () => {
       const user = userEvent.setup();
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
+      renderWithClient(<NavigationBar />);
 
       await user.click(screen.getByRole('button', { name: '프로필 메뉴' }));
       await user.click(screen.getByRole('menuitem', { name: '로그아웃' }));
@@ -171,7 +165,7 @@ describe('NavigationBar', () => {
   describe('활성 메뉴', () => {
     it('현재 경로에 해당하는 메뉴에 활성 스타일이 적용된다', () => {
       mockUsePathname.mockReturnValue('/meetings');
-      renderWithClient(<NavigationBar initialUser={null} />);
+      renderWithClient(<NavigationBar />);
 
       const activeLinks = screen.getAllByRole('link', { name: '모임찾기' });
       activeLinks.forEach((link) => {

@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 
 import { Providers } from '@/app/providers';
-import { NavigationBar } from '@/components/common/navigation-bar';
+import { NavigationBarClient } from '@/components/common/navigation-bar/navigation-bar-client';
 import { Toaster } from '@/components/ui/sonner/index';
-import { CookieStorage } from '@/lib/auth/cookie-storage';
 
 import './globals.css';
 
@@ -12,18 +11,16 @@ export const metadata: Metadata = {
   description: '일상과 만남을 잇다', // 수정 필요
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialUser = await CookieStorage.getUser();
-
   return (
     <html lang="ko">
       <body className="min-w-[375px]">
-        <Providers initialUser={initialUser}>
-          <NavigationBar initialUser={initialUser} />
+        <Providers>
+          <NavigationBarClient />
           <main>{children}</main>
         </Providers>
         <Toaster />

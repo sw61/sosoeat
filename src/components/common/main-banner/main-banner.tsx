@@ -25,21 +25,21 @@ interface Banner {
 const BANNERS: Banner[] = [
   {
     imageUrl:
-      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021008378-d25ae489-1950-4c33-9e91-d962b4e63c14.jpg',
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070',
     alt: '신선한 오늘의 추천 메뉴',
-    href: '/meetings',
+    href: '/event/1',
   },
   {
     imageUrl:
-      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021059723-2224efa7-cd60-4b75-9ef8-b05b1db43596.jpg',
+      'https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&q=80&w=2070',
     alt: '모닝 브런치 스페셜 세트',
-    href: '/sosotalk',
+    href: '/event/2',
   },
   {
     imageUrl:
-      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021087340-27221ae9-edba-448c-97ee-775ae7e75b75.jpg',
+      'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=2070',
     alt: '저녁 모임을 위한 정갈한 요리',
-    href: '/mypage',
+    href: '/event/3',
   },
 ];
 
