@@ -53,7 +53,7 @@ describe('MeetingDetailCard', () => {
     expect(screen.getByText('김소소')).toBeInTheDocument();
   });
 
-  it('confirmedAt이 있으면 개설완료 뱃지가 노출된다', () => {
+  it('confirmedAt이 있으면 개설확정 뱃지가 노출된다', () => {
     render(
       <MeetingDetailCard
         {...DEFAULT_PROPS}
@@ -61,7 +61,7 @@ describe('MeetingDetailCard', () => {
       />
     );
 
-    expect(screen.getAllByText('개설완료').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('개설확정').length).toBeGreaterThanOrEqual(1);
   });
 
   describe('더보기(...) 버튼', () => {
