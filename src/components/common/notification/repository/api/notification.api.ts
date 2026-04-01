@@ -1,23 +1,28 @@
-import { postsApi } from '@/lib/api-client';
+import { parseISO } from 'date-fns';
+
 import { fetchClient } from '@/lib/http/fetch-client';
-import type { Notification, NotificationList } from '@/types/generated-client';
+import type { Comment, Notification, NotificationList } from '@/types/generated-client';
 
 export const notificationApi = {
   readNotification: ({ notificationId }: { notificationId: number }) => {
     return fetchClient.put(`/notifications/${notificationId}/read`);
   },
-  fetchLatestPostComment: ({ teamId, postId }: { teamId: string; postId: number }) => {
-    return postsApi.teamIdPostsPostIdCommentsGet({
-      teamId,
-      postId,
+  fetchLatestPostComment: async ({ postId }: { postId: number }) => {
+    const params = new URLSearchParams({
       sortBy: 'createdAt',
       sortOrder: 'desc',
-      size: 1,
+      size: '1',
     });
-  },
-  fetchUsersUserId: async ({ userId }: { userId: number }) => {
-    const response = await fetchClient.get(`/users/${userId}`);
-    return await response.json();
+
+    const response = await fetchClient.get(`/posts/${postId}/comments?${params.toString()}`);
+    const json = await response.json();
+    const data = json.data.map((comment: Comment) => ({
+      ...comment,
+      createdAt: parseISO(comment.createdAt as unknown as string), // string을 Date 객체로 변환
+      updatedAt: parseISO(comment.updatedAt as unknown as string), // string을 Date 객체로 변환
+    }));
+
+    return { ...json, data };
   },
   fetchLatestNotifications: async ({
     size = 10,
