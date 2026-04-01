@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Providers } from '@/app/providers';
+import { Footer } from '@/components/common/footer';
 import { NavigationBar } from '@/components/common/navigation-bar';
 import { Toaster } from '@/components/ui/sonner/index';
 import { CookieStorage } from '@/lib/auth/cookie-storage';
@@ -25,6 +26,7 @@ export default async function RootLayout({
         <Providers initialUser={initialUser}>
           <NavigationBar initialUser={initialUser} />
           <main>{children}</main>
+          <Footer />
         </Providers>
         <Toaster />
       </body>

@@ -11,8 +11,8 @@ import {
   useUpdateSosoTalkPost,
 } from '@/app/sosotalk/_services';
 
-import { SosoTalkPostEditor } from './sosotalk-post-editor';
 import type { SosoTalkPostSubmitPayload } from './sosotalk-post-editor';
+import { SosoTalkPostEditor } from './sosotalk-post-editor';
 
 interface SosoTalkWritePageClientProps {
   editPostId?: number;
@@ -108,12 +108,18 @@ export function SosoTalkWritePageClient({ editPostId }: SosoTalkWritePageClientP
   }
 
   if (isLoading) {
-    return <div className="py-20 text-center text-sm text-gray-500">게시글 정보를 불러오는 중이에요.</div>;
+    return (
+      <div className="py-20 text-center text-sm text-gray-500">
+        게시글 정보를 불러오는 중이에요.
+      </div>
+    );
   }
 
   if (isError || !data) {
     return (
-      <div className="py-20 text-center text-sm text-gray-500">수정할 게시글 정보를 불러오지 못했어요.</div>
+      <div className="py-20 text-center text-sm text-gray-500">
+        수정할 게시글 정보를 불러오지 못했어요.
+      </div>
     );
   }
 

@@ -14,8 +14,8 @@ export default function MainPage() {
         <BestSoeatSection />
         <MeetingTypeSection />
         <MainPageSection />
-        <CtaSection />
       </div>
+      <CtaSection />
     </div>
   );
 }
