@@ -30,6 +30,10 @@ export class CookieStorage {
     return (await cookies()).get('refreshToken')?.value || null;
   }
 
+  /**
+   * 서버 컴포넌트 / Route Handler 전용.
+   * 클라이언트에서는 AuthInitializer의 getUserFromCookie() 사용.
+   */
   static async getUser(): Promise<AuthUser | null> {
     const raw = (await cookies()).get('user')?.value;
     if (!raw) return null;

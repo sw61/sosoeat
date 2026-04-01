@@ -2,9 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-import { Bell, ChevronDown } from 'lucide-react';
+import { Bell, ChevronRight } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,7 @@ import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/com
 import { cn } from '@/lib/utils';
 import { useLogout } from '@/services/auth';
 import { useAuthStore } from '@/store/auth-store';
+import { AuthUser } from '@/types/auth';
 
 const NAV_ITEMS = [
   { href: '/meetings', label: '모임찾기' },
@@ -25,21 +26,41 @@ const NAV_ITEMS = [
   { href: '/sosotalk', label: '소소토크' },
 ] as const;
 
-export function NavigationBar() {
+// TODO: 알림 기능 구현 시 React Query로 교체 예정
+// ex) const { data: hasUnread = false } = useHasUnreadNotification();
+const hasUnread = false;
+
+// TODO: 찜 컴포넌트 분리 시 아래 상수 제거 후 컴포넌트로 교체
+// ex) import { WishGroupBadge } from '@/components/common/wish-group-badge'
+const wishGroupCount = 0;
+
+const getNavHref = (item: (typeof NAV_ITEMS)[number], user: AuthUser | null) =>
+  'showBadge' in item && !user ? '/login' : item.href;
+
+const getIsActive = (
+  item: (typeof NAV_ITEMS)[number],
+  pathname: string,
+  searchParams: URLSearchParams
+) => {
+  const [itemPath, itemQuery] = item.href.split('?');
+  if (!itemQuery) return pathname === itemPath;
+  const itemParams = new URLSearchParams(itemQuery);
+  return (
+    pathname === itemPath &&
+    [...itemParams.entries()].every(([key, value]) => searchParams.get(key) === value)
+  );
+};
+
+export function NavigationBar({ initialUser }: { initialUser: AuthUser | null }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const user = useAuthStore((state) => state.user);
+  const searchParams = useSearchParams();
+  const storeUser = useAuthStore((state) => state.user);
+  const isInitialized = useAuthStore((state) => state.isInitialized);
   const { mutate: performLogout } = useLogout();
 
-  const visibleNavItems = NAV_ITEMS;
-
-  // TODO: 알림 기능 구현 시 React Query로 교체 예정
-  // ex) const { data: hasUnread = false } = useHasUnreadNotification();
-  const hasUnread = false;
-
-  // TODO: 찜 컴포넌트 분리 시 아래 상수 제거 후 컴포넌트로 교체
-  // ex) import { WishGroupBadge } from '@/components/common/wish-group-badge'
-  const wishGroupCount = 0;
+  // isInitialized 전: 서버에서 받은 initialUser 사용 (FOUC 방지)
+  // isInitialized 후: Zustand storeUser가 권위 (로그아웃 등 클라이언트 상태 변화 반영)
+  const user = isInitialized ? storeUser : initialUser;
 
   return (
     <header className="bg-background w-full">
@@ -55,16 +76,16 @@ export function NavigationBar() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          {visibleNavItems.map((item) => {
-            const isActive = pathname === item.href;
+          {NAV_ITEMS.map((item) => {
+            const isActive = getIsActive(item, pathname, searchParams);
             return (
               <Link
                 key={item.href}
-                href={'showBadge' in item && !user ? '/login' : item.href}
+                href={getNavHref(item, user)}
                 className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
                   isActive
                     ? 'text-sosoeat-orange-600 bg-sosoeat-orange-100'
-                    : 'text-sosoeat-gray-900 hover:text-foreground'
+                    : 'text-sosoeat-gray-900 hover:text-sosoeat-orange-600'
                 }`}
               >
                 {item.label}
@@ -95,6 +116,14 @@ export function NavigationBar() {
                 </SheetContent>
               </Sheet>
 
+              <Button
+                size="lg"
+                className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white md:mr-1 md:flex"
+              >
+                <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
+                모임 만들기
+              </Button>
+
               <button className="relative hidden cursor-pointer p-1 md:block" aria-label="알림">
                 <Bell className="text-sosoeat-orange-600 h-5 w-5" />
                 {hasUnread && (
@@ -102,18 +131,10 @@ export function NavigationBar() {
                 )}
               </button>
 
-              <Button
-                size="lg"
-                className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white lg:mr-1 lg:flex"
-              >
-                <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
-                모임 만들기
-              </Button>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="hidden cursor-pointer items-center gap-1 md:flex"
+                    className="hidden cursor-pointer items-center gap-1 outline-none md:flex"
                     aria-label="프로필 메뉴"
                   >
                     <Avatar className="bg-sosoeat-gray-200 shrink-0">
@@ -122,15 +143,17 @@ export function NavigationBar() {
                         {user.name[0]}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="hidden text-sm font-medium lg:block">{user.name}</span>
-                    <ChevronDown className="text-muted-foreground hidden h-4 w-4 lg:block" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => router.push('/mypage')}>
-                    마이페이지
+                  <DropdownMenuItem className="h-10" asChild>
+                    <Link href="/mypage">마이페이지</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem variant="destructive" onClick={() => performLogout()}>
+                  <DropdownMenuItem
+                    className="h-10"
+                    variant="destructive"
+                    onClick={() => performLogout()}
+                  >
                     로그아웃
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -139,7 +162,7 @@ export function NavigationBar() {
           ) : (
             <Link
               href="/login"
-              className="text-muted-foreground hover:text-foreground hidden text-sm font-medium transition-colors md:block"
+              className="text-muted-foreground hover:text-sosoeat-orange-600 hidden text-sm font-medium transition-colors md:block"
             >
               로그인
             </Link>
@@ -151,37 +174,63 @@ export function NavigationBar() {
                 <Image src="/icons/icon-hamburger.png" alt="메뉴" width={24} height={24} />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-64 p-0 pt-12">
+            <SheetContent side="right" className="flex w-64 flex-col p-0 pt-12">
               <SheetTitle className="sr-only">메뉴</SheetTitle>
-              <nav className="flex flex-col gap-1 px-4">
-                {visibleNavItems.map((item) => {
-                  const isActive = pathname === item.href;
+
+              <div className="flex flex-col gap-1 px-4">
+                {NAV_ITEMS.map((item) => {
+                  const isActive = getIsActive(item, pathname, searchParams);
                   return (
                     <SheetClose key={item.href} asChild>
                       <Link
-                        href={item.href}
-                        className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                        href={getNavHref(item, user)}
+                        className={`flex h-[72px] items-center justify-between rounded-md px-3 text-sm font-medium transition-colors ${
                           isActive
                             ? 'text-sosoeat-orange-600 bg-sosoeat-orange-100'
-                            : 'text-muted-foreground hover:text-foreground'
+                            : 'text-muted-foreground hover:text-sosoeat-orange-600'
                         }`}
                       >
                         {item.label}
+                        <ChevronRight className="h-4 w-4 shrink-0" />
                       </Link>
                     </SheetClose>
                   );
                 })}
-                {!user && (
+
+                {user && (
+                  <SheetClose asChild>
+                    <Link
+                      href="/mypage"
+                      className="text-muted-foreground hover:text-sosoeat-orange-600 flex h-[72px] items-center justify-between rounded-md px-3 text-sm font-medium transition-colors"
+                    >
+                      마이페이지
+                      <ChevronRight className="h-4 w-4 shrink-0" />
+                    </Link>
+                  </SheetClose>
+                )}
+              </div>
+
+              <div className="mt-auto flex justify-end px-7 pb-10">
+                {user ? (
+                  <SheetClose asChild>
+                    <button
+                      onClick={() => performLogout()}
+                      className="text-muted-foreground hover:text-destructive cursor-pointer text-sm transition-colors"
+                    >
+                      로그아웃
+                    </button>
+                  </SheetClose>
+                ) : (
                   <SheetClose asChild>
                     <Link
                       href="/login"
-                      className="text-muted-foreground hover:text-foreground rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                      className="text-muted-foreground hover:text-sosoeat-orange-600 text-sm transition-colors"
                     >
                       로그인
                     </Link>
                   </SheetClose>
                 )}
-              </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
