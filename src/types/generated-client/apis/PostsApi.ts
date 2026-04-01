@@ -61,6 +61,8 @@ export interface TeamIdPostsGetRequest {
   sortBy?: TeamIdPostsGetSortByEnum;
   sortOrder?: TeamIdPostsGetSortOrderEnum;
   cursor?: string;
+  offset?: number;
+  limit?: number;
   size?: number;
 }
 
@@ -162,6 +164,14 @@ export class PostsApi extends runtime.BaseAPI {
       queryParameters['cursor'] = requestParameters['cursor'];
     }
 
+    if (requestParameters['offset'] != null) {
+      queryParameters['offset'] = requestParameters['offset'];
+    }
+
+    if (requestParameters['limit'] != null) {
+      queryParameters['limit'] = requestParameters['limit'];
+    }
+
     if (requestParameters['size'] != null) {
       queryParameters['size'] = requestParameters['size'];
     }
@@ -192,7 +202,7 @@ export class PostsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
+   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
    * 게시글 목록
    */
   async teamIdPostsGetRaw(
@@ -206,7 +216,7 @@ export class PostsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
+   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
    * 게시글 목록
    */
   async teamIdPostsGet(

@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { ko } from 'react-day-picker/locale';
 
-import { format, startOfDay } from 'date-fns';
+import Image from 'next/image';
+
+import { format, isSameDay, startOfDay } from 'date-fns';
 import { ChevronDown, Triangle } from 'lucide-react';
 
 import type { DetailDatePickerProps } from '@/components/common/date-picker/detail-date-picker.type';
@@ -12,83 +14,101 @@ import { Calendar } from '@/components/ui/calendar/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/popover';
 import { cn } from '@/lib/utils';
 
-const variantStyles: Record<
-  NonNullable<DetailDatePickerProps['variant']>,
-  {
-    calendarSelected: string;
-    resetButton: string;
-    applyButton: string;
-  }
-> = {
-  groupEat: {
-    calendarSelected:
-      '[&_button[data-selected-single=true]]:!rounded-[var(--radius-md)] [&_button[data-selected-single=true]]:!bg-sosoeat-orange-500 [&_button[data-selected-single=true]]:!text-white',
-    resetButton:
-      'bg-white border border-sosoeat-orange-600 text-sosoeat-orange-700 rounded-xl hover:bg-sosoeat-orange-50',
-    applyButton: 'bg-sosoeat-orange-600 text-white rounded-xl hover:bg-sosoeat-orange-700',
-  },
-  groupBuy: {
-    calendarSelected:
-      '[&_button[data-selected-single=true]]:!rounded-[var(--radius-md)] [&_button[data-selected-single=true]]:!bg-sosoeat-blue-500 [&_button[data-selected-single=true]]:!text-white',
-    resetButton:
-      'bg-white border border-sosoeat-blue-500 text-sosoeat-blue-600 rounded-xl hover:bg-sosoeat-blue-50',
-    applyButton: 'bg-sosoeat-blue-500 text-white rounded-xl hover:bg-sosoeat-blue-600',
-  },
-};
+import {
+  DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS,
+  DETAIL_DATE_PICKER_ACTIONS_CLASS,
+  DETAIL_DATE_PICKER_CALENDAR_CLASS,
+  DETAIL_DATE_PICKER_CHEVRON_CLASS,
+  DETAIL_DATE_PICKER_POPOVER_CONTENT_CLASS,
+  DETAIL_DATE_PICKER_TRIGGER_CLASS,
+  DETAIL_DATE_PICKER_TRIGGER_CONTENT_CLASS,
+  DETAIL_DATE_PICKER_VARIANT_STYLES,
+} from './detail-date-picker.constants';
 
-function formatTriggerLabel(value: Date | null): string {
-  if (!value) return '날짜 전체';
-  return format(value, 'yyyy-MM-dd');
+function formatTriggerLabel({
+  valueStart,
+  valueEnd,
+}: {
+  valueStart: Date | null;
+  valueEnd: Date | null;
+}): string {
+  if (!valueStart && !valueEnd) return '날짜 전체';
+  if (valueStart && !valueEnd) return format(valueStart, 'M.dd EEE', { locale: ko });
+  if (!valueStart && valueEnd) return format(valueEnd, 'M.dd EEE', { locale: ko });
+  if (valueStart && valueEnd && isSameDay(valueStart, valueEnd))
+    return format(valueStart, 'M.dd EEE', { locale: ko });
+  return `${format(valueStart!, 'M.dd EEE', { locale: ko })} - ${format(valueEnd!, 'M.dd EEE', { locale: ko })}`;
 }
 
 export function DetailDatePicker({
   variant = 'groupEat',
-  value,
-  onChange,
+  valueStart,
+  valueEnd,
+  onDateChange = () => {},
   className,
 }: DetailDatePickerProps) {
-  const styles = variantStyles[variant];
+  const styles = DETAIL_DATE_PICKER_VARIANT_STYLES[variant];
 
   const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState<Date | undefined>(undefined);
+  const [draft, setDraft] = useState<{
+    valueStart: Date | undefined;
+    valueEnd: Date | undefined;
+  }>();
 
   const handleReset = () => {
-    setDraft(undefined);
-    onChange(null);
+    setDraft({ valueStart: undefined, valueEnd: undefined });
+    onDateChange({ valueStart: null, valueEnd: null });
   };
 
   const handleApply = () => {
-    onChange(draft ?? null);
+    if (!draft?.valueStart && !draft?.valueEnd) {
+      onDateChange({ valueStart: null, valueEnd: null });
+      setOpen(false);
+      return;
+    }
+
+    onDateChange({ valueStart: draft.valueStart ?? null, valueEnd: draft.valueEnd ?? null });
     setOpen(false);
   };
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
-    if (nextOpen) setDraft(value ?? undefined);
+    if (nextOpen)
+      setDraft({
+        valueStart: valueStart ?? undefined,
+        valueEnd: valueEnd ?? undefined,
+      });
   };
 
-  const triggerLabel = formatTriggerLabel(value);
-
+  const triggerLabel = formatTriggerLabel({ valueStart, valueEnd });
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
-      <PopoverTrigger type="button" className={cn('min-w-[93px]', className)}>
-        <span>{triggerLabel}</span>
-        <ChevronDown className="text-sosoeat-gray-600 size-[17px] shrink-0" aria-hidden />
+      <PopoverTrigger type="button" className={cn(DETAIL_DATE_PICKER_TRIGGER_CLASS, className)}>
+        <span className={DETAIL_DATE_PICKER_TRIGGER_CONTENT_CLASS}>
+          <Image src={'/icons/deadline-calendar.svg'} alt="Calendar" width={20} height={20} />
+          {triggerLabel}
+          <ChevronDown className="size-4 shrink-0" aria-hidden />
+        </span>
       </PopoverTrigger>
-      <PopoverContent className="w-[298px] p-4">
+      <PopoverContent className={DETAIL_DATE_PICKER_POPOVER_CONTENT_CLASS}>
         <Calendar
           locale={ko}
-          mode="single"
+          mode="range"
           disabled={{ before: startOfDay(new Date()) }}
-          selected={draft}
-          onSelect={(d) => setDraft(d)}
-          className={cn('w-[250px] text-sm font-semibold', styles.calendarSelected)}
+          selected={draft?.valueStart ? { from: draft.valueStart, to: draft.valueEnd } : undefined}
+          onSelect={(d) =>
+            setDraft({
+              valueStart: d?.from,
+              valueEnd: d?.to,
+            })
+          }
+          className={cn(DETAIL_DATE_PICKER_CALENDAR_CLASS, styles.calendarSelected)}
           buttonVariant={'ghost'}
           components={{
             Chevron: ({ orientation, className, ...props }) =>
               orientation === 'left' ? (
                 <Triangle
-                  className={cn('text-foreground h-[7px] w-[15px]', className)}
+                  className={cn(DETAIL_DATE_PICKER_CHEVRON_CLASS, className)}
                   fill="currentColor"
                   strokeWidth={0}
                   style={{ transform: 'rotate(-90deg)' }}
@@ -96,7 +116,7 @@ export function DetailDatePicker({
                 />
               ) : (
                 <Triangle
-                  className={cn('text-foreground h-[7px] w-[15px]', className)}
+                  className={cn(DETAIL_DATE_PICKER_CHEVRON_CLASS, className)}
                   fill="currentColor"
                   strokeWidth={0}
                   style={{ transform: 'rotate(90deg)' }}
@@ -105,17 +125,17 @@ export function DetailDatePicker({
               ),
           }}
         />
-        <div className="flex w-full justify-center gap-2">
+        <div className={DETAIL_DATE_PICKER_ACTIONS_CLASS}>
           <Button
             variant="outline"
-            className={cn('h-10 w-[118px] text-sm font-semibold', styles.resetButton)}
+            className={cn(DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS, styles.resetButton)}
             onClick={handleReset}
             type="button"
           >
             초기화
           </Button>
           <Button
-            className={cn('h-10 w-[118px] text-sm font-semibold', styles.applyButton)}
+            className={cn(DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS, styles.applyButton)}
             onClick={handleApply}
             type="button"
           >

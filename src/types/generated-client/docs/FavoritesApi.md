@@ -78,7 +78,7 @@ example().catch(console.error);
 
 ## teamIdFavoritesGet
 
-> FavoriteList teamIdFavoritesGet(teamId, type, region, date, sortBy, sortOrder, cursor, size)
+> FavoriteList teamIdFavoritesGet(teamId, type, region, dateStart, dateEnd, sortBy, sortOrder, cursor, size)
 
 찜 목록
 
@@ -108,8 +108,10 @@ async function example() {
     type: type_example,
     // string | 지역으로 필터링 (optional)
     region: region_example,
-    // Date | 모임 날짜로 필터링 (YYYY-MM-DD) (optional)
-    date: 2013-10-20T19:20:30+01:00,
+    // Date | 모임 시작 범위 (이상, ISO 8601) (optional)
+    dateStart: 2026-02-09T15:00:00Z,
+    // Date | 모임 끝 범위 (이하, ISO 8601) (optional)
+    dateEnd: 2026-02-10T14:59:59.999Z,
     // 'createdAt' | 'dateTime' | 'registrationEnd' | 'participantCount' | 정렬 기준 (optional)
     sortBy: sortBy_example,
     // 'asc' | 'desc' | 정렬 순서 (optional)
@@ -139,7 +141,8 @@ example().catch(console.error);
 | **teamId**    | `string`                                                       |                                 | [Defaults to `undefined`]                                                                                     |
 | **type**      | `string`                                                       | 모임 종류로 필터링              | [Optional] [Defaults to `undefined`]                                                                          |
 | **region**    | `string`                                                       | 지역으로 필터링                 | [Optional] [Defaults to `undefined`]                                                                          |
-| **date**      | `Date`                                                         | 모임 날짜로 필터링 (YYYY-MM-DD) | [Optional] [Defaults to `undefined`]                                                                          |
+| **dateStart** | `Date`                                                         | 모임 시작 범위 (이상, ISO 8601) | [Optional] [Defaults to `undefined`]                                                                          |
+| **dateEnd**   | `Date`                                                         | 모임 끝 범위 (이하, ISO 8601)   | [Optional] [Defaults to `undefined`]                                                                          |
 | **sortBy**    | `createdAt`, `dateTime`, `registrationEnd`, `participantCount` | 정렬 기준                       | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, dateTime, registrationEnd, participantCount] |
 | **sortOrder** | `asc`, `desc`                                                  | 정렬 순서                       | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                                                   |
 | **cursor**    | `string`                                                       | 다음 페이지를 위한 커서         | [Optional] [Defaults to `undefined`]                                                                          |

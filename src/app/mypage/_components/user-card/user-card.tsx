@@ -1,63 +1,101 @@
-import { Calendar, MapPin, Pencil } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+
+import { Calendar, Mail, Pencil } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+
+import { mypageRepository } from '../../repositories/mypage.repository';
+import { EditProfileModal } from '../edit-profile-modal';
 
 import { UserCardProps } from './user-card.types';
 
-export function UserCard({ name, location, joinedAt, bio, className }: UserCardProps) {
-  return (
-    <Card
-      className={cn(
-        'bg-sosoeat-orange-100 gap-2 ring-0',
-        'md:bg-sosoeat-gray-100',
-        'h-28.75 w-120 md:h-full md:w-full'
-      )}
-    >
-      <CardHeader>
-        <div className="flex items-center gap-2 md:hidden">
-          <Avatar className="size-20 shrink-0">
-            <AvatarImage />
-            <AvatarFallback></AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <CardTitle className={cn('text-base font-bold')}>{name}</CardTitle>
-              <Pencil className="text-sosoeat-gray-600 size-3 shrink-0" />
-            </div>
-            {joinedAt && (
-              <span className="bg-sosoeat-orange-200 text-sosoeat-gray-600 flex items-center gap-1 rounded-2xl px-4 py-1.5 text-xs ring-0">
-                <Calendar className={cn('size-3')} /> {joinedAt} 가입
-              </span>
-            )}
-          </div>
-        </div>
+export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCardProps) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [localName, setLocalName] = useState(name);
+  const [localEmail, setLocalEmail] = useState(email);
+  const [localImageUrl, setLocalImageUrl] = useState(imageUrl);
 
-        <div className="hidden md:block">
-          <CardTitle className="w-full text-base font-bold">{name}</CardTitle>
-          <CardDescription>
-            <span className="text-sosoeat-gray-600 flex gap-x-3 gap-y-1 text-xs">
-              {location && (
-                <span className="flex items-center gap-1">
-                  <MapPin className={cn('size-3')} /> {location}
-                </span>
-              )}
+  const handleProfileUpdate = async (data: { name: string; email: string; imageUrl?: string }) => {
+    const updated = await mypageRepository.patchMe({
+      name: data.name,
+      email: data.email,
+      image: data.imageUrl,
+    });
+    if (updated) {
+      setLocalName(updated.name);
+      setLocalEmail(updated.email);
+      setLocalImageUrl(updated.image);
+    }
+  };
+
+  return (
+    <div className={cn('relative w-full p-4', className)}>
+      <Card
+        className={cn(
+          'bg-sosoeat-orange-100 ring-0',
+          'md:bg-sosoeat-gray-100',
+          'h-28.75 w-full md:h-full md:w-full'
+        )}
+      >
+        <CardHeader>
+          <div className="flex items-center gap-6 md:hidden">
+            <Avatar className="h-[83px] w-[83px] shrink-0 border-2 border-white">
+              <AvatarImage src={localImageUrl} />
+              <AvatarFallback></AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center py-1">
+                <CardTitle className={cn('px-2 text-base font-bold')}>{localName}</CardTitle>
+                <button onClick={() => setModalOpen(true)}>
+                  <Pencil className="text-sosoeat-gray-600 size-3 shrink-0" />
+                </button>
+              </div>
               {joinedAt && (
-                <span className="bg-sosoeat-gray-100 flex items-center gap-1 rounded-2xl px-1 py-1.5 ring-0">
+                <span className="bg-sosoeat-orange-200 text-sosoeat-gray-600 flex items-center gap-1 rounded-2xl px-4 py-2 text-xs ring-0">
                   <Calendar className={cn('size-3')} /> {joinedAt} 가입
                 </span>
               )}
-            </span>
-          </CardDescription>
-        </div>
-      </CardHeader>
+            </div>
+          </div>
 
-      {bio && (
-        <CardContent className="hidden md:block">
-          <p className="text-sosoeat-gray-700 text-xs">{bio}</p>
-        </CardContent>
-      )}
-    </Card>
+          <div className="hidden items-center gap-6 md:flex">
+            <Avatar className="h-42.25 w-42.25 shrink-0">
+              <AvatarImage src={localImageUrl} />
+              <AvatarFallback></AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col gap-1">
+              <CardTitle className="w-full text-[28px] font-bold">{localName}</CardTitle>
+              <CardDescription className="text-sosoeat-gray-600 flex flex-col text-sm">
+                {joinedAt && (
+                  <span className="flex items-center gap-1 py-3">
+                    <Calendar className={cn('size-3')} /> {joinedAt} 가입
+                  </span>
+                )}
+                {localEmail && (
+                  <span className="flex items-center gap-1">
+                    <Mail className={cn('size-3')} /> {localEmail}
+                  </span>
+                )}
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
+      <div className="absolute top-4 right-0 p-5">
+        <EditProfileModal
+          open={modalOpen}
+          onOpenChange={setModalOpen}
+          initialEmail={localEmail}
+          initialName={localName}
+          initialImageUrl={localImageUrl}
+          onSubmit={handleProfileUpdate}
+        />
+      </div>
+    </div>
   );
 }

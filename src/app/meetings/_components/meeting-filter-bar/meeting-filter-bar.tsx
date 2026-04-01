@@ -21,18 +21,51 @@ import { MeetingFilterBarButton } from './_components/meeting-filter-bar-button'
 import { options } from './repositories/options';
 import type { MeetingFilterBarProps } from './meeting-filter-bar.types';
 
+type SortOption = (typeof options)[number];
+
 export const MeetingFilterBar = ({
   onTypeFilterChange = () => {},
   regionCommitted,
-  date,
+  dateStart,
+  dateEnd,
   className,
   typeFilter,
-  sort: _sort,
+  sortOrder: _sortOrder,
+  sortBy: _sortBy,
   onSortChange = () => {},
   onDateChange = () => {},
   onRegionChange = () => {},
 }: MeetingFilterBarProps) => {
-  const [checked, setChecked] = useState<string | null>(null);
+  // const [selectedSortLabel, setSelectedSortLabel] = useState<string | null>(null);
+  // const DEFAULT_SORT = { sortBy: 'participantCount', sortOrder: 'desc' } as const;
+
+  // const handleSortItemChecked = (option: SortOption) => {
+  //   const isSelected = selectedSortLabel === option.label;
+  //   if (isSelected) {
+  //     setSelectedSortLabel(null);
+  //     onSortChange(DEFAULT_SORT.sortBy, DEFAULT_SORT.sortOrder);
+  //     return;
+  //   }
+  //   setSelectedSortLabel(option.label);
+  //   onSortChange(option.sortBy, option.sortOrder);
+  // };
+  const [selectedSortLabel, setSelectedSortLabel] = useState<string | null>(() => {
+    const selectedOption = options.find(
+      (option) => option.sortBy === _sortBy && option.sortOrder === _sortOrder
+    );
+    return selectedOption ? selectedOption.label : null;
+  });
+
+  const handleSortItemChecked = (option: SortOption) => {
+    const isSelected = selectedSortLabel === option.label;
+    if (isSelected) {
+      setSelectedSortLabel(null);
+      onSortChange('participantCount', 'desc');
+      return;
+    }
+    setSelectedSortLabel(option.label);
+    onSortChange(option.sortBy, option.sortOrder);
+  };
   return (
     <div
       className={cn(
@@ -66,8 +99,9 @@ export const MeetingFilterBar = ({
       {/* Frame 2610402 — h 32 필터 행 */}
       <div className="flex h-8 w-full items-center justify-start gap-2 sm:justify-end md:w-auto">
         <DetailDatePicker
-          value={date}
-          onChange={onDateChange}
+          valueStart={dateStart}
+          valueEnd={dateEnd}
+          onDateChange={onDateChange}
           className={cn(meetingFilterPillTriggerClass, 'min-w-24')}
         />
         <RegionSelectModal
@@ -92,8 +126,8 @@ export const MeetingFilterBar = ({
         />
         {
           <DropdownMenu>
-            <DropdownMenuTrigger className={cn(meetingFilterPillTriggerClass, 'min-w-24')}>
-              <span>{checked ? checked : '정렬'}</span>
+            <DropdownMenuTrigger className={cn(meetingFilterPillTriggerClass, 'min-w-[45px]')}>
+              <span>{selectedSortLabel ?? '정렬'}</span>
               <ChevronDown className="size-4 shrink-0" aria-hidden />
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -102,47 +136,32 @@ export const MeetingFilterBar = ({
                 'shadow-[0_4px_16px_rgba(0,0,0,0.04)]'
               )}
             >
-              {options.map(
-                (option: {
-                  label: string;
-                  sortBy: 'participantCount' | 'dateTime' | 'registrationEnd';
-                  sortOrder: 'asc' | 'desc';
-                }) => {
-                  const isSelected = checked === option.label;
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={option.label}
-                      checked={isSelected}
-                      onCheckedChange={() => {
-                        setChecked(option.label);
-                        if (checked === option.label) {
-                          setChecked(null);
-                        } else {
-                          setChecked(option.label);
-                        }
-                        onSortChange(option.sortBy, option.sortOrder);
-                      }}
+              {options.map((option) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={option.label}
+                    checked={selectedSortLabel === option.label}
+                    onCheckedChange={() => handleSortItemChecked(option)}
+                    className={cn(
+                      'relative flex h-10 min-h-10 w-full flex-none cursor-pointer items-center gap-[6px] rounded-none border-0 py-0 pr-3 pl-[11px] text-sm leading-5 font-medium text-[#333333] outline-none select-none',
+                      'focus:text-[#333333] data-[highlighted]:text-[#333333]',
+                      selectedSortLabel === option.label
+                        ? 'bg-[#E8F3FF] focus:bg-[#E8F3FF] data-[highlighted]:bg-[#E8F3FF]'
+                        : 'bg-white focus:bg-white data-[highlighted]:bg-white',
+                      '[&_[data-slot=dropdown-menu-checkbox-item-indicator]]:hidden'
+                    )}
+                  >
+                    <span
                       className={cn(
-                        'relative flex h-10 min-h-10 w-full flex-none cursor-pointer items-center gap-[6px] rounded-none border-0 py-0 pr-3 pl-[11px] text-sm leading-5 font-medium text-[#333333] outline-none select-none',
-                        'focus:text-[#333333] data-[highlighted]:text-[#333333]',
-                        isSelected
-                          ? 'bg-[#E8F3FF] focus:bg-[#E8F3FF] data-[highlighted]:bg-[#E8F3FF]'
-                          : 'bg-white focus:bg-white data-[highlighted]:bg-white',
-                        '[&_[data-slot=dropdown-menu-checkbox-item-indicator]]:hidden'
+                        'size-[6px] shrink-0 rounded-full',
+                        selectedSortLabel === option.label ? 'bg-[#3182F6]' : 'bg-[#D9D9D9]'
                       )}
-                    >
-                      <span
-                        className={cn(
-                          'size-[6px] shrink-0 rounded-full',
-                          isSelected ? 'bg-[#3182F6]' : 'bg-[#D9D9D9]'
-                        )}
-                        aria-hidden
-                      />
-                      <span>{option.label}</span>
-                    </DropdownMenuCheckboxItem>
-                  );
-                }
-              )}
+                      aria-hidden
+                    />
+                    <span>{option.label}</span>
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
             </DropdownMenuContent>
           </DropdownMenu>
         }

@@ -20,6 +20,7 @@ export function CommentInput({
   submitLabel = '댓글 전송',
   currentUserName = '사용자',
   currentUserImageUrl,
+  showAvatar = true,
   submitOnEnter = true,
   className,
 }: CommentInputProps) {
@@ -48,12 +49,14 @@ export function CommentInput({
 
   return (
     <div className={cn('flex items-center gap-3 sm:gap-4', className)}>
-      <Avatar size="default" className="h-[54px] w-[54px] shrink-0">
-        <AvatarImage src={currentUserImageUrl} alt={currentUserName} />
-        <AvatarFallback className="text-sm font-semibold">
-          {currentUserName.slice(0, 1)}
-        </AvatarFallback>
-      </Avatar>
+      {showAvatar ? (
+        <Avatar size="default" className="h-[54px] w-[54px] shrink-0">
+          <AvatarImage src={currentUserImageUrl} alt={currentUserName} />
+          <AvatarFallback className="text-sm font-semibold">
+            {currentUserName.slice(0, 1)}
+          </AvatarFallback>
+        </Avatar>
+      ) : null}
 
       <div className="bg-sosoeat-gray-300 flex min-h-[46px] min-w-0 flex-1 items-end gap-3 rounded-[24px] py-2 pr-[14px] pl-5 sm:pr-[14px] sm:pl-6">
         <Textarea
@@ -88,7 +91,7 @@ export function CommentInput({
           onClick={handleSubmit}
           className="text-sosoeat-gray-700 hover:text-sosoeat-gray-800 disabled:text-sosoeat-gray-500 mb-0.5 size-9 shrink-0 self-end rounded-full bg-transparent p-0 shadow-none transition-[transform,color,background-color,box-shadow] duration-150 ease-out hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-[0_4px_12px_rgba(30,30,30,0.08)] active:translate-y-0 active:scale-95 active:bg-white/85 disabled:rounded-none disabled:bg-transparent disabled:shadow-none"
         >
-          <Send className="mt-0.5 size-6 fill-current" />
+          <Send className="mt-0.5 size-5 fill-current" />
         </Button>
       </div>
     </div>

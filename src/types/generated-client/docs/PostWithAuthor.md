@@ -2,20 +2,20 @@
 
 ## Properties
 
-| Name        | Type                                                    |
-| ----------- | ------------------------------------------------------- |
-| `id`        | number                                                  |
-| `teamId`    | string                                                  |
-| `title`     | string                                                  |
-| `content`   | string                                                  |
-| `image`     | string                                                  |
-| `authorId`  | number                                                  |
-| `viewCount` | number                                                  |
-| `likeCount` | number                                                  |
-| `createdAt` | Date                                                    |
-| `updatedAt` | Date                                                    |
-| `author`    | [Author](Author.md)                                     |
-| `count`     | [PostWithAuthorAllOfCount](PostWithAuthorAllOfCount.md) |
+| Name        | Type                                                                  |
+| ----------- | --------------------------------------------------------------------- |
+| `id`        | number                                                                |
+| `teamId`    | string                                                                |
+| `title`     | string                                                                |
+| `content`   | string                                                                |
+| `image`     | string                                                                |
+| `authorId`  | number                                                                |
+| `viewCount` | number                                                                |
+| `likeCount` | number                                                                |
+| `createdAt` | Date                                                                  |
+| `updatedAt` | Date                                                                  |
+| `author`    | [Author](Author.md)                                                   |
+| `count`     | [UserPostsResponseDataInnerCount](UserPostsResponseDataInnerCount.md) |
 
 ## Example
 

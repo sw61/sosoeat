@@ -4,30 +4,22 @@ import { cn } from '@/lib/utils';
 
 import type { MeetingSearchBannerProps } from './meeting-search-banner.type';
 
-// mobile-first (no arbitrary px): base layout first, scale with sm/md/lg.
 const bannerShellClass =
-  'relative w-full max-w-6xl overflow-hidden rounded-none mt-11 h-48 sm:mt-24 sm:h-56 sm:rounded-3xl lg:h-60';
+  'relative h-48 w-full overflow-hidden rounded-xlsm:h-56 md:h-[244px] md:max-w-[1140px] md:rounded-2xl';
 
 const headlineClass =
-  'font-sans text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl';
+  'font-pretendard-local text-3xl leading-[1.2] font-extrabold tracking-[-0.03em] text-white sm:text-4xl md:text-[46px] md:leading-[55px] md:tracking-[-1.38px]';
 
 const subtitleWrapClass =
-  'mt-4 hidden max-w-md text-base font-normal leading-7 text-white/80 md:block';
+  'mt-2 hidden max-w-[273px] text-base leading-7 font-normal text-white/80 md:block';
 
-export default function MeetingSearchBanner({
-  imageUrl,
-  alt,
-  titleContent,
-  subtitleContent,
-  subtitle,
-  className,
-}: MeetingSearchBannerProps) {
+export default function MeetingSearchBanner({ className }: MeetingSearchBannerProps) {
   return (
     <div className={cn('flex w-full items-start justify-center', className)}>
       <div className={bannerShellClass}>
         <Image
-          src={imageUrl}
-          alt={alt}
+          src={'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80'}
+          alt={'모임 검색 배너 이미지'}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 1140px"
@@ -37,21 +29,25 @@ export default function MeetingSearchBanner({
           className="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,0,0,0.55),rgba(0,0,0,0.55))]"
           aria-hidden
         />
-        <div className="absolute inset-0 z-10 flex flex-col justify-start p-6 sm:p-10">
+        <div className="absolute inset-0 z-10 flex flex-col justify-start px-6 pt-8 sm:px-10 sm:pt-10 md:px-26 md:pt-9.75">
           <h2 className={headlineClass}>
-            {titleContent} <span className="text-sosoeat-orange-500">{subtitleContent}</span>
+            <span>{'함께하면'} </span>
+            <span className="text-sosoeat-orange-500">
+              <br />
+              {'더 맛있어요'}
+            </span>
           </h2>
 
-          {subtitle != null ? (
+          {
             <div
               className={subtitleWrapClass}
               style={{
                 fontFamily: "'Noto Sans KR', var(--font-pretendard-local), sans-serif",
               }}
             >
-              {subtitle}
+              {'가고 싶었던 맛집, 혼자 가기 아쉬웠죠? 모여요에서 같이 먹을 사람을 찾아보세요.'}
             </div>
-          ) : null}
+          }
         </div>
       </div>
     </div>

@@ -37,6 +37,36 @@ export interface CategoryStatisticsItem {
    * @memberof CategoryStatisticsItem
    */
   totalReviews: number;
+  /**
+   *
+   * @type {number}
+   * @memberof CategoryStatisticsItem
+   */
+  oneStar: number;
+  /**
+   *
+   * @type {number}
+   * @memberof CategoryStatisticsItem
+   */
+  twoStars: number;
+  /**
+   *
+   * @type {number}
+   * @memberof CategoryStatisticsItem
+   */
+  threeStars: number;
+  /**
+   *
+   * @type {number}
+   * @memberof CategoryStatisticsItem
+   */
+  fourStars: number;
+  /**
+   *
+   * @type {number}
+   * @memberof CategoryStatisticsItem
+   */
+  fiveStars: number;
 }
 
 /**
@@ -46,6 +76,11 @@ export function instanceOfCategoryStatisticsItem(value: object): value is Catego
   if (!('type' in value) || value['type'] === undefined) return false;
   if (!('averageScore' in value) || value['averageScore'] === undefined) return false;
   if (!('totalReviews' in value) || value['totalReviews'] === undefined) return false;
+  if (!('oneStar' in value) || value['oneStar'] === undefined) return false;
+  if (!('twoStars' in value) || value['twoStars'] === undefined) return false;
+  if (!('threeStars' in value) || value['threeStars'] === undefined) return false;
+  if (!('fourStars' in value) || value['fourStars'] === undefined) return false;
+  if (!('fiveStars' in value) || value['fiveStars'] === undefined) return false;
   return true;
 }
 
@@ -64,6 +99,11 @@ export function CategoryStatisticsItemFromJSONTyped(
     type: json['type'],
     averageScore: json['averageScore'],
     totalReviews: json['totalReviews'],
+    oneStar: json['oneStar'],
+    twoStars: json['twoStars'],
+    threeStars: json['threeStars'],
+    fourStars: json['fourStars'],
+    fiveStars: json['fiveStars'],
   };
 }
 
@@ -83,5 +123,10 @@ export function CategoryStatisticsItemToJSONTyped(
     type: value['type'],
     averageScore: value['averageScore'],
     totalReviews: value['totalReviews'],
+    oneStar: value['oneStar'],
+    twoStars: value['twoStars'],
+    threeStars: value['threeStars'],
+    fourStars: value['fourStars'],
+    fiveStars: value['fiveStars'],
   };
 }

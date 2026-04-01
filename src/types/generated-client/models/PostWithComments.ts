@@ -20,13 +20,13 @@ import {
   CommentToJSON,
   CommentToJSONTyped,
 } from './Comment';
-import type { PostWithAuthorAllOfCount } from './PostWithAuthorAllOfCount';
+import type { UserPostsResponseDataInnerCount } from './UserPostsResponseDataInnerCount';
 import {
-  PostWithAuthorAllOfCountFromJSON,
-  PostWithAuthorAllOfCountFromJSONTyped,
-  PostWithAuthorAllOfCountToJSON,
-  PostWithAuthorAllOfCountToJSONTyped,
-} from './PostWithAuthorAllOfCount';
+  UserPostsResponseDataInnerCountFromJSON,
+  UserPostsResponseDataInnerCountFromJSONTyped,
+  UserPostsResponseDataInnerCountToJSON,
+  UserPostsResponseDataInnerCountToJSONTyped,
+} from './UserPostsResponseDataInnerCount';
 import type { PostWithCommentsAllOfAuthor } from './PostWithCommentsAllOfAuthor';
 import {
   PostWithCommentsAllOfAuthorFromJSON,
@@ -109,10 +109,10 @@ export interface PostWithComments {
   author: PostWithCommentsAllOfAuthor;
   /**
    *
-   * @type {PostWithAuthorAllOfCount}
+   * @type {UserPostsResponseDataInnerCount}
    * @memberof PostWithComments
    */
-  count: PostWithAuthorAllOfCount;
+  count: UserPostsResponseDataInnerCount;
   /**
    *
    * @type {Array<Comment>}
@@ -171,7 +171,7 @@ export function PostWithCommentsFromJSONTyped(
     createdAt: new Date(json['createdAt']),
     updatedAt: new Date(json['updatedAt']),
     author: PostWithCommentsAllOfAuthorFromJSON(json['author']),
-    count: PostWithAuthorAllOfCountFromJSON(json['_count']),
+    count: UserPostsResponseDataInnerCountFromJSON(json['_count']),
     comments: (json['comments'] as Array<any>).map(CommentFromJSON),
     isLiked: json['isLiked'],
   };
@@ -201,7 +201,7 @@ export function PostWithCommentsToJSONTyped(
     createdAt: value['createdAt'].toISOString(),
     updatedAt: value['updatedAt'].toISOString(),
     author: PostWithCommentsAllOfAuthorToJSON(value['author']),
-    _count: PostWithAuthorAllOfCountToJSON(value['count']),
+    _count: UserPostsResponseDataInnerCountToJSON(value['count']),
     comments: (value['comments'] as Array<any>).map(CommentToJSON),
     isLiked: value['isLiked'],
   };

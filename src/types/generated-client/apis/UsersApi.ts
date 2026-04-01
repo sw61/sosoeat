@@ -19,6 +19,7 @@ import type {
   UpdateUserRequest,
   User,
   UserMeetingsResponse,
+  UserPostsResponse,
   UserReviewsResponse,
 } from '../models/index';
 import {
@@ -32,6 +33,8 @@ import {
   UserToJSON,
   UserMeetingsResponseFromJSON,
   UserMeetingsResponseToJSON,
+  UserPostsResponseFromJSON,
+  UserPostsResponseToJSON,
   UserReviewsResponseFromJSON,
   UserReviewsResponseToJSON,
 } from '../models/index';
@@ -54,6 +57,14 @@ export interface TeamIdUsersMeMeetingsGetRequest {
 export interface TeamIdUsersMePatchRequest {
   teamId: string;
   updateUserRequest?: UpdateUserRequest;
+}
+
+export interface TeamIdUsersMePostsGetRequest {
+  teamId: string;
+  sortBy?: TeamIdUsersMePostsGetSortByEnum;
+  sortOrder?: TeamIdUsersMePostsGetSortOrderEnum;
+  size?: number;
+  cursor?: string;
 }
 
 export interface TeamIdUsersMeReviewsGetRequest {
@@ -305,6 +316,90 @@ export class UsersApi extends runtime.BaseAPI {
   }
 
   /**
+   * Creates request options for teamIdUsersMePostsGet without sending the request
+   */
+  async teamIdUsersMePostsGetRequestOpts(
+    requestParameters: TeamIdUsersMePostsGetRequest
+  ): Promise<runtime.RequestOpts> {
+    if (requestParameters['teamId'] == null) {
+      throw new runtime.RequiredError(
+        'teamId',
+        'Required parameter "teamId" was null or undefined when calling teamIdUsersMePostsGet().'
+      );
+    }
+
+    const queryParameters: any = {};
+
+    if (requestParameters['sortBy'] != null) {
+      queryParameters['sortBy'] = requestParameters['sortBy'];
+    }
+
+    if (requestParameters['sortOrder'] != null) {
+      queryParameters['sortOrder'] = requestParameters['sortOrder'];
+    }
+
+    if (requestParameters['size'] != null) {
+      queryParameters['size'] = requestParameters['size'];
+    }
+
+    if (requestParameters['cursor'] != null) {
+      queryParameters['cursor'] = requestParameters['cursor'];
+    }
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token('Bearer', []);
+
+      if (tokenString) {
+        headerParameters['Authorization'] = `Bearer ${tokenString}`;
+      }
+    }
+
+    let urlPath = `/{teamId}/users/me/posts`;
+    urlPath = urlPath.replace(
+      `{${'teamId'}}`,
+      encodeURIComponent(String(requestParameters['teamId']))
+    );
+
+    return {
+      path: urlPath,
+      method: 'GET',
+      headers: headerParameters,
+      query: queryParameters,
+    };
+  }
+
+  /**
+   * 현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다.
+   * 내가 작성한 게시글 목록 조회
+   */
+  async teamIdUsersMePostsGetRaw(
+    requestParameters: TeamIdUsersMePostsGetRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<UserPostsResponse>> {
+    const requestOptions = await this.teamIdUsersMePostsGetRequestOpts(requestParameters);
+    const response = await this.request(requestOptions, initOverrides);
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      UserPostsResponseFromJSON(jsonValue)
+    );
+  }
+
+  /**
+   * 현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다.
+   * 내가 작성한 게시글 목록 조회
+   */
+  async teamIdUsersMePostsGet(
+    requestParameters: TeamIdUsersMePostsGetRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<UserPostsResponse> {
+    const response = await this.teamIdUsersMePostsGetRaw(requestParameters, initOverrides);
+    return await response.value();
+  }
+
+  /**
    * Creates request options for teamIdUsersMeReviewsGet without sending the request
    */
   async teamIdUsersMeReviewsGetRequestOpts(
@@ -512,6 +607,25 @@ export const TeamIdUsersMeMeetingsGetSortOrderEnum = {
 } as const;
 export type TeamIdUsersMeMeetingsGetSortOrderEnum =
   (typeof TeamIdUsersMeMeetingsGetSortOrderEnum)[keyof typeof TeamIdUsersMeMeetingsGetSortOrderEnum];
+/**
+ * @export
+ */
+export const TeamIdUsersMePostsGetSortByEnum = {
+  CreatedAt: 'createdAt',
+  ViewCount: 'viewCount',
+  LikeCount: 'likeCount',
+} as const;
+export type TeamIdUsersMePostsGetSortByEnum =
+  (typeof TeamIdUsersMePostsGetSortByEnum)[keyof typeof TeamIdUsersMePostsGetSortByEnum];
+/**
+ * @export
+ */
+export const TeamIdUsersMePostsGetSortOrderEnum = {
+  Asc: 'asc',
+  Desc: 'desc',
+} as const;
+export type TeamIdUsersMePostsGetSortOrderEnum =
+  (typeof TeamIdUsersMePostsGetSortOrderEnum)[keyof typeof TeamIdUsersMePostsGetSortOrderEnum];
 /**
  * @export
  */

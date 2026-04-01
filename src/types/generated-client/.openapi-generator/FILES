@@ -52,7 +52,6 @@ docs/Post.md
 docs/PostLike.md
 docs/PostList.md
 docs/PostWithAuthor.md
-docs/PostWithAuthorAllOfCount.md
 docs/PostWithComments.md
 docs/PostWithCommentsAllOfAuthor.md
 docs/PostsApi.md
@@ -78,6 +77,10 @@ docs/UpdateUserRequest.md
 docs/User.md
 docs/UserMeeting.md
 docs/UserMeetingsResponse.md
+docs/UserPostsResponse.md
+docs/UserPostsResponseDataInner.md
+docs/UserPostsResponseDataInnerAuthor.md
+docs/UserPostsResponseDataInnerCount.md
 docs/UserReview.md
 docs/UserReviewMeeting.md
 docs/UserReviewsResponse.md
@@ -119,7 +122,6 @@ models/Post.ts
 models/PostLike.ts
 models/PostList.ts
 models/PostWithAuthor.ts
-models/PostWithAuthorAllOfCount.ts
 models/PostWithComments.ts
 models/PostWithCommentsAllOfAuthor.ts
 models/PresignedUrlRequest.ts
@@ -143,6 +145,10 @@ models/UpdateUserRequest.ts
 models/User.ts
 models/UserMeeting.ts
 models/UserMeetingsResponse.ts
+models/UserPostsResponse.ts
+models/UserPostsResponseDataInner.ts
+models/UserPostsResponseDataInnerAuthor.ts
+models/UserPostsResponseDataInnerCount.ts
 models/UserReview.ts
 models/UserReviewMeeting.ts
 models/UserReviewsResponse.ts

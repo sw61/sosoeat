@@ -154,6 +154,18 @@ export interface MeetingWithHost {
    * @memberof MeetingWithHost
    */
   isFavorited?: boolean;
+  /**
+   * 로그인한 사용자의 참여 여부 (비로그인 시 미포함)
+   * @type {boolean}
+   * @memberof MeetingWithHost
+   */
+  isJoined?: boolean;
+  /**
+   * 모임 완료 여부 (모임 일시가 현재보다 과거이면 true)
+   * @type {boolean}
+   * @memberof MeetingWithHost
+   */
+  isCompleted: boolean;
 }
 
 /**
@@ -181,6 +193,7 @@ export function instanceOfMeetingWithHost(value: object): value is MeetingWithHo
   if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
   if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
   if (!('host' in value) || value['host'] === undefined) return false;
+  if (!('isCompleted' in value) || value['isCompleted'] === undefined) return false;
   return true;
 }
 
@@ -218,6 +231,8 @@ export function MeetingWithHostFromJSONTyped(
     updatedAt: new Date(json['updatedAt']),
     host: HostFromJSON(json['host']),
     isFavorited: json['isFavorited'] == null ? undefined : json['isFavorited'],
+    isJoined: json['isJoined'] == null ? undefined : json['isJoined'],
+    isCompleted: json['isCompleted'],
   };
 }
 
@@ -256,5 +271,7 @@ export function MeetingWithHostToJSONTyped(
     updatedAt: value['updatedAt'].toISOString(),
     host: HostToJSON(value['host']),
     isFavorited: value['isFavorited'],
+    isJoined: value['isJoined'],
+    isCompleted: value['isCompleted'],
   };
 }

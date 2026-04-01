@@ -18,11 +18,11 @@ All URIs are relative to *https://together-dallaem-api.vercel.app*
 
 ## teamIdPostsGet
 
-> PostList teamIdPostsGet(teamId, type, keyword, sortBy, sortOrder, cursor, size)
+> PostList teamIdPostsGet(teamId, type, keyword, sortBy, sortOrder, cursor, offset, limit, size)
 
 게시글 목록
 
-게시글 목록을 조회합니다. **조회 타입:** - type&#x3D;all: 전체 게시글 (기본값, 최신순) - type&#x3D;best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순) **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순 **페이지네이션:** - offset: 건너뛸 항목 수 (기본 0) - limit: 조회할 최대 항목 수 (기본 10, 최대 100)
+게시글 목록을 조회합니다. **조회 타입:** - type&#x3D;all: 전체 게시글 (기본값, 최신순) - type&#x3D;best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순) **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순 **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
 
 ### Example
 
@@ -49,9 +49,13 @@ async function example() {
     sortBy: sortBy_example,
     // 'asc' | 'desc' | 정렬 순서 (optional)
     sortOrder: sortOrder_example,
-    // string | 다음 페이지를 위한 커서 (optional)
+    // string | 다음 페이지를 위한 커서 (offset과 함께 사용 불가) (optional)
     cursor: eyJpZCI6MTB9,
-    // number | 페이지 크기 (1-100) (optional)
+    // number | 건너뛸 항목 수 (cursor와 함께 사용 불가) (optional)
+    offset: 0,
+    // number | 조회할 최대 항목 수 (offset 사용 시, 기본 10, 최대 100) (optional)
+    limit: 10,
+    // number | 페이지 크기 - cursor 사용 시 (1-100) (optional)
     size: 10,
   } satisfies TeamIdPostsGetRequest;
 
@@ -69,15 +73,17 @@ example().catch(console.error);
 
 ### Parameters
 
-| Name          | Type                                                  | Description                           | Notes                                                                                                |
-| ------------- | ----------------------------------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| **teamId**    | `string`                                              |                                       | [Defaults to `undefined`]                                                                            |
-| **type**      | `all`, `best`                                         | 게시글 타입 (all: 전체, best: 베스트) | [Optional] [Defaults to `&#39;all&#39;`] [Enum: all, best]                                           |
-| **keyword**   | `string`                                              | 제목/내용 검색                        | [Optional] [Defaults to `undefined`]                                                                 |
-| **sortBy**    | `createdAt`, `viewCount`, `likeCount`, `commentCount` | 정렬 기준                             | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, viewCount, likeCount, commentCount] |
-| **sortOrder** | `asc`, `desc`                                         | 정렬 순서                             | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                                          |
-| **cursor**    | `string`                                              | 다음 페이지를 위한 커서               | [Optional] [Defaults to `undefined`]                                                                 |
-| **size**      | `number`                                              | 페이지 크기 (1-100)                   | [Optional] [Defaults to `10`]                                                                        |
+| Name          | Type                                                  | Description                                             | Notes                                                                                                |
+| ------------- | ----------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **teamId**    | `string`                                              |                                                         | [Defaults to `undefined`]                                                                            |
+| **type**      | `all`, `best`                                         | 게시글 타입 (all: 전체, best: 베스트)                   | [Optional] [Defaults to `&#39;all&#39;`] [Enum: all, best]                                           |
+| **keyword**   | `string`                                              | 제목/내용 검색                                          | [Optional] [Defaults to `undefined`]                                                                 |
+| **sortBy**    | `createdAt`, `viewCount`, `likeCount`, `commentCount` | 정렬 기준                                               | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, viewCount, likeCount, commentCount] |
+| **sortOrder** | `asc`, `desc`                                         | 정렬 순서                                               | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                                          |
+| **cursor**    | `string`                                              | 다음 페이지를 위한 커서 (offset과 함께 사용 불가)       | [Optional] [Defaults to `undefined`]                                                                 |
+| **offset**    | `number`                                              | 건너뛸 항목 수 (cursor와 함께 사용 불가)                | [Optional] [Defaults to `undefined`]                                                                 |
+| **limit**     | `number`                                              | 조회할 최대 항목 수 (offset 사용 시, 기본 10, 최대 100) | [Optional] [Defaults to `undefined`]                                                                 |
+| **size**      | `number`                                              | 페이지 크기 - cursor 사용 시 (1-100)                    | [Optional] [Defaults to `10`]                                                                        |
 
 ### Return type
 

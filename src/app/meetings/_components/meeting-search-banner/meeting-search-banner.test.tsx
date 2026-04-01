@@ -10,6 +10,12 @@ jest.mock('next/image', () => {
 });
 
 describe('MeetingDetailBanner', () => {
+  const hardcodedImageUrl =
+    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80';
+  const hardcodedAlt = '모임 검색 배너 이미지';
+  const hardcodedSubtitle =
+    '가고 싶었던 맛집, 혼자 가기 아쉬웠죠? 모여요에서 같이 먹을 사람을 찾아보세요.';
+
   const defaultProps = {
     imageUrl: 'https://example.com/banner.jpg',
     alt: '모임 배너',
@@ -21,8 +27,8 @@ describe('MeetingDetailBanner', () => {
     render(<MeetingSearchBanner {...defaultProps} />);
 
     const img = screen.getByTestId('banner-image');
-    expect(img).toHaveAttribute('src', defaultProps.imageUrl);
-    expect(img).toHaveAttribute('alt', defaultProps.alt);
+    expect(img).toHaveAttribute('src', hardcodedImageUrl);
+    expect(img).toHaveAttribute('alt', hardcodedAlt);
   });
 
   it('titleContent가 화면에 표시된다', () => {
@@ -31,16 +37,16 @@ describe('MeetingDetailBanner', () => {
     expect(screen.getByRole('heading', { name: '함께하면 더 맛있어요' })).toBeInTheDocument();
   });
 
-  it('subtitle이 있으면 부제 문구가 렌더링된다', () => {
+  it('subtitle prop과 무관하게 하드코딩된 부제 문구가 렌더링된다', () => {
     render(<MeetingSearchBanner {...defaultProps} subtitle={<p>부제목 문구입니다</p>} />);
 
-    expect(screen.getByText('부제목 문구입니다')).toBeInTheDocument();
+    expect(screen.getByText(hardcodedSubtitle)).toBeInTheDocument();
   });
 
-  it('subtitle을 넘기지 않으면 paragraph 역할이 없다', () => {
+  it('subtitle을 넘기지 않아도 하드코딩된 부제 문구가 렌더링된다', () => {
     render(<MeetingSearchBanner {...defaultProps} />);
 
-    expect(screen.queryByRole('paragraph')).not.toBeInTheDocument();
+    expect(screen.getByText(hardcodedSubtitle)).toBeInTheDocument();
   });
 
   it('className이 루트 래퍼에 적용된다', () => {

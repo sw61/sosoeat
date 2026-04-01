@@ -48,8 +48,10 @@ export interface TeamIdMeetingsMeetingIdReviewsGetRequest {
   userId?: number;
   type?: string;
   region?: string;
-  date?: Date;
-  registrationEnd?: Date;
+  dateStart?: Date;
+  dateEnd?: Date;
+  registrationEndStart?: Date;
+  registrationEndEnd?: Date;
   sortBy?: TeamIdMeetingsMeetingIdReviewsGetSortByEnum;
   sortOrder?: TeamIdMeetingsMeetingIdReviewsGetSortOrderEnum;
   cursor?: string;
@@ -72,8 +74,10 @@ export interface TeamIdReviewsGetRequest {
   userId?: number;
   type?: string;
   region?: string;
-  date?: Date;
-  registrationEnd?: Date;
+  dateStart?: Date;
+  dateEnd?: Date;
+  registrationEndStart?: Date;
+  registrationEndEnd?: Date;
   sortBy?: TeamIdReviewsGetSortByEnum;
   sortOrder?: TeamIdReviewsGetSortOrderEnum;
   cursor?: string;
@@ -133,13 +137,23 @@ export class ReviewsApi extends runtime.BaseAPI {
       queryParameters['region'] = requestParameters['region'];
     }
 
-    if (requestParameters['date'] != null) {
-      queryParameters['date'] = (requestParameters['date'] as any).toISOString();
+    if (requestParameters['dateStart'] != null) {
+      queryParameters['dateStart'] = (requestParameters['dateStart'] as any).toISOString();
     }
 
-    if (requestParameters['registrationEnd'] != null) {
-      queryParameters['registrationEnd'] = (
-        requestParameters['registrationEnd'] as any
+    if (requestParameters['dateEnd'] != null) {
+      queryParameters['dateEnd'] = (requestParameters['dateEnd'] as any).toISOString();
+    }
+
+    if (requestParameters['registrationEndStart'] != null) {
+      queryParameters['registrationEndStart'] = (
+        requestParameters['registrationEndStart'] as any
+      ).toISOString();
+    }
+
+    if (requestParameters['registrationEndEnd'] != null) {
+      queryParameters['registrationEndEnd'] = (
+        requestParameters['registrationEndEnd'] as any
       ).toISOString();
     }
 
@@ -407,13 +421,23 @@ export class ReviewsApi extends runtime.BaseAPI {
       queryParameters['region'] = requestParameters['region'];
     }
 
-    if (requestParameters['date'] != null) {
-      queryParameters['date'] = (requestParameters['date'] as any).toISOString();
+    if (requestParameters['dateStart'] != null) {
+      queryParameters['dateStart'] = (requestParameters['dateStart'] as any).toISOString();
     }
 
-    if (requestParameters['registrationEnd'] != null) {
-      queryParameters['registrationEnd'] = (
-        requestParameters['registrationEnd'] as any
+    if (requestParameters['dateEnd'] != null) {
+      queryParameters['dateEnd'] = (requestParameters['dateEnd'] as any).toISOString();
+    }
+
+    if (requestParameters['registrationEndStart'] != null) {
+      queryParameters['registrationEndStart'] = (
+        requestParameters['registrationEndStart'] as any
+      ).toISOString();
+    }
+
+    if (requestParameters['registrationEndEnd'] != null) {
+      queryParameters['registrationEndEnd'] = (
+        requestParameters['registrationEndEnd'] as any
       ).toISOString();
     }
 

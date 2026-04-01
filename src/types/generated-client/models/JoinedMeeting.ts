@@ -155,6 +155,18 @@ export interface JoinedMeeting {
    */
   isFavorited?: boolean;
   /**
+   * 로그인한 사용자의 참여 여부 (비로그인 시 미포함)
+   * @type {boolean}
+   * @memberof JoinedMeeting
+   */
+  isJoined?: boolean;
+  /**
+   *
+   * @type {boolean}
+   * @memberof JoinedMeeting
+   */
+  isCompleted: boolean;
+  /**
    *
    * @type {Date}
    * @memberof JoinedMeeting
@@ -166,12 +178,6 @@ export interface JoinedMeeting {
    * @memberof JoinedMeeting
    */
   isReviewed: boolean;
-  /**
-   *
-   * @type {boolean}
-   * @memberof JoinedMeeting
-   */
-  isCompleted: boolean;
 }
 
 /**
@@ -199,9 +205,9 @@ export function instanceOfJoinedMeeting(value: object): value is JoinedMeeting {
   if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
   if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
   if (!('host' in value) || value['host'] === undefined) return false;
+  if (!('isCompleted' in value) || value['isCompleted'] === undefined) return false;
   if (!('joinedAt' in value) || value['joinedAt'] === undefined) return false;
   if (!('isReviewed' in value) || value['isReviewed'] === undefined) return false;
-  if (!('isCompleted' in value) || value['isCompleted'] === undefined) return false;
   return true;
 }
 
@@ -236,9 +242,10 @@ export function JoinedMeetingFromJSONTyped(json: any, ignoreDiscriminator: boole
     updatedAt: new Date(json['updatedAt']),
     host: HostFromJSON(json['host']),
     isFavorited: json['isFavorited'] == null ? undefined : json['isFavorited'],
+    isJoined: json['isJoined'] == null ? undefined : json['isJoined'],
+    isCompleted: json['isCompleted'],
     joinedAt: new Date(json['joinedAt']),
     isReviewed: json['isReviewed'],
-    isCompleted: json['isCompleted'],
   };
 }
 
@@ -277,8 +284,9 @@ export function JoinedMeetingToJSONTyped(
     updatedAt: value['updatedAt'].toISOString(),
     host: HostToJSON(value['host']),
     isFavorited: value['isFavorited'],
+    isJoined: value['isJoined'],
+    isCompleted: value['isCompleted'],
     joinedAt: value['joinedAt'].toISOString(),
     isReviewed: value['isReviewed'],
-    isCompleted: value['isCompleted'],
   };
 }

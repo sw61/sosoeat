@@ -3,6 +3,13 @@ import { render, screen } from '@testing-library/react';
 import { MainPageCard } from '@/components/common/main-page-card/main-page-card';
 import type { MeetingWithHost } from '@/types/generated-client';
 
+jest.mock('@/services/meetings/use-detail-router', () => ({
+  useDetailRouter: () => ({
+    handleCardClick: jest.fn(),
+    handleCardKeyDown: jest.fn(),
+  }),
+}));
+
 jest.mock('next/image', () => ({
   __esModule: true,
   default: ({
@@ -48,6 +55,7 @@ function createMockMeeting(overrides: Partial<MeetingWithHost> = {}): MeetingWit
     createdBy: 1,
     createdAt: now,
     updatedAt: now,
+    isCompleted: false,
     host: {
       id: 1,
       name: '김소소',

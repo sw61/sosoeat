@@ -50,7 +50,8 @@ export interface TeamIdMeetingsGetRequest {
   id?: number;
   type?: string;
   region?: string;
-  date?: Date;
+  dateStart?: Date;
+  dateEnd?: Date;
   createdBy?: number;
   sortBy?: TeamIdMeetingsGetSortByEnum;
   sortOrder?: TeamIdMeetingsGetSortOrderEnum;
@@ -151,8 +152,12 @@ export class MeetingsApi extends runtime.BaseAPI {
       queryParameters['region'] = requestParameters['region'];
     }
 
-    if (requestParameters['date'] != null) {
-      queryParameters['date'] = (requestParameters['date'] as any).toISOString();
+    if (requestParameters['dateStart'] != null) {
+      queryParameters['dateStart'] = (requestParameters['dateStart'] as any).toISOString();
+    }
+
+    if (requestParameters['dateEnd'] != null) {
+      queryParameters['dateEnd'] = (requestParameters['dateEnd'] as any).toISOString();
     }
 
     if (requestParameters['createdBy'] != null) {
@@ -201,7 +206,7 @@ export class MeetingsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 모임 목록을 조회합니다. 취소되지 않은 모임만 반환됩니다. 로그인 시 각 모임의 찜 여부(isFavorited)가 포함됩니다.
+   * 모임 목록을 조회합니다. 취소되지 않은 모임만 반환됩니다. 로그인 시 각 모임의 찜 여부(isFavorited)와 참여 여부(isJoined)가 포함됩니다.
    * 모임 목록
    */
   async teamIdMeetingsGetRaw(
@@ -215,7 +220,7 @@ export class MeetingsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 모임 목록을 조회합니다. 취소되지 않은 모임만 반환됩니다. 로그인 시 각 모임의 찜 여부(isFavorited)가 포함됩니다.
+   * 모임 목록을 조회합니다. 취소되지 않은 모임만 반환됩니다. 로그인 시 각 모임의 찜 여부(isFavorited)와 참여 여부(isJoined)가 포함됩니다.
    * 모임 목록
    */
   async teamIdMeetingsGet(
@@ -449,7 +454,7 @@ export class MeetingsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 특정 모임의 상세 정보를 조회합니다.
+   * 특정 모임의 상세 정보를 조회합니다. 로그인 시 찜 여부(isFavorited)와 참여 여부(isJoined)가 포함됩니다.
    * 모임 상세
    */
   async teamIdMeetingsMeetingIdGetRaw(
@@ -463,7 +468,7 @@ export class MeetingsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 특정 모임의 상세 정보를 조회합니다.
+   * 특정 모임의 상세 정보를 조회합니다. 로그인 시 찜 여부(isFavorited)와 참여 여부(isJoined)가 포함됩니다.
    * 모임 상세
    */
   async teamIdMeetingsMeetingIdGet(
@@ -1050,7 +1055,7 @@ export class MeetingsApi extends runtime.BaseAPI {
 export const TeamIdMeetingsGetSortByEnum = {
   DateTime: 'dateTime',
   RegistrationEnd: 'registrationEnd',
-  ParticipantCount: '',
+  ParticipantCount: 'participantCount',
 } as const;
 export type TeamIdMeetingsGetSortByEnum =
   (typeof TeamIdMeetingsGetSortByEnum)[keyof typeof TeamIdMeetingsGetSortByEnum];

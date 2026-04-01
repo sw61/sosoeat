@@ -7,6 +7,7 @@ All URIs are relative to *https://together-dallaem-api.vercel.app*
 | [**teamIdUsersMeGet**](UsersApi.md#teamidusersmeget)                 | **GET** /{teamId}/users/me          | 내 정보 조회                    |
 | [**teamIdUsersMeMeetingsGet**](UsersApi.md#teamidusersmemeetingsget) | **GET** /{teamId}/users/me/meetings | 내가 참여한/만든 모임 목록 조회 |
 | [**teamIdUsersMePatch**](UsersApi.md#teamidusersmepatch)             | **PATCH** /{teamId}/users/me        | 내 정보 수정                    |
+| [**teamIdUsersMePostsGet**](UsersApi.md#teamidusersmepostsget)       | **GET** /{teamId}/users/me/posts    | 내가 작성한 게시글 목록 조회    |
 | [**teamIdUsersMeReviewsGet**](UsersApi.md#teamidusersmereviewsget)   | **GET** /{teamId}/users/me/reviews  | 내가 작성한 리뷰 목록 조회      |
 | [**teamIdUsersUserIdGet**](UsersApi.md#teamidusersuseridget)         | **GET** /{teamId}/users/{userId}    | 유저 프로필 조회                |
 
@@ -235,6 +236,86 @@ example().catch(console.error);
 | Status code | Description                                 | Response headers |
 | ----------- | ------------------------------------------- | ---------------- |
 | **200**     | 수정 성공 - 업데이트된 사용자 정보 반환     | -                |
+| **401**     | 인증 필요 - 유효한 accessToken이 필요합니다 | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+## teamIdUsersMePostsGet
+
+> UserPostsResponse teamIdUsersMePostsGet(teamId, sortBy, sortOrder, size, cursor)
+
+내가 작성한 게시글 목록 조회
+
+현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다.
+
+### Example
+
+```ts
+import { Configuration, UsersApi } from '';
+import type { TeamIdUsersMePostsGetRequest } from '';
+
+async function example() {
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
+    // Configure HTTP bearer authorization: Bearer
+    accessToken: 'YOUR BEARER TOKEN',
+  });
+  const api = new UsersApi(config);
+
+  const body = {
+    // string
+    teamId: dallaem,
+    // 'createdAt' | 'viewCount' | 'likeCount' (optional)
+    sortBy: createdAt,
+    // 'asc' | 'desc' (optional)
+    sortOrder: desc,
+    // number (optional)
+    size: 10,
+    // string (optional)
+    cursor: eyJpZCI6MTB9,
+  } satisfies TeamIdUsersMePostsGetRequest;
+
+  try {
+    const data = await api.teamIdUsersMePostsGet(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+| Name          | Type                                  | Description | Notes                                                                                  |
+| ------------- | ------------------------------------- | ----------- | -------------------------------------------------------------------------------------- |
+| **teamId**    | `string`                              |             | [Defaults to `undefined`]                                                              |
+| **sortBy**    | `createdAt`, `viewCount`, `likeCount` |             | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, viewCount, likeCount] |
+| **sortOrder** | `asc`, `desc`                         |             | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                            |
+| **size**      | `number`                              |             | [Optional] [Defaults to `10`]                                                          |
+| **cursor**    | `string`                              |             | [Optional] [Defaults to `undefined`]                                                   |
+
+### Return type
+
+[**UserPostsResponse**](UserPostsResponse.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+### HTTP response details
+
+| Status code | Description                                 | Response headers |
+| ----------- | ------------------------------------------- | ---------------- |
+| **200**     | 조회 성공 - 게시글 목록과 페이지네이션 정보 | -                |
+| **400**     | 잘못된 요청 - 잘못된 커서                   | -                |
 | **401**     | 인증 필요 - 유효한 accessToken이 필요합니다 | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)

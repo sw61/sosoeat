@@ -8,7 +8,12 @@ const usageVariantClassName = {
   groupBuy: 'border-0 bg-sosoeat-blue-50 text-sosoeat-blue-700',
 } as const;
 
-export function UseStateBadge({ variant, className }: UseStateBadgeProps) {
+const STATUS_LABEL: Record<UseStateBadgeProps['status'], string> = {
+  upcoming: '이용예정',
+  completed: '이용완료',
+};
+
+export function UseStateBadge({ variant, status, className }: UseStateBadgeProps) {
   return (
     <Badge
       variant="outline"
@@ -18,7 +23,7 @@ export function UseStateBadge({ variant, className }: UseStateBadgeProps) {
         className
       )}
     >
-      이용 예정
+      {STATUS_LABEL[status]}
     </Badge>
   );
 }

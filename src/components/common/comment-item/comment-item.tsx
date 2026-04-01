@@ -92,6 +92,7 @@ export function CommentItem({
               submitLabel="댓글 수정"
               currentUserName={authorName}
               currentUserImageUrl={authorImageUrl}
+              showAvatar={false}
             />
             <div className="flex justify-end">
               <button

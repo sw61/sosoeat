@@ -2,22 +2,22 @@
 
 ## Properties
 
-| Name        | Type                                                          |
-| ----------- | ------------------------------------------------------------- |
-| `id`        | number                                                        |
-| `teamId`    | string                                                        |
-| `title`     | string                                                        |
-| `content`   | string                                                        |
-| `image`     | string                                                        |
-| `authorId`  | number                                                        |
-| `viewCount` | number                                                        |
-| `likeCount` | number                                                        |
-| `createdAt` | Date                                                          |
-| `updatedAt` | Date                                                          |
-| `author`    | [PostWithCommentsAllOfAuthor](PostWithCommentsAllOfAuthor.md) |
-| `count`     | [PostWithAuthorAllOfCount](PostWithAuthorAllOfCount.md)       |
-| `comments`  | [Array&lt;Comment&gt;](Comment.md)                            |
-| `isLiked`   | boolean                                                       |
+| Name        | Type                                                                  |
+| ----------- | --------------------------------------------------------------------- |
+| `id`        | number                                                                |
+| `teamId`    | string                                                                |
+| `title`     | string                                                                |
+| `content`   | string                                                                |
+| `image`     | string                                                                |
+| `authorId`  | number                                                                |
+| `viewCount` | number                                                                |
+| `likeCount` | number                                                                |
+| `createdAt` | Date                                                                  |
+| `updatedAt` | Date                                                                  |
+| `author`    | [PostWithCommentsAllOfAuthor](PostWithCommentsAllOfAuthor.md)         |
+| `count`     | [UserPostsResponseDataInnerCount](UserPostsResponseDataInnerCount.md) |
+| `comments`  | [Array&lt;Comment&gt;](Comment.md)                                    |
+| `isLiked`   | boolean                                                               |
 
 ## Example
 

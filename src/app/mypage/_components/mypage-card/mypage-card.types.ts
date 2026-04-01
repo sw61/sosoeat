@@ -12,5 +12,8 @@ export interface MyPageCardProps {
   imageAlt?: string;
   variant: 'groupBuy' | 'groupEat';
   confirmedAt?: Date | null;
+  isCompleted?: boolean;
+  isHost?: boolean;
+  isFavorited?: boolean;
   className?: string;
 }

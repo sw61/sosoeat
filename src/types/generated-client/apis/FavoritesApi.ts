@@ -41,7 +41,8 @@ export interface TeamIdFavoritesGetRequest {
   teamId: string;
   type?: string;
   region?: string;
-  date?: Date;
+  dateStart?: Date;
+  dateEnd?: Date;
   sortBy?: TeamIdFavoritesGetSortByEnum;
   sortOrder?: TeamIdFavoritesGetSortOrderEnum;
   cursor?: string;
@@ -151,8 +152,12 @@ export class FavoritesApi extends runtime.BaseAPI {
       queryParameters['region'] = requestParameters['region'];
     }
 
-    if (requestParameters['date'] != null) {
-      queryParameters['date'] = (requestParameters['date'] as any).toISOString();
+    if (requestParameters['dateStart'] != null) {
+      queryParameters['dateStart'] = (requestParameters['dateStart'] as any).toISOString();
+    }
+
+    if (requestParameters['dateEnd'] != null) {
+      queryParameters['dateEnd'] = (requestParameters['dateEnd'] as any).toISOString();
     }
 
     if (requestParameters['sortBy'] != null) {

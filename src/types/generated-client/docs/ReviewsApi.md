@@ -14,7 +14,7 @@ All URIs are relative to *https://together-dallaem-api.vercel.app*
 
 ## teamIdMeetingsMeetingIdReviewsGet
 
-> PaginatedReview teamIdMeetingsMeetingIdReviewsGet(teamId, meetingId, userId, type, region, date, registrationEnd, sortBy, sortOrder, cursor, size)
+> PaginatedReview teamIdMeetingsMeetingIdReviewsGet(teamId, meetingId, userId, type, region, dateStart, dateEnd, registrationEndStart, registrationEndEnd, sortBy, sortOrder, cursor, size)
 
 특정 모임 리뷰 목록 (중첩)
 
@@ -48,10 +48,14 @@ async function example() {
     type: type_example,
     // string | 지역으로 필터링 (optional)
     region: region_example,
-    // Date | 모임 날짜로 필터링 (YYYY-MM-DD) (optional)
-    date: 2013-10-20T19:20:30+01:00,
-    // Date | 모집 마감일로 필터링 (YYYY-MM-DD) (optional)
-    registrationEnd: 2013-10-20T19:20:30+01:00,
+    // Date | 모임 시작 범위 (이상, ISO 8601) (optional)
+    dateStart: 2026-02-09T15:00:00Z,
+    // Date | 모임 끝 범위 (이하, ISO 8601) (optional)
+    dateEnd: 2026-02-10T14:59:59.999Z,
+    // Date | 모집 마감 시작 범위 (이상, ISO 8601) (optional)
+    registrationEndStart: 2026-02-09T15:00:00Z,
+    // Date | 모집 마감 끝 범위 (이하, ISO 8601) (optional)
+    registrationEndEnd: 2026-02-10T14:59:59.999Z,
     // 'createdAt' | 'score' | 'participantCount' | 정렬 기준 (optional)
     sortBy: sortBy_example,
     // 'asc' | 'desc' | 정렬 순서 (optional)
@@ -76,19 +80,21 @@ example().catch(console.error);
 
 ### Parameters
 
-| Name                | Type                                     | Description                       | Notes                                                                                     |
-| ------------------- | ---------------------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------- |
-| **teamId**          | `string`                                 |                                   | [Defaults to `undefined`]                                                                 |
-| **meetingId**       | `number`                                 |                                   | [Defaults to `undefined`]                                                                 |
-| **userId**          | `number`                                 | 특정 사용자의 리뷰만 조회         | [Optional] [Defaults to `undefined`]                                                      |
-| **type**            | `string`                                 | 모임 종류로 필터링                | [Optional] [Defaults to `undefined`]                                                      |
-| **region**          | `string`                                 | 지역으로 필터링                   | [Optional] [Defaults to `undefined`]                                                      |
-| **date**            | `Date`                                   | 모임 날짜로 필터링 (YYYY-MM-DD)   | [Optional] [Defaults to `undefined`]                                                      |
-| **registrationEnd** | `Date`                                   | 모집 마감일로 필터링 (YYYY-MM-DD) | [Optional] [Defaults to `undefined`]                                                      |
-| **sortBy**          | `createdAt`, `score`, `participantCount` | 정렬 기준                         | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, score, participantCount] |
-| **sortOrder**       | `asc`, `desc`                            | 정렬 순서                         | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                               |
-| **cursor**          | `string`                                 | 다음 페이지를 위한 커서           | [Optional] [Defaults to `undefined`]                                                      |
-| **size**            | `number`                                 | 페이지 크기 (1-100)               | [Optional] [Defaults to `10`]                                                             |
+| Name                     | Type                                     | Description                          | Notes                                                                                     |
+| ------------------------ | ---------------------------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------- |
+| **teamId**               | `string`                                 |                                      | [Defaults to `undefined`]                                                                 |
+| **meetingId**            | `number`                                 |                                      | [Defaults to `undefined`]                                                                 |
+| **userId**               | `number`                                 | 특정 사용자의 리뷰만 조회            | [Optional] [Defaults to `undefined`]                                                      |
+| **type**                 | `string`                                 | 모임 종류로 필터링                   | [Optional] [Defaults to `undefined`]                                                      |
+| **region**               | `string`                                 | 지역으로 필터링                      | [Optional] [Defaults to `undefined`]                                                      |
+| **dateStart**            | `Date`                                   | 모임 시작 범위 (이상, ISO 8601)      | [Optional] [Defaults to `undefined`]                                                      |
+| **dateEnd**              | `Date`                                   | 모임 끝 범위 (이하, ISO 8601)        | [Optional] [Defaults to `undefined`]                                                      |
+| **registrationEndStart** | `Date`                                   | 모집 마감 시작 범위 (이상, ISO 8601) | [Optional] [Defaults to `undefined`]                                                      |
+| **registrationEndEnd**   | `Date`                                   | 모집 마감 끝 범위 (이하, ISO 8601)   | [Optional] [Defaults to `undefined`]                                                      |
+| **sortBy**               | `createdAt`, `score`, `participantCount` | 정렬 기준                            | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, score, participantCount] |
+| **sortOrder**            | `asc`, `desc`                            | 정렬 순서                            | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                               |
+| **cursor**               | `string`                                 | 다음 페이지를 위한 커서              | [Optional] [Defaults to `undefined`]                                                      |
+| **size**                 | `number`                                 | 페이지 크기 (1-100)                  | [Optional] [Defaults to `10`]                                                             |
 
 ### Return type
 
@@ -258,7 +264,7 @@ example().catch(console.error);
 
 ## teamIdReviewsGet
 
-> PaginatedReview teamIdReviewsGet(teamId, meetingId, userId, type, region, date, registrationEnd, sortBy, sortOrder, cursor, size)
+> PaginatedReview teamIdReviewsGet(teamId, meetingId, userId, type, region, dateStart, dateEnd, registrationEndStart, registrationEndEnd, sortBy, sortOrder, cursor, size)
 
 리뷰 목록
 
@@ -292,10 +298,14 @@ async function example() {
     type: type_example,
     // string | 지역으로 필터링 (optional)
     region: region_example,
-    // Date | 모임 날짜로 필터링 (YYYY-MM-DD) (optional)
-    date: 2013-10-20T19:20:30+01:00,
-    // Date | 모집 마감일로 필터링 (YYYY-MM-DD) (optional)
-    registrationEnd: 2013-10-20T19:20:30+01:00,
+    // Date | 모임 시작 범위 (이상, ISO 8601) (optional)
+    dateStart: 2026-02-09T15:00:00Z,
+    // Date | 모임 끝 범위 (이하, ISO 8601) (optional)
+    dateEnd: 2026-02-10T14:59:59.999Z,
+    // Date | 모집 마감 시작 범위 (이상, ISO 8601) (optional)
+    registrationEndStart: 2026-02-09T15:00:00Z,
+    // Date | 모집 마감 끝 범위 (이하, ISO 8601) (optional)
+    registrationEndEnd: 2026-02-10T14:59:59.999Z,
     // 'createdAt' | 'score' | 'participantCount' | 정렬 기준 (optional)
     sortBy: sortBy_example,
     // 'asc' | 'desc' | 정렬 순서 (optional)
@@ -320,19 +330,21 @@ example().catch(console.error);
 
 ### Parameters
 
-| Name                | Type                                     | Description                       | Notes                                                                                     |
-| ------------------- | ---------------------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------- |
-| **teamId**          | `string`                                 |                                   | [Defaults to `undefined`]                                                                 |
-| **meetingId**       | `number`                                 | 특정 모임의 리뷰만 조회           | [Optional] [Defaults to `undefined`]                                                      |
-| **userId**          | `number`                                 | 특정 사용자의 리뷰만 조회         | [Optional] [Defaults to `undefined`]                                                      |
-| **type**            | `string`                                 | 모임 종류로 필터링                | [Optional] [Defaults to `undefined`]                                                      |
-| **region**          | `string`                                 | 지역으로 필터링                   | [Optional] [Defaults to `undefined`]                                                      |
-| **date**            | `Date`                                   | 모임 날짜로 필터링 (YYYY-MM-DD)   | [Optional] [Defaults to `undefined`]                                                      |
-| **registrationEnd** | `Date`                                   | 모집 마감일로 필터링 (YYYY-MM-DD) | [Optional] [Defaults to `undefined`]                                                      |
-| **sortBy**          | `createdAt`, `score`, `participantCount` | 정렬 기준                         | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, score, participantCount] |
-| **sortOrder**       | `asc`, `desc`                            | 정렬 순서                         | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                               |
-| **cursor**          | `string`                                 | 다음 페이지를 위한 커서           | [Optional] [Defaults to `undefined`]                                                      |
-| **size**            | `number`                                 | 페이지 크기 (1-100)               | [Optional] [Defaults to `10`]                                                             |
+| Name                     | Type                                     | Description                          | Notes                                                                                     |
+| ------------------------ | ---------------------------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------- |
+| **teamId**               | `string`                                 |                                      | [Defaults to `undefined`]                                                                 |
+| **meetingId**            | `number`                                 | 특정 모임의 리뷰만 조회              | [Optional] [Defaults to `undefined`]                                                      |
+| **userId**               | `number`                                 | 특정 사용자의 리뷰만 조회            | [Optional] [Defaults to `undefined`]                                                      |
+| **type**                 | `string`                                 | 모임 종류로 필터링                   | [Optional] [Defaults to `undefined`]                                                      |
+| **region**               | `string`                                 | 지역으로 필터링                      | [Optional] [Defaults to `undefined`]                                                      |
+| **dateStart**            | `Date`                                   | 모임 시작 범위 (이상, ISO 8601)      | [Optional] [Defaults to `undefined`]                                                      |
+| **dateEnd**              | `Date`                                   | 모임 끝 범위 (이하, ISO 8601)        | [Optional] [Defaults to `undefined`]                                                      |
+| **registrationEndStart** | `Date`                                   | 모집 마감 시작 범위 (이상, ISO 8601) | [Optional] [Defaults to `undefined`]                                                      |
+| **registrationEndEnd**   | `Date`                                   | 모집 마감 끝 범위 (이하, ISO 8601)   | [Optional] [Defaults to `undefined`]                                                      |
+| **sortBy**               | `createdAt`, `score`, `participantCount` | 정렬 기준                            | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, score, participantCount] |
+| **sortOrder**            | `asc`, `desc`                            | 정렬 순서                            | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                               |
+| **cursor**               | `string`                                 | 다음 페이지를 위한 커서              | [Optional] [Defaults to `undefined`]                                                      |
+| **size**                 | `number`                                 | 페이지 크기 (1-100)                  | [Optional] [Defaults to `10`]                                                             |
 
 ### Return type
 

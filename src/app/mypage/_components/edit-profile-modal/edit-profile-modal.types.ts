@@ -1,12 +1,12 @@
 import type { ChangeEvent } from 'react';
 
 export interface EditProfileModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   initialName?: string;
   initialEmail?: string;
   initialImageUrl?: string;
-  onSubmit?: (data: { name: string; email: string }) => void;
+  onSubmit?: (data: { name: string; email: string; imageUrl?: string }) => void;
 }
 
 export interface ProfileFieldProps {
@@ -24,4 +24,5 @@ export interface ModalActionButtonsProps {
 
 export interface ProfileImageEditorProps {
   imageUrl?: string;
+  onChange: (url: string) => void;
 }

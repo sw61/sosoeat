@@ -1,11 +1,11 @@
 'use client';
-
 import { MainPageCard } from '@/components/common/main-page-card';
 import { MeetingCreateModal } from '@/components/common/meeting-create-modal';
 import { useModal } from '@/hooks/use-modal';
 import { useCreateMeeting } from '@/services/meetings';
 import { useAuthStore } from '@/store/auth-store';
 
+import { EmptyPage } from './_components/empty-page';
 import { MeetingFilterBar } from './_components/meeting-filter-bar';
 import { MeetingMakeButton } from './_components/meeting-make-button';
 import { MeetingSearchBanner } from './_components/meeting-search-banner';
@@ -27,13 +27,15 @@ export default function MeetingsPage() {
   const {
     regionCommitted,
     handleRegionChange,
-    date,
-    handleDateChange,
+    dateStart,
+    dateEnd,
     meetingData,
+    handleDateChange,
     handleTypeFilterChange,
     typeFilter,
     handleSortChange,
-    sort,
+    sortBy,
+    sortOrder,
   } = useMeetingPage();
 
   //sort는 dateTime, registrationEnd, participantCount를 가짐

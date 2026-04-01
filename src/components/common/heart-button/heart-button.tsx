@@ -8,6 +8,11 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 import useFavoriteMeeting from './hooks/use-heart-button';
+import {
+  HEART_BUTTON_CLASS,
+  HEART_BUTTON_ICON_WRAPPER_CLASS,
+  HEART_BUTTON_WRAPPER_CLASS,
+} from './heart-button.constants';
 import type { HeartButtonProps } from './heart-button.types';
 
 /** 하트 SVG 크기 (픽셀) */
@@ -36,18 +41,14 @@ export function HeartButton({
   const iconPx = sizeIcon[size];
 
   return (
-    <div className={cn('top-4 right-[17px] z-10 m-0 shrink-0', className)}>
+    <div className={cn(HEART_BUTTON_WRAPPER_CLASS, className)}>
       <Button
         variant="ghost"
         size="icon"
-        className={cn(
-          'border-sosoeat-gray-300 cursor-pointer rounded-full border bg-white/90 p-0 hover:bg-white/90',
-          ringSizeClass[size]
-        )}
+        className={cn(HEART_BUTTON_CLASS, ringSizeClass[size])}
         onClick={() => {
           if (meetingId === undefined) {
             if (process.env.NODE_ENV !== 'production') {
-               
               console.error(
                 'HeartButton: meetingId is required for toggleFavorite but was undefined.'
               );
@@ -64,7 +65,7 @@ export function HeartButton({
             scale: isFavoritedState ? 1 : [0.1, 1.15, 0.6, 1],
             transition: { duration: 1, ease: 'easeOut' },
           }}
-          className="flex size-full items-center justify-center"
+          className={HEART_BUTTON_ICON_WRAPPER_CLASS}
         >
           <Image src={src} alt="좋아요" width={iconPx} height={iconPx} />
         </motion.div>

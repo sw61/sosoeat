@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { PostWithAuthorAllOfCount } from './PostWithAuthorAllOfCount';
+import type { UserPostsResponseDataInnerCount } from './UserPostsResponseDataInnerCount';
 import {
-  PostWithAuthorAllOfCountFromJSON,
-  PostWithAuthorAllOfCountFromJSONTyped,
-  PostWithAuthorAllOfCountToJSON,
-  PostWithAuthorAllOfCountToJSONTyped,
-} from './PostWithAuthorAllOfCount';
+  UserPostsResponseDataInnerCountFromJSON,
+  UserPostsResponseDataInnerCountFromJSONTyped,
+  UserPostsResponseDataInnerCountToJSON,
+  UserPostsResponseDataInnerCountToJSONTyped,
+} from './UserPostsResponseDataInnerCount';
 import type { Author } from './Author';
 import { AuthorFromJSON, AuthorFromJSONTyped, AuthorToJSON, AuthorToJSONTyped } from './Author';
 
@@ -97,10 +97,10 @@ export interface PostWithAuthor {
   author: Author;
   /**
    *
-   * @type {PostWithAuthorAllOfCount}
+   * @type {UserPostsResponseDataInnerCount}
    * @memberof PostWithAuthor
    */
-  count: PostWithAuthorAllOfCount;
+  count: UserPostsResponseDataInnerCount;
 }
 
 /**
@@ -145,7 +145,7 @@ export function PostWithAuthorFromJSONTyped(
     createdAt: new Date(json['createdAt']),
     updatedAt: new Date(json['updatedAt']),
     author: AuthorFromJSON(json['author']),
-    count: PostWithAuthorAllOfCountFromJSON(json['_count']),
+    count: UserPostsResponseDataInnerCountFromJSON(json['_count']),
   };
 }
 
@@ -173,6 +173,6 @@ export function PostWithAuthorToJSONTyped(
     createdAt: value['createdAt'].toISOString(),
     updatedAt: value['updatedAt'].toISOString(),
     author: AuthorToJSON(value['author']),
-    _count: PostWithAuthorAllOfCountToJSON(value['count']),
+    _count: UserPostsResponseDataInnerCountToJSON(value['count']),
   };
 }

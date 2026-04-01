@@ -7,6 +7,11 @@
 | `type`         | string |
 | `averageScore` | number |
 | `totalReviews` | number |
+| `oneStar`      | number |
+| `twoStars`     | number |
+| `threeStars`   | number |
+| `fourStars`    | number |
+| `fiveStars`    | number |
 
 ## Example
 
@@ -18,6 +23,11 @@ const example = {
   type: 달램핏,
   averageScore: 4.7,
   totalReviews: 28,
+  oneStar: 1,
+  twoStars: 2,
+  threeStars: 3,
+  fourStars: 8,
+  fiveStars: 14,
 } satisfies CategoryStatisticsItem;
 
 console.log(example);

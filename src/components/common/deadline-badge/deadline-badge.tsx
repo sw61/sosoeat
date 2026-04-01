@@ -10,6 +10,10 @@ import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
+import {
+  DEADLINE_BADGE_CLASS,
+  DEADLINE_BADGE_TEXT_WRAPPER_CLASS,
+} from './deadline-badge.constants';
 import type { DeadlineBadgeProps } from './deadline-badge.types';
 
 const variantBadgeClassName = {
@@ -59,11 +63,7 @@ export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineB
   return (
     <Badge
       variant="outline"
-      className={cn(
-        'h-auto min-h-0 w-61.75 items-center gap-1 rounded-[14px] border-0 py-1.5 pr-3 pl-1.5 text-sm leading-5 font-medium shadow-none',
-        variantBadgeClassName[variant],
-        className
-      )}
+      className={cn(DEADLINE_BADGE_CLASS, variantBadgeClassName[variant], className)}
     >
       <Image
         src={variant === 'groupEat' ? '/icons/alarm-clock-eat.svg' : '/icons/alarm-clock-buy.svg'}
@@ -72,7 +72,7 @@ export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineB
         height={16}
         className="size-4 shrink-0"
       />
-      <div className="relative min-h-[1.25em] overflow-hidden">
+      <div className={DEADLINE_BADGE_TEXT_WRAPPER_CLASS}>
         {isEnded ? (
           <span>마감 종료</span>
         ) : (

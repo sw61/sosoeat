@@ -26,7 +26,7 @@ export interface AuthTokens {
    */
   accessToken: string;
   /**
-   *
+   * Grace period 내 재요청 시 null (기존 RT 유지)
    * @type {string}
    * @memberof AuthTokens
    */

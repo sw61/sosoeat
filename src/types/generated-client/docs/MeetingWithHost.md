@@ -26,6 +26,8 @@
 | `updatedAt`        | Date            |
 | `host`             | [Host](Host.md) |
 | `isFavorited`      | boolean         |
+| `isJoined`         | boolean         |
+| `isCompleted`      | boolean         |
 
 ## Example
 
@@ -56,6 +58,8 @@ const example = {
   "updatedAt": 2026-02-01T10:00:00.000Z,
   "host": null,
   "isFavorited": false,
+  "isJoined": false,
+  "isCompleted": false,
 } satisfies MeetingWithHost
 
 console.log(example)
