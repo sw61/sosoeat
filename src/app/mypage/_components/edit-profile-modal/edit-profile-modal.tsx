@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import Image from 'next/image';
 
-import { Pencil, PencilLine, XIcon } from 'lucide-react';
+import { Loader2, Pencil, PencilLine, XIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/dialog';
 import { Field, FieldContent, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useUploadImage } from '@/services/images';
+import { PresignedUrlRequestFolderEnum } from '@/types/generated-client';
 
 import type {
   EditProfileModalProps,
@@ -32,22 +34,45 @@ const styles = {
     'w-fill h-12 md:h-15 flex-1 md:rounded-2xl rounded-xl py-3 text-base md:text-xl font-semibold',
 } as const;
 
-function ProfileImageEditor({ imageUrl }: ProfileImageEditorProps) {
-  // 실제 프롭스로 넘어온 이미지가 있으면 그걸 쓰고, 없으면 public 폴더의 기본 이미지를 씁니다.
-  const imageSrc = imageUrl || '/default-profile.png';
+function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { mutateAsync, isPending } = useUploadImage(PresignedUrlRequestFolderEnum.Users);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const publicUrl = await mutateAsync(file);
+    if (publicUrl) onChange(publicUrl);
+  };
 
   return (
     <div className="flex justify-center">
       <div className="relative">
         <Image
-          src={imageSrc} // ✅ 2. "/" 대신 imageSrc 변수를 넣습니다.
+          src={imageUrl || '/default-profile.png'}
           alt="프로필 이미지"
           width={116}
           height={116}
           className="ring-sosoeat-gray-300 rounded-full object-cover ring-1"
         />
-        <Button className="ring-sosoeat-gray-300 absolute right-1 bottom-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-600 ring-1 md:right-1 md:bottom-7">
-          <Pencil className="h-6 w-6" />
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          className="hidden"
+          onChange={handleFileChange}
+        />
+        <Button
+          type="button"
+          disabled={isPending}
+          onClick={() => inputRef.current?.click()}
+          className="ring-sosoeat-gray-300 absolute right-1 bottom-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-600 ring-1 md:right-1 md:bottom-7"
+        >
+          {isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Pencil className="h-6 w-6" />
+          )}
         </Button>
       </div>
     </div>
@@ -72,28 +97,34 @@ export function EditProfileModal({
   initialEmail = '',
   initialImageUrl = '',
   onSubmit,
+  open: externalOpen,
+  onOpenChange: externalOnOpenChange,
 }: EditProfileModalProps) {
   const [name, setName] = useState(initialName);
   const [email, setEmail] = useState(initialEmail);
-  const [open, setOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState(initialImageUrl);
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const open = externalOpen ?? internalOpen;
+  const setOpen = externalOnOpenChange ?? setInternalOpen;
+
   const handleSubmit = () => {
-    onSubmit?.({ name, email });
+    onSubmit?.({ name, email, imageUrl });
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="bg-sosoeat-gray-200 text-sosoeat-gray-700 ring-sosoeat-gray-300 flex h-[34.45px] w-[104.04px] flex-row items-center justify-center gap-1 rounded-xl text-xs font-bold ring-1">
+        <button className="bg-sosoeat-gray-200 text-sosoeat-gray-700 ring-sosoeat-gray-300 hidden h-[34.45px] w-[104.04px] flex-row items-center justify-center gap-1 rounded-xl text-xs font-bold ring-1 md:flex">
           <PencilLine className="h-[12.99px] w-[12.99px]" />
           프로필 수정
         </button>
       </DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="h-[499px] w-[343px] max-w-none rounded-4xl bg-white p-9 shadow-xl sm:max-w-none md:h-[627px] md:w-[544px]"
+        className="h-124.75 w-85.75 max-w-none rounded-4xl bg-white p-9 shadow-xl sm:max-w-none md:h-156.75 md:w-136"
       >
-        {/* Title + shadcn 기본 X버튼 */}
         <DialogHeader className="flex w-full flex-row items-center justify-between">
           <DialogTitle className="text-xl font-semibold text-gray-900">프로필 수정하기</DialogTitle>
           <DialogClose asChild>
@@ -109,10 +140,8 @@ export function EditProfileModal({
           </DialogClose>
         </DialogHeader>
 
-        {/* 프로필 이미지 */}
-        <ProfileImageEditor imageUrl={initialImageUrl} />
+        <ProfileImageEditor imageUrl={imageUrl} onChange={setImageUrl} />
 
-        {/* 이름, 이메일 필드 */}
         <FieldGroup className="gap-4">
           <ProfileField
             id="name"
@@ -129,7 +158,6 @@ export function EditProfileModal({
           />
         </FieldGroup>
 
-        {/* 취소, 수정하기 버튼 */}
         <DialogFooter className="flex flex-row gap-3 border-0 bg-white">
           <DialogClose asChild>
             <Button
