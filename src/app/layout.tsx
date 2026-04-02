@@ -11,6 +11,9 @@ import './globals.css';
 export const metadata: Metadata = {
   title: '소소잇 | 일상과 만남을 잇다',
   description: '일상과 만남을 잇다', // 수정 필요
+  other: {
+    viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
+  },
 };
 
 export default async function RootLayout({
@@ -22,7 +25,7 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
-      <body className="min-w-[375px]">
+      <body className="min-w-[375px] overscroll-none">
         <Providers initialUser={initialUser}>
           <NavigationBar initialUser={initialUser} />
           <main>{children}</main>

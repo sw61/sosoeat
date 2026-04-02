@@ -9,6 +9,11 @@ import type { CreateMeeting } from '@/types/generated-client/models/CreateMeetin
 import { meetingsApi } from './meetings.api';
 import { useCreateMeeting } from './meetings.queries';
 
+const mockPush = jest.fn();
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push: mockPush }),
+}));
+
 jest.mock('./meetings.api', () => ({
   meetingsApi: {
     create: jest.fn(),
@@ -49,7 +54,7 @@ describe('useCreateMeeting', () => {
   });
 
   it('모임 생성 성공 시 isSuccess 상태가 되고 success toast를 띄운다', async () => {
-    mockCreate.mockResolvedValue(undefined);
+    mockCreate.mockResolvedValue({ id: 42 });
 
     const { result } = renderHook(() => useCreateMeeting(), {
       wrapper: createWrapper(),
@@ -60,6 +65,19 @@ describe('useCreateMeeting', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(mockCreate).toHaveBeenCalledTimes(1);
     expect(toast.success).toHaveBeenCalled();
+  });
+
+  it('모임 생성 성공 시 생성된 모임 상세 페이지로 이동한다', async () => {
+    mockCreate.mockResolvedValue({ id: 42 });
+
+    const { result } = renderHook(() => useCreateMeeting(), {
+      wrapper: createWrapper(),
+    });
+
+    result.current.mutate(MOCK_PAYLOAD);
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(mockPush).toHaveBeenCalledWith('/meetings/42');
   });
 
   it('모임 생성 실패 시 isError 상태가 되고 error toast를 띄운다', async () => {

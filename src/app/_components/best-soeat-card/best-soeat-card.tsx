@@ -4,24 +4,27 @@ import { Clock, MapPin } from 'lucide-react';
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { useDetailRouter } from '@/services/meetings/use-detail-router';
 
 import type { BestSoeatCardProps } from './best-soeat-card.types';
 
 export function BestSoeatCard({
+  id,
   title,
   region,
   meetingAt,
   thumbnailUrl,
   thumbnailAlt = '모임 이미지',
-  onClick,
 }: BestSoeatCardProps) {
+  const { handleCardClick, handleCardKeyDown } = useDetailRouter({ id });
+
   return (
     <Card
       className={cn(
-        'border-sosoeat-gray-400 h-[200px] w-[220px] gap-0 border py-0 ring-0',
-        onClick && 'cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]'
+        'border-sosoeat-gray-400 h-[200px] min-w-[218px] cursor-pointer gap-0 border py-0 ring-0'
       )}
-      onClick={onClick}
+      onClick={handleCardClick}
+      onKeyDown={handleCardKeyDown}
     >
       {/* 썸네일 */}
       <div className="bg-muted relative w-full flex-1">
@@ -30,13 +33,13 @@ export function BestSoeatCard({
           alt={thumbnailAlt}
           fill
           className="object-cover"
-          sizes="220px"
+          sizes="218px"
         />
       </div>
 
       {/* 카드 정보 */}
       <CardContent className="flex flex-col p-3">
-        <CardTitle className="mb-1.5 line-clamp-2 text-sm leading-(--text-xs--line-height) font-bold">
+        <CardTitle className="mb-1.5 line-clamp-1 text-sm leading-(--text-xs--line-height) font-bold">
           {title}
         </CardTitle>
         <div className="text-sosoeat-gray-700 flex items-center gap-1 text-xs">

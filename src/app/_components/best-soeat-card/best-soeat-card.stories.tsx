@@ -9,6 +9,7 @@ const meta = {
     layout: 'centered',
   },
   args: {
+    id: 1,
     title: '강남 고기집 같이 가실 분!',
     region: '서울 강남구',
     meetingAt: '3/15(일) 18:30',
@@ -28,15 +29,6 @@ export const WithThumbnail: Story = {
     thumbnailUrl:
       'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=400',
     thumbnailAlt: '맛있는 음식',
-  },
-};
-
-export const WithClick: Story = {
-  name: '클릭 가능',
-  args: {
-    thumbnailUrl:
-      'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=400',
-    onClick: () => alert('카드 클릭!'),
   },
 };
 

@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { PencilLine } from 'lucide-react';
 
 import { EditProfileModal } from './edit-profile-modal';
 
