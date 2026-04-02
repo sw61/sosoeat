@@ -35,7 +35,6 @@ const request = async (
     if (refreshed) {
       return request(url, options, true);
     }
-    // silentRefresh 실패 시 세션 만료 → 로그인 페이지로
     redirect('/login');
   }
 

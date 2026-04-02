@@ -1,6 +1,9 @@
+import { commentServer } from '@/lib/http/comment-server';
 import { getMeetings } from '@/services/meetings/meetings.server';
 import type { Meeting } from '@/types/meeting';
 
+import type { MeetingComment } from './_components/meeting-comment-section';
+import { MeetingCommentSection } from './_components/meeting-comment-section';
 import { MeetingHeroSection } from './_components/meeting-hero-section';
 import { MeetingLocationSection } from './_components/meeting-location-section';
 import { MeetingRecommendedSection } from './_components/meeting-recommended-section';
@@ -18,13 +21,19 @@ export default async function MeetingDetailPage({ params }: Props) {
 
   const meetingData = await getMeetingById(meetingId);
 
-  const [meetingList] = await Promise.allSettled([
+  const [meetingList, commentsResult] = await Promise.allSettled([
     getMeetings({ region: meetingData.region, size: 4 }),
+    commentServer.get(`/meetings/${meetingId}/comments`),
   ]);
 
   const recommendedMeetingsRaw: Meeting[] =
     meetingList.status === 'fulfilled' ? (meetingList.value.data as unknown as Meeting[]) : [];
   const recommendedMeetings = recommendedMeetingsRaw.filter((m) => m.id !== meetingId);
+
+  let initialComments: MeetingComment[] = [];
+  if (commentsResult.status === 'fulfilled' && commentsResult.value.ok) {
+    initialComments = await commentsResult.value.json();
+  }
 
   return (
     <main className="space-y-[30px] py-10">
@@ -40,6 +49,7 @@ export default async function MeetingDetailPage({ params }: Props) {
       </section>
 
       <MeetingLocationSection address={meetingData.address} />
+      <MeetingCommentSection meetingId={meetingId} initialComments={initialComments} />
       <MeetingRecommendedSection meetings={recommendedMeetings} />
     </main>
   );
