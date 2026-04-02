@@ -23,7 +23,7 @@ const withAuthState =
     return <Story />;
   };
 
-const MOCK_USER = { id: '1', name: '홍길동' };
+const MOCK_USER = { id: 1, email: 'test@test.com', name: '홍길동' };
 
 export const NotLoggedIn: Story = {
   name: '비로그인',
@@ -63,7 +63,7 @@ export const LoggedInWithProfileImage: Story = {
   name: '로그인 / 프로필이미지',
   decorators: [
     withAuthState({
-      user: { id: '2', name: '김소소', profileImage: 'https://i.pravatar.cc/32?img=47' },
+      user: { id: 2, email: 'test2@test.com', name: '김소소', image: 'https://i.pravatar.cc/32?img=47' },
     }),
   ],
 };
