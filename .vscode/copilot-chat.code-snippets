@@ -1,0 +1,52 @@
+{
+  "Copilot Skill Autoplan": {
+    "prefix": "autoplan",
+    "body": ["/autoplan"],
+    "description": "Run autoplan prompt command",
+  },
+  "Copilot Skill Investigate": {
+    "prefix": "investigate",
+    "body": ["/investigate"],
+    "description": "Run investigate prompt command",
+  },
+  "Copilot Skill QA": {
+    "prefix": "qa",
+    "body": ["/qa"],
+    "description": "Run qa prompt command",
+  },
+  "Copilot Skill QA Only": {
+    "prefix": "qaonly",
+    "body": ["/qa-only"],
+    "description": "Run qa-only prompt command",
+  },
+  "Copilot Skill Review": {
+    "prefix": "review",
+    "body": ["/review"],
+    "description": "Run review prompt command",
+  },
+  "Copilot Skill Ship": {
+    "prefix": "ship",
+    "body": ["/ship"],
+    "description": "Run ship prompt command",
+  },
+  "Copilot Skill Design Review": {
+    "prefix": "dreview",
+    "body": ["/design-review"],
+    "description": "Run design-review prompt command",
+  },
+  "Copilot Skill Benchmark": {
+    "prefix": "benchmark",
+    "body": ["/benchmark"],
+    "description": "Run benchmark prompt command",
+  },
+  "Copilot Skill Office Hours": {
+    "prefix": "officehours",
+    "body": ["/office-hours"],
+    "description": "Run office-hours prompt command",
+  },
+  "Copilot Skill Codex": {
+    "prefix": "codex",
+    "body": ["/codex"],
+    "description": "Run codex prompt command",
+  },
+}
