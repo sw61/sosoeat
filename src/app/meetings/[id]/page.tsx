@@ -180,7 +180,11 @@ export default function MeetingDetailPage() {
         </div>
       </section>
 
-      <MeetingLocationSection address={mockMeeting.address} />
+      <MeetingLocationSection
+        address={mockMeeting.address}
+        latitude={mockMeeting.latitude}
+        longitude={mockMeeting.longitude}
+      />
       <MeetingCommentSection comments={mockComments} />
       <MeetingRecommendedSection meetings={mockRecommendedMeetings} />
     </main>
