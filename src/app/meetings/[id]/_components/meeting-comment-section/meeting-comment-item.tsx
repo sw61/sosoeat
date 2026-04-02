@@ -19,8 +19,8 @@ interface MeetingCommentItemProps {
 // ─── MeetingCommentItem ───────────────────────────────────────
 
 export function MeetingCommentItem({ comment, isReply = false }: MeetingCommentItemProps) {
+  // mutation 연동 시 comment.id 사용
   const {
-    id: _id, // TODO: 좋아요/수정/삭제 mutation에서 사용 예정
     author,
     content,
     isDeleted,
