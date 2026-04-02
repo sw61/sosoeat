@@ -48,7 +48,7 @@ export default function MeetingsPage() {
     <div className="bg-sosoeat-gray-100">
       <div className="mx-auto flex max-w-[1140px] flex-col items-center justify-center gap-4 sm:px-4">
         <MeetingSearchBanner />
-        <div className="flex flex-col gap-4 px-4 sm:px-0">
+        <div className="flex w-full flex-col gap-4 px-4 sm:px-0">
           <MeetingFilterBar
             sortBy={sortBy}
             sortOrder={sortOrder}

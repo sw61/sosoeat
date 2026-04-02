@@ -1,3 +1,5 @@
+import { get } from 'http';
+
 import { fetchClient } from '@/lib/http/fetch-client';
 import { CreateMeeting } from '@/types/generated-client/models/CreateMeeting';
 import { MeetingWithHost } from '@/types/generated-client/models/MeetingWithHost';
@@ -40,6 +42,17 @@ export const meetingsApi = {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || '모임 수정에 실패했습니다.');
+    }
+
+    return response.json();
+  },
+
+  async getAll(): Promise<MeetingWithHost[]> {
+    const response = await fetchClient.get('/meetings');
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || '모임 조회에 실패했습니다.');
     }
 
     return response.json();
