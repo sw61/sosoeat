@@ -80,7 +80,7 @@ export interface ActionButtonConfig {
 export const ACTION_BUTTON_CONFIGS: ActionButtonConfig[] = [
   {
     type: 'closed',
-    match: ({ status }) => status === 'closed',
+    match: ({ status }) => status === 'closed' || status === 'full',
     label: '모집 마감',
     variant: 'disabled',
   },

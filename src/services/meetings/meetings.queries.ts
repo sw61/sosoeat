@@ -23,11 +23,12 @@ export const useCreateMeeting = () => {
   });
 };
 
-export const useUpdateMeeting = (id: number) =>
+export const useUpdateMeeting = (id: number, onSuccess?: () => void) =>
   useMutation({
     mutationFn: (payload: UpdateMeeting) => meetingsApi.update(id, payload),
     onSuccess: () => {
       toast.success('모임이 수정되었습니다.');
+      onSuccess?.();
     },
     onError: (error: Error) => {
       toast.error(error.message || '모임 수정 중 오류가 발생했습니다.');
