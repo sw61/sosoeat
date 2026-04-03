@@ -5,6 +5,13 @@ import type { Meeting } from '@/types/meeting';
 
 import RecommendedMeetingCard from './meeting-recommended-card';
 
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+}));
+
 jest.mock('next/image', () => ({
   __esModule: true,
   default: ({ src, alt }: { src: string; alt: string }) => (
@@ -34,7 +41,7 @@ const mockMeeting: Meeting = {
   image: '/test-image.jpg',
   description: '',
   hostId: 1,
-  createdBy: '1',
+  createdBy: 1,
   updatedAt: '2024-03-01T00:00:00.000Z',
   host: { id: 1, name: '김소소' },
   isFavorited: false,

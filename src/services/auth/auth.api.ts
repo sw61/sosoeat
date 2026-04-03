@@ -1,3 +1,4 @@
+import { fetchClient } from '@/lib/http/fetch-client';
 import { AuthUser } from '@/types/auth';
 import { LoginRequest, SignupRequest } from '@/types/generated-client/models';
 
@@ -27,14 +28,11 @@ export const authApi = {
   },
 
   /**
-   * 회원가입 실행 (BFF 호출)
+   * 회원가입 실행 (proxy 경유 → 백엔드 직접 호출)
+   * 세션 관리가 없으므로 BFF가 아닌 /api/proxy/를 통해 백엔드로 전달합니다.
    */
   async signUp(payload: SignupRequest): Promise<void> {
-    const response = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetchClient.post('/auth/signup', payload);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

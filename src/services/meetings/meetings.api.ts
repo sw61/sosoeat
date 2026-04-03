@@ -4,12 +4,25 @@ import { MeetingList, TeamIdMeetingsGetRequest } from '@/types/generated-client'
 import { CreateMeeting } from '@/types/generated-client/models/CreateMeeting';
 import { MeetingWithHost } from '@/types/generated-client/models/MeetingWithHost';
 import { UpdateMeeting } from '@/types/generated-client/models/UpdateMeeting';
+import { UpdateMeetingStatus } from '@/types/generated-client/models/UpdateMeetingStatus';
+import type { Meeting } from '@/types/meeting';
 
 /**
  * [Service Layer] meetingsApi
  * 모임 관련 API 요청을 처리합니다.
  */
 export const meetingsApi = {
+  async getById(id: number): Promise<Meeting> {
+    const response = await fetchClient.get(`/meetings/${id}`);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || '모임 조회에 실패했습니다.');
+    }
+
+    return response.json();
+  },
+
   /**
    * 모임 생성 요청
    * POST /meetings
@@ -47,37 +60,41 @@ export const meetingsApi = {
     return response.json();
   },
 
-  async getList(): Promise<MeetingList> {
-    const response = await fetchClient.get('/meetings');
+  async updateStatus(id: number, payload: UpdateMeetingStatus): Promise<MeetingWithHost> {
+    const response = await fetchClient.patch(`/meetings/${id}/status`, payload);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 조회에 실패했습니다.');
+      throw new Error(errorData.message || '모임 상태 변경에 실패했습니다.');
     }
 
     return response.json();
   },
 
-  async getById(id: number): Promise<MeetingWithHost> {
-    const response = await fetchClient.get(`/meetings/${id}`);
+  async deleteMeeting(id: number): Promise<void> {
+    const response = await fetchClient.delete(`/meetings/${id}`);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 조회에 실패했습니다.');
+      throw new Error(errorData.message || '모임 삭제에 실패했습니다.');
     }
-
-    return response.json();
   },
 
-  async getByFilter(options: Omit<TeamIdMeetingsGetRequest, 'teamId'>): Promise<MeetingList> {
-    const queryParams = makeQueryString(options);
-    const response = await fetchClient.get(`/meetings${queryParams}`);
+  async join(id: number): Promise<void> {
+    const response = await fetchClient.post(`/meetings/${id}/join`);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 조회에 실패했습니다.');
+      throw new Error(errorData.message || '모임 참여에 실패했습니다.');
     }
+  },
 
-    return response.json();
+  async leave(id: number): Promise<void> {
+    const response = await fetchClient.delete(`/meetings/${id}/join`);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || '모임 참여 취소에 실패했습니다.');
+    }
   },
 };

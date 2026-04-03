@@ -3,7 +3,13 @@ import userEvent from '@testing-library/user-event';
 
 import { BestSoeatCard } from './best-soeat-card';
 
+const mockPush = jest.fn();
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push: mockPush }),
+}));
+
 const DEFAULT_PROPS = {
+  id: 1,
   title: '강남 고기집 같이 가실 분!',
   region: '서울 강남구',
   meetingAt: '3/15(일) 18:30',
@@ -36,13 +42,11 @@ describe('BestSoeatCard', () => {
     expect(screen.getByAltText('모임 이미지')).toBeInTheDocument();
   });
 
-  it('onClick 제공 시 클릭 이벤트가 호출된다', async () => {
-    const handleClick = jest.fn();
+  it('클릭 시 모임 상세 페이지로 이동한다', async () => {
     const user = userEvent.setup();
-
-    const { container } = render(<BestSoeatCard {...DEFAULT_PROPS} onClick={handleClick} />);
+    const { container } = render(<BestSoeatCard {...DEFAULT_PROPS} />);
 
     await user.click(container.firstChild as HTMLElement);
-    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(mockPush).toHaveBeenCalledWith('/meetings/1');
   });
 });

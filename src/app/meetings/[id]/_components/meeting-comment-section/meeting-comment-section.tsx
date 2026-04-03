@@ -8,27 +8,57 @@ import { CommentInput } from '@/components/common/comment-input';
 import { CountingBadge } from '@/components/common/counting-badge/counting-badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import type { Comment } from '@/services/comments';
+import { useComments, useCreateComment } from '@/services/comments';
 import { useAuthStore } from '@/store/auth-store';
 
 import { buildCommentTree } from './comment-tree';
 import { MeetingCommentItem } from './meeting-comment-item';
-import type { MeetingCommentSectionProps } from './meeting-comment-section.types';
+import type { MeetingComment, MeetingCommentSectionProps } from './meeting-comment-section.types';
+
+function toMeetingCommentTree(raw: Comment[]): MeetingComment[] {
+  const list = raw as MeetingComment[];
+  if (list.some((c) => c.parentId != null)) {
+    return buildCommentTree(list);
+  }
+  return list;
+}
+
+function countNonDeleted(nodes: MeetingComment[]): number {
+  let n = 0;
+  const walk = (c: MeetingComment) => {
+    if (!c.isDeleted) n += 1;
+    c.replies?.forEach(walk);
+  };
+  nodes.forEach(walk);
+  return n;
+}
 
 export function MeetingCommentSection({
-  comments,
-  commentCount,
+  meetingId,
+  initialComments,
   className,
 }: MeetingCommentSectionProps) {
   const [commentText, setCommentText] = useState('');
-  const user = useAuthStore((state) => state.user);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const { isAuthenticated, user } = useAuthStore();
+  const { data: comments } = useComments(meetingId, initialComments as Comment[]);
+  const { mutate: createComment, isPending: isCreateCommentPending } = useCreateComment(meetingId, {
+    nickname: user?.name ?? '',
+    profileUrl: user?.image ?? null,
+  });
 
-  const totalCommentCount = commentCount ?? comments.length;
-  const treeComments = buildCommentTree(comments);
+  const tree = toMeetingCommentTree(comments ?? []);
+  const totalCommentCount = countNonDeleted(tree);
+  const visibleRoots = tree.filter(
+    (comment) => !comment.isDeleted || comment.replies?.some((r) => !r.isDeleted)
+  );
 
-  const commentList = treeComments.map((comment) => (
-    <MeetingCommentItem key={comment.id} comment={comment} />
-  ));
+  const handleSubmit = () => {
+    const trimmed = commentText.trim();
+    if (!trimmed) return;
+    createComment({ content: trimmed });
+    setCommentText('');
+  };
 
   return (
     <section
@@ -37,7 +67,6 @@ export function MeetingCommentSection({
         className
       )}
     >
-      {/* 헤더 */}
       <div className="flex items-center gap-2">
         <MessageSquareText className="text-sosoeat-orange-600 size-5" />
         <h2 className="text-sosoeat-gray-900 text-xl font-bold">댓글</h2>
@@ -49,22 +78,24 @@ export function MeetingCommentSection({
         </span>
       </div>
 
-      {/* 댓글 목록 */}
       <ScrollArea className="mt-4 *:data-radix-scroll-area-viewport:h-auto! *:data-radix-scroll-area-viewport:max-h-[994px]">
-        <div className="space-y-4 pr-4">{commentList}</div>
+        <div className="space-y-4 pr-4">
+          {visibleRoots.map((comment) => (
+            <MeetingCommentItem key={comment.id} comment={comment} meetingId={meetingId} />
+          ))}
+        </div>
       </ScrollArea>
 
-      {/* 댓글 입력창 */}
       <div className="mt-4 rounded-[24px] px-6 py-4">
         <CommentInput
           value={commentText}
           onChange={setCommentText}
-          onSubmit={() => setCommentText('')}
-          disabled={!isAuthenticated}
+          onSubmit={handleSubmit}
+          disabled={!isAuthenticated || isCreateCommentPending}
           placeholder={
             isAuthenticated ? '댓글을 입력하세요.' : '로그인 후 댓글을 작성할 수 있습니다.'
           }
-          currentUserName={user?.name}
+          currentUserName={user?.name ?? '사용자'}
           currentUserImageUrl={user?.image ?? undefined}
         />
       </div>

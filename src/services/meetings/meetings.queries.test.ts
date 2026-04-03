@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { toast } from 'sonner';
 
+import { commentApi } from '@/services/comments';
 import type { CreateMeeting } from '@/types/generated-client/models/CreateMeeting';
 
 import { meetingsApi } from './meetings.api';
@@ -22,7 +23,14 @@ jest.mock('sonner', () => ({
   },
 }));
 
+jest.mock('@/services/comments', () => ({
+  commentApi: {
+    syncCreateMeeting: jest.fn(),
+  },
+}));
+
 const mockCreate = meetingsApi.create as jest.Mock;
+const mockSyncCreateMeeting = commentApi.syncCreateMeeting as jest.Mock;
 
 const createWrapper = () => {
   const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
@@ -49,7 +57,9 @@ describe('useCreateMeeting', () => {
   });
 
   it('모임 생성 성공 시 isSuccess 상태가 되고 success toast를 띄운다', async () => {
-    mockCreate.mockResolvedValue(undefined);
+    const mockMeeting = { id: 1, hostId: 42, teamId: 'team-abc' };
+    mockCreate.mockResolvedValue(mockMeeting);
+    mockSyncCreateMeeting.mockResolvedValue(undefined);
 
     const { result } = renderHook(() => useCreateMeeting(), {
       wrapper: createWrapper(),
@@ -59,6 +69,11 @@ describe('useCreateMeeting', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(mockCreate).toHaveBeenCalledTimes(1);
+    expect(mockSyncCreateMeeting).toHaveBeenCalledWith({
+      id: mockMeeting.id,
+      hostId: mockMeeting.hostId,
+      teamId: mockMeeting.teamId,
+    });
     expect(toast.success).toHaveBeenCalled();
   });
 

@@ -38,7 +38,7 @@ export const StepBasicInfo = ({ form }: StepProps) => {
 
   const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
   const inputClassName =
-    'bg-sosoeat-gray-100 text-sm md:text-base font-normal text-sosoeat-gray-900 border border-transparent placeholder:text-sosoeat-gray-600 transition-all focus:border-sosoeat-orange-500 focus-visible:border-sosoeat-orange-500';
+    'h-10 md:h-12 bg-sosoeat-gray-100 text-sm md:text-base font-normal text-sosoeat-gray-900 border border-transparent placeholder:text-sosoeat-gray-600 transition-all focus:border-sosoeat-orange-500 focus-visible:border-sosoeat-orange-500';
 
   return (
     <div className="flex flex-col gap-5">
@@ -87,7 +87,7 @@ export const StepBasicInfo = ({ form }: StepProps) => {
             <label className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
               이미지{requiredIndicator}
             </label>
-            <div className="relative w-full">
+            <div className={field.value && !isPending ? 'relative w-full' : 'relative w-[147px]'}>
               {field.value && !isPending ? (
                 <Image
                   src={field.value as string}
@@ -98,7 +98,7 @@ export const StepBasicInfo = ({ form }: StepProps) => {
                   className="h-auto w-full rounded-2xl"
                 />
               ) : (
-                <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-[147px] w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
+                <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-[147px] w-[147px] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
                   {isPending ? (
                     <Loader2 className="h-6 w-6 animate-spin" />
                   ) : (

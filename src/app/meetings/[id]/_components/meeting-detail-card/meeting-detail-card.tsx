@@ -65,8 +65,13 @@ interface ParticipantsRowProps {
 function ParticipantsRow({ meetingId, current, max, category, className }: ParticipantsRowProps) {
   return (
     <div className={cn('flex items-center gap-3', className)}>
-      <div className="bg-sosoeat-orange-100 flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
-        <UsersIcon className="text-sosoeat-orange-400 h-4 w-4" />
+      <div
+        className={cn(
+          'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
+          iconBgVariants({ category })
+        )}
+      >
+        <UsersIcon className={cn('h-4 w-4', iconColorVariants({ category }))} />
       </div>
       <div className="flex-1">
         <p className="text-sosoeat-gray-600 mb-1 text-xs font-semibold">참여 현황</p>
@@ -140,7 +145,7 @@ function InfoSection({ meeting, category, fullDateLabel, className }: InfoSectio
         category={category}
       />
 
-      <HostRow name={meeting.host.name} profileImage={meeting.host.profileImage} />
+      <HostRow name={meeting.host.name} profileImage={meeting.host.image} />
     </div>
   );
 }
@@ -151,21 +156,24 @@ function InfoSection({ meeting, category, fullDateLabel, className }: InfoSectio
 
 interface ActionRowProps {
   actionButton: React.ReactNode;
+  meetingId: number;
   isFavorited: boolean;
 }
 
-function ActionRow({ actionButton, isFavorited }: ActionRowProps) {
+function ActionRow({ actionButton, meetingId, isFavorited }: ActionRowProps) {
   return (
     <div className="flex items-center gap-2">
       <div className="h-10 w-full lg:h-[62px]">{actionButton}</div>
       {/* sm·md: 40×40 */}
       <HeartButton
+        meetingId={meetingId}
         isFavorited={isFavorited}
         size="sm"
         className="border-sosoeat-gray-500 relative inset-auto m-0 lg:hidden"
       />
       {/* lg: 60×60 */}
       <HeartButton
+        meetingId={meetingId}
         isFavorited={isFavorited}
         size="lg"
         className="border-sosoeat-gray-500 relative inset-auto m-0 hidden lg:block"
@@ -190,10 +198,21 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
   const hasSafetyBadge = isConfirmed; /* || isScheduled */
 
   const ellipsisMenu =
-    props.role === 'host' ? <EllipsisMenu onEdit={props.onEdit} onDelete={props.onDelete} /> : null;
+    props.role === 'host' ? (
+      <EllipsisMenu
+        onEdit={props.onEdit}
+        onDelete={props.onDelete}
+        isDeletePending={props.isDeletePending}
+      />
+    ) : null;
 
   const actionButton = (
-    <ActionButton config={activeConfig} category={category} onClick={actionHandler} />
+    <ActionButton
+      config={activeConfig}
+      category={category}
+      onClick={actionHandler}
+      pending={props.isActionPending}
+    />
   );
 
   return (
@@ -268,7 +287,11 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
       {/* ════════════════════════════════════════
           액션 버튼 + 좋아요
           ════════════════════════════════════════ */}
-      <ActionRow actionButton={actionButton} isFavorited={meeting.isFavorited ?? false} />
+      <ActionRow
+        actionButton={actionButton}
+        meetingId={meeting.id}
+        isFavorited={meeting.isFavorited ?? false}
+      />
     </div>
   );
 }

@@ -32,6 +32,7 @@ const meta = {
   args: {
     comment: mockComment,
     isReply: false,
+    meetingId: 1,
   },
 } satisfies Meta<typeof MeetingCommentItem>;
 
