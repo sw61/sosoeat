@@ -1,4 +1,6 @@
+import { makeQueryString } from '@/app/meetings/services/meeting-page.services';
 import { fetchClient } from '@/lib/http/fetch-client';
+import { MeetingList, TeamIdMeetingsGetRequest } from '@/types/generated-client';
 import { CreateMeeting } from '@/types/generated-client/models/CreateMeeting';
 import { MeetingWithHost } from '@/types/generated-client/models/MeetingWithHost';
 import { UpdateMeeting } from '@/types/generated-client/models/UpdateMeeting';
@@ -18,6 +20,25 @@ export const meetingsApi = {
       throw new Error(errorData.message || '모임 조회에 실패했습니다.');
     }
 
+    return response.json();
+  },
+  async getList(): Promise<MeetingList> {
+    const response = await fetchClient.get('/meetings');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || '모임 목록 조회에 실패했습니다.');
+    }
+    return response.json();
+  },
+
+  async getByFilter(options: Omit<TeamIdMeetingsGetRequest, 'teamId'>): Promise<MeetingList> {
+    const queryString = makeQueryString(options);
+    const response = await fetchClient.get(`/meetings${queryString}`);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || '모임 목록 조회에 실패했습니다.');
+    }
     return response.json();
   },
 
