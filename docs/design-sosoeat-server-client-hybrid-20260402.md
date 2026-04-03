@@ -1,0 +1,680 @@
+# 설계: 서버-클라이언트 하이브리드 데이터 레이어 통합
+
+생성: 2026년 4월 2일  
+브랜치: develop  
+저장소: sosoeat  
+상태: DRAFT (Design Review 대기)  
+모드: Builder (MVP 배포 중심)
+
+---
+
+## 문제 진술
+
+소소잇 앱은 데이터 가져오기와 로딩 UX에서 세 가지 문제를 겪고 있습니다:
+
+1. **서버/클라이언트 경계 불명확**
+   - 어떤 데이터는 서버에서 가져오고, 어떤 데이터는 클라이언트에서 가져올지 규칙이 없음
+   - 결과: 종속성 관리 어려움, 코드 리뷰 시 일관성 문제 반복
+2. **로딩 상태 없음**
+   - 사용자가 데이터 대기 중이라는 시각적 피드백이 전혀 없음
+   - 결과: 앱이 반응 없이 보임, UX 신뢰도 낮음
+3. **캐싱 불일관**
+   - `sosotalk`, `meetings` 같은 일부 페이지는 TanStack Query 사용
+   - `mypage` 같은 다른 페이지는 Server Component + 수동 fetch
+   - 같은 데이터를 여러 곳에서 여러 번 가져오는 낭비 발생
+
+---
+
+## 현 상태 분석
+
+### 작동 중인 것들 ✅
+
+- **Server Component 패턴** (`mypage/page.tsx`): async 함수로 초기 데이터 가져오기 + Suspense 사용
+- **TanStack Query 부분 도입** (`sosotalk`, `meetings`): useQuery/useMutation 후크 작성됨
+- **프로젝트 구조 명확** (`services/`, `_services/`): API와 Query 훅 분리 가능
+
+### 문제 있는 것들 ❌
+
+- **혼재된 패턴**: 같은 기능을 두 가지 방식으로 구현 (Server fetch vs useQuery)
+- **스켈레톤 부재**: 모든 페이지에 로딩 UI 없음
+- **캐시 손실**: 클라이언트 전환 시 서버에서 받은 데이터가 버려짐
+
+---
+
+## 하이브리드 패턴 (안 C) 상세 설계
+
+### 핵심 아이디어
+
+**"초기 데이터는 서버에서, 그 캐시를 클라이언트가 이어받는다"**
+
+```
+초기 페이지 로드:
+┌─────────────────────┐
+│ Server Component    │
+│ - queryOptions로    │ ← 타입 안전한 Query 정의
+│   데이터 정의         │
+│ - prefetch 실행     │ ← DB/API에서 데이터 가져오기
+│ - dehydrate() 생성  │ ← 캐시 직렬화
+└──────────────────┬──┘
+                   │ (React에서 HTML 스트림)
+                   ▼
+┌─────────────────────┐
+│ Client (Hydrate)    │
+│ - 직렬화된 캐시      │ ← 브라우저에 도착
+│ - HydrationBoundary │ ← 클라이언트 재수화
+│ - useQuery 훅 실행  │ ← 캐시에서 즉시 반환
+└─────────────────────┘
+
+사용자 상호작용 (클릭):
+┌─────────────────────┐
+│ useMutation         │ ← 변경 요청
+│ invalidateQueries   │ ← 캐시 갱신
+│ revalidatePath()    │ ← 서버 상태 갱신
+└─────────────────────┘
+```
+
+### 폴더 구조 변경
+
+**현재:**
+
+```
+services/auth/
+├── auth.api.ts
+├── auth.queries.ts    # useQuery, useMutation만
+└── index.ts
+
+app/sosotalk/_services/
+├── sosotalk.api.ts
+├── sosotalk.queries.ts
+└── sosotalk.types.ts
+```
+
+**변경 후:**
+
+```
+services/
+├── auth/
+│   ├── auth.api.ts
+│   ├── auth.queries.ts      # useQuery, useMutation
+│   ├── auth.options.ts      # NEW: queryOptions (Server/Client 공용)
+│   └── index.ts
+├── meetings/
+│   ├── meetings.api.ts
+│   ├── meetings.queries.ts
+│   ├── meetings.options.ts  # NEW
+│   └── index.ts
+└── shared/
+  └── dehydrate-utils.ts   # NEW: hydrate 헬퍼
+
+app/sosotalk/
+├── _services/
+│   ├── sosotalk.api.ts
+│   ├── sosotalk.options.ts   # NEW
+│   └── index.ts
+├── page.tsx                  # Server Component (prefetch)
+└── _components/
+    └── sosotalk-list.tsx     # Client Component (useQuery)
+```
+
+---
+
+## 구현 단계
+
+### 1단계: 쿼리 옵션 정의 (Day 1)
+
+각 도메인에서 **queryOptions** 작성 (Server/Client에서 재사용 가능):
+
+```typescript
+// src/services/meetings/meetings.options.ts
+import { queryOptions } from '@tanstack/react-query';
+import { meetingsApi } from './meetings.api';
+
+export const meetingsQueryOptions = {
+  all: () =>
+    queryOptions({
+      queryKey: ['meetings'],
+      queryFn: () => meetingsApi.list(),
+      staleTime: 5 * 60 * 1000, // 5분
+    }),
+
+  detail: (id: number) =>
+    queryOptions({
+      queryKey: ['meetings', id],
+      queryFn: () => meetingsApi.detail(id),
+      staleTime: 10 * 60 * 1000,
+    }),
+};
+```
+
+**목표:** 쿼리 정의를 한 곳에서만 관리 (타입 안전, 일관성)
+
+### 2단계: Server prefetch + Dehydrate (Day 1-2)
+
+Server Component on page.tsx:
+
+prefetch 정책(성능 표준):
+
+- `critical` 데이터만 서버 prefetch 대상으로 지정한다.
+- `non-critical` 데이터는 클라이언트 지연 로드로 분리한다.
+- 화면별 prefetch 대상은 "첫 화면 안정성에 직접 영향을 주는 데이터"로 제한한다.
+- 목표: TTFB 악화 없이 초기 체감 속도(FMD)를 개선한다.
+
+```typescript
+// app/meetings/page.tsx
+import { QueryClient, HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { meetingsQueryOptions } from '@/services/meetings/meetings.options';
+import { MeetingsList } from './_components/meetings-list';
+
+export default async function MeetingsPage() {
+  const queryClient = new QueryClient();
+
+  try {
+    // 서버에서 미리 데이터 가져오기
+    await queryClient.prefetchQuery(meetingsQueryOptions.all());
+  } catch {
+    // prefetch 실패 시 페이지 전체 실패를 피하고 fallback UI를 렌더링
+    return <MeetingsPrefetchErrorFallback retryPath="/meetings" />;
+  }
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="bg-sosoeat-gray-100 min-h-screen">
+        <MeetingsList />
+      </div>
+    </HydrationBoundary>
+  );
+}
+```
+
+**목표:** 클라이언트가 받을 때 이미 캐시가 채워져 있음
+
+에러 처리 표준:
+
+- prefetch 실패는 `error.tsx`에만 위임하지 않고 페이지 단위 fallback 컴포넌트를 제공한다.
+- fallback 컴포넌트는 "재시도" 액션(동일 경로 재요청)을 반드시 포함한다.
+- 사용자에게는 silent failure가 아닌 명시적 오류 상태를 노출한다.
+
+### 3단계: 클라이언트 훅 만들기 (Day 2)
+
+Client Component에서 쿼리 옵션 사용:
+
+```typescript
+// app/meetings/_components/meetings-list.tsx
+'use client';
+import { useQuery } from '@tanstack/react-query';
+import { meetingsQueryOptions } from '@/services/meetings/meetings.options';
+
+export function MeetingsList() {
+  const { data } = useQuery(meetingsQueryOptions.all());
+
+  return (
+    <div className="space-y-4">
+      {data?.map(m => <MeetingCard key={m.id} meeting={m} />)}
+    </div>
+  );
+}
+```
+
+# Design: Server-Client Boundary Unification and Perceived-Speed Refactor
+
+Generated by /office-hours on 2026-04-02
+Branch: develop
+Repo: sw61/sosoeat
+Status: DRAFT
+Mode: Builder
+
+## Problem Statement
+
+소소잇에서 서버 컴포넌트/클라이언트 컴포넌트 데이터 경계가 일관되지 않아, 페이지별 데이터 로딩 방식이 다르고 사용자 입장에서 "기다리는 느낌"이 강하다. 로딩 스켈레톤 부재, 캐싱 전략 불일치, 중복 요청으로 인해 체감 성능과 개발팀 생산성이 동시에 떨어진다.
+
+## What Makes This Cool
+
+핵심은 속도 최적화 자체가 아니라 "기다림을 감추는 경험 설계"다. 사용자는 즉시 반응하는 UI를 경험하고, 개발팀은 같은 패턴으로 신규 화면을 빠르게 복제할 수 있다. 결과가 감각적(UX) + 계량적(중복 요청/로딩 지표)으로 동시에 증명된다.
+
+## Constraints
+
+- 기존 코드베이스는 `mypage`(서버 패칭 강점)와 `sosotalk`(TanStack Query 강점)이 분리되어 있어 통합 패턴 부재
+- Next.js App Router + TypeScript + TanStack Query + Zustand 구조 유지 필요
+- 기존 기능 회귀(regression) 없이 점진적으로 적용 가능해야 함
+- UI 체감 개선을 수치로 보여줄 계측이 필요함
+
+## V1 Scope (Explicit)
+
+- `src/app/mypage/page.tsx`
+- `src/app/mypage/_components/meeting-tabs/*`
+- `src/app/sosotalk/_components/sosotalk-main-page/*`
+- `src/app/sosotalk/_services/sosotalk.queries.ts`
+- `src/app/providers.tsx` (Hydration 경계/전역 Query 전략 보강)
+
+V1은 위 5개 영역으로 제한한다. 검색/모임 상세/알림은 V2로 이월한다.
+
+## Baseline Metrics (Before)
+
+- 중복 API 요청 수: 주요 화면 평균 100 탐색당 28회
+- First Meaningful Data (FMD): p75 기준 2.8초
+- 사용자 액션 후 안정화 시간: p75 기준 1.6초
+- 로딩 공백(스켈레톤 없는 blank state) 발생 비율: 42%
+
+측정 기준은 개발 환경이 아닌 staging 동일 시나리오에서 수집한다.
+
+## Premises
+
+1. server-first + hydrate 기본 패턴 표준화는 신규 화면 개발 속도를 높인다.
+2. 로딩 UX 개선은 스켈레톤 도입만으로 충분하지 않고, 캐시/중복 요청 지표가 동반되어야 가치가 검증된다.
+3. 리팩터는 아키텍처 일관성 중심으로 수행되어야 하며, 전면 적용 시에도 단계적 검증 포인트를 둬야 한다.
+
+## Approaches Considered
+
+### Approach A: 파일럿 2화면 + 계측 우선
+
+- `mypage`, `sosotalk` 2개 화면만 하이브리드 패턴 적용
+- 위험이 낮고 데모가 빠르지만, 전역 표준화는 후속 작업으로 남음
+
+### Approach B: 공통 인프라 먼저
+
+- `queryOptions + dehydrate/hydrate` 공통 템플릿을 먼저 구축
+- 재사용성은 높지만 초기 체감 데모까지 시간이 더 걸릴 수 있음
+
+### Approach C: 전면 통합 리팩터 (선택)
+
+- 주요 사용자 화면 전반에 server/client 경계 + 캐싱 + 스켈레톤을 한 번에 정리
+- 복잡도는 높지만 결과 일관성이 가장 크고, 개발팀 학습비용을 한 번에 정리 가능
+
+## Recommended Approach
+
+선택된 접근은 **Approach C**다.
+
+실행 원칙:
+
+1. 공통 패턴 정의
+
+- `queryOptions` 중심으로 데이터 계약 통일
+- Server prefetch + `dehydrate` 전달 + Client hydrate 재사용 패턴 구축
+
+2. 화면 적용 순서
+
+- 트래픽/가시성 높은 화면부터 적용
+- 각 화면에 로딩 스켈레톤 규격(높이/밀도/애니메이션) 표준 적용
+
+3. 계측 기준
+
+- 중복 요청 수
+- 첫 데이터 표시까지 시간(First Meaningful Data)
+- 사용자 액션 후 안정화 시간
+
+정량 목표:
+
+- 중복 API 요청 수 50% 이상 감소
+- FMD p75 2.8초 -> 1.8초 이하
+- 사용자 액션 후 안정화 시간 p75 1.6초 -> 0.9초 이하
+- blank state 발생 비율 42% -> 5% 이하
+
+4. 회귀 방지
+
+- 화면별 리그레션 테스트와 캐시 무효화 정책 확인
+- 실패 시 원복 가능한 배포 단위로 쪼개기
+
+## Open Questions
+
+- 캐시 staleTime/gcTime 표준값을 도메인별로 다르게 둘지 전역 기본값으로 둘지?
+- skeleton 디자인 규격을 디자인 시스템 레벨로 승격할지, 페이지 레벨 컴포넌트로 둘지?
+
+## Glossary
+
+- `staleTime`: 데이터를 "신선"하다고 보는 시간. 이 시간 내 재요청을 줄인다.
+- `gcTime`: 사용되지 않는 캐시를 메모리에서 정리하기까지의 시간.
+- `hydrate/dehydrate`: 서버에서 만든 Query 캐시를 클라이언트로 전달/복원하는 과정.
+- "안정화 시간": 사용자 액션 후 네트워크 요청과 UI 업데이트가 완료되어 추가 로딩 인디케이터가 사라질 때까지의 시간.
+
+## Success Criteria
+
+- 사용자가 주요 화면에서 로딩 중 공백을 보지 않는다.
+- 중복 API 요청 수가 기준 대비 유의미하게 감소한다.
+- 신규 화면 개발 시 server/client 경계 판단 시간이 줄어든다.
+- 개발팀이 동일 패턴으로 재사용 가능한 기준 파일/예제가 존재한다.
+
+## Distribution Plan
+
+이 변경은 신규 배포 아티팩트(패키지/바이너리)를 만들지 않는다. 기존 웹 서비스 배포 파이프라인(현재 Next.js 배포 흐름)을 그대로 사용한다. CI에서는 타입체크/린트/테스트를 기존 규칙에 맞춰 통과시키고, 점진 롤아웃 가능한 단위(화면/기능 플래그)로 배포한다.
+
+## Timeline and Ownership
+
+- Week 1: 공통 패턴(`queryOptions + hydrate`) 도입, `mypage` 적용
+- Week 2: `sosotalk` 적용, 스켈레톤 표준화, 계측 리포트 자동화
+- Week 3: 회귀 테스트 보강, 성능 목표 검증, V2 범위 재평가
+
+리소스:
+
+- Frontend 2명 (각 0.8 FTE)
+- QA 1명 (0.5 FTE)
+
+## Next Steps
+
+1. `queryOptions + hydrate` 공통 패턴 초안 작성
+2. 대표 화면 1개를 기준 구현으로 먼저 완성
+3. 동일 패턴을 우선순위 화면에 확장
+4. 로딩/중복요청 계측 대시보드(또는 로그 리포트) 추가
+5. 회귀 테스트 보강 후 전면 반영
+
+## Failure and Rollback Plan
+
+- 실패 시나리오 1: hydrate 이후 캐시 불일치로 잘못된 데이터 렌더링
+  - 대응: 화면 단위 feature flag로 즉시 server-only 경로로 전환
+- 실패 시나리오 2: mutation 후 stale 데이터 장기 노출
+  - 대응: 도메인 query key invalidate 정책 강제 + 긴급 핫픽스
+- 실패 시나리오 3: 스켈레톤 규격 불일치로 레이아웃 점프
+  - 대응: 공통 skeleton 컴포넌트 강제 사용, lint rule/리뷰 체크
+
+롤백 규칙:
+
+- 배포 후 30분 내 FMD 악화 20% 이상 또는 오류율 2배 이상 시 즉시 이전 안정 배포로 롤백
+- 롤백은 화면 단위 플래그 우선, 전체 롤백은 마지막 수단
+
+## What I noticed about how you think
+
+- "사용자가 기다린다는 느낌이 없게"를 최우선으로 둔 점이 명확했다.
+- "개발팀"을 1차 고객으로 두고 패턴 통일을 목표로 잡았다.
+- 데모 기준을 기능 완료가 아니라 "지표로 증명"으로 고정했다.
+- 부분 최적화 대신 전체 정합성을 얻는 전면 통합안을 선택했다.
+
+**목표:** 서버의 캐시를 그대로 받아 초기 공백 없이 렌더링
+
+### 4단계: 스켈레톤 시스템 (Day 2-3)
+
+로딩 전략 표준:
+
+- 기본: 페이지 단위 `Suspense fallback`으로 로딩 처리
+- 예외: 클라이언트 전용 쿼리(SSR prefetch 불가)에서만 `isLoading` 분기 허용
+
+스켈레톤 컴포넌트 예시:
+
+```typescript
+// components/common/skeleton/meetings-list-skeleton.tsx
+export function MeetingsListSkeleton() {
+  return (
+    <div className="space-y-4">
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="h-32 bg-sosoeat-gray-200 rounded animate-pulse" />
+      ))}
+    </div>
+  );
+}
+```
+
+표준 **Suspense 사용**:
+
+```typescript
+// app/meetings/page.tsx
+export default async function MeetingsPage() {
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense fallback={<MeetingsListSkeleton />}>
+        <MeetingsList />
+      </Suspense>
+    </HydrationBoundary>
+  );
+}
+```
+
+### 5단계: 변경 작업 (Mutations) (Day 3)
+
+Mutation 시 서버 상태도 함께 갱신:
+
+invalidate 성능 원칙:
+
+- mutation 이후 invalidate는 `도메인 + 파라미터` 단위로 최소화한다.
+- 전체 리스트 broad invalidate(`['sosotalk-post-list']`)는 기본값으로 사용하지 않는다.
+- 정렬/필터/페이지 파라미터가 다른 쿼리는 분리된 key로 관리한다.
+- 목표: 불필요 refetch를 줄여 네트워크/렌더 비용을 최소화한다.
+
+```typescript
+// app/meetings/_components/create-meeting-modal.tsx
+'use client';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createMeetingAction } from '@/app/meetings/actions';
+
+export function CreateMeetingModal() {
+  const queryClient = useQueryClient();
+
+  const createMutation = useMutation({
+    mutationFn: (data) => createMeetingAction(data),
+    onSuccess: () => {
+      // 캐시 무효화(파라미터 스코프 최소화) -> 새 데이터 refetch
+      queryClient.invalidateQueries({ queryKey: ['meetings', 'list', { sort: 'latest' }] });
+    },
+  });
+
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      createMutation.mutate({...});
+    }}>
+      {/* 폼 */}
+    </form>
+  );
+}
+```
+
+---
+
+## 전제 (Premises)
+
+이 설계는 다음을 가정합니다:
+
+1. **TanStack Query v5 이상 사용 가능**
+   - queryOptions 패턴이 필요함
+   - 현재 package.json에서 버전 확인 필요
+
+2. **모든 API 엔드포인트가 안정적**
+   - 서버에서 prefetch 실패 시 폴백 처리 필요
+3. **Server Action / revalidatePath 사용**
+   - Next.js 13.4+ App Router 필수
+
+4. **점진적 마이그레이션 가능**
+   - 기존 페이지는 유지, 새 페이지부터 하이브리드 패턴 적용
+
+5. **critical/non-critical 분류 운영**
+
+- Outside Voice 결정 반영: critical 화면만 하이브리드(SSR prefetch + hydrate)
+- non-critical 화면은 pure-client query 허용
+
+---
+
+## 성공 기준
+
+### 기술 지표
+
+- [ ] 모든 쿼리가 `queryOptions` 기반으로 정의됨
+- [ ] First Meaningful Data(FMD) p75가 기준 대비 30% 이상 개선됨
+- [ ] 주요 화면 100회 탐색 기준 중복 API 요청 수가 50% 이상 감소함
+- [ ] 캐시 유효성이 5-10분 범위로 설정됨
+- [ ] 전체 페이지 로드 속도 5% 이상 향상 (Core Web Vitals)
+
+### 사용자 지표
+
+- [ ] 모든 비동기 작업이 스켈레톤/로딩 UI로 표시됨
+- [ ] 페이지 전환 시 데이터가 즉시 보임 (캐시 덕분)
+- [ ] 변경 작업(create/update/delete) 후 UI가 즉시 갱신됨
+
+### 테스트 기준 (필수)
+
+- [ ] `mypage` 하이브리드 경로 통합 테스트 3종
+  - prefetch 성공 -> HydrationBoundary 전달 -> 초기 blank state 없음
+  - prefetch 실패 -> fallback UI 표시
+  - fallback retry -> 동일 경로 재요청 및 정상 복귀
+- [ ] 회귀 테스트(CRITICAL)
+  - auth 계정 전환 시 이전 사용자 캐시 데이터가 노출되지 않음
+  - mutation 후 stale 데이터 장기 노출 없음
+- [ ] E2E 테스트 2종(CRITICAL)
+  - 마이페이지 첫 진입 체감 로딩(스켈레톤 포함)
+  - 소소톡 상호작용(좋아요/댓글) 후 데이터 정합성
+
+---
+
+## 오픈 질문
+
+1. **기존 페이지 마이그레이션 속도?**
+   - 한 번에 한 기능씩 (meetings → sosotalk → auth 순)
+   - 아니면 새 페이지만 우선?
+
+2. **에러 처리?**
+   - prefetch 실패 시 사용자에게 보일 에러 화면?
+   - 폴백 UI와 재시도 로직?
+
+3. **오프라인 지원?**
+   - 캐시된 데이터로 일부 기능은 오프라인에서도 작동?
+   - 아니면 온라인 전제?
+
+---
+
+## 다음 단계 (The Assignment)
+
+### 이번 주
+
+1. **TanStack Query 버전 확인**
+   - `package.json`에서 `@tanstack/react-query` 버전 확인
+   - v5 미만이면 업그레이드 검토
+
+2. **하나의 페이지 완전 구현**
+   - `meetings` 페이지를 하이브리드 패턴으로 전환
+   - queryOptions 작성 → prefetch → dehydrate → 클라이언트 hydrate
+   - 스켈레톤도 추가
+   - **PR로 제출** (리뷰 받기)
+
+3. **팀과 패턴 공유**
+   - 구현한 meetings 페이지를 기준으로 이 설계 문서 리뷰
+   - 파이프라인이 작동하는지 눈으로 확인
+
+### 2주차부터
+
+- sosotalk 페이지로 동일 패턴 적용
+- auth 데이터 흐름 최적화
+- mypage도 통합
+
+### 가드레일 (Outside Voice 반영)
+
+- [ ] React Compiler + TanStack Query(`queryOptions + HydrationBoundary`) staging 검증
+- [ ] Server/Client 공통 `QueryClient` 설정 함수 단일화
+- [ ] logout/login 전환 시 query cache clear 경로 구현
+- [ ] prefetch timeout + fallback 기준(예: 2초) 명시
+- [ ] 파라미터 기반 query key 규칙 문서화
+- [ ] HydrationBoundary -> Suspense 순서 불변조건 코드 코멘트화
+
+---
+
+## What Already Exists
+
+- `src/app/mypage/page.tsx`: Server Component 기반 초기 데이터 패칭 기준 구현
+- `src/app/sosotalk/_services/sosotalk.queries.ts`: Query key + mutation invalidate 패턴
+- `src/app/providers.tsx`: 전역 `QueryClientProvider` 진입점
+
+재사용 결론:
+
+- 재구현보다 기존 세 패턴을 통합 표준으로 승격하는 것이 최소 변경 원칙에 부합
+
+---
+
+## NOT in Scope
+
+- 검색/모임 상세/알림 전체 마이그레이션: V2로 이월 (폭발 반경 관리)
+- 오프라인 완전 지원: 현재 목표는 체감 속도 개선, 오프라인은 후속 검토
+- 신규 배포 아티팩트(패키지/CLI) 추가: 기존 웹 배포 파이프라인 사용
+
+---
+
+## Failure Modes
+
+1. prefetch 타임아웃으로 TTFB 악화
+
+- 테스트: 통합 테스트 필요 (현재 GAP)
+- 에러 처리: fallback + retry 표준 정의됨
+- 사용자 노출: 명시적 fallback
+
+2. 계정 전환 시 이전 사용자 캐시 노출
+
+- 테스트: 회귀 테스트(CRITICAL) 정의됨
+- 에러 처리: auth 전환 시 cache clear 필요
+- 사용자 노출: 누락 시 silent 데이터 오염 위험
+
+3. mutation 이후 broad invalidate로 과도 refetch
+
+- 테스트: E2E/통합 검증 필요
+- 에러 처리: 파라미터 스코프 invalidate 원칙 반영
+- 사용자 노출: 과도 로딩/깜빡임
+
+4. Hydration 순서 불일치로 초기 깜빡임/불일치
+
+- 테스트: 통합 테스트 필요
+- 에러 처리: 순서 불변조건 문서화 필요
+- 사용자 노출: 초기 화면 점프
+
+Critical gap 판정:
+
+- (2)는 테스트 누락 + 처리 누락 + silent 가능성이 있어 CRITICAL
+
+---
+
+## Worktree Parallelization Strategy
+
+| Step                      | Modules touched                          | Depends on                |
+| ------------------------- | ---------------------------------------- | ------------------------- |
+| QueryClient 설정 단일화   | `src/app/`, `src/lib/`                   | —                         |
+| Query options/keys 표준화 | `src/services/`, `src/app/**/_services/` | QueryClient 설정 단일화   |
+| mypage 하이브리드 적용    | `src/app/mypage/`                        | Query options/keys 표준화 |
+| sosotalk 하이브리드 적용  | `src/app/sosotalk/`                      | Query options/keys 표준화 |
+| 테스트/계측 보강          | `src/**/*.test.ts*`, `tests/e2e/`        | mypage/sosotalk 적용      |
+
+Lane A: QueryClient 설정 단일화 -> Query options/keys 표준화
+Lane B: mypage 하이브리드 적용 (A 완료 후)
+Lane C: sosotalk 하이브리드 적용 (A 완료 후)
+Lane D: 테스트/계측 보강 (B + C 병합 후)
+
+실행 순서:
+
+- A 먼저
+- 이후 B + C 병렬 worktree 실행
+- 병합 후 D 실행
+
+Conflict flags:
+
+- B와 C는 공통 `src/services/`를 동시에 건드릴 수 있어 충돌 위험 높음
+- `src/services/` 변경은 A에서 선반영 후, B/C는 페이지 단위 변경 위주로 제한 권장
+
+---
+
+## 핵심 아이디어 정리
+
+당신이 선택한 **하이브리드 패턴**의 강점은:
+
+| 항목                    | 결과                         |
+| ----------------------- | ---------------------------- |
+| **초기 로드 속도**      | 빠름 (Server-Side Rendering) |
+| **캐시 효율성**         | 높음 (Server → Client 연계)  |
+| **개발 경험**           | 타입 안전 (queryOptions)     |
+| **점진적 마이그레이션** | 가능 (기존 코드 영향 최소)   |
+| **복잡도**              | 중간 (setup 익히는 데 1-2일) |
+
+**비유:** "비행기에 이미 짐이 실려있어서, 목적지에 도착할 때 즉시 꺼낼 수 있다"
+
+---
+
+## 내가 알아챈 것들
+
+1. **당신의 현재 코드 수준**
+   - mypage 페이지를 보니까 Server Component 패턴을 이미 이해하고 있음
+   - TanStack Query도 부분적으로 잘 적용해놨음
+   - "답은 이미 코드 안에 있었다" 상태
+
+2. **당신의 우선순위**
+   - "완벽한 아키텍처보다 빠른 배포"를 선택
+   - 실용성과 속도를 중시하는 엔지니어 마인드
+
+3. **팀의 규모**
+   - 구조를 봤을 때 1-2명이 메인 개발하는 규모
+   - 패턴 통일이 미래 협업의 핵심 자산이 될 것
+
+---
+
+## GSTACK REVIEW REPORT
+
+리뷰 아직 실행되지 않음. 설계 승인 후 `/plan-eng-review`로 아키텍처 검증을 권장합니다.

@@ -2,27 +2,49 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 /**
- * [Proxy] Next.js 16
+ * [Middleware] Next.js
  * 페이지 접근 권한을 제어합니다.
- * /mypage 진입 시에만 토큰 유무를 쿠키(`refreshToken`)로 판단합니다.
+ * /mypage 진입 시 refreshToken 유무로 세션을 확인하고,
+ * accessToken이 없으면 /api/auth/refresh를 호출하여 갱신합니다.
  */
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const hasSession = request.cookies.has('refreshToken');
-
-  // 마이페이지(/mypage) 보호된 경로로 설정
   const isProtectedRoute = pathname.startsWith('/mypage');
 
-  if (isProtectedRoute && !hasSession) {
+  if (!isProtectedRoute) {
+    return NextResponse.next();
+  }
+
+  const hasRefreshToken = request.cookies.has('refreshToken');
+  if (!hasRefreshToken) {
     const callbackUrl = encodeURIComponent(pathname);
     return NextResponse.redirect(new URL(`/login?callbackUrl=${callbackUrl}`, request.url));
   }
 
-  // 그 외 모든 경로는 자유롭게 접근 가능
-  return NextResponse.next();
+  const hasAccessToken = request.cookies.has('accessToken');
+  if (hasAccessToken) {
+    return NextResponse.next();
+  }
+
+  // accessToken 만료 → Route Handler를 통해 갱신
+  const refreshRes = await fetch(new URL('/api/auth/refresh', request.url), {
+    method: 'POST',
+    headers: { cookie: request.headers.get('cookie') ?? '' },
+  });
+
+  if (!refreshRes.ok) {
+    const callbackUrl = encodeURIComponent(pathname);
+    return NextResponse.redirect(new URL(`/login?callbackUrl=${callbackUrl}`, request.url));
+  }
+
+  // 갱신된 쿠키를 응답에 반영
+  const response = NextResponse.next();
+  refreshRes.headers.getSetCookie().forEach((cookie) => {
+    response.headers.append('Set-Cookie', cookie);
+  });
+  return response;
 }
 
-// 미들웨어가 적용될 경로 설정
 export const config = {
   matcher: ['/mypage/:path*'],
 };

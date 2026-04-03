@@ -70,7 +70,7 @@ export const MeetingFilterBar = ({
     <div
       className={cn(
         // mobile-first: base = stacked rows, md+ = single row
-        'flex w-full flex-col justify-start gap-2 sm:justify-between md:flex-row md:items-center md:gap-0',
+        'flex w-full flex-col justify-start gap-2 md:flex-row md:items-center md:justify-between md:gap-0',
         className
       )}
     >
@@ -97,7 +97,7 @@ export const MeetingFilterBar = ({
       </div>
 
       {/* Frame 2610402 — h 32 필터 행 */}
-      <div className="flex h-8 w-full items-center justify-start gap-2 sm:justify-end md:w-auto">
+      <div className="flex h-8 w-full items-center justify-start gap-2 md:w-auto">
         <DetailDatePicker
           valueStart={dateStart}
           valueEnd={dateEnd}

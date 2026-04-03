@@ -33,9 +33,10 @@ const MeetingEditForm = ({
   onClose,
   meetingId,
   defaultValues,
+  onSuccess,
 }: Omit<MeetingEditModalProps, 'open'>) => {
   const [activeTab, setActiveTab] = useState<MeetingEditTab>('basicInfo');
-  const { mutateAsync } = useUpdateMeeting(meetingId);
+  const { mutateAsync } = useUpdateMeeting(meetingId, onSuccess);
   const {
     mutateAsync: uploadImage,
     isPending: isUploadPending,
@@ -180,6 +181,7 @@ export const MeetingEditModal = ({
   onClose,
   meetingId,
   defaultValues,
+  onSuccess,
 }: MeetingEditModalProps) => {
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) onClose();
@@ -200,7 +202,12 @@ export const MeetingEditModal = ({
         )}
       >
         <DialogTitle className="sr-only">모임 수정</DialogTitle>
-        <MeetingEditForm onClose={onClose} meetingId={meetingId} defaultValues={defaultValues} />
+        <MeetingEditForm
+          onClose={onClose}
+          meetingId={meetingId}
+          defaultValues={defaultValues}
+          onSuccess={onSuccess}
+        />
       </DialogContent>
     </Dialog>
   );

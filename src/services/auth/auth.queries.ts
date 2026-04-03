@@ -64,6 +64,20 @@ export const useSocialLogin = () => {
   // BFF 중복 호출 방지: 의존성 변경으로 useEffect가 재실행되어도 한 번만 실행
   const isProcessed = useRef(false);
 
+  const mutation = useMutation({
+    mutationFn: (payload: { accessToken: string; refreshToken: string }) =>
+      authApi.socialCallback(payload),
+    onSuccess: (data) => {
+      const storedCallbackUrl = sessionStorage.getItem(SOCIAL_CALLBACK_URL_KEY);
+      sessionStorage.removeItem(SOCIAL_CALLBACK_URL_KEY);
+      login(data.user);
+      router.replace(getSafeCallbackUrl(storedCallbackUrl));
+    },
+    onError: () => {
+      router.replace('/login?error=session_error');
+    },
+  });
+
   useEffect(() => {
     if (isProcessed.current) return;
     isProcessed.current = true;
@@ -78,20 +92,12 @@ export const useSocialLogin = () => {
       return;
     }
 
-    const storedCallbackUrl = sessionStorage.getItem(SOCIAL_CALLBACK_URL_KEY);
-    const callbackUrl = getSafeCallbackUrl(storedCallbackUrl);
+    mutation.mutate({ accessToken, refreshToken });
+    // 마운트 시 한 번만 실행 — searchParams는 URL에서 읽는 초기값이므로 재실행 불필요
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    authApi
-      .socialCallback({ accessToken, refreshToken })
-      .then((data) => {
-        sessionStorage.removeItem(SOCIAL_CALLBACK_URL_KEY);
-        login(data.user);
-        router.replace(callbackUrl);
-      })
-      .catch(() => {
-        router.replace('/login?error=session_error');
-      });
-  }, [searchParams, login, router]);
+  return mutation;
 };
 
 /**

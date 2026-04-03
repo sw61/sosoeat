@@ -28,5 +28,9 @@
     @apply bg-background text-foreground font-sans;
     font-size: var(--text-base);
     line-height: var(--text-base--line-height);
+    /* 화면 방향 전환 및 input focus 시 iOS Safari의 텍스트 자동 확대 방지 */
+    -webkit-text-size-adjust: 100%;
+    /* 버튼/링크 터치 시 iOS/Android의 파란 하이라이트 제거 */
+    -webkit-tap-highlight-color: transparent;
   }
 }

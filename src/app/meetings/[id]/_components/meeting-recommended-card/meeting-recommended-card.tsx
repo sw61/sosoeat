@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { MapPin } from 'lucide-react';
 
@@ -15,18 +16,31 @@ interface RecommendedMeetingCardProps {
 }
 
 export default function RecommendedMeetingCard({ meeting, onClick }: RecommendedMeetingCardProps) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick(meeting.id);
+    } else {
+      router.push(`/meetings/${meeting.id}`);
+    }
+  };
+
   return (
     <Card
       className="h-[286px] w-[302px] cursor-pointer border-none bg-transparent pt-0 shadow-none ring-0"
-      onClick={() => onClick?.(meeting.id)}
+      onClick={handleClick}
     >
       <CardContent className="flex flex-col p-0">
         {/* ── 썸네일 ── */}
         <div className="pb-[14px]">
           <div className="relative h-[160px] w-full overflow-hidden rounded-3xl">
             <Image src={meeting.image} alt={meeting.name} fill className="object-cover" />
-            <div className="absolute right-5 bottom-5" onClick={(e) => e.stopPropagation()}>
-              <HeartButton size="sm" isFavorited={meeting.isFavorited} />
+            <div
+              className="absolute right-5 bottom-5 cursor-pointer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <HeartButton size="sm" meetingId={meeting.id} isFavorited={meeting.isFavorited} />
             </div>
           </div>
         </div>

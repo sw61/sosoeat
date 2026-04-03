@@ -9,4 +9,5 @@ export interface MeetingEditModalProps {
   onClose: () => void;
   meetingId: number;
   defaultValues: MeetingEditFormData;
+  onSuccess?: () => void;
 }

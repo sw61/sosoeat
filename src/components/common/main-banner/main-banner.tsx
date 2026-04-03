@@ -39,7 +39,7 @@ const BANNERS: Banner[] = [
     imageUrl:
       'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021087340-27221ae9-edba-448c-97ee-775ae7e75b75.jpg',
     alt: '저녁 모임을 위한 정갈한 요리',
-    href: '/mypage',
+    href: '/meetings',
   },
 ];
 
@@ -109,7 +109,7 @@ export function MainBanner() {
                   'left-8 xl:-left-16',
                   'h-12.5 w-12.5 border border-white/20 bg-white/15 text-white backdrop-blur-md',
                   'hover:scale-105 hover:border-white/40 hover:bg-white/25',
-                  'active:scale-95 active:bg-white/30'
+                  'active:translate-y-[-50%] active:scale-95 active:bg-white/30'
                 )}
               />
               <CarouselNext
@@ -118,7 +118,7 @@ export function MainBanner() {
                   'right-8 xl:-right-16',
                   'h-12.5 w-12.5 border border-white/20 bg-white/15 text-white backdrop-blur-md',
                   'hover:scale-105 hover:border-white/40 hover:bg-white/25',
-                  'active:scale-95 active:bg-white/30'
+                  'active:translate-y-[-50%] active:scale-95 active:bg-white/30'
                 )}
               />
             </div>

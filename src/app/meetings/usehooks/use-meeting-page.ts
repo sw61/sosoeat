@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
 import { startOfDay } from 'date-fns';
 
-import { MeetingWithHost, TeamIdMeetingsGetRequest } from '@/types/generated-client';
+import { meetingsQueryOptions } from '@/services/meetings/meetings.options';
+import { MeetingList, TeamIdMeetingsGetRequest } from '@/types/generated-client';
 
 import { MeetingFilterBarProps } from '../_components/meeting-filter-bar';
 import { RegionSelection } from '../_components/region-select-modal';
-import { fetchMeetingByFilter } from '../repositories/api/fetch-meeting-by-filter';
 
 type DateChangeParams = {
   valueStart: Date | null;
@@ -17,27 +18,33 @@ const useMeetingPage = () => {
   const [regionCommitted, setRegionCommitted] = useState<RegionSelection>(null);
   const [dateStart, setDateStart] = useState<Date | null>(null);
   const [dateEnd, setDateEnd] = useState<Date | null>(null);
-  const [meetingData, setMeetingData] = useState<MeetingWithHost[]>([]);
   const [typeFilter, setTypeFilter] = useState<'all' | 'groupEat' | 'groupBuy'>('all');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [sortBy, setSortBy] = useState<MeetingFilterBarProps['sortBy']>('participantCount');
+
+  const region =
+    regionCommitted == null ? undefined : `${regionCommitted.district} ${regionCommitted.province}`;
+  const dateEndExclusiveIso =
+    dateEnd == null
+      ? undefined
+      : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1).toISOString();
 
   const options: Omit<TeamIdMeetingsGetRequest, 'teamId'> = {
     size: 10,
     //type unfind이면 전체 보냄
     type: typeFilter === 'all' ? undefined : typeFilter,
-    region:
-      regionCommitted == null
-        ? undefined
-        : regionCommitted.district + ' ' + regionCommitted.province,
+    region,
     dateStart: dateStart == null ? undefined : dateStart,
-    dateEnd:
-      dateEnd == null
-        ? undefined
-        : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1),
+    dateEnd: dateEndExclusiveIso == null ? undefined : new Date(dateEndExclusiveIso),
     sortBy: sortBy,
     sortOrder: sortOrder,
   };
+  const {
+    data: meetingList,
+    isLoading,
+    isError,
+  } = useQuery<MeetingList>(meetingsQueryOptions.options(options));
+  const meetingData = meetingList?.data ?? [];
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
     setTypeFilter(value);
@@ -72,13 +79,6 @@ const useMeetingPage = () => {
     setSortOrder(sortOrder);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchMeetingByFilter(options);
-      setMeetingData(data.data);
-    };
-    fetchData();
-  }, [regionCommitted, dateStart, dateEnd, typeFilter, sortBy, sortOrder]);
   return {
     meetingData,
     handleRegionChange,
@@ -91,6 +91,8 @@ const useMeetingPage = () => {
     handleSortChange,
     sortBy,
     sortOrder,
+    isLoading,
+    isError,
   };
 };
 

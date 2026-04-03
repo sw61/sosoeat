@@ -8,7 +8,7 @@ const bannerShellClass =
   'relative h-48 w-full overflow-hidden rounded-xlsm:h-56 md:h-[244px] md:max-w-[1140px] md:rounded-2xl';
 
 const headlineClass =
-  'font-pretendard-local text-3xl leading-[1.2] font-extrabold tracking-[-0.03em] text-white sm:text-4xl md:text-[46px] md:leading-[55px] md:tracking-[-1.38px]';
+  'font-pretendard-local text-3xl leading-[1.2] font-extrabold tracking-[-0.03em] text-white  md:text-[46px] md:leading-[55px] md:tracking-[-1.38px]';
 
 const subtitleWrapClass =
   'mt-2 hidden max-w-[273px] text-base leading-7 font-normal text-white/80 md:block';
@@ -29,7 +29,7 @@ export default function MeetingSearchBanner({ className }: MeetingSearchBannerPr
           className="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,0,0,0.55),rgba(0,0,0,0.55))]"
           aria-hidden
         />
-        <div className="absolute inset-0 z-10 flex flex-col justify-start px-6 pt-8 sm:px-10 sm:pt-10 md:px-26 md:pt-9.75">
+        <div className="absolute inset-0 z-10 flex flex-col justify-start px-10 pt-10 md:px-26 md:pt-9.75">
           <h2 className={headlineClass}>
             <span>{'함께하면'} </span>
             <span className="text-sosoeat-orange-500">

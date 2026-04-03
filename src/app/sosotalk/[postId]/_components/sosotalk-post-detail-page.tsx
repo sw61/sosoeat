@@ -17,7 +17,6 @@ import {
   useUpdateSosoTalkComment,
 } from '@/app/sosotalk/_services';
 import type { CommentItemData } from '@/components/common/comment-item';
-import { Footer } from '@/components/common/footer';
 import { useAuthStore } from '@/store/auth-store';
 import type { Comment } from '@/types/generated-client/models/Comment';
 
@@ -300,8 +299,6 @@ function SosoTalkPostDetailPageLayout({ children }: { children: ReactNode }) {
           <div className="mx-auto w-full max-w-[860px] xl:max-w-[960px]">{children}</div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
