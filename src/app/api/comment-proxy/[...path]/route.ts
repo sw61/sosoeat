@@ -13,7 +13,7 @@ const COMMENT_SERVER_URL = process.env.COMMENT_SERVER_URL;
  */
 async function handler(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { path } = await params;
-  const targetUrl = `${COMMENT_SERVER_URL}/${path.join('/')}${request.nextUrl.search}`;
+  const targetUrl = `${COMMENT_SERVER_URL?.replace(/\/$/, '')}/${path.join('/')}${request.nextUrl.search}`;
 
   const body =
     request.method !== 'GET' && request.method !== 'HEAD' ? await request.blob() : undefined;

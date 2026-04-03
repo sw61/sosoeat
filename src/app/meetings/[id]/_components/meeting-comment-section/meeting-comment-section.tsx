@@ -37,11 +37,12 @@ function countNonDeleted(nodes: MeetingComment[]): number {
 export function MeetingCommentSection({
   meetingId,
   initialComments,
+  commentSync,
   className,
 }: MeetingCommentSectionProps) {
   const [commentText, setCommentText] = useState('');
   const { isAuthenticated, user } = useAuthStore();
-  const { data: comments } = useComments(meetingId, initialComments as Comment[]);
+  const { data: comments } = useComments(meetingId, initialComments as Comment[], commentSync);
   const { mutate: createComment, isPending: isCreateCommentPending } = useCreateComment(meetingId, {
     nickname: user?.name ?? '',
     profileUrl: user?.image ?? null,

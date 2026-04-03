@@ -17,10 +17,14 @@ export const commentKeys = {
 
 const COMMENT_LIST_STALE_MS = 30_000;
 
-export const useComments = (meetingId: number, initialData?: Comment[]) => {
+export const useComments = (
+  meetingId: number,
+  initialData?: Comment[],
+  syncMeeting?: SyncMeetingRequest
+) => {
   return useQuery({
     queryKey: commentKeys.list(meetingId),
-    queryFn: () => commentApi.getComments(meetingId),
+    queryFn: () => commentApi.getComments(meetingId, syncMeeting),
     initialData,
     staleTime: COMMENT_LIST_STALE_MS,
     retry: false,

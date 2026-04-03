@@ -37,8 +37,8 @@ const mockNotificationList: Notification[] = [
 /**
  * notificationRepository의 fetchLatestNotifications를 mock 데이터로 오버라이드
  * 이 설정은 모든 story에서 실제 API 호출을 차단합니다.
- */
-const originalFetch = notificationRepository.fetchLatestNotifications;
+//  */
+// const originalFetch = notificationRepository.fetchLatestNotifications;
 notificationRepository.fetchLatestNotifications = async () => ({
   data: mockNotificationList,
   unread: mockNotificationList.filter((notification) => !notification.isRead).length,

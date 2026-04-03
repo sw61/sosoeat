@@ -16,7 +16,7 @@ export const setCommentSessionExpiredHandler = (handler: () => void) => {
  * Authorization 헤더 삽입 및 토큰 갱신은 프록시 Route Handler에서 처리합니다.
  */
 const request = async (url: string, options: RequestInit = {}): Promise<Response> => {
-  const fullUrl = `/api/comment-proxy${url}`;
+  const fullUrl = `/api/comment-proxy/${url.replace(/^\//, '')}`;
 
   const headers = new Headers(options.headers);
   if (!headers.has('Content-Type')) {

@@ -18,6 +18,8 @@ export type Meeting = {
   canceledAt?: string | null;
   confirmedAt?: string | null;
   hostId: number;
+  /** 댓글 서버 모임 동기화 등에 사용 (백엔드 모임 상세 응답에 포함) */
+  teamId: string;
   createdBy: number;
   updatedAt: string;
   host: {
