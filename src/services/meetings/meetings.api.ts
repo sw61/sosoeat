@@ -22,6 +22,25 @@ export const meetingsApi = {
 
     return response.json();
   },
+  async getList(): Promise<MeetingList> {
+    const response = await fetchClient.get('/meetings');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || '모임 목록 조회에 실패했습니다.');
+    }
+    return response.json();
+  },
+
+  async getByFilter(options: Omit<TeamIdMeetingsGetRequest, 'teamId'>): Promise<MeetingList> {
+    const queryString = makeQueryString(options);
+    const response = await fetchClient.get(`/meetings${queryString}`);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || '모임 목록 조회에 실패했습니다.');
+    }
+    return response.json();
+  },
 
   /**
    * 모임 생성 요청
