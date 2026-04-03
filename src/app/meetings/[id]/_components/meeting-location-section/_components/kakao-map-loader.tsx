@@ -11,17 +11,18 @@ const KakaoMap = dynamic(() => import('@/components/common/kakao-map').then((m) 
 });
 
 interface KakaoMapLoaderProps {
+  appKey: string;
   latitude: number;
   longitude: number;
 }
 
-export function KakaoMapLoader({ latitude, longitude }: KakaoMapLoaderProps) {
+export function KakaoMapLoader({ appKey, latitude, longitude }: KakaoMapLoaderProps) {
   const [sdkReady, setSdkReady] = useState(false);
 
   return (
     <>
       <Script
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY}&autoload=false`}
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`}
         strategy="afterInteractive"
         onLoad={() => setSdkReady(true)}
       />
