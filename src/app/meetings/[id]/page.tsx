@@ -1,12 +1,11 @@
-import { commentServer } from '@/lib/http/comment-server';
 import { getMeetings } from '@/services/meetings/meetings.server';
 import type { Meeting } from '@/types/meeting';
 
-import type { MeetingComment } from './_components/meeting-comment-section';
 import { MeetingCommentSection } from './_components/meeting-comment-section';
 import { MeetingHeroSection } from './_components/meeting-hero-section';
 import { MeetingLocationSection } from './_components/meeting-location-section';
 import { MeetingRecommendedSection } from './_components/meeting-recommended-section';
+import { fetchMeetingCommentsForPage } from './services/meeting-comments.server';
 import { getMeetingById } from './services/meeting-detail.server';
 
 // ─── Page ────────────────────────────────────────────────────
@@ -21,19 +20,15 @@ export default async function MeetingDetailPage({ params }: Props) {
 
   const meetingData = await getMeetingById(meetingId);
 
-  const [meetingList, commentsResult] = await Promise.allSettled([
-    getMeetings({ region: meetingData.region, size: 4 }),
-    commentServer.get(`/meetings/${meetingId}/comments`),
+  const [meetingList, initialCommentsRaw] = await Promise.all([
+    getMeetings({ region: meetingData.region, size: 4 }).catch(() => ({ data: [] as Meeting[] })),
+    fetchMeetingCommentsForPage(meetingId, meetingData),
   ]);
 
-  const recommendedMeetingsRaw: Meeting[] =
-    meetingList.status === 'fulfilled' ? (meetingList.value.data as unknown as Meeting[]) : [];
+  const recommendedMeetingsRaw = meetingList.data as unknown as Meeting[];
   const recommendedMeetings = recommendedMeetingsRaw.filter((m) => m.id !== meetingId);
 
-  let initialComments: MeetingComment[] = [];
-  if (commentsResult.status === 'fulfilled' && commentsResult.value.ok) {
-    initialComments = await commentsResult.value.json();
-  }
+  const initialComments = initialCommentsRaw;
 
   return (
     <main className="space-y-[30px] py-10">
@@ -56,7 +51,15 @@ export default async function MeetingDetailPage({ params }: Props) {
         latitude={meetingData.latitude}
         longitude={meetingData.longitude}
       />
-      <MeetingCommentSection meetingId={meetingId} initialComments={initialComments} />
+      <MeetingCommentSection
+        meetingId={meetingId}
+        initialComments={initialComments}
+        commentSync={{
+          id: meetingData.id,
+          hostId: meetingData.hostId,
+          teamId: meetingData.teamId,
+        }}
+      />
       <MeetingRecommendedSection meetings={recommendedMeetings} />
     </main>
   );

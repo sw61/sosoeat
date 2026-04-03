@@ -42,8 +42,20 @@ export type SyncMeetingRequest = {
  * 클라이언트 컴포넌트 전용 (comment-client 사용)
  */
 export const commentApi = {
-  async getComments(meetingId: number): Promise<Comment[]> {
-    const response = await commentClient.get(`/meetings/${meetingId}/comments`);
+  async getComments(meetingId: number, syncMeeting?: SyncMeetingRequest): Promise<Comment[]> {
+    let response = await commentClient.get(`/meetings/${meetingId}/comments`);
+
+    if (response.status === 404 && syncMeeting?.teamId) {
+      const syncResponse = await commentClient.post('/meetings', {
+        id: syncMeeting.id,
+        hostId: syncMeeting.hostId,
+        teamId: syncMeeting.teamId,
+      });
+      if (syncResponse.ok) {
+        response = await commentClient.get(`/meetings/${meetingId}/comments`);
+      }
+    }
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || '댓글을 불러오는데 실패했습니다.');

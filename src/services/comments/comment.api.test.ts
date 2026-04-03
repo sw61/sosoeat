@@ -23,8 +23,9 @@ const okResponse = (data: unknown) => ({
   json: jest.fn().mockResolvedValue(data),
 });
 
-const errorResponse = (message?: string) => ({
+const errorResponse = (message?: string, status = 500) => ({
   ok: false,
+  status,
   json: jest.fn().mockResolvedValue(message ? { message } : {}),
 });
 
@@ -45,8 +46,29 @@ describe('commentApi.getComments', () => {
   });
 
   it('응답 실패 시 메시지 없으면 기본 에러를 throw 한다', async () => {
-    mockClient.get.mockResolvedValue(errorResponse());
+    mockClient.get.mockResolvedValue(errorResponse(undefined, 500));
     await expect(commentApi.getComments(1)).rejects.toThrow('댓글을 불러오는데 실패했습니다.');
+  });
+
+  it('404이고 syncMeeting이 있으면 동기화 후 댓글을 다시 조회한다', async () => {
+    const comments = [{ id: 1, content: 'hi' }];
+    mockClient.get
+      .mockResolvedValueOnce({ ok: false, status: 404, json: jest.fn().mockResolvedValue({}) })
+      .mockResolvedValueOnce(okResponse(comments));
+    mockClient.post.mockResolvedValue(okResponse({}));
+
+    await expect(commentApi.getComments(99, { id: 99, hostId: 1, teamId: 't1' })).resolves.toEqual(
+      comments
+    );
+
+    expect(mockClient.post).toHaveBeenCalledWith('/meetings', {
+      id: 99,
+      hostId: 1,
+      teamId: 't1',
+    });
+    expect(mockClient.get).toHaveBeenCalledTimes(2);
+    expect(mockClient.get).toHaveBeenNthCalledWith(1, '/meetings/99/comments');
+    expect(mockClient.get).toHaveBeenNthCalledWith(2, '/meetings/99/comments');
   });
 });
 

@@ -19,6 +19,7 @@ const mockMeeting: Meeting = {
   image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600',
   description: '',
   hostId: 1,
+  teamId: 'test-team',
   createdBy: 1,
   updatedAt: '2024-03-01T00:00:00.000Z',
   host: { id: 1, name: '김소소' },
