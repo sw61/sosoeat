@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { startOfDay } from 'date-fns';
 
 import { meetingsQueryOptions } from '@/services/meetings/meetings.options';
@@ -14,7 +14,7 @@ type DateChangeParams = {
   valueEnd: Date | null;
 };
 
-const useMeetingPage = () => {
+const useMeetingPage = (inView: boolean) => {
   const [regionCommitted, setRegionCommitted] = useState<RegionSelection>(null);
   const [dateStart, setDateStart] = useState<Date | null>(null);
   const [dateEnd, setDateEnd] = useState<Date | null>(null);
@@ -30,7 +30,7 @@ const useMeetingPage = () => {
       : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1).toISOString();
 
   const options: Omit<TeamIdMeetingsGetRequest, 'teamId'> = {
-    size: 10,
+    size: 5,
     //type unfind이면 전체 보냄
     type: typeFilter === 'all' ? undefined : typeFilter,
     region,
@@ -41,10 +41,12 @@ const useMeetingPage = () => {
   };
   const {
     data: meetingList,
-    isLoading,
-    isError,
-  } = useQuery<MeetingList>(meetingsQueryOptions.options(options));
-  const meetingData = meetingList?.data ?? [];
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery(meetingsQueryOptions.infiniteOptions(options));
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
     setTypeFilter(value);
@@ -80,7 +82,6 @@ const useMeetingPage = () => {
   };
 
   return {
-    meetingData,
     handleRegionChange,
     regionCommitted,
     dateStart,
@@ -91,8 +92,12 @@ const useMeetingPage = () => {
     handleSortChange,
     sortBy,
     sortOrder,
-    isLoading,
-    isError,
+    data: meetingList,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
   };
 };
 

@@ -1,4 +1,7 @@
 'use client';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+
 import { MainPageCard } from '@/components/common/main-page-card';
 import { MeetingCreateModal } from '@/components/common/meeting-create-modal';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -16,6 +19,9 @@ export default function MeetingsPage() {
   const { isOpen, open, close } = useModal();
   const { mutateAsync: createMeeting } = useCreateMeeting();
   const { isAuthenticated, setLoginRequired } = useAuthStore();
+  const [viewRef, inView] = useInView({
+    threshold: 0.1,
+  });
 
   const handleOpenCreateModal = () => {
     if (!isAuthenticated) {
@@ -30,16 +36,19 @@ export default function MeetingsPage() {
     handleRegionChange,
     dateStart,
     dateEnd,
-    meetingData,
     handleDateChange,
     handleTypeFilterChange,
     typeFilter,
     handleSortChange,
     sortBy,
     sortOrder,
-    isLoading,
-    isError,
-  } = useMeetingPage();
+    data: meetingList,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useMeetingPage(inView);
 
   //sort는 dateTime, registrationEnd, participantCount를 가짐
 
@@ -47,6 +56,12 @@ export default function MeetingsPage() {
 
   //근데 vlaue===sort value === options 즉 sort === options임
   //sortBy는 dateTime, registrationEnd, participantCount
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage, isFetchingNextPage]);
+
   return (
     <div className="bg-sosoeat-gray-100">
       <div className="mx-auto flex max-w-[1140px] flex-col items-center justify-center gap-4 sm:px-4">
@@ -64,7 +79,7 @@ export default function MeetingsPage() {
             onRegionChange={handleRegionChange}
             onSortChange={handleSortChange}
           />
-          {isLoading ? (
+          {status === 'pending' ? (
             <div className="grid grid-cols-1 justify-center gap-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6.75">
               {Array.from({ length: 10 }).map((_, index) => (
                 <div
@@ -89,7 +104,7 @@ export default function MeetingsPage() {
                 </div>
               ))}
             </div>
-          ) : isError ? (
+          ) : status === 'error' ? (
             <div className="flex min-h-80 w-full items-center justify-center rounded-2xl border border-[#F3F4F6] bg-white px-6 py-12 text-center">
               {' '}
               <div className="flex flex-col items-center gap-2">
@@ -105,13 +120,17 @@ export default function MeetingsPage() {
                 </p>{' '}
               </div>{' '}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 justify-center gap-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6.75">
-              {meetingData.map((meeting) => (
-                <MainPageCard key={meeting.id} meeting={meeting} />
-              ))}
+          ) : status === 'success' ? (
+            <div
+              ref={viewRef}
+              className="grid grid-cols-1 justify-center gap-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6.75"
+            >
+              {meetingList &&
+                meetingList.pages
+                  .flatMap((page) => page.data)
+                  .map((meeting) => <MainPageCard key={meeting.id} meeting={meeting} />)}
             </div>
-          )}
+          ) : null}
           <MeetingMakeButton onClick={handleOpenCreateModal} />
         </div>
         <MeetingCreateModal open={isOpen} onClose={close} onSubmit={createMeeting} />
