@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { startOfDay } from 'date-fns';
 
-import { MeetingWithHost, TeamIdMeetingsGetRequest } from '@/types/generated-client';
+import { meetingsQueryOptions } from '@/services/meetings/meetings.options';
+import { MeetingList, TeamIdMeetingsGetRequest } from '@/types/generated-client';
 
 import { MeetingFilterBarProps } from '../_components/meeting-filter-bar';
 import { RegionSelection } from '../_components/region-select-modal';
-import { fetchMeetingByFilter } from '../repositories/api/fetch-meeting-by-filter';
 
 type DateChangeParams = {
   valueStart: Date | null;
@@ -40,28 +40,12 @@ const useMeetingPage = () => {
     sortBy: sortBy,
     sortOrder: sortOrder,
   };
-
-  const { data: meetingData = [] } = useQuery<MeetingWithHost[]>({
-    queryKey: [
-      'meetings',
-      'list',
-      {
-        size: options.size,
-        type: options.type,
-        region,
-        dateStartIso,
-        dateEndExclusiveIso,
-        sortBy,
-        sortOrder,
-      },
-    ],
-    queryFn: async () => {
-      const data = await fetchMeetingByFilter(options);
-      return data.data;
-    },
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 10,
-  });
+  const {
+    data: meetingList,
+    isLoading,
+    isError,
+  } = useQuery<MeetingList>(meetingsQueryOptions.options(options));
+  const meetingData = meetingList?.data ?? [];
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
     setTypeFilter(value);
@@ -108,6 +92,8 @@ const useMeetingPage = () => {
     handleSortChange,
     sortBy,
     sortOrder,
+    isLoading,
+    isError,
   };
 };
 

@@ -1,22 +1,28 @@
+import { TeamIdMeetingsGetRequest } from '@/types/generated-client';
+
 import { meetingsApi } from './meetings.api';
 
 export const meetingsQueryOptions = {
   all: () => ({
     queryKey: ['meetings'],
-    queryFn: () => meetingsApi.getAll(),
+    queryFn: () => meetingsApi.getList(),
     staleTime: 1000 * 60 * 5, // 5분
-    cacheTime: 1000 * 60 * 10, // 10분
+    gcTime: 1000 * 60 * 10, // 10분
   }),
   detail: (id: number) => ({
     queryKey: ['meetings', id],
-    queryFn: async () => {
-      const response = await meetingsApi.getAll();
-      const meeting = response.data.find((m) => m.id === id);
-      if (!meeting) {
-        throw new Error('모임을 찾을 수 없습니다.');
-      }
-      return meeting;
-    },
+    queryFn: async () => meetingsApi.getById(id),
+    staleTime: 1000 * 60 * 5, // 5분
+    gcTime: 1000 * 60 * 10, // 10분
+  }),
+  options: (options: Omit<TeamIdMeetingsGetRequest, 'teamId'>) => ({
+    queryKey: [
+      'meetings',
+      {
+        ...options,
+      },
+    ],
+    queryFn: () => meetingsApi.getByFilter(options),
     staleTime: 1000 * 60 * 5, // 5분
     gcTime: 1000 * 60 * 10, // 10분
   }),
