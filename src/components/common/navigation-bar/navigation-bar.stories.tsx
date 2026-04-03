@@ -42,7 +42,7 @@ export const NotLoggedInWishList: Story = {
   name: '비로그인 / 찜한 모임 클릭 → 로그인 이동',
   decorators: [withAuthState({ user: null })],
   parameters: {
-    nextjs: { navigation: { pathname: '/mypage?tab=liked' } },
+    nextjs: { navigation: { pathname: '/mypage?tab=favorite' } },
   },
 };
 
@@ -63,7 +63,12 @@ export const LoggedInWithProfileImage: Story = {
   name: '로그인 / 프로필이미지',
   decorators: [
     withAuthState({
-      user: { id: 2, email: 'test2@test.com', name: '김소소', image: 'https://i.pravatar.cc/32?img=47' },
+      user: {
+        id: 2,
+        email: 'test2@test.com',
+        name: '김소소',
+        image: 'https://i.pravatar.cc/32?img=47',
+      },
     }),
   ],
 };

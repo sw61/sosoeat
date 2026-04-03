@@ -26,7 +26,7 @@ import { AuthUser } from '@/types/auth';
 const NAV_ITEMS = [
   { href: '/', label: '홈' },
   { href: '/meetings', label: '모임찾기' },
-  { href: '/wishlist', label: '찜한 모임', showBadge: true },
+  { href: '/mypage?tab=favorite', label: '찜한 모임', showBadge: true },
   { href: '/sosotalk', label: '소소토크' },
 ] as const;
 

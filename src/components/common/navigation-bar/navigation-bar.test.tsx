@@ -48,7 +48,6 @@ describe('NavigationBar', () => {
       expect(screen.getAllByRole('link', { name: /찜한 모임/ }).length).toBeGreaterThan(0);
       expect(screen.getAllByRole('link', { name: '소소토크' }).length).toBeGreaterThan(0);
     });
-
   });
 
   describe('비로그인 상태', () => {
@@ -97,12 +96,12 @@ describe('NavigationBar', () => {
       expect(screen.queryByRole('link', { name: '로그인' })).not.toBeInTheDocument();
     });
 
-    it('찜한 모임 메뉴와 배지가 표시되며 /mypage?tab=liked로 이동한다', () => {
+    it('찜한 모임 메뉴와 배지가 표시되며 /mypage?tab=favorite로 이동한다', () => {
       renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
       const links = screen.getAllByRole('link', { name: /찜한 모임/ });
       expect(links.length).toBeGreaterThan(0);
       links.forEach((link) => {
-        expect(link).toHaveAttribute('href', '/mypage?tab=liked');
+        expect(link).toHaveAttribute('href', '/mypage?tab=favorite');
       });
       expect(screen.getAllByText('0').length).toBeGreaterThan(0);
     });
@@ -135,7 +134,7 @@ describe('NavigationBar', () => {
       renderWithClient(<NavigationBar initialUser={null} />);
 
       await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
-      expect(screen.getByRole('button', { name: '메뉴 닫기' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: '메뉴' })).toBeInTheDocument();
     });
 
     it('닫기 버튼 클릭 시 메뉴 패널이 닫힌다', async () => {
@@ -143,8 +142,9 @@ describe('NavigationBar', () => {
       renderWithClient(<NavigationBar initialUser={null} />);
 
       await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
-      await user.click(screen.getByRole('button', { name: '메뉴 닫기' }));
-      expect(screen.queryByRole('button', { name: '메뉴 닫기' })).not.toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: '메뉴' })).toBeInTheDocument();
+      await user.keyboard('{Escape}');
+      expect(screen.queryByRole('dialog', { name: '메뉴' })).not.toBeInTheDocument();
     });
   });
 
@@ -154,7 +154,7 @@ describe('NavigationBar', () => {
       renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
 
       await user.click(screen.getByRole('button', { name: '프로필 메뉴' }));
-      expect(screen.getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
+      expect(screen.getByRole('menuitem', { name: '로그아웃' })).toBeInTheDocument();
     });
 
     it('로그아웃 클릭 시 user가 null이 되고 홈으로 이동한다', async () => {
@@ -162,7 +162,7 @@ describe('NavigationBar', () => {
       renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
 
       await user.click(screen.getByRole('button', { name: '프로필 메뉴' }));
-      await user.click(screen.getByRole('button', { name: '로그아웃' }));
+      await user.click(screen.getByRole('menuitem', { name: '로그아웃' }));
 
       expect(useAuthStore.getState().user).toBeNull();
       expect(mockPush).toHaveBeenCalledWith('/');
