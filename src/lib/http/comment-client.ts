@@ -25,7 +25,6 @@ const request = async (url: string, options: RequestInit = {}): Promise<Response
 
   const response = await fetch(fullUrl, { ...options, headers });
 
-  // proxy를 경유한 요청에서 silentRefresh까지 실패한 401 → 세션 만료 알림 모달 띄우기
   if (response.status === 401 && fullUrl.startsWith('/api/comment-proxy/')) {
     onSessionExpired?.();
   }

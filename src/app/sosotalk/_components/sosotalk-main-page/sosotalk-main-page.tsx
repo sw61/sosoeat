@@ -96,9 +96,10 @@ export const SosoTalkMainPage = ({ className }: SosoTalkMainPageProps) => {
 
       <Button
         asChild
+        variant="ghost"
         className={cn(
-          'bg-sosoeat-orange-600 fixed right-5 bottom-5 z-50 h-14 rounded-full px-5 text-base font-bold text-white shadow-lg',
-          'hover:bg-sosoeat-orange-700 md:right-8 md:bottom-8 md:h-16 md:px-7 md:text-lg'
+          'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 fixed right-5 bottom-[calc(20px+env(safe-area-inset-bottom))] z-50 h-14 rounded-full px-5 text-base font-bold text-white shadow-lg hover:text-white',
+          'md:right-8 md:bottom-8 md:h-16 md:px-7 md:text-lg'
         )}
       >
         <Link href="/sosotalk/write">

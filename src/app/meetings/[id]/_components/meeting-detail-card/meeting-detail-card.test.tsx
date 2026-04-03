@@ -21,7 +21,7 @@ const mockMeeting: Meeting = {
   image: '',
   description: '',
   hostId: 1,
-  createdBy: '1',
+  createdBy: 1,
   updatedAt: '2024/03/01T00:00:00.000Z',
   host: { id: 1, name: '김소소' },
   isFavorited: false,
@@ -53,7 +53,7 @@ describe('MeetingDetailCard', () => {
     expect(screen.getByText('김소소')).toBeInTheDocument();
   });
 
-  it('confirmedAt이 있으면 개설확정 뱃지가 노출된다', () => {
+  it('confirmedAt이 있으면 개설완료 뱃지가 노출된다', () => {
     render(
       <MeetingDetailCard
         {...DEFAULT_PROPS}

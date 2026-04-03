@@ -1,9 +1,6 @@
 'use client';
 
-import { use } from 'react';
-
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -104,7 +101,7 @@ export const MainPageCard = ({ meeting }: MainPageCardProps) => {
           {meeting.name}
         </h3>
         <CardAction
-          className="absolute top-4 right-4 z-10"
+          className="absolute top-4 right-4 z-10 cursor-default"
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}
         >

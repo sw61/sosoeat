@@ -17,7 +17,7 @@ export async function MainPageSection() {
         <Image src="icons/main-page-twinkle.svg" alt="twinkle" width={18} height={18} />
         추천 소잇
       </h2>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 place-items-center gap-6 md:grid-cols-2 lg:grid-cols-3">
         {meetings.map((meeting) => (
           <MainPageCard key={meeting.id} meeting={meeting} />
         ))}
