@@ -6,8 +6,7 @@ import { MessageSquareText } from 'lucide-react';
 
 import { useAuthStore } from '@/entities/auth';
 import type { Comment } from '@/entities/comment';
-import { useComments, useCreateComment } from '@/entities/comment';
-import { CommentInput } from '@/entities/comment/ui/comment-input';
+import { CommentInput, useComments, useCreateComment } from '@/entities/comment';
 import { cn } from '@/shared/lib/utils';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 import { ScrollArea } from '@/shared/ui/scroll-area';

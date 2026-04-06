@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { DeadlineBadge } from '@/entities/meeting/ui/deadline-badge/deadline-badge';
+import { DeadlineBadge } from './deadline-badge';
 
 jest.mock('next/image', () => ({
   __esModule: true,

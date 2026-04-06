@@ -10,6 +10,7 @@ import type { MeetingComment } from './meeting-comment-section.types';
 const mockMutate = jest.fn();
 
 jest.mock('@/entities/comment', () => ({
+  ...jest.requireActual('@/entities/comment'),
   useComments: jest.fn(() => ({ data: [] })),
   useCreateComment: jest.fn(() => ({ mutate: mockMutate, isPending: false })),
 }));

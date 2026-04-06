@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { EstablishmentStatusBadge } from '@/entities/meeting/ui/establishment-status-badge/establishment-status-badge';
+import { EstablishmentStatusBadge } from './establishment-status-badge';
 
 describe('EstablishmentStatusBadge', () => {
   it('confirmedAt이 없으면 개설대기가 표시된다', () => {
