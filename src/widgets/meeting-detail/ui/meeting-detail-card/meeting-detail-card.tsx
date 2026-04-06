@@ -3,8 +3,7 @@
 import { CalendarIcon, MapPinIcon, UserIcon, UsersIcon } from 'lucide-react';
 
 import type { MeetingCategory } from '@/entities/meeting';
-import { DeadlineBadge } from '@/entities/meeting/ui/deadline-badge';
-import { EstablishmentStatusBadge } from '@/entities/meeting/ui/establishment-status-badge';
+import { DeadlineBadge, EstablishmentStatusBadge } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
 // import { UseStateBadge } from '@/shared/ui/use-state-badge/use-state-badge'; // TODO: isScheduled 기준 논의 후 활성화
 import { cn } from '@/shared/lib/utils';

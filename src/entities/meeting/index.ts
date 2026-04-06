@@ -3,3 +3,5 @@ export { getMeetings } from './api/meetings.server';
 export type { Meeting, MeetingCategory } from './model/meeting.types';
 export { meetingsQueryOptions } from './model/meetings.options';
 export { useDetailRouter } from './model/use-detail-router';
+export { DeadlineBadge } from './ui/deadline-badge';
+export { EstablishmentStatusBadge } from './ui/establishment-status-badge';

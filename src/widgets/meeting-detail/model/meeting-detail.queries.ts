@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { Meeting } from '@/entities/meeting';
-import { meetingsApi } from '@/entities/meeting/api/meetings.api';
+import { meetingsApi } from '@/entities/meeting';
 
 export const meetingDetailKeys = {
   detail: (id: number) => ['meetings', 'detail', id] as const,

@@ -6,8 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 
 import type { Meeting } from '@/entities/meeting';
-import { MeetingEditModal } from '@/features/meeting-edit/ui/meeting-edit-modal/meeting-edit-modal';
-import { toMeetingEditFormData } from '@/features/meeting-edit/ui/meeting-edit-modal/meeting-edit-modal.utils';
+import { MeetingEditModal, toMeetingEditFormData } from '@/features/meeting-edit';
 import { useModal } from '@/shared/hooks/use-modal';
 
 import {
