@@ -1,8 +1,9 @@
 'use client';
 
 import { useAuthStore } from '@/entities/auth/model/auth-store';
-import { useCreateMeeting } from '@/entities/meeting';
 import { MainPageCard } from '@/entities/meeting/ui/main-page-card';
+import { HeartButton } from '@/features/favorites';
+import { useCreateMeeting } from '@/features/meeting-create/model/use-create-meeting';
 import { MeetingCreateModal } from '@/features/meeting-create/ui/meeting-create-modal/meeting-create-modal';
 import { useModal } from '@/shared/hooks/use-modal';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -100,7 +101,13 @@ export default function SearchPage() {
           ) : (
             <div className="grid grid-cols-1 justify-center justify-items-center gap-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6.75">
               {meetingData.map((meeting) => (
-                <MainPageCard key={meeting.id} meeting={meeting} />
+                <MainPageCard
+                  key={meeting.id}
+                  meeting={meeting}
+                  renderFavoriteButton={(id, isFavorited) => (
+                    <HeartButton meetingId={id} isFavorited={isFavorited} size="md" />
+                  )}
+                />
               ))}
             </div>
           )}

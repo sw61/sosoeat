@@ -6,10 +6,11 @@ import { type FieldErrors, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useUploadImage } from '@/entities/image';
-import { useUpdateMeeting } from '@/entities/meeting';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/shared/ui/dialog';
+
+import { useUpdateMeeting } from '../../model/use-update-meeting';
 
 import { TabBasicInfo, TabSchedule } from './_components';
 import { type MeetingEditFormData, meetingEditFormSchema } from './meeting-edit-modal.schema';

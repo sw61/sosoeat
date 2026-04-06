@@ -108,7 +108,9 @@ describe('MainPageCard', () => {
 
     it('좋아요 버튼이 렌더링된다', () => {
       const meeting = createMockMeeting();
-      render(<MainPageCard meeting={meeting} />);
+      render(
+        <MainPageCard meeting={meeting} renderFavoriteButton={() => <button>좋아요</button>} />
+      );
 
       expect(screen.getByRole('button', { name: '좋아요' })).toBeInTheDocument();
     });

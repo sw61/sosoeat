@@ -2,7 +2,8 @@
 import Image from 'next/image';
 
 import { getMeetings } from '@/entities/meeting/api/meetings.server';
-import { MainPageCard } from '@/entities/meeting/ui/main-page-card';
+
+import { MainPageCardWithHeart } from './main-page-card-with-heart';
 
 export async function MainPageSection() {
   const { data: meetings } = await getMeetings({
@@ -19,7 +20,7 @@ export async function MainPageSection() {
       </h2>
       <div className="grid grid-cols-1 place-items-center gap-6 md:grid-cols-2 lg:grid-cols-3">
         {meetings.map((meeting) => (
-          <MainPageCard key={meeting.id} meeting={meeting} />
+          <MainPageCardWithHeart key={meeting.id} meeting={meeting} />
         ))}
       </div>
     </section>
