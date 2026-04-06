@@ -1,5 +1,5 @@
+import type { Meeting } from '@/entities/meeting';
 import { commentServer } from '@/shared/api/comment-server';
-import type { Meeting } from '@/shared/types/meeting';
 
 import type { MeetingComment } from '../ui/meeting-comment-section/meeting-comment-section.types';
 

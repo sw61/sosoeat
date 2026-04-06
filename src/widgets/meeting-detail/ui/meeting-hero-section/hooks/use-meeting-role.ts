@@ -1,7 +1,7 @@
 'use client';
 
-import { useAuthStore } from '@/entities/auth/model/auth-store';
-import type { Meeting } from '@/shared/types/meeting';
+import { useAuthStore } from '@/entities/auth';
+import type { Meeting } from '@/entities/meeting';
 
 import type {
   MeetingRole,

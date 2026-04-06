@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { MessageSquareText } from 'lucide-react';
 
-import { useAuthStore } from '@/entities/auth/model/auth-store';
+import { useAuthStore } from '@/entities/auth';
 import type { Comment } from '@/entities/comment';
 import { useComments, useCreateComment } from '@/entities/comment';
 import { CommentInput } from '@/entities/comment/ui/comment-input';

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import type { Meeting } from '@/shared/types/meeting';
+import type { Meeting } from '@/entities/meeting';
 
 import RecommendedMeetingCard from './meeting-recommended-card';
 

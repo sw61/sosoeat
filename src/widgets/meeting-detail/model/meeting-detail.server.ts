@@ -1,5 +1,5 @@
+import type { Meeting } from '@/entities/meeting';
 import { apiServer } from '@/shared/api/api-server';
-import type { Meeting } from '@/shared/types/meeting';
 
 /**
  * 모임 단건 조회 (서버 컴포넌트 전용)

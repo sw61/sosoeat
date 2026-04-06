@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { Clock, MapPin } from 'lucide-react';
 
-import { useDetailRouter } from '@/entities/meeting/model/use-detail-router';
+import { useDetailRouter } from '@/entities/meeting';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardContent, CardTitle } from '@/shared/ui/card';
 

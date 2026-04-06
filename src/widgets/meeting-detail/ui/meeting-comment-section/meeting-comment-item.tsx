@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { Heart, MessageCircle, UserRound } from 'lucide-react';
 
-import { useAuthStore } from '@/entities/auth/model/auth-store';
+import { useAuthStore } from '@/entities/auth';
 import {
   useCreateComment,
   useDeleteComment,

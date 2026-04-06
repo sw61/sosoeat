@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 
-import { AuthUser } from './auth.types';
-
-export type { AuthUser };
+import { AuthUser } from '@/shared/types/auth';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -23,7 +21,7 @@ interface AuthActions {
 export type AuthStore = AuthState & AuthActions;
 
 /**
- * [Application Layer] useAuthStore
+ * [Entities] useAuthStore
  * 클라이언트 사이드 인증 상태 관리 (UI용)
  * accessToken은 httpOnly 쿠키에서 프록시가 처리하므로 여기서는 관리하지 않습니다.
  */

@@ -12,8 +12,8 @@
 import { cva } from 'class-variance-authority';
 import { format } from 'date-fns';
 
+import type { MeetingCategory } from '@/entities/meeting';
 import { cn } from '@/shared/lib/utils';
-import type { MeetingCategory } from '@/shared/types/meeting';
 
 // ── variants ─────────────────────────────────────────────────
 

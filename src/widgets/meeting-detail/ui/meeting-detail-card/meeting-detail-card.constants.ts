@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-import type { MeetingCategory } from '@/shared/types/meeting';
+import type { MeetingCategory } from '@/entities/meeting';
 
 import type { MeetingRole, MeetingStatus } from './meeting-detail-card.types';
 

@@ -176,6 +176,15 @@ FSD의 핵심은 **하위 레이어는 상위 레이어를 참조할 수 없다*
 - `widgets`는 `features`와 `entities`를 조합할 수 있습니다.
 - `app`은 모든 레이어를 조립하는 최종 단계입니다.
 
+### 🧩 슬라이스 내부 구조 (Slice Internal Structure)
+
+각 레이어(`widgets`, `features`, `entities`) 내의 개별 도메인(슬라이스)은 기능별로 구분된 세그먼트(Segment) 폴더를 가집니다.
+
+- `ui/`: 화면에 그려지는 UI 컴포넌트 (예: `*_component.tsx`)
+- `model/`: 비즈니스 로직, 전역/지역 상태 관리, 커스텀 훅 및 스키마 (예: `use-*.ts`, `*.schema.ts`, `*.store.ts`)
+- `api/`: 해당 특성이나 엔티티의 API 호출 함수 (서버 통신 로직)
+- `lib/` (선택): 도메인 내에서 쓰이는 독립적인 유틸 함수
+
 ---
 
 ## 📏 컨벤션 및 가이드 (Conventions)

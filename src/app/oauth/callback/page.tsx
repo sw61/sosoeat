@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 
-import { useSocialLogin } from '@/entities/auth';
+import { useSocialLogin } from '@/features/auth';
 
 /**
  * 전용 OAuth 콜백 페이지

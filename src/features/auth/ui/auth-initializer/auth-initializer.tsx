@@ -2,8 +2,7 @@
 
 import { useEffect } from 'react';
 
-import { AuthUser } from '@/entities/auth/model/auth.types';
-import { useAuthStore } from '@/entities/auth/model/auth-store';
+import { AuthUser, useAuthStore } from '@/entities/auth';
 
 /**
  * [Application Layer] AuthInitializer

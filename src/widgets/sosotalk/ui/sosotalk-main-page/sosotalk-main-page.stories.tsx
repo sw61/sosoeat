@@ -1,6 +1,6 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { useAuthStore } from '@/entities/auth/model/auth-store';
+import { useAuthStore } from '@/entities/auth';
 
 import { SosoTalkMainPage } from './sosotalk-main-page';
 

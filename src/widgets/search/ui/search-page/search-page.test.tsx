@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider,useQuery  } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 
 import { useAuthStore } from '@/entities/auth/model/auth-store';
