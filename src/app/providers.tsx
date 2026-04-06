@@ -4,13 +4,11 @@ import { useEffect, useState } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { AuthUser } from '@/entities/auth/model/auth.types';
-import { useAuthStore } from '@/entities/auth/model/auth-store';
+import { AuthUser, useAuthStore } from '@/entities/auth';
 import { AuthInitializer } from '@/features/auth/ui/auth-initializer/auth-initializer';
-import { LoginRequireModal } from '@/features/auth/ui/login-require-modal/login-require-modal';
-import { SessionExpiredModal } from '@/features/auth/ui/session-expired-modal/session-expired-modal';
 import { setCommentSessionExpiredHandler } from '@/shared/api/comment-client';
 import { setSessionExpiredHandler } from '@/shared/api/fetch-client';
+import { LoginRequireModal, SessionExpiredModal } from '@/widgets/auth';
 
 export function Providers({
   children,

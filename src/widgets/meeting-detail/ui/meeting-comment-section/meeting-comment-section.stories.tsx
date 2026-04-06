@@ -1,6 +1,6 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { useAuthStore } from '@/entities/auth/model/auth-store';
+import { useAuthStore } from '@/entities/auth';
 
 import { MeetingCommentSection } from './meeting-comment-section';
 import type { MeetingComment } from './meeting-comment-section.types';

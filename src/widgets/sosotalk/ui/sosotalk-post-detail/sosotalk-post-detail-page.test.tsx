@@ -20,6 +20,7 @@ jest.mock('@/widgets/footer/ui/footer/footer', () => ({
 }));
 
 jest.mock('@/entities/auth', () => ({
+  ...jest.requireActual('@/entities/auth'),
   useAuthStore: jest.fn(),
 }));
 

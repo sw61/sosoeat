@@ -1,1 +1,8 @@
-export type { AuthUser } from '@/entities/auth/model/auth.types';
+export interface AuthUser {
+  id: number;
+  email: string;
+  name: string;
+  teamId?: string;
+  companyName?: string;
+  image?: string | null;
+}

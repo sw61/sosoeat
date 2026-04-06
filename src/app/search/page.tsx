@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthStore } from '@/entities/auth/model/auth-store';
+import { useAuthStore } from '@/entities/auth';
 import { MainPageCard } from '@/entities/meeting/ui/main-page-card';
 import { HeartButton } from '@/features/favorites';
 import { useCreateMeeting } from '@/features/meeting-create/model/use-create-meeting';

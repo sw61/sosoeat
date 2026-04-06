@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { useAuthStore } from '@/shared/store/auth-store';
+import { useAuthStore } from '@/entities/auth';
 
 import { NavigationBar } from './navigation-bar';
 
