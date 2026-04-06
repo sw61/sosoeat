@@ -89,7 +89,7 @@ export function NavigationBar({ initialUser }: { initialUser: AuthUser | null })
             'md:px-[37px]'
           )}
         >
-          <Link href="/" className="shrink-0">
+          <Link href="/home" className="shrink-0">
             <Image src="/images/logo.svg" alt="sosoeat" width={72} height={22.64} priority />
           </Link>
 
