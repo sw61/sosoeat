@@ -8,7 +8,8 @@ import { MapPin } from 'lucide-react';
 import type { Meeting } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
 import { Card, CardContent } from '@/shared/ui/card';
-import { DateBadge, TimeBadge } from '@/widgets/meeting-detail/ui/meeting-detail-card/date-badge';
+
+import { DateBadge, TimeBadge } from '../meeting-detail-card/date-badge';
 
 interface RecommendedMeetingCardProps {
   meeting: Meeting;
