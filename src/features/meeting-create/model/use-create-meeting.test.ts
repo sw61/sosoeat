@@ -5,13 +5,12 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { toast } from 'sonner';
 
 import { commentApi } from '@/entities/comment';
+import { meetingsApi } from '@/entities/meeting';
 import type { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 
-import { meetingsApi } from '../api/meetings.api';
+import { useCreateMeeting } from './use-create-meeting';
 
-import { useCreateMeeting } from './meetings.queries';
-
-jest.mock('../api/meetings.api', () => ({
+jest.mock('@/entities/meeting', () => ({
   meetingsApi: {
     create: jest.fn(),
   },

@@ -7,7 +7,7 @@ import { type ReadonlyURLSearchParams, usePathname, useSearchParams } from 'next
 import { Bell, ChevronRight } from 'lucide-react';
 
 import { useLogout } from '@/entities/auth';
-import { useCreateMeeting } from '@/entities/meeting';
+import { useCreateMeeting } from '@/features/meeting-create/model/use-create-meeting';
 import { MeetingCreateModal } from '@/features/meeting-create/ui/meeting-create-modal/meeting-create-modal';
 import { useModal } from '@/shared/hooks/use-modal';
 import { cn } from '@/shared/lib/utils';

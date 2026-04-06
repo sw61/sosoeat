@@ -8,6 +8,7 @@ import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import storybook from 'eslint-plugin-storybook';
+import featureSliced from '@conarti/eslint-plugin-feature-sliced';
 import globals from 'globals';
 
 /** @type {import("eslint").Linter.Config[]} */
@@ -40,6 +41,7 @@ const eslintConfig = [
       '@next/next': pluginNext,
       import: pluginImport,
       'simple-import-sort': simpleImportSort,
+      'feature-sliced': featureSliced,
     },
     settings: {
       react: { version: 'detect' },
@@ -59,6 +61,11 @@ const eslintConfig = [
       ...pluginNext.configs['core-web-vitals'].rules,
       ...pluginImport.configs.recommended.rules,
       ...pluginImport.configs.typescript.rules,
+
+      // FSD (Feature-Sliced Design) 규칙
+      'feature-sliced/layers-slices': 'error',
+      'feature-sliced/absolute-relative': 'warn',
+      'feature-sliced/public-api': 'warn',
 
       // 사용자 정의 규칙 최적화
       'no-undef': 'off', // TypeScript에서 이미 처리함

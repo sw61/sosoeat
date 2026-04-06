@@ -6,8 +6,6 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { MapPin, Users } from 'lucide-react';
 
-// HeartButton은 features/favorites 완성 후 경로 교체 예정
-import { HeartButton } from '@/features/favorites/ui/heart-button/heart-button';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from '@/shared/ui/card';
 import { Progress, type ProgressProps } from '@/shared/ui/progress-bar';
@@ -55,7 +53,7 @@ const variantImageBadgeIcon = {
 const getProgressVariant = (meetingType: string): ProgressProps['variant'] =>
   meetingType === 'groupEat' ? 'groupEat' : 'groupBuy';
 
-export const MainPageCard = ({ meeting }: MainPageCardProps) => {
+export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProps) => {
   const variant = getProgressVariant(meeting.type);
   const formatted = format(meeting.dateTime, 'M/d(E) HH:mm', { locale: ko });
   const progress =
@@ -107,8 +105,7 @@ export const MainPageCard = ({ meeting }: MainPageCardProps) => {
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}
         >
-          {' '}
-          <HeartButton meetingId={meeting.id} isFavorited={meeting.isFavorited} size="md" />
+          {renderFavoriteButton?.(meeting.id, meeting.isFavorited ?? false)}
         </CardAction>
       </CardHeader>
 

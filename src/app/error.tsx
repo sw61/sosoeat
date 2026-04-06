@@ -17,7 +17,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="bg-sosoeat-gray-100 flex min-h-screen items-center justify-center px-4 py-10">
+    <div className="bg-sosoeat-gray-100 flex min-h-[calc(100vh-124px)] items-center justify-center px-4 py-10">
       <div className="flex w-full max-w-[568px] flex-col items-center rounded-[24px] bg-white px-4 py-10 shadow-sm sm:rounded-[40px] sm:px-[56px] sm:py-[64px]">
         <Image src="/images/logo.svg" alt="sosoeat" width={96} height={30} priority />
 
