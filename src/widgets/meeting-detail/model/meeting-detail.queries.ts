@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
+import type { Meeting } from '@/entities/meeting';
 import { meetingsApi } from '@/entities/meeting/api/meetings.api';
-import type { Meeting } from '@/shared/types/meeting';
 
 export const meetingDetailKeys = {
   detail: (id: number) => ['meetings', 'detail', id] as const,

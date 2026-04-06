@@ -1,4 +1,4 @@
-import type { Meeting } from '@/shared/types/meeting';
+import type { Meeting } from '@/entities/meeting';
 import { ScrollArea, ScrollBar } from '@/shared/ui/scroll-area';
 
 import RecommendedMeetingCard from '../meeting-recommended-card/meeting-recommended-card';

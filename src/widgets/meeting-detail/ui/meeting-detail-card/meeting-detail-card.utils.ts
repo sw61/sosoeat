@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-import type { Meeting } from '@/shared/types/meeting';
+import type { Meeting } from '@/entities/meeting';
 
 import type { MeetingRole, MeetingStatus } from './meeting-detail-card.types';
 

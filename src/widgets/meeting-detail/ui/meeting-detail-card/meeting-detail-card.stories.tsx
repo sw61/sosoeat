@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import type { Meeting } from '@/shared/types/meeting';
+import type { Meeting } from '@/entities/meeting';
 
 import { MeetingDetailCard } from './meeting-detail-card';
 import type { MeetingRole, MeetingStatus } from './meeting-detail-card.types';

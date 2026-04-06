@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 
 import { MapPin } from 'lucide-react';
 
+import type { Meeting } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
-import type { Meeting } from '@/shared/types/meeting';
 import { Card, CardContent } from '@/shared/ui/card';
 import { DateBadge, TimeBadge } from '@/widgets/meeting-detail/ui/meeting-detail-card/date-badge';
 

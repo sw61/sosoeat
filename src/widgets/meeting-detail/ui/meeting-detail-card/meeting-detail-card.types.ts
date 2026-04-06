@@ -1,4 +1,4 @@
-import type { Meeting } from '@/shared/types/meeting';
+import type { Meeting } from '@/entities/meeting';
 
 export type MeetingRole = 'guest' | 'participant' | 'host';
 export type MeetingStatus = 'open' | 'closed' | 'confirmed' | 'full';

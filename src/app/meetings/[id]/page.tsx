@@ -1,5 +1,5 @@
+import type { Meeting } from '@/entities/meeting';
 import { getMeetings } from '@/entities/meeting/api/meetings.server';
-import type { Meeting } from '@/shared/types/meeting';
 import { fetchMeetingCommentsForPage } from '@/widgets/meeting-detail/model/meeting-comments.server';
 import { getMeetingById } from '@/widgets/meeting-detail/model/meeting-detail.server';
 import { MeetingCommentSection } from '@/widgets/meeting-detail/ui/meeting-comment-section';
