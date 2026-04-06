@@ -1,5 +1,5 @@
 import { TabsList, TabsTrigger } from './tabs/tabs';
-import { MYPAGE_TABS, TabValue } from './meeting-tabs.types';
+import { MYPAGE_TABS } from './meeting-tabs.types';
 
 export function MeetingTabsList() {
   return (

@@ -4,8 +4,8 @@ import { useCallback } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useMeetingTabs } from '@/widgets/mypage/model/use-meeting-tabs';
-import { MyPageCard } from '@/widgets/mypage/ui/mypage-card/mypage-card';
+import { useMeetingTabs } from '../../model/use-meeting-tabs';
+import { MyPageCard } from '../mypage-card';
 
 import { Tabs, TabsContent } from './tabs/tabs';
 import { MYPAGE_TABS, TabValue } from './meeting-tabs.types';
