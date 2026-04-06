@@ -15,7 +15,14 @@ import globals from 'globals';
 const eslintConfig = [
   // 1. 글로벌 무시 설정
   {
-    ignores: ['.next/**', 'node_modules/**', 'dist/**', 'public/**', 'coverage/**'],
+    ignores: [
+      '.next/**',
+      'node_modules/**',
+      'dist/**',
+      'public/**',
+      'coverage/**',
+      'src/types/generated-client/**',
+    ],
   },
 
   // 2. 기본 JS/TS 공통 설정
