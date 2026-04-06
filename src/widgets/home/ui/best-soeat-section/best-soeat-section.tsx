@@ -7,7 +7,8 @@ import { ko } from 'date-fns/locale';
 import useEmblaCarousel from 'embla-carousel-react';
 
 import { MeetingWithHost } from '@/shared/types/generated-client/models/MeetingWithHost';
-import { BestSoeatCard } from '@/widgets/home/ui/best-soeat-card/best-soeat-card';
+
+import { BestSoeatCard } from '../best-soeat-card';
 
 function formatDateTime(date: Date): string {
   return format(date, 'M/d(E) HH:mm', { locale: ko });

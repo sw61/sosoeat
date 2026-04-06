@@ -1,7 +1,7 @@
 // app/_components/main-page-section/main-page-section.tsx
 import Image from 'next/image';
 
-import { getMeetings } from '@/entities/meeting/api/meetings.server';
+import { getMeetings } from '@/entities/meeting/index.server';
 
 import { MainPageCardWithHeart } from './main-page-card-with-heart';
 
