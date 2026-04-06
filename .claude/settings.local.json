@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "allow": ["Bash(ov status:*)", "Bash(ov health:*)", "Bash(ov ls:*)", "Bash(ov reindex:*)"]
+  }
+}

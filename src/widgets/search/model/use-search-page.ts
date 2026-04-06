@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
@@ -13,7 +15,9 @@ type DateChangeParams = {
   valueEnd: Date | null;
 };
 
-const useMeetingPage = () => {
+const MEETINGS_PAGE_SIZE = 10;
+
+const useSearchPage = () => {
   const [regionCommitted, setRegionCommitted] = useState<RegionSelection>(null);
   const [dateStart, setDateStart] = useState<Date | null>(null);
   const [dateEnd, setDateEnd] = useState<Date | null>(null);
@@ -29,8 +33,7 @@ const useMeetingPage = () => {
       : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1).toISOString();
 
   const options: Omit<TeamIdMeetingsGetRequest, 'teamId'> = {
-    size: 10,
-    //type unfind이면 전체 보냄
+    size: MEETINGS_PAGE_SIZE,
     type: typeFilter === 'all' ? undefined : typeFilter,
     region,
     dateStart: dateStart == null ? undefined : dateStart,
@@ -95,4 +98,4 @@ const useMeetingPage = () => {
   };
 };
 
-export default useMeetingPage;
+export default useSearchPage;

@@ -19,7 +19,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown';
-import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from '@/shared/ui/sheet';
 
 const NAV_ITEMS = [
   { href: '/home', label: '홈' },
@@ -129,6 +136,7 @@ export function NavigationBar({ initialUser }: { initialUser: AuthUser | null })
                   </SheetTrigger>
                   <SheetContent side="right" className="w-64 p-0 pt-12">
                     <SheetTitle className="sr-only">알림</SheetTitle>
+                    <SheetDescription className="sr-only">알림 목록 패널</SheetDescription>
                   </SheetContent>
                 </Sheet>
 
@@ -193,6 +201,7 @@ export function NavigationBar({ initialUser }: { initialUser: AuthUser | null })
               </SheetTrigger>
               <SheetContent side="right" className="flex w-64 flex-col p-0 pt-12">
                 <SheetTitle className="sr-only">메뉴</SheetTitle>
+                <SheetDescription className="sr-only">모바일 네비게이션 메뉴</SheetDescription>
 
                 <div className="flex flex-col gap-1 px-4">
                   {NAV_ITEMS.map((item) => {
