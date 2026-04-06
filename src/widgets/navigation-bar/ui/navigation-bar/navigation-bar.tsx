@@ -8,8 +8,7 @@ import { Bell, ChevronRight } from 'lucide-react';
 
 import { AuthUser, useAuthStore } from '@/entities/auth';
 import { useLogout } from '@/features/auth';
-import { useCreateMeeting } from '@/features/meeting-create/model/use-create-meeting';
-import { MeetingCreateModal } from '@/features/meeting-create/ui/meeting-create-modal/meeting-create-modal';
+import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
 import { useModal } from '@/shared/hooks/use-modal';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';

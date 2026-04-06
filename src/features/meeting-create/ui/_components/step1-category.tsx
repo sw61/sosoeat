@@ -6,8 +6,8 @@ import Image from 'next/image';
 
 import { cn } from '@/shared/lib/utils';
 
-import { MEETING_CATEGORY_LABELS } from '../meeting-create-modal.constants';
-import type { MeetingFormData, StepProps } from '../meeting-create-modal.types';
+import { MEETING_CATEGORY_LABELS } from '../../model/meeting-create.constants';
+import type { MeetingFormData, StepProps } from '../../model/meeting-create.types';
 
 const CATEGORY_ICONS: Record<string, string> = {
   groupEat: '/images/group-eat-modal.png',

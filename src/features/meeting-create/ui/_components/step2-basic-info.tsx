@@ -10,7 +10,7 @@ import { MIME_TO_EXT, useUploadImage } from '@/entities/image';
 import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/ui/input/input';
 
-import type { StepProps } from '../meeting-create-modal.types';
+import type { StepProps } from '../../model/meeting-create.types';
 
 const ACCEPTED_IMAGE_TYPES = Object.keys(MIME_TO_EXT).join(',');
 

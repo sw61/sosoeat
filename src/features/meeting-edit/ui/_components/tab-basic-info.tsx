@@ -17,12 +17,8 @@ import {
 import { Input } from '@/shared/ui/input/input';
 import { Textarea } from '@/shared/ui/textarea/textarea';
 
-import type { MeetingEditFormData } from '../meeting-edit-modal.types';
-
-const CATEGORY_OPTIONS = [
-  { value: 'groupEat', label: '함께먹기' },
-  { value: 'groupBuy', label: '공동구매' },
-] as const;
+import { CATEGORY_OPTIONS } from '../../model/meeting-edit.constants';
+import type { MeetingEditFormData } from '../../model/meeting-edit.schema';
 
 interface TabProps {
   form: UseFormReturn<MeetingEditFormData>;

@@ -2,7 +2,7 @@
 
 import { Textarea } from '@/shared/ui/textarea/textarea';
 
-import type { StepProps } from '../meeting-create-modal.types';
+import type { StepProps } from '../../model/meeting-create.types';
 
 /**
  * 3단계: 모임 설명 입력

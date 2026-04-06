@@ -1,4 +1,4 @@
-import type { MeetingStep } from './meeting-create-modal.types';
+import type { MeetingStep } from './meeting-create.types';
 
 export const CATEGORY_OPTIONS = [
   { value: 'groupEat', label: '함께먹기' },

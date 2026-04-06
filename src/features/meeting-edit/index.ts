@@ -1,2 +1,3 @@
-export { MeetingEditModal } from './ui/meeting-edit-modal/meeting-edit-modal';
-export { toMeetingEditFormData } from './ui/meeting-edit-modal/meeting-edit-modal.utils';
+export type { MeetingEditFormData, MeetingEditModalProps } from './model/meeting-edit.types';
+export { toMeetingEditFormData } from './model/meeting-edit.utils';
+export { MeetingEditModal } from './ui/meeting-edit-modal';

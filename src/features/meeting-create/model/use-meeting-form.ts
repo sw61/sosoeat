@@ -3,9 +3,9 @@ import { type Resolver, useForm, useWatch } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { DEFAULT_FORM_VALUES, STEPS, TOTAL_STEPS } from '../meeting-create-modal.constants';
-import { meetingFormSchema, STEP_REQUIRED_FIELDS } from '../meeting-create-modal.schema';
-import type { MeetingFormData, MeetingStep } from '../meeting-create-modal.types';
+import { DEFAULT_FORM_VALUES, STEPS, TOTAL_STEPS } from './meeting-create.constants';
+import { meetingFormSchema, STEP_REQUIRED_FIELDS } from './meeting-create.schema';
+import type { MeetingFormData, MeetingStep } from './meeting-create.types';
 
 /**
  * MeetingCreateModal 전용 폼 상태 관리 훅.

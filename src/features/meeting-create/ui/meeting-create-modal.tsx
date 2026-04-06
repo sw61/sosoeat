@@ -5,10 +5,11 @@ import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/shared/ui/dialog';
 import { Funnel, Step } from '@/shared/ui/funnel/funnel';
 
-import { useMeetingForm } from './hooks/use-meeting-form';
+import { STEP_TITLES } from '../model/meeting-create.constants';
+import type { MeetingCreateModalProps, MeetingFormData } from '../model/meeting-create.types';
+import { useMeetingForm } from '../model/use-meeting-form';
+
 import { StepBasicInfo, StepCategory, StepDescription, StepSchedule } from './_components';
-import { STEP_TITLES } from './meeting-create-modal.constants';
-import type { MeetingCreateModalProps, MeetingFormData } from './meeting-create-modal.types';
 
 const CTA_BASE_CLASS =
   'h-[48px] flex-1 rounded-[12px] text-sm md:text-base font-semibold transition-all md:h-[60px] md:rounded-[16px]';

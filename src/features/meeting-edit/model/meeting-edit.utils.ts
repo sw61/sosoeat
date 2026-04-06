@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 import type { Meeting } from '@/entities/meeting';
 
-import type { MeetingEditFormData } from './meeting-edit-modal.types';
+import type { MeetingEditFormData } from './meeting-edit.schema';
 
 /**
  * Meeting 상세 데이터를 MeetingEditModal의 defaultValues로 변환합니다.

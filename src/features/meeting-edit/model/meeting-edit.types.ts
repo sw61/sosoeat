@@ -1,4 +1,4 @@
-import type { MeetingEditFormData } from './meeting-edit-modal.schema';
+import type { MeetingEditFormData } from './meeting-edit.schema';
 
 export type { MeetingEditFormData };
 

@@ -10,25 +10,12 @@ import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/shared/ui/dialog';
 
-import { useUpdateMeeting } from '../../model/use-update-meeting';
+import { BASIC_INFO_KEYS, EDIT_TABS } from '../model/meeting-edit.constants';
+import { type MeetingEditFormData, meetingEditFormSchema } from '../model/meeting-edit.schema';
+import type { MeetingEditModalProps, MeetingEditTab } from '../model/meeting-edit.types';
+import { useUpdateMeeting } from '../model/use-update-meeting';
 
 import { TabBasicInfo, TabSchedule } from './_components';
-import { type MeetingEditFormData, meetingEditFormSchema } from './meeting-edit-modal.schema';
-import type { MeetingEditModalProps, MeetingEditTab } from './meeting-edit-modal.types';
-
-const EDIT_TABS: { value: MeetingEditTab; label: string }[] = [
-  { value: 'basicInfo', label: '기본정보' },
-  { value: 'schedule', label: '일정 및 인원' },
-];
-
-const BASIC_INFO_KEYS: (keyof MeetingEditFormData)[] = [
-  'name',
-  'type',
-  'region',
-  'address',
-  'image',
-  'description',
-];
 
 const MeetingEditForm = ({
   onClose,
@@ -89,7 +76,9 @@ const MeetingEditForm = ({
    * (React Hook Form은 안 보이는 탭의 input을 포커스할 수 없어 silent failure가 발생할 수 있기 때문)
    */
   const handleInvalid = (errors: FieldErrors<MeetingEditFormData>) => {
-    const hasBasicInfoError = BASIC_INFO_KEYS.some((key) => !!errors[key]);
+    const hasBasicInfoError = BASIC_INFO_KEYS.some(
+      (key) => !!errors[key as keyof MeetingEditFormData]
+    );
 
     if (hasBasicInfoError && activeTab !== 'basicInfo') {
       setActiveTab('basicInfo');
@@ -105,7 +94,7 @@ const MeetingEditForm = ({
 
       {/* 탭 */}
       <div className="border-sosoeat-gray-200 mt-5 flex border-b">
-        {EDIT_TABS.map((tab) => (
+        {EDIT_TABS.map((tab: (typeof EDIT_TABS)[number]) => (
           <button
             key={tab.value}
             type="button"

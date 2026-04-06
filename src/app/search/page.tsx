@@ -3,8 +3,7 @@
 import { useAuthStore } from '@/entities/auth';
 import { MainPageCard } from '@/entities/meeting/ui/main-page-card';
 import { HeartButton } from '@/features/favorites';
-import { useCreateMeeting } from '@/features/meeting-create/model/use-create-meeting';
-import { MeetingCreateModal } from '@/features/meeting-create/ui/meeting-create-modal/meeting-create-modal';
+import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
 import { useModal } from '@/shared/hooks/use-modal';
 import { Skeleton } from '@/shared/ui/skeleton';
 import useSearchPage from '@/widgets/search/model/use-search-page';
