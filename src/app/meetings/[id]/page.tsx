@@ -1,5 +1,5 @@
 import type { Meeting } from '@/entities/meeting';
-import { getMeetings } from '@/entities/meeting';
+import { getMeetings } from '@/entities/meeting/index.server';
 import {
   MeetingCommentSection,
   MeetingHeroSection,

@@ -1,4 +1,4 @@
-import { getMeetings } from '@/entities/meeting/api/meetings.server';
+import { getMeetings } from '@/entities/meeting/index.server';
 import { BestSoeatSection } from '@/widgets/home/ui/best-soeat-section/best-soeat-section';
 import { CtaSection } from '@/widgets/home/ui/cta-section/cta-section';
 import { MainPageSection } from '@/widgets/home/ui/main-page-section/main-page-section';
