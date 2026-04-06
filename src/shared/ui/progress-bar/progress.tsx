@@ -2,7 +2,7 @@
 
 import { Progress as ProgressPrimitive } from 'radix-ui';
 
-import { cn } from '@/shared/lib/utils';
+import { cn } from '../../lib/utils';
 
 import { variantStyles, variantStylesFull } from './progress.constants';
 import type { ProgressProps } from './progress.types';

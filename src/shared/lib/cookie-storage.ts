@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-import { AuthUser } from '@/shared/types/auth';
+import { AuthUser } from '../types/auth';
 
 export interface SessionData {
   accessToken?: string;

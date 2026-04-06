@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { ProgressWithLabel } from '@/shared/ui/progress-with-label/progress-with-label';
+import { ProgressWithLabel } from './progress-with-label';
 
 describe('ProgressWithLabel', () => {
   it('전체인원이 찼을 시 마감이 나온다.', () => {

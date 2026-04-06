@@ -1,4 +1,4 @@
-import { CookieStorage } from '@/shared/lib/cookie-storage';
+import { CookieStorage } from './cookie-storage';
 
 const BASE_URL = process.env.API_BASE_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;

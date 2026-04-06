@@ -4,9 +4,9 @@ import * as React from 'react';
 
 import { Clock as ClockIcon } from 'lucide-react';
 
-import { cn } from '@/shared/lib/utils';
-import { Button } from '@/shared/ui/button/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover/popover';
+import { cn } from '../../lib/utils';
+import { Button } from '../button/button';
+import { Popover, PopoverContent, PopoverTrigger } from '../popover/popover';
 
 import { TimePicker } from './time-picker';
 

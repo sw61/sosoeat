@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { DetailDatePicker } from '@/shared/ui/date-picker/detail-date-picker';
+import { DetailDatePicker } from './detail-date-picker';
 
 describe('DetailDatePicker', () => {
   describe('렌더링', () => {

@@ -1,9 +1,9 @@
-import { NotificationsApi } from '@/shared/types/generated-client';
-import { AuthApi } from '@/shared/types/generated-client/apis/AuthApi';
-import { MeetingsApi } from '@/shared/types/generated-client/apis/MeetingsApi';
-import { PostsApi } from '@/shared/types/generated-client/apis/PostsApi';
-import { UsersApi } from '@/shared/types/generated-client/apis/UsersApi';
-import { Configuration } from '@/shared/types/generated-client/runtime';
+import { NotificationsApi } from '../types/generated-client';
+import { AuthApi } from '../types/generated-client/apis/AuthApi';
+import { MeetingsApi } from '../types/generated-client/apis/MeetingsApi';
+import { PostsApi } from '../types/generated-client/apis/PostsApi';
+import { UsersApi } from '../types/generated-client/apis/UsersApi';
+import { Configuration } from '../types/generated-client/runtime';
 
 /**
  * API Base URL 설정

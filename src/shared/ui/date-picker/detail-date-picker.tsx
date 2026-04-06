@@ -8,11 +8,10 @@ import Image from 'next/image';
 import { format, isSameDay, startOfDay } from 'date-fns';
 import { ChevronDown, Triangle } from 'lucide-react';
 
-import { cn } from '@/shared/lib/utils';
-import { Button } from '@/shared/ui/button/button';
-import { Calendar } from '@/shared/ui/calendar/calendar';
-import type { DetailDatePickerProps } from '@/shared/ui/date-picker/detail-date-picker.type';
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover/popover';
+import { cn } from '../../lib/utils';
+import { Button } from '../button/button';
+import { Calendar } from '../calendar/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '../popover/popover';
 
 import {
   DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS,
@@ -24,6 +23,7 @@ import {
   DETAIL_DATE_PICKER_TRIGGER_CONTENT_CLASS,
   DETAIL_DATE_PICKER_VARIANT_STYLES,
 } from './detail-date-picker.constants';
+import type { DetailDatePickerProps } from './detail-date-picker.type';
 
 function formatTriggerLabel({
   valueStart,

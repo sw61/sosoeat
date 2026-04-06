@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import regionDataRaw from '@/shared/data/korea-regions-districts.json';
-import type { Region } from '@/shared/data/korea-regions-districts.types';
+import regionDataRaw from '../../data/korea-regions-districts.json';
+import type { Region } from '../../data/korea-regions-districts.types';
 
 import { DropdownSub } from './dropdown-sub';
 

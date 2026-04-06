@@ -11,8 +11,8 @@ import {
 import { format, type Locale as DateFnsLocale } from 'date-fns';
 import { ChevronDown, Triangle } from 'lucide-react';
 
-import { cn } from '@/shared/lib/utils';
-import { Button, buttonVariants } from '@/shared/ui/button/button';
+import { cn } from '../../lib/utils';
+import { Button, buttonVariants } from '../button/button';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];

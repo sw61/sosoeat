@@ -1,10 +1,10 @@
 import { cva } from 'class-variance-authority';
 import { Users } from 'lucide-react';
 
-import { cn } from '@/shared/lib/utils';
-import { Field, FieldLabel } from '@/shared/ui/field/field';
-import type { ProgressProps } from '@/shared/ui/progress-bar';
-import { Progress } from '@/shared/ui/progress-bar';
+import { cn } from '../../lib/utils';
+import { Field, FieldLabel } from '../field/field';
+import type { ProgressProps } from '../progress-bar';
+import { Progress } from '../progress-bar';
 
 import {
   PROGRESS_WITH_LABEL_FIELD_CLASS,

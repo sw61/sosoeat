@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { Progress } from '@/shared/ui/progress-bar';
+import { Progress } from './progress';
 
 describe('Progress', () => {
   it("variant='groupEat'일 때 groupEat 색상 클래스가 적용된다", () => {

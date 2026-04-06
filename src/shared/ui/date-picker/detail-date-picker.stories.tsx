@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { DetailDatePicker } from '@/shared/ui/date-picker/detail-date-picker';
+import { DetailDatePicker } from './detail-date-picker';
 
 const meta = {
   title: 'components/common/detail-date-picker',

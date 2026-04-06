@@ -6,10 +6,10 @@ import { ko } from 'react-day-picker/locale';
 import { format, startOfDay } from 'date-fns';
 import { Calendar as CalendarIcon, Triangle } from 'lucide-react';
 
-import { cn } from '@/shared/lib/utils';
-import { Button } from '@/shared/ui/button/button';
-import { Calendar } from '@/shared/ui/calendar/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover/popover';
+import { cn } from '../../lib/utils';
+import { Button } from '../button/button';
+import { Calendar } from '../calendar/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '../popover/popover';
 
 export type DatePickerVariant = 'groupEat' | 'groupBuy';
 

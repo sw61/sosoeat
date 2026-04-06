@@ -14,4 +14,4 @@ export {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/shared/ui/dropdown/dropdown';
+} from './dropdown';

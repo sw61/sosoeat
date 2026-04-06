@@ -1,5 +1,5 @@
-import { cn } from '@/shared/lib/utils';
-import { Badge } from '@/shared/ui/badge';
+import { cn } from '../../lib/utils';
+import { Badge } from '../badge';
 
 import type { UseStateBadgeProps } from './use-state-badge.types';
 

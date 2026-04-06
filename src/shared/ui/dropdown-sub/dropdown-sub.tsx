@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuTrigger,
-} from '@/shared/ui/dropdown';
+} from '../dropdown';
 
 import type { DropdownSubProp } from './dropdown-sub.types';
 

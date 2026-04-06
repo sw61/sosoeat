@@ -23,7 +23,6 @@ export const Large: Story = {
 };
 
 export const Small: Story = {
-  name: 'Small',
   args: { count: 5, size: 'small' },
 };
 
