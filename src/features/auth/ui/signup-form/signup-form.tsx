@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 
-import { Funnel, Step } from '@/components/common/funnel/funnel';
 import { useSignUp } from '@/entities/auth';
+import { Funnel, Step } from '@/shared/ui/funnel/funnel';
 
 import { useSignupForm } from './hooks/use-signup-form';
 import {

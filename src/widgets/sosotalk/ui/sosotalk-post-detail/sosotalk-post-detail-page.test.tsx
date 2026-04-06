@@ -11,11 +11,11 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-jest.mock('@/components/common/navigation-bar', () => ({
+jest.mock('@/widgets/navigation-bar/ui/navigation-bar/navigation-bar', () => ({
   NavigationBar: () => <div>NavigationBar</div>,
 }));
 
-jest.mock('@/components/common/footer', () => ({
+jest.mock('@/widgets/footer/ui/footer/footer', () => ({
   Footer: () => <div>Footer</div>,
 }));
 

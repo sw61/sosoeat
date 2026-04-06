@@ -1,5 +1,5 @@
 // comment-delete-modal.tsx
-import { AlertModal } from '@/components/common/alert-modal/alert-modal';
+import { AlertModal } from '@/shared/ui/alert-modal/alert-modal';
 
 interface CommentDeleteModalProps {
   open: boolean;

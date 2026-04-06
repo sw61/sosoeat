@@ -4,11 +4,11 @@ import Image from 'next/image';
 
 import { Calendar, Clock, LucideIcon, MapPin, UserRound } from 'lucide-react';
 
-import { UseStateBadge } from '@/components/common/use-state-badge/use-state-badge';
 import { EstablishmentStatusBadge } from '@/entities/meeting/ui/establishment-status-badge';
 import { HeartButton } from '@/features/favorites/ui/heart-button';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardContent, CardDescription, CardTitle } from '@/shared/ui/card';
+import { UseStateBadge } from '@/shared/ui/use-state-badge/use-state-badge';
 
 import type { MyPageCardProps } from './mypage-card.types';
 

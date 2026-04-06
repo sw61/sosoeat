@@ -27,7 +27,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       login(data.user);
       toast.success('로그인에 성공했습니다.');
-      router.push(getSafeCallbackUrl(searchParams.get('callbackUrl')));
+      router.push(getSafeCallbackUrl(searchParams?.get('callbackUrl')));
     },
     onError: (error: Error) => {
       toast.error(error.message || '로그인 중 오류가 발생했습니다.');
@@ -83,9 +83,9 @@ export const useSocialLogin = () => {
     if (isProcessed.current) return;
     isProcessed.current = true;
 
-    const accessToken = searchParams.get('accessToken');
-    const refreshToken = searchParams.get('refreshToken');
-    const error = searchParams.get('error');
+    const accessToken = searchParams?.get('accessToken');
+    const refreshToken = searchParams?.get('refreshToken');
+    const error = searchParams?.get('error');
 
     if (error || !accessToken || !refreshToken) {
       console.error('[OAuthCallback] Error or Missing tokens:', error);

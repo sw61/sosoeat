@@ -22,7 +22,7 @@ const TAB_PARAM_MAP: Record<string, TabValue> = {
 export function MeetingTabs() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const tabParam = searchParams.get('tab') ?? 'all';
+  const tabParam = searchParams?.get('tab') ?? 'all';
   const activeTab: TabValue = TAB_PARAM_MAP[tabParam] ?? 'all';
 
   const setActiveTab = useCallback(

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import type { DropdownSubProp } from '@/components/common/dropdown-sub/dropdown-sub.types';
+import type { DropdownSubProp } from '@/shared/ui/dropdown-sub/dropdown-sub.types';
 
 /** `korea-regions-districts.json`의 지역 항목과 동일한 형태 */
 export interface KoreaRegionRegion {

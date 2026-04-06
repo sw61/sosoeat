@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import { XIcon } from 'lucide-react';
 
-import { DropdownSub } from '@/components/common/dropdown-sub/dropdown-sub';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button/button';
 import {
@@ -16,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/ui/dialog';
+import { DropdownSub } from '@/shared/ui/dropdown-sub/dropdown-sub';
 
 import { useRegionSelectModal } from './hooks/use-region-select-modal';
 import {

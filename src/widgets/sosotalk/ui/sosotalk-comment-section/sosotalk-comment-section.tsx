@@ -2,10 +2,10 @@
 
 import { MessageSquareText } from 'lucide-react';
 
-import { CountingBadge } from '@/components/common/counting-badge';
 import { CommentInput } from '@/entities/comment/ui/comment-input';
 import { CommentItem } from '@/entities/comment/ui/comment-item';
 import { cn } from '@/shared/lib/utils';
+import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 
 import type { SosoTalkCommentSectionProps } from './sosotalk-comment-section.types';
 

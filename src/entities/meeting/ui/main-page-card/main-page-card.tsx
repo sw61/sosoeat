@@ -7,7 +7,7 @@ import { ko } from 'date-fns/locale';
 import { MapPin, Users } from 'lucide-react';
 
 // HeartButton은 features/favorites 완성 후 경로 교체 예정
-import { HeartButton } from '@/components/common/heart-button';
+import { HeartButton } from '@/features/favorites/ui/heart-button/heart-button';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from '@/shared/ui/card';
 import { Progress, type ProgressProps } from '@/shared/ui/progress-bar';

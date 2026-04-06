@@ -1,9 +1,9 @@
 'use client';
 
-import { MeetingCreateModal } from '@/components/common/meeting-create-modal';
 import { useAuthStore } from '@/entities/auth/model/auth-store';
 import { useCreateMeeting } from '@/entities/meeting';
 import { MainPageCard } from '@/entities/meeting/ui/main-page-card';
+import { MeetingCreateModal } from '@/features/meeting-create/ui/meeting-create-modal/meeting-create-modal';
 import { useModal } from '@/shared/hooks/use-modal';
 import { Skeleton } from '@/shared/ui/skeleton';
 import useSearchPage from '@/widgets/search/model/use-search-page';

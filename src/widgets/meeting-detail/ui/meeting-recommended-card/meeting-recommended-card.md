@@ -101,11 +101,11 @@ import RecommendedMeetingCard from '@/components/common/RecommendedMeetingCard';
 
 ## 🧩 사용 컴포넌트
 
-| 컴포넌트              | 위치                              | 용도                    |
-| --------------------- | --------------------------------- | ----------------------- |
-| `Card`, `CardContent` | `@/components/ui/card`            | 카드 레이아웃 베이스    |
-| `Badge`               | `@/components/ui/badge`           | 날짜 · 시간 · 마감 표시 |
-| `HeartButton`         | `@/components/common/HeartButton` | 찜 토글 버튼            |
+| 컴포넌트              | 위치                                                | 용도                    |
+| --------------------- | --------------------------------------------------- | ----------------------- |
+| `Card`, `CardContent` | `@/components/ui/card`                              | 카드 레이아웃 베이스    |
+| `Badge`               | `@/components/ui/badge`                             | 날짜 · 시간 · 마감 표시 |
+| `HeartButton`         | `@/features/favorites/ui/heart-button/heart-button` | 찜 토글 버튼            |
 
 ---
 

@@ -162,7 +162,7 @@ prefetch 정책(성능 표준):
 ```typescript
 // app/meetings/page.tsx
 import { QueryClient, HydrationBoundary, dehydrate } from '@tanstack/react-query';
-import { meetingsQueryOptions } from '@/services/meetings/meetings.options';
+import { meetingsQueryOptions } from '@/entities/meeting';
 import { MeetingsList } from './_components/meetings-list';
 
 export default async function MeetingsPage() {
@@ -202,7 +202,7 @@ Client Component에서 쿼리 옵션 사용:
 // app/meetings/_components/meetings-list.tsx
 'use client';
 import { useQuery } from '@tanstack/react-query';
-import { meetingsQueryOptions } from '@/services/meetings/meetings.options';
+import { meetingsQueryOptions } from '@/entities/meeting';
 
 export function MeetingsList() {
   const { data } = useQuery(meetingsQueryOptions.all());

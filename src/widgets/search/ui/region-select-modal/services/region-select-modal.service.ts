@@ -1,4 +1,4 @@
-import type { DropdownSubProp } from '@/components/common/dropdown-sub/dropdown-sub.types';
+import type { DropdownSubProp } from '@/shared/ui/dropdown-sub/dropdown-sub.types';
 
 import type { RegionModalDropdownSub, RegionSelection } from '../region-select-modal.types';
 

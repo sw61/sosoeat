@@ -24,7 +24,7 @@ export const useLoginForm = ({ defaultValues }: LoginFormProps) => {
   // 동일한 에러 토스트 중복 실행 방지
   const isErrorToastShown = useRef(false);
 
-  const errorCode = searchParams.get('error');
+  const errorCode = searchParams?.get('error');
 
   useEffect(() => {
     if (!errorCode || isErrorToastShown.current) return;

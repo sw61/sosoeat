@@ -1,0 +1,31 @@
+import { render, screen } from '@testing-library/react';
+
+import { ProgressWithLabel } from '@/shared/ui/progress-with-label/progress-with-label';
+
+describe('ProgressWithLabel', () => {
+  it('전체인원이 찼을 시 마감이 나온다.', () => {
+    render(<ProgressWithLabel id="progress-test-full" current={10} max={10} variant="groupEat" />);
+
+    const peopleNumberText = screen.getByText('마감');
+
+    expect(peopleNumberText).toBeInTheDocument();
+  });
+
+  it('current 5 max 10 일때 5/10 이 나온다.', () => {
+    const current = 5;
+    const max = 10;
+
+    render(
+      <ProgressWithLabel
+        id="progress-test-partial"
+        current={current}
+        max={max}
+        variant="groupEat"
+      />
+    );
+
+    const peopleNumberText = screen.getByText('5/10 참여중');
+
+    expect(peopleNumberText).toBeInTheDocument();
+  });
+});

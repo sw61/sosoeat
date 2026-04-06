@@ -23,7 +23,7 @@ interface LoginLayoutProps {
  */
 export const LoginLayout = ({ children }: LoginLayoutProps) => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl');
+  const callbackUrl = searchParams?.get('callbackUrl');
 
   const buildSocialUrl = (provider: string) =>
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_TEAM_ID}/auth/${provider}`;

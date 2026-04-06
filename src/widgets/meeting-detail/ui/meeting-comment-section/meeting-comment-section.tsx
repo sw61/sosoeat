@@ -4,12 +4,12 @@ import { useState } from 'react';
 
 import { MessageSquareText } from 'lucide-react';
 
-import { CountingBadge } from '@/components/common/counting-badge/counting-badge';
 import { useAuthStore } from '@/entities/auth/model/auth-store';
 import type { Comment } from '@/entities/comment';
 import { useComments, useCreateComment } from '@/entities/comment';
 import { CommentInput } from '@/entities/comment/ui/comment-input';
 import { cn } from '@/shared/lib/utils';
+import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 
 import { buildCommentTree } from './comment-tree';

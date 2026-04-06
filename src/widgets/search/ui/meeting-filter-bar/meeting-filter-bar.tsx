@@ -4,10 +4,10 @@ import { useState } from 'react';
 
 import { ChevronDown } from 'lucide-react';
 
-import { DetailDatePicker } from '@/components/common/date-picker/detail-date-picker';
 import regionData from '@/shared/data/korea-regions-districts.json';
 import { meetingFilterPillTriggerClass } from '@/shared/lib/meeting-filter-pill';
 import { cn } from '@/shared/lib/utils';
+import { DetailDatePicker } from '@/shared/ui/date-picker/detail-date-picker';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
