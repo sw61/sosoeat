@@ -5,8 +5,8 @@ import * as React from 'react';
 import { Bell } from 'lucide-react';
 
 import { CountingBadge } from '@/components/common/counting-badge';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
 
 import {
   NOTIFICATION_TRIGGER_BADGE_WRAPPER_CLASS,

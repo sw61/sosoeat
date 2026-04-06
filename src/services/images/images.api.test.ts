@@ -1,8 +1,8 @@
-import { fetchClient } from '@/lib/http/fetch-client';
+import { fetchClient } from '@/shared/api/fetch-client';
 
 import { imagesApi } from './images.api';
 
-jest.mock('@/lib/http/fetch-client', () => ({
+jest.mock('@/shared/api/fetch-client', () => ({
   fetchClient: {
     post: jest.fn(),
   },

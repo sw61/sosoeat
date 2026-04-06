@@ -4,8 +4,8 @@ import Image from 'next/image';
 
 import { motion } from 'framer-motion';
 
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
 
 import useFavoriteMeeting from './hooks/use-heart-button';
 import {

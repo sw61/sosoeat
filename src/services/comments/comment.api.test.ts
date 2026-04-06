@@ -1,8 +1,8 @@
-import { commentClient } from '@/lib/http/comment-client';
+import { commentClient } from '@/shared/api/comment-client';
 
 import { commentApi } from './comment.api';
 
-jest.mock('@/lib/http/comment-client', () => ({
+jest.mock('@/shared/api/comment-client', () => ({
   commentClient: {
     get: jest.fn(),
     post: jest.fn(),

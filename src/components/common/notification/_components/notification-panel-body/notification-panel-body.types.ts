@@ -1,4 +1,4 @@
-import type { Notification } from '@/types/generated-client';
+import type { Notification } from '@/shared/types/generated-client';
 
 export interface NotificationPanelBodyProps {
   titleId: string;

@@ -1,4 +1,4 @@
-import { fetchClient } from '@/lib/http/fetch-client';
+import { fetchClient } from '@/shared/api/fetch-client';
 
 const favoriteApi = {
   async favoritePost(meetingId: number): Promise<boolean> {

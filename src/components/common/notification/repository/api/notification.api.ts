@@ -1,7 +1,7 @@
 import { parseISO } from 'date-fns';
 
-import { fetchClient } from '@/lib/http/fetch-client';
-import type { Comment, Notification, NotificationList } from '@/types/generated-client';
+import { fetchClient } from '@/shared/api/fetch-client';
+import type { Comment, Notification, NotificationList } from '@/shared/types/generated-client';
 
 export const notificationApi = {
   readNotification: ({ notificationId }: { notificationId: number }) => {

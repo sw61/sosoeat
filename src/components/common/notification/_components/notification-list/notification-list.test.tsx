@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import { NotificationList } from './notification-list';
 
-jest.mock('@/lib/api-client', () => ({
+jest.mock('@/shared/lib/api-client', () => ({
   postsApi: {
     teamIdPostsPostIdCommentsGet: jest.fn().mockResolvedValue({
       data: [],

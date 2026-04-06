@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { Notification } from '@/types/generated-client';
+import { Notification } from '@/shared/types/generated-client';
 
 import { NotificationDialog } from './notification-dialog';
 

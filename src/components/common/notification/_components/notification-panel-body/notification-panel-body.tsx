@@ -1,7 +1,7 @@
 'use client';
 
 import { CountingBadge } from '@/components/common/counting-badge';
-import type { Notification } from '@/types/generated-client';
+import type { Notification } from '@/shared/types/generated-client';
 
 import { NotificationTab } from '../notification-list/_components/notification-tab';
 

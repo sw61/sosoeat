@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import { AlertModal } from '@/components/common/alert-modal/alert-modal';
 import { authApi } from '@/services/auth/auth.api';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuthStore } from '@/shared/store/auth-store';
 
 export const SessionExpiredModal = () => {
   const router = useRouter();

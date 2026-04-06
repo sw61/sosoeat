@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { fetchClient } from '@/lib/http/fetch-client';
-import type { Notification, NotificationList } from '@/types/generated-client';
+import { fetchClient } from '@/shared/api/fetch-client';
+import type { Notification, NotificationList } from '@/shared/types/generated-client';
 
 import { Notification as Nt } from './notification';
 
-jest.mock('@/lib/http/fetch-client', () => ({
+jest.mock('@/shared/api/fetch-client', () => ({
   fetchClient: {
     get: jest.fn(),
     put: jest.fn(),

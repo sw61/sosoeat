@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 import { metaDot } from '../icons/meta-dot/meta-dot';
 import { ReadCheckIcon } from '../icons/read-check-icon';

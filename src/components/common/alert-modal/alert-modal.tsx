@@ -1,14 +1,14 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
+} from '@/shared/ui/dialog';
 
 import { ALERT_MODAL_BTN_BASE_CLASS, ALERT_MODAL_CONTENT_CLASS } from './alert-modal.constants';
 import type { AlertModalProps } from './alert-modal.types';

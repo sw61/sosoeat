@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 
 import { AlertModal } from '@/components/common/alert-modal/alert-modal';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuthStore } from '@/shared/store/auth-store';
 
 export const LoginRequireModal = () => {
   const router = useRouter();

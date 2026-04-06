@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 
-import type { Notification, NotificationTypeEnum } from '@/types/generated-client';
+import type { Notification, NotificationTypeEnum } from '@/shared/types/generated-client';
 
 import { ApprovedIcon } from '../_components/notification-list/_components/notification-tab/_components/icons/approved-icon';
 import { CommentIcon } from '../_components/notification-list/_components/notification-tab/_components/icons/comment-icon';

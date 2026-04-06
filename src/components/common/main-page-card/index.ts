@@ -1,2 +1,2 @@
-export * from './main-page-card';
-export * from './main-page-card.types';
+export type { MainPageCardProps } from '@/entities/meeting/ui/main-page-card';
+export { MainPageCard } from '@/entities/meeting/ui/main-page-card';

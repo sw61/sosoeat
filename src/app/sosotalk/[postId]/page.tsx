@@ -1,4 +1,4 @@
-import { SosoTalkPostDetailPage } from './_components/sosotalk-post-detail-page';
+import { SosoTalkPostDetailPage } from '@/widgets/sosotalk/ui/sosotalk-post-detail/sosotalk-post-detail-page';
 
 interface PageProps {
   params: Promise<{

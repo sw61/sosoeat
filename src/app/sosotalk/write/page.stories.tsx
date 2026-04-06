@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { useAuthStore } from '@/store/auth-store';
+import { useAuthStore } from '@/shared/store/auth-store';
 
 import SosoTalkWritePage from './page';
 

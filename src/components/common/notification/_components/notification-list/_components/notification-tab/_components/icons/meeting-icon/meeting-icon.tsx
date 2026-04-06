@@ -1,6 +1,6 @@
 import { Calendar } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 import { NOTIFICATION_ICON_BOX_CLASS } from '../../../notification-tab.constants';
 

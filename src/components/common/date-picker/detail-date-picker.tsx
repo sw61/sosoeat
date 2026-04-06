@@ -9,10 +9,10 @@ import { format, isSameDay, startOfDay } from 'date-fns';
 import { ChevronDown, Triangle } from 'lucide-react';
 
 import type { DetailDatePickerProps } from '@/components/common/date-picker/detail-date-picker.type';
-import { Button } from '@/components/ui/button/button';
-import { Calendar } from '@/components/ui/calendar/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/popover';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button/button';
+import { Calendar } from '@/shared/ui/calendar/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover/popover';
 
 import {
   DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS,

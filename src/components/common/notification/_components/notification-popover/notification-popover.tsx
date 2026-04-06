@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 
 import { NotificationPanelBody } from '../notification-panel-body';
 import { scrollAreaDesktopClass } from '../notification-scroll-area';

@@ -1,2 +1,2 @@
-export { CommentInput } from './comment-input';
-export type { CommentInputProps } from './comment-input.types';
+export type { CommentInputProps } from '@/entities/comment/ui/comment-input';
+export { CommentInput } from '@/entities/comment/ui/comment-input';

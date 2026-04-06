@@ -1,12 +1,11 @@
-import { getMeetings } from '@/services/meetings/meetings.server';
-import type { Meeting } from '@/types/meeting';
-
-import { MeetingCommentSection } from './_components/meeting-comment-section';
-import { MeetingHeroSection } from './_components/meeting-hero-section';
-import { MeetingLocationSection } from './_components/meeting-location-section';
-import { MeetingRecommendedSection } from './_components/meeting-recommended-section';
-import { fetchMeetingCommentsForPage } from './services/meeting-comments.server';
-import { getMeetingById } from './services/meeting-detail.server';
+import { getMeetings } from '@/entities/meeting/api/meetings.server';
+import type { Meeting } from '@/shared/types/meeting';
+import { fetchMeetingCommentsForPage } from '@/widgets/meeting-detail/model/meeting-comments.server';
+import { getMeetingById } from '@/widgets/meeting-detail/model/meeting-detail.server';
+import { MeetingCommentSection } from '@/widgets/meeting-detail/ui/meeting-comment-section';
+import { MeetingHeroSection } from '@/widgets/meeting-detail/ui/meeting-hero-section';
+import { MeetingLocationSection } from '@/widgets/meeting-detail/ui/meeting-location-section';
+import { MeetingRecommendedSection } from '@/widgets/meeting-detail/ui/meeting-recommended-section';
 
 // ─── Page ────────────────────────────────────────────────────
 

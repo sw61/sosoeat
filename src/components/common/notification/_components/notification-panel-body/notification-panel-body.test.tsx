@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { Notification } from '@/types/generated-client';
+import { Notification } from '@/shared/types/generated-client';
 
 import { NotificationPanelBody } from './notification-panel-body';
 

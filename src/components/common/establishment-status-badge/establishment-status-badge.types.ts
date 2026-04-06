@@ -1,7 +1,1 @@
-import type { ProgressProps } from '@/components/ui/progress-bar';
-
-export interface EstablishmentStatusBadgeProps {
-  confirmedAt: Date | null;
-  variant: ProgressProps['variant'];
-  className?: string;
-}
+export type { EstablishmentStatusBadgeProps } from '@/entities/meeting/ui/establishment-status-badge/establishment-status-badge.types';

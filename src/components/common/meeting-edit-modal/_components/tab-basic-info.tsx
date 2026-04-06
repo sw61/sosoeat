@@ -6,16 +6,16 @@ import Image from 'next/image';
 
 import { ImagePlus, Loader2 } from 'lucide-react';
 
+import { MIME_TO_EXT } from '@/entities/image';
+import { cn } from '@/shared/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown';
-import { Input } from '@/components/ui/input/input';
-import { Textarea } from '@/components/ui/textarea/textarea';
-import { cn } from '@/lib/utils';
-import { MIME_TO_EXT } from '@/services/images';
+} from '@/shared/ui/dropdown';
+import { Input } from '@/shared/ui/input/input';
+import { Textarea } from '@/shared/ui/textarea/textarea';
 
 import type { MeetingEditFormData } from '../meeting-edit-modal.types';
 

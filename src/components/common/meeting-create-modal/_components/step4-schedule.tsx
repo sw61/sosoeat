@@ -2,9 +2,9 @@
 
 import { Controller } from 'react-hook-form';
 
-import { DatePicker } from '@/components/ui/date-picker/date-picker';
-import { Input } from '@/components/ui/input/input';
-import { TimeInput } from '@/components/ui/time-picker/time-input';
+import { DatePicker } from '@/shared/ui/date-picker/date-picker';
+import { Input } from '@/shared/ui/input/input';
+import { TimeInput } from '@/shared/ui/time-picker/time-input';
 
 import type { StepProps } from '../meeting-create-modal.types';
 

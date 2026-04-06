@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { addDays, addMonths } from 'date-fns';
 
 import { MainPageCard } from '@/components/common/main-page-card/main-page-card';
-import type { MeetingWithHost } from '@/types/generated-client';
+import type { MeetingWithHost } from '@/shared/types/generated-client';
 
 const meta = {
   title: 'components/common/main-page-card',

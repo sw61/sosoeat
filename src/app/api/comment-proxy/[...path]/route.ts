@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { CookieStorage } from '@/lib/auth/cookie-storage';
-import { silentRefresh } from '@/lib/auth/silent-refresh';
+import { CookieStorage } from '@/shared/lib/cookie-storage';
+import { silentRefresh } from '@/shared/lib/silent-refresh';
 
 const COMMENT_SERVER_URL = process.env.COMMENT_SERVER_URL;
 

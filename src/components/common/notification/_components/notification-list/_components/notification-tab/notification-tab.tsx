@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 
 import { notificationRepository } from '@/components/common/notification/repository';
-import { Button } from '@/components/ui/button';
-import type { Notification } from '@/types/generated-client';
+import type { Notification } from '@/shared/types/generated-client';
+import { Button } from '@/shared/ui/button';
 
 import {
   formatNotificationMetaRelativeTime,

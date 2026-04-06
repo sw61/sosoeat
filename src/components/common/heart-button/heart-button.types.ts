@@ -1,4 +1,4 @@
-import { MeetingWithHost } from '@/types/generated-client';
+import { MeetingWithHost } from '@/shared/types/generated-client';
 
 export interface HeartButtonProps extends Pick<MeetingWithHost, 'isFavorited'> {
   className?: string;

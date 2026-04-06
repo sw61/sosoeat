@@ -1,8 +1,8 @@
-import { fetchClient } from '@/lib/http/fetch-client';
+import { fetchClient } from '@/shared/api/fetch-client';
 
 import { notificationApi } from './notification.api';
 
-jest.mock('@/lib/http/fetch-client', () => ({
+jest.mock('@/shared/api/fetch-client', () => ({
   fetchClient: {
     get: jest.fn(),
     post: jest.fn(),

@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 import {
   SCROLL_AREA_DESKTOP_TAILWIND_CLASS,

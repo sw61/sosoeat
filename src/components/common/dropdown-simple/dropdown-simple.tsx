@@ -1,10 +1,10 @@
+import { cn } from '@/shared/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown/index';
-import { cn } from '@/lib/utils';
+} from '@/shared/ui/dropdown';
 
 import type { DropdownSimpleProp } from './dropdown-simple.types';
 

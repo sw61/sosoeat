@@ -1,9 +1,9 @@
 'use client';
 
 import { Funnel, Step } from '@/components/common/funnel/funnel';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Dialog, DialogContent, DialogTitle } from '@/shared/ui/dialog';
 
 import { useMeetingForm } from './hooks/use-meeting-form';
 import { StepBasicInfo, StepCategory, StepDescription, StepSchedule } from './_components';

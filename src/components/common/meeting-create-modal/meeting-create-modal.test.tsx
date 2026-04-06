@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { MeetingCreateModal } from './meeting-create-modal';
 
 // useUploadImage mock — 이미지 업로드를 즉시 성공으로 처리
-jest.mock('@/services/images', () => ({
+jest.mock('@/entities/image', () => ({
   useUploadImage: () => ({
     mutateAsync: jest.fn().mockResolvedValue('https://s3.example.com/image.jpg'),
     data: undefined,

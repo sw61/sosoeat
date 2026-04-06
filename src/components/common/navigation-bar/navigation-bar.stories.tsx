@@ -1,6 +1,6 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { useAuthStore } from '@/store/auth-store';
+import { useAuthStore } from '@/shared/store/auth-store';
 
 import { NavigationBar } from './navigation-bar';
 

@@ -3,9 +3,12 @@ import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import regionData from '@/data/korea-regions-districts.json';
+import regionDataRaw from '@/shared/data/korea-regions-districts.json';
+import type { Region } from '@/shared/data/korea-regions-districts.types';
 
 import { DropdownSub } from './dropdown-sub';
+
+const regionData = regionDataRaw as { regions: Region[] };
 
 const meta = {
   component: DropdownSub,
@@ -75,7 +78,7 @@ export const MultipleRegions: Story = {
 
     return (
       <div className="flex flex-wrap gap-3">
-        {multipleRegionsRegions.map((region) => (
+        {multipleRegionsRegions.map((region: Region) => (
           <DropdownSub
             key={region.id}
             data={{ label: region.name, options: region.districts }}
@@ -103,7 +106,7 @@ export const MultipleRegionsCustomized: Story = {
 
     return (
       <div className="flex w-100 flex-col flex-wrap gap-3">
-        {multipleRegionsRegions.map((region) => (
+        {multipleRegionsRegions.map((region: Region) => (
           <DropdownSub
             key={region.id}
             data={{ label: region.name, options: region.districts }}

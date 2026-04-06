@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import Autoplay from 'embla-carousel-autoplay';
 
+import { cn } from '@/shared/lib/utils';
 import {
   Carousel,
   CarouselApi,
@@ -13,8 +14,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/components/ui/carousel/index';
-import { cn } from '@/lib/utils';
+} from '@/shared/ui/carousel';
 
 interface Banner {
   imageUrl: string;

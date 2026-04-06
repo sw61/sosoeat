@@ -1,6 +1,6 @@
 'use client';
 
-import { Textarea } from '@/components/ui/textarea/textarea';
+import { Textarea } from '@/shared/ui/textarea/textarea';
 
 import type { StepProps } from '../meeting-create-modal.types';
 

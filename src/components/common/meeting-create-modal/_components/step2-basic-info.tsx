@@ -6,9 +6,9 @@ import Image from 'next/image';
 
 import { ImagePlus, Loader2 } from 'lucide-react';
 
-import { Input } from '@/components/ui/input/input';
-import { cn } from '@/lib/utils';
-import { MIME_TO_EXT, useUploadImage } from '@/services/images';
+import { MIME_TO_EXT, useUploadImage } from '@/entities/image';
+import { cn } from '@/shared/lib/utils';
+import { Input } from '@/shared/ui/input/input';
 
 import type { StepProps } from '../meeting-create-modal.types';
 

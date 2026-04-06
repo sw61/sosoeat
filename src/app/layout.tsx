@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import { Providers } from '@/app/providers';
 import { Footer } from '@/components/common/footer';
 import { NavigationBar } from '@/components/common/navigation-bar';
-import { Toaster } from '@/components/ui/sonner/index';
-import { CookieStorage } from '@/lib/auth/cookie-storage';
+import { CookieStorage } from '@/shared/lib/cookie-storage';
+import { Toaster } from '@/shared/ui/sonner';
 
 import './globals.css';
 

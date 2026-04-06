@@ -1,6 +1,6 @@
 import type { FieldValues, UseFormReturn } from 'react-hook-form';
 
-import type { CreateMeeting } from '@/types/generated-client/models/CreateMeeting';
+import type { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 
 /** 퍼널 단계 이름 */
 export type MeetingStep = 'category' | 'basicInfo' | 'description' | 'schedule';

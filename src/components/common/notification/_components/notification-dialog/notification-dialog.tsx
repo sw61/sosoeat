@@ -2,14 +2,14 @@
 
 import * as React from 'react';
 
+import { cn } from '@/shared/lib/utils';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
+} from '@/shared/ui/dialog';
 
 import { NotificationPanelBody } from '../notification-panel-body';
 import { scrollAreaMobileClass } from '../notification-scroll-area';

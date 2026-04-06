@@ -2,15 +2,15 @@ import { Suspense } from 'react';
 
 import { format } from 'date-fns';
 
-import { CountCard } from './_components/count-card';
-import { MeetingTabs } from './_components/meeting-tabs';
-import { UserCard } from './_components/user-card';
 import {
   fetchFavoriteCountServer,
   fetchMeetingCountServer,
   fetchMeServer,
   fetchPostCountServer,
-} from './repositories/mypage.repository.server';
+} from '@/widgets/mypage/model/mypage.repository.server';
+import { CountCard } from '@/widgets/mypage/ui/count-card';
+import { MeetingTabs } from '@/widgets/mypage/ui/meeting-tabs';
+import { UserCard } from '@/widgets/mypage/ui/user-card';
 
 export default async function MyPage() {
   const user = await fetchMeServer();

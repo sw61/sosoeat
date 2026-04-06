@@ -7,21 +7,21 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { Bell, ChevronRight } from 'lucide-react';
 
 import { MeetingCreateModal } from '@/components/common/meeting-create-modal';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { useLogout } from '@/services/auth';
+import { useCreateMeeting } from '@/services/meetings';
+import { useModal } from '@/shared/hooks/use-modal';
+import { cn } from '@/shared/lib/utils';
+import { useAuthStore } from '@/shared/store/auth-store';
+import { AuthUser } from '@/shared/types/auth';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown';
-import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { useModal } from '@/hooks/use-modal';
-import { cn } from '@/lib/utils';
-import { useLogout } from '@/services/auth';
-import { useCreateMeeting } from '@/services/meetings';
-import { useAuthStore } from '@/store/auth-store';
-import { AuthUser } from '@/types/auth';
+} from '@/shared/ui/dropdown';
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
 
 const NAV_ITEMS = [
   { href: '/', label: '홈' },

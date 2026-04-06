@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import type { Meeting } from '@/types/meeting';
+import type { Meeting } from '@/shared/types/meeting';
 
 import type { MeetingEditFormData } from './meeting-edit-modal.types';
 

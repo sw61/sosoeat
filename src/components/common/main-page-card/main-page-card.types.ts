@@ -1,5 +1,1 @@
-import type { MeetingWithHost } from '@/types/generated-client';
-
-export interface MainPageCardProps {
-  meeting: MeetingWithHost;
-}
+export type { MainPageCardProps } from '@/entities/meeting/ui/main-page-card/main-page-card.types';

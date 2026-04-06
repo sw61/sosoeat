@@ -5,11 +5,11 @@ import { type FieldErrors, useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
-import { useUploadImage } from '@/services/images';
+import { useUploadImage } from '@/entities/image';
 import { useUpdateMeeting } from '@/services/meetings/meetings.queries';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Dialog, DialogContent, DialogTitle } from '@/shared/ui/dialog';
 
 import { TabBasicInfo, TabSchedule } from './_components';
 import { type MeetingEditFormData, meetingEditFormSchema } from './meeting-edit-modal.schema';
