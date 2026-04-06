@@ -1,13 +1,12 @@
 import type { Meeting } from '@/entities/meeting';
 import { getMeetings } from '@/entities/meeting';
 import {
-  fetchMeetingCommentsForPage,
-  getMeetingById,
   MeetingCommentSection,
   MeetingHeroSection,
   MeetingLocationSection,
   MeetingRecommendedSection,
 } from '@/widgets/meeting-detail';
+import { fetchMeetingCommentsForPage, getMeetingById } from '@/widgets/meeting-detail/index.server';
 
 // ─── Page ────────────────────────────────────────────────────
 
