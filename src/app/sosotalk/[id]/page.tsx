@@ -2,12 +2,12 @@ import { SosoTalkPostDetailPage } from '@/widgets/sosotalk/ui/sosotalk-post-deta
 
 interface PageProps {
   params: Promise<{
-    postId: string;
+    id: string;
   }>;
 }
 
 export default async function Page({ params }: PageProps) {
-  const { postId } = await params;
+  const { id } = await params;
 
-  return <SosoTalkPostDetailPage postId={postId} />;
+  return <SosoTalkPostDetailPage postId={id} />;
 }

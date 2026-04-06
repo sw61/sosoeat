@@ -7,8 +7,13 @@ export const fetchMeServer = async (): Promise<User | null> => {
   return res.json();
 };
 
+// TODO: Replace with a dedicated count endpoint when the API supports it
+const MAX_MEETING_FETCH_SIZE = 9999;
+
 export const fetchMeetingCountServer = async (): Promise<number> => {
-  const res = await apiServer.get('/users/me/meetings?size=9999', { cache: 'no-store' });
+  const res = await apiServer.get(`/users/me/meetings?size=${MAX_MEETING_FETCH_SIZE}`, {
+    cache: 'no-store',
+  });
   if (!res.ok) return 0;
   const data: UserMeetingsResponse = await res.json();
   return data.data.length;

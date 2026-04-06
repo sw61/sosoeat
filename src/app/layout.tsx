@@ -4,7 +4,7 @@ import { Providers } from '@/app/providers';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
 import { Toaster } from '@/shared/ui/sonner';
 import { Footer } from '@/widgets/footer/ui/footer/footer';
-import { NavigationBar } from '@/widgets/navigation-bar/ui/navigation-bar/navigation-bar';
+import { NavigationBar } from '@/widgets/navigation-bar';
 
 import './globals.css';
 

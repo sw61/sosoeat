@@ -7,11 +7,7 @@ import {
   useFavoriteMeetings,
   useJoinedMeetings,
 } from '@/widgets/mypage/model/mypage.queries';
-import {
-  toCreatedMeetingCards,
-  toFavoriteMeetingCards,
-  toJoinedMeetingCards,
-} from '@/widgets/mypage/model/mypage.service';
+import { toFavoriteMeetingCards, toUserMeetingCards } from '@/widgets/mypage/model/mypage.service';
 
 import { TabValue } from '../ui/meeting-tabs/meeting-tabs.types';
 
@@ -22,10 +18,10 @@ export function useMeetingTabs(activeTab: TabValue) {
 
   const cards = useMemo(() => {
     if (activeTab === 'all' && joinedQuery.data) {
-      return toJoinedMeetingCards(joinedQuery.data);
+      return toUserMeetingCards(joinedQuery.data);
     }
     if (activeTab === 'created' && createdQuery.data) {
-      return toCreatedMeetingCards(createdQuery.data);
+      return toUserMeetingCards(createdQuery.data);
     }
     if (activeTab === 'favorite' && favoriteQuery.data) {
       return toFavoriteMeetingCards(favoriteQuery.data);

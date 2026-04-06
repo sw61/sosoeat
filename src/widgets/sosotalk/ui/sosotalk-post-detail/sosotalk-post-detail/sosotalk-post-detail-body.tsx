@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 import Image from 'next/image';
 
+import DOMPurify from 'isomorphic-dompurify';
+
 import type { SosoTalkPostBodyProps } from './sosotalk-post-detail.types';
 
 interface SosoTalkPostDetailBodyProps extends SosoTalkPostBodyProps {
@@ -14,7 +16,7 @@ export function SosoTalkPostDetailBody({
   imageUrl,
   children,
 }: SosoTalkPostDetailBodyProps) {
-  const normalizedContentHtml = contentHtml.trim();
+  const normalizedContentHtml = DOMPurify.sanitize(contentHtml.trim());
 
   return (
     <section className="border-sosoeat-gray-300 mt-6 flex flex-col gap-5 border-t pt-5 md:mt-8 md:gap-6 md:pt-6">

@@ -37,10 +37,7 @@ const toMeetingCard = (m: UserMeeting): MyPageCardProps => ({
   isFavorited: false,
 });
 
-export const toJoinedMeetingCards = (data: UserMeetingsResponse): MyPageCardProps[] =>
-  data.data.map(toMeetingCard);
-
-export const toCreatedMeetingCards = (data: UserMeetingsResponse): MyPageCardProps[] =>
+export const toUserMeetingCards = (data: UserMeetingsResponse): MyPageCardProps[] =>
   data.data.map(toMeetingCard);
 
 export const toFavoriteMeetingCards = (data: FavoriteList): MyPageCardProps[] =>
