@@ -1,6 +1,6 @@
 'use client';
 
-import { MainPageCard } from '@/entities/meeting/ui/main-page-card';
+import { MainPageCard } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
 import type { MeetingWithHost } from '@/shared/types/generated-client';
 
