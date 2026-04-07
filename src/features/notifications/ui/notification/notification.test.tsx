@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -68,6 +69,17 @@ function mockMatchMedia(matchesNarrow: boolean) {
   });
 }
 
+const renderWithClient = (ui: Parameters<typeof render>[0]) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
+
 describe('Notification', () => {
   beforeEach(() => {
     mockMatchMedia(false);
@@ -80,12 +92,12 @@ describe('Notification', () => {
 
   // 수정 후
   it('알림 열기 트리거가 표시된다', async () => {
-    render(<Nt />);
+    renderWithClient(<Nt />);
     expect(await screen.findByRole('button', { name: '알림 열기' })).toBeInTheDocument();
   });
 
   it('triggerClassName이 트리거 버튼에 적용된다', async () => {
-    render(<Nt triggerClassName="trigger-test-class" />);
+    renderWithClient(<Nt triggerClassName="trigger-test-class" />);
     expect(await screen.findByRole('button', { name: '알림 열기' })).toHaveClass(
       'trigger-test-class'
     );
@@ -93,7 +105,7 @@ describe('Notification', () => {
 
   it('트리거 클릭 시 알림 내역과 목록이 보인다 (넓은 화면: Popover)', async () => {
     const user = userEvent.setup();
-    render(<Nt />);
+    renderWithClient(<Nt />);
     await user.click(await screen.findByRole('button', { name: '알림 열기' })); // ← findBy
 
     expect(await screen.findByRole('dialog')).toBeInTheDocument();

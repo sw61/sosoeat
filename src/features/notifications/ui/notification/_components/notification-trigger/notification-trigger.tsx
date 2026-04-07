@@ -8,10 +8,6 @@ import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 
-import {
-  NOTIFICATION_TRIGGER_BADGE_WRAPPER_CLASS,
-  NOTIFICATION_TRIGGER_CLASS,
-} from './notification-trigger.constants';
 import type { NotificationTriggerProps } from './notification-trigger.types';
 
 export const NotificationTrigger = React.forwardRef<HTMLButtonElement, NotificationTriggerProps>(
@@ -20,7 +16,7 @@ export const NotificationTrigger = React.forwardRef<HTMLButtonElement, Notificat
       <Button
         ref={ref}
         type={type}
-        className={cn(NOTIFICATION_TRIGGER_CLASS, className)}
+        className={cn('relative inline-flex cursor-pointer border-0 bg-transparent p-0', className)}
         {...props}
         aria-label={props['aria-label'] ?? '알림 열기'}
       >
@@ -29,7 +25,7 @@ export const NotificationTrigger = React.forwardRef<HTMLButtonElement, Notificat
           aria-hidden="true"
         />
         {unreadCount > 0 ? (
-          <span className={NOTIFICATION_TRIGGER_BADGE_WRAPPER_CLASS}>
+          <span className="absolute -top-2 -right-2">
             <CountingBadge count={unreadCount} size="small" />
           </span>
         ) : null}

@@ -1,1 +1,1 @@
-export { useIsMaxWidth767 } from '../../hook';
+export { useIsMaxWidth767 } from '@/features/notifications/model';

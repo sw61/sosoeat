@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import { notificationRepository } from '@/features/notifications/ui/notification/repository';
+import { notificationRepository } from '@/features/notifications/api';
 import { Notification } from '@/shared/types/generated-client';
 
 import { NotificationTab } from './notification-tab';
@@ -40,9 +40,7 @@ const testNotifications: Notification[] = [
 
 describe('NotificationTab', () => {
   beforeEach(() => {
-    jest
-      .spyOn(notificationRepository, 'readNotification')
-      .mockResolvedValue({ ok: true } as Response);
+    jest.spyOn(notificationRepository, 'readNotification').mockResolvedValue(true);
   });
 
   afterEach(() => {

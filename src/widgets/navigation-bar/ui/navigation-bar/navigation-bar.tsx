@@ -9,6 +9,7 @@ import { Bell, ChevronRight } from 'lucide-react';
 import { AuthUser, useAuthStore } from '@/entities/auth';
 import { useLogout } from '@/features/auth';
 import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
+import { Notification } from '@/features/notifications/ui/notification';
 import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
@@ -149,12 +150,7 @@ export function NavigationBar({ initialUser }: { initialUser: AuthUser | null })
                   모임 만들기
                 </Button>
 
-                <button className="relative hidden cursor-pointer p-1 md:block" aria-label="알림">
-                  <Bell className="text-sosoeat-orange-600 h-5 w-5" />
-                  {hasUnread && (
-                    <span className="bg-sosoeat-orange-600 absolute top-0.5 right-0.5 h-1.5 w-1.5 rounded-full" />
-                  )}
-                </button>
+                <Notification />
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
