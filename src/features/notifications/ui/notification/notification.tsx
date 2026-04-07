@@ -1,22 +1,21 @@
 'use client';
 
-import { useNotificationService } from './services/notification.service';
+import { useIsMaxWidth767, useNotificationService } from '@/features/notifications/model';
+
 import { NotificationDialog, NotificationPopover } from './components';
 
 export const Notification = ({ triggerClassName = '' }: { triggerClassName?: string }) => {
-  const { isNarrow, list, unreadCount } = useNotificationService();
+  const { list, unreadCount, isLoading } = useNotificationService();
+  const isNarrow = useIsMaxWidth767();
 
-  if (isNarrow) {
-    return (
-      <NotificationDialog
-        triggerClassName={triggerClassName}
-        list={list}
-        unreadCount={unreadCount}
-      />
-    );
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
+  console.log('Notification list:', list);
 
-  return (
+  return isNarrow ? (
+    <NotificationDialog triggerClassName={triggerClassName} list={list} unreadCount={unreadCount} />
+  ) : (
     <NotificationPopover
       triggerClassName={triggerClassName}
       list={list}

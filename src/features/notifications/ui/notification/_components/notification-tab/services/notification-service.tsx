@@ -2,4 +2,4 @@ export {
   getNotificationDescription,
   notificationTitleForType,
   thumbnailForType,
-} from '../../../../../services';
+} from '@/features/notifications/model';

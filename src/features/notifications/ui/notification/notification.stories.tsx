@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
+import { notificationRepository } from '@/features/notifications/api';
 import type { Notification, NotificationTypeEnum } from '@/shared/types/generated-client';
 
 import { Notification as NotificationComponent } from './index';
-import { notificationRepository } from './repository';
 
 const mockNotificationList: Notification[] = [
   {

@@ -6,6 +6,12 @@ export const formatNotificationMetaRelativeTime = (
   createdAt: Date,
   now: Date = new Date()
 ): string => {
+  if (!createdAt || isNaN(createdAt.getTime())) {
+    throw new Error('유효한 Date 객체를 입력해야 합니다.');
+  }
+  if (createdAt > now) {
+    return '방금 전';
+  }
   const ms = now.getTime() - createdAt.getTime();
   if (ms < MINUTE_MS) return '방금 전';
 

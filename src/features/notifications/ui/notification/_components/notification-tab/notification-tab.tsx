@@ -2,23 +2,21 @@
 
 import { useEffect, useState } from 'react';
 
-import { notificationRepository } from '@/features/notifications/ui/notification/repository';
-import type { Notification } from '@/shared/types/generated-client';
-import { Button } from '@/shared/ui/button';
-
+import { notificationRepository } from '@/features/notifications/api';
 import {
   formatNotificationMetaRelativeTime,
   getNotificationDescription,
   notificationTitleForType,
   thumbnailForType,
-} from '../../../../services';
+} from '@/features/notifications/model';
+import type { Notification } from '@/shared/types/generated-client';
+import { Button } from '@/shared/ui/button';
 
 import { NotificationTabBody } from './_components/notification-tab-body/notification-tab-body';
 import { NOTIFICATION_ROW_BUTTON_CLASS } from './notification-tab.constants';
 
 export const NotificationTab = (props: Notification) => {
   const [description, setDescription] = useState('');
-
   useEffect(() => {
     let cancelled = false;
     void getNotificationDescription(props).then((text) => {

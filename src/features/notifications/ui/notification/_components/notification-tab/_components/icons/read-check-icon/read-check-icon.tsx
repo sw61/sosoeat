@@ -2,11 +2,15 @@ import { cn } from '@/shared/lib/utils';
 
 import type { ReadCheckIconProps } from '../../../notification-tab.types';
 
-import { READ_CHECK_ICON_CLASS } from './read-check-icon.constants';
-
 export const ReadCheckIcon = ({ className }: ReadCheckIconProps) => {
   return (
-    <span className={cn(READ_CHECK_ICON_CLASS, className)} aria-hidden>
+    <span
+      className={cn(
+        'inline-flex size-[18px] shrink-0 items-center justify-center rounded-full bg-[#FF6600]',
+        className
+      )}
+      aria-hidden
+    >
       <svg width="10" height="8" viewBox="0 0 10 8" fill="none" aria-hidden>
         <path
           d="M1 4L3.5 6.5L9 1"

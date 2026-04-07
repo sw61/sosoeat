@@ -83,6 +83,7 @@ export interface Notification {
 export const NotificationTypeEnum = {
   MeetingConfirmed: 'MEETING_CONFIRMED',
   MeetingCanceled: 'MEETING_CANCELED',
+  MeetingDeleted: 'MEETING_DELETED',
   Comment: 'COMMENT',
 } as const;
 export type NotificationTypeEnum = (typeof NotificationTypeEnum)[keyof typeof NotificationTypeEnum];
