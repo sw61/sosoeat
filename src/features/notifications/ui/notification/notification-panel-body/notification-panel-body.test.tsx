@@ -123,7 +123,7 @@ describe('NotificationPanelBody', () => {
     expect(screen.getByText('알림을 불러오는 중 오류가 발생했습니다.')).toBeInTheDocument();
   });
 
-  it('마지막 페이지에 도달하면 "더 이상 알림이 없습니다" 메시지를 렌더한다', () => {
+  it('마지막 페이지에 도달하면 "모든 알림을 불러왔어요" 메시지를 렌더한다', () => {
     (useNotificationInfiniteListRead as jest.Mock).mockReturnValue({
       isLoading: false,
       isPending: false,
@@ -142,7 +142,7 @@ describe('NotificationPanelBody', () => {
       />
     );
 
-    expect(screen.getByText('더 이상 알림이 없습니다.')).toBeInTheDocument();
+    expect(screen.getByText('모든 알림을 불러왔어요')).toBeInTheDocument();
   });
 
   it('다음 페이지가 있을 때 "더 이상 알림이 없습니다" 메시지를 렌더하지 않는다', () => {
@@ -164,6 +164,6 @@ describe('NotificationPanelBody', () => {
       />
     );
 
-    expect(screen.queryByText('더 이상 알림이 없습니다.')).not.toBeInTheDocument();
+    expect(screen.queryByText('모든 알림을 불러왔어요')).not.toBeInTheDocument();
   });
 });

@@ -39,10 +39,8 @@ export const useNotificationInfiniteList = (
       notificationApi.getNotificationOption(
         options ? { ...options, cursor: pageParam } : { cursor: pageParam }
       ),
-    getNextPageParam: (lastPage) => {
-      return lastPage.nextCursor || undefined;
-    },
-    initialPageParam: '',
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
+    initialPageParam: undefined as string | undefined,
     staleTime: 1000 * 60,
     gcTime: 1000 * 60 * 5,
   });

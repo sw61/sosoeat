@@ -73,7 +73,7 @@ export const NotificationPanelBody = ({
           <div ref={ref} className="flex h-1 items-center justify-center" />
           {!hasNextPage && list.length > 0 ? (
             <div className="flex h-12 items-center justify-center text-sm text-gray-500">
-              더 이상 알림이 없습니다.
+              모든 알림을 불러왔어요
             </div>
           ) : isLoading || isPending ? (
             <div className="flex h-12 items-center justify-center">
