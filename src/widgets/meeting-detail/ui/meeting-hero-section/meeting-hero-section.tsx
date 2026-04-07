@@ -79,7 +79,13 @@ export function MeetingHeroSection({ meeting: initialMeeting }: MeetingHeroSecti
     <>
       <div className="flex flex-col gap-6 md:flex-row">
         <div className="relative h-[241px] w-full overflow-hidden rounded-[24px] md:h-auto md:min-w-0 md:flex-1">
-          <Image src={meeting.image} alt={meeting.name} fill className="object-cover" />
+          <Image
+            src={meeting.image}
+            alt={meeting.name}
+            fill
+            draggable={false}
+            className="object-cover"
+          />
         </div>
         <div className="min-w-0 flex-1">
           <MeetingDetailCard meeting={meeting} status={status} {...cardProps} />
