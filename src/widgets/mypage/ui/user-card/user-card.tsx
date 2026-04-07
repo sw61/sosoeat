@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Calendar, Mail, Pencil } from 'lucide-react';
 
 import { EditProfileModal } from '@/features/profile-edit';
+import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -14,7 +15,7 @@ import { mypageRepository } from '../../model/mypage.repository';
 import { UserCardProps } from './user-card.types';
 
 export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCardProps) {
-  const [modalOpen, setModalOpen] = useState(false);
+  const { isOpen, open, close } = useModal();
   const [localName, setLocalName] = useState(name);
   const [localEmail, setLocalEmail] = useState(email);
   const [localImageUrl, setLocalImageUrl] = useState(imageUrl);
@@ -50,7 +51,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
             <div className="flex flex-col gap-1">
               <div className="flex items-center py-1">
                 <CardTitle className={cn('px-2 text-base font-bold')}>{localName}</CardTitle>
-                <button onClick={() => setModalOpen(true)}>
+                <button onClick={open}>
                   <Pencil className="text-sosoeat-gray-600 size-3 shrink-0" />
                 </button>
               </div>
@@ -88,8 +89,8 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
 
       <div className="absolute top-4 right-0 p-5">
         <EditProfileModal
-          open={modalOpen}
-          onOpenChange={setModalOpen}
+          open={isOpen}
+          onOpenChange={(val) => (val ? open() : close())}
           initialEmail={localEmail}
           initialName={localName}
           initialImageUrl={localImageUrl}
