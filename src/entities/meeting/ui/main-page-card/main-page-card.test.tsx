@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 
-import { MainPageCard } from '@/entities/meeting/ui/main-page-card/main-page-card';
 import type { MeetingWithHost } from '@/shared/types/generated-client';
+
+import { MainPageCard } from './main-page-card';
 
 jest.mock('@/entities/meeting/model/use-detail-router', () => ({
   useDetailRouter: () => ({

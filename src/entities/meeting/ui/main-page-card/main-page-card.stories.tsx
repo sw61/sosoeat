@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { addDays, addMonths } from 'date-fns';
 
-import { MainPageCard } from '@/entities/meeting/ui/main-page-card/main-page-card';
 import type { MeetingWithHost } from '@/shared/types/generated-client';
+
+import { MainPageCard } from './main-page-card';
 
 const meta = {
   title: './',
