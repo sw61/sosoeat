@@ -20,42 +20,76 @@ npm run format       # Prettier 포맷팅
 npm run test         # 전체 단위 테스트
 npm run test:coverage # 커버리지 리포트
 npm run storybook    # Storybook (localhost:6006)
+npm run validate    # 타입 체크 + Prettier + ESLint + 관련 Jest 테스트 자동 실행
 ```
 
-## 폴더 구조
+---
 
-모든 폴더/파일명은 **kebab-case** 사용.
+## 📂 폴더 구조 (Folder Structure)
+
+본 프로젝트는 **FSD (Feature-Sliced Design)** 방법론을 채택하여 유지보수성과 확장성을 극대화했습니다. 모든 폴더와 파일 이름은 **kebab-case**를 사용합니다.
 
 ```text
 src/
-├── app/
-│   ├── _components/          # 루트 layout 전용 컴포넌트
-│   ├── (auth)/               # /login, /signup 라우트 그룹
-│   ├── my-page/
-│   ├── layout.tsx
-│   ├── providers.tsx         # QueryClientProvider, 전역 설정
-│   └── page.tsx
-├── components/
-│   ├── ui/                   # shadcn 기본 컴포넌트
-│   └── common/               # UI 조각 조합 공통 컴포넌트
-├── services/                 # API fetch 함수 + React Query 훅
-├── store/                    # Zustand 전역 상태
-├── hooks/                    # 전역 커스텀 훅
-├── lib/                      # QueryClient 등 설정
-├── types/                    # 공용 타입/인터페이스
-├── utils/                    # 순수 유틸 함수
-└── tests/e2e/                # Playwright E2E 테스트
+├── app/                  # [App Layer] Next.js App Router 전용 (라우팅, 레이아웃)
+│   ├── (auth)/           # 인증 관련 라우트 그룹
+│   ├── meetings/         # 모임 상세 및 목록 페이지
+│   ├── mypage/           # 마이페이지
+│   ├── sosotalk/         # 게시판 페이지
+│   ├── layout.tsx        # 전역 레이아웃
+│   └── providers.tsx     # 전역 Provider 설정
+│
+├── widgets/              # [Widgets Layer] 독립적인 복합 블록 (페이지에서 조합)
+│   ├── navigation-bar/   # 상단 네비게이션 바
+│   ├── footer/           # 하단 푸터
+│   ├── meeting-list/     # 모임 목록 섹션
+│   └── ...
+│
+├── features/             # [Features Layer] 사용자 액션 단위 (Mutation, 폼 제출)
+│   ├── auth/             # 로그인, 회원가입 폼 및 로직
+│   ├── meeting-create/   # 모임 생성 모달 및 로직
+│   ├── favorites/        # 좋아요 토글 버튼 및 로직
+│   └── ...
+│
+├── entities/             # [Entities Layer] 비즈니스 엔티티 (데이터 모델, 조회 로직)
+│   ├── meeting/          # 모임 데이터, API, 카드 UI
+│   ├── user/             # 유저 데이터, 프로필 UI
+│   ├── comment/          # 댓글 데이터, 목록 UI
+│   └── ...
+│
+├── shared/               # [Shared Layer] 도메인 무관 재사용 요소
+│   ├── ui/               # 공통 UI 컴포넌트 (Button, Input, Modal 등)
+│   ├── api/              # 공통 API 클라이언트 (fetchClient, apiServer)
+│   ├── lib/              # 유틸리티 함수 (cn, date-utils 등)
+│   ├── hooks/            # 공통 커스텀 훅 (useModal 등)
+│   └── types/            # 전역 타입 정의 (OpenAPI 생성 타입 등)
+│
+├── tests/e2e             # Playwright E2E 테스트 시나리오
+└── .github/workflows/    # CI/CD (GitHub Actions)
 ```
 
-컴포넌트 폴더 구조 예시:
+### 📏 레이어별 계층 규칙 (Layer Hierarchy)
 
-```text
-button/
-├── button.tsx
-├── button.test.tsx
-├── button.stories.tsx
-└── index.ts        # 외부 export 관리
-```
+FSD의 핵심은 **하위 레이어는 상위 레이어를 참조할 수 없다**는 단방향 의존성 원칙입니다.
+
+`app` > `widgets` > `features` > `entities` > `shared`
+
+- `shared`는 그 무엇도 참조하지 않습니다.
+- `entities`는 다른 `entities`나 `features`를 참조할 수 없습니다.
+- `features`는 `entities`를 참조할 수 있지만, 다른 `features`나 `widgets`는 참조할 수 없습니다.
+- `widgets`는 `features`와 `entities`를 조합할 수 있습니다.
+- `app`은 모든 레이어를 조립하는 최종 단계입니다.
+
+### 🧩 슬라이스 내부 구조 (Slice Internal Structure)
+
+각 레이어(`widgets`, `features`, `entities`) 내의 개별 도메인(슬라이스)은 기능별로 구분된 세그먼트(Segment) 폴더를 가집니다.
+
+- `ui/`: 화면에 그려지는 UI 컴포넌트 (예: `*_component.tsx`)
+- `model/`: 비즈니스 로직, 전역/지역 상태 관리, 커스텀 훅 및 스키마 (예: `use-*.ts`, `*.schema.ts`, `*.store.ts`)
+- `api/`: 해당 특성이나 엔티티의 API 호출 함수 (서버 통신 로직)
+- `lib/` (선택): 도메인 내에서 쓰이는 독립적인 유틸 함수
+
+---
 
 ## HTTP 클라이언트
 

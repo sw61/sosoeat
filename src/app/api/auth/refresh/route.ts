@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { silentRefresh } from '@/lib/auth/silent-refresh';
+import { silentRefresh } from '@/shared/lib/silent-refresh';
 
 /**
  * [BFF] POST /api/auth/refresh

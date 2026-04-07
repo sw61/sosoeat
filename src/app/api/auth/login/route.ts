@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { CookieStorage } from '@/lib/auth/cookie-storage';
-import { LoginRequest, LoginResponse } from '@/types/generated-client/models';
+import { CookieStorage } from '@/shared/lib/cookie-storage';
+import { LoginRequest, LoginResponse } from '@/shared/types/generated-client/models';
 
 const BASE_URL = process.env.API_BASE_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;

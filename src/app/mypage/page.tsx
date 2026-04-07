@@ -2,15 +2,15 @@ import { Suspense } from 'react';
 
 import { format } from 'date-fns';
 
-import { CountCard } from './_components/count-card';
-import { MeetingTabs } from './_components/meeting-tabs';
-import { UserCard } from './_components/user-card';
 import {
+  CountCard,
   fetchFavoriteCountServer,
   fetchMeetingCountServer,
   fetchMeServer,
   fetchPostCountServer,
-} from './repositories/mypage.repository.server';
+  MeetingTabs,
+  UserCard,
+} from '@/widgets/mypage';
 
 export default async function MyPage() {
   const user = await fetchMeServer();

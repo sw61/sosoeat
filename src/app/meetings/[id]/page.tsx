@@ -1,12 +1,12 @@
-import { getMeetings } from '@/services/meetings/meetings.server';
-import type { Meeting } from '@/types/meeting';
-
-import { MeetingCommentSection } from './_components/meeting-comment-section';
-import { MeetingHeroSection } from './_components/meeting-hero-section';
-import { MeetingLocationSection } from './_components/meeting-location-section';
-import { MeetingRecommendedSection } from './_components/meeting-recommended-section';
-import { fetchMeetingCommentsForPage } from './services/meeting-comments.server';
-import { getMeetingById } from './services/meeting-detail.server';
+import type { Meeting } from '@/entities/meeting';
+import { getMeetings } from '@/entities/meeting/index.server';
+import {
+  MeetingCommentSection,
+  MeetingHeroSection,
+  MeetingLocationSection,
+  MeetingRecommendedSection,
+} from '@/widgets/meeting-detail';
+import { fetchMeetingCommentsForPage, getMeetingById } from '@/widgets/meeting-detail/index.server';
 
 // ─── Page ────────────────────────────────────────────────────
 
@@ -20,15 +20,10 @@ export default async function MeetingDetailPage({ params }: Props) {
 
   const meetingData = await getMeetingById(meetingId);
 
-  const [meetingList, initialCommentsRaw] = await Promise.all([
-    getMeetings({ region: meetingData.region, size: 4 }).catch(() => ({ data: [] as Meeting[] })),
+  const [meetingList, initialComments] = await Promise.all([
+    getMeetings({ region: meetingData.region, size: 4 }).catch(() => ({ data: [] })),
     fetchMeetingCommentsForPage(meetingId, meetingData),
   ]);
-
-  const recommendedMeetingsRaw = meetingList.data as unknown as Meeting[];
-  const recommendedMeetings = recommendedMeetingsRaw.filter((m) => m.id !== meetingId);
-
-  const initialComments = initialCommentsRaw;
 
   return (
     <main className="space-y-[30px] py-10">
@@ -60,7 +55,10 @@ export default async function MeetingDetailPage({ params }: Props) {
           teamId: meetingData.teamId,
         }}
       />
-      <MeetingRecommendedSection meetings={recommendedMeetings} />
+      <MeetingRecommendedSection
+        meetings={meetingList.data as unknown as Meeting[]}
+        currentMeetingId={meetingId}
+      />
     </main>
   );
 }
