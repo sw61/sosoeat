@@ -1,16 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { notificationQueryOptions } from './notifications.options';
+import { useMarkAllAsRead, useMarkAsRead } from './notification.quries';
 
 export const useNotificationReadActions = (notificationId?: number) => {
-  const queryClient = useQueryClient();
-  const {
-    mutate: mutate,
-    isPending,
-    isError,
-  } = useMutation(notificationQueryOptions.matchAsRead(queryClient));
-  const { mutate: mutateAll } = useMutation(notificationQueryOptions.matchAsReadAll(queryClient));
-
+  const { mutate: mutate, isPending, isError } = useMarkAsRead();
+  const { mutate: mutateAll } = useMarkAllAsRead();
   const markAsRead = () => {
     if (notificationId == null) {
       return false;
