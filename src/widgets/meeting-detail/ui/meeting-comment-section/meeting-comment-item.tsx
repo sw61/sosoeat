@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Heart, MessageCircle, UserRound } from 'lucide-react';
 
@@ -51,7 +51,18 @@ export function MeetingCommentItem({
   const [editText, setEditText] = useState(content);
   const [isReplying, setIsReplying] = useState(false);
   const [replyText, setReplyText] = useState('');
+  const [prevServerLike, setPrevServerLike] = useState({ isLiked, likeCount });
+  const [localIsLiked, setLocalIsLiked] = useState(isLiked);
+  const [localLikeCount, setLocalLikeCount] = useState(likeCount);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useModal();
+
+  // 서버 데이터 변경 시 렌더 중 동기화 (useEffect 대신 React 권장 파생 상태 패턴)
+  if (prevServerLike.isLiked !== isLiked || prevServerLike.likeCount !== likeCount) {
+    setPrevServerLike({ isLiked, likeCount });
+    setLocalIsLiked(isLiked);
+    setLocalLikeCount(likeCount);
+  }
 
   const { user } = useAuthStore();
   const { mutate: likeComment } = useLikeComment(meetingId);
@@ -62,8 +73,25 @@ export function MeetingCommentItem({
     profileUrl: user?.image ?? null,
   });
 
+  const isPending = id < 0;
+
   const handleLike = () => {
-    likeComment({ commentId: id, isLiked });
+    const nextIsLiked = !localIsLiked;
+    setLocalIsLiked(nextIsLiked);
+    setLocalLikeCount((prev) => (nextIsLiked ? prev + 1 : prev - 1));
+
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      likeComment(
+        { commentId: id, isLiked: localIsLiked },
+        {
+          onError: () => {
+            setLocalIsLiked(localIsLiked);
+            setLocalLikeCount(likeCount);
+          },
+        }
+      );
+    }, 300);
   };
 
   const handleEditSubmit = () => {
@@ -85,12 +113,15 @@ export function MeetingCommentItem({
 
   const handleReplySubmit = () => {
     if (!replyText.trim()) return;
+    const savedText = replyText;
+    setIsReplying(false);
+    setReplyText('');
     createComment(
-      { content: replyText, parentId: id },
+      { content: savedText, parentId: id },
       {
-        onSuccess: () => {
-          setReplyText('');
-          setIsReplying(false);
+        onError: () => {
+          setIsReplying(true);
+          setReplyText(savedText);
         },
       }
     );
@@ -176,10 +207,11 @@ export function MeetingCommentItem({
                   type="button"
                   aria-label="좋아요"
                   onClick={handleLike}
-                  className="text-sosoeat-orange-600 flex cursor-pointer items-center gap-1 text-sm transition-colors"
+                  disabled={isPending}
+                  className="text-sosoeat-orange-600 flex cursor-pointer items-center gap-1 text-sm transition-colors disabled:opacity-40"
                 >
-                  <Heart className={cn('size-4', isLiked && 'fill-sosoeat-orange-600')} />
-                  <span>{likeCount}</span>
+                  <Heart className={cn('size-4', localIsLiked && 'fill-sosoeat-orange-600')} />
+                  <span>{localLikeCount}</span>
                 </button>
 
                 {!isReply && (
@@ -187,7 +219,8 @@ export function MeetingCommentItem({
                     type="button"
                     aria-label="답글"
                     onClick={() => setIsReplying((prev) => !prev)}
-                    className="text-sosoeat-gray-500 hover:text-sosoeat-orange-600 flex cursor-pointer items-center gap-1 text-sm transition-colors"
+                    disabled={isPending}
+                    className="text-sosoeat-gray-500 hover:text-sosoeat-orange-600 flex cursor-pointer items-center gap-1 text-sm transition-colors disabled:opacity-40"
                   >
                     <MessageCircle className="size-4" />
                     <span>답글</span>
