@@ -13,13 +13,13 @@ export const Notification = ({ triggerClassName = '' }: { triggerClassName?: str
 
   return isPending ? (
     <Skeleton className={cn('size-8 rounded-full', triggerClassName)} aria-label="알림 로딩 중" />
-  ) : isNarrow ? (
+  ) : isNarrow && !isLoading ? (
     <NotificationDialog triggerClassName={triggerClassName} list={list} unreadCount={unreadCount} />
-  ) : (
+  ) : !isNarrow && !isLoading ? (
     <NotificationPopover
       triggerClassName={triggerClassName}
       list={list}
       unreadCount={unreadCount}
     />
-  );
+  ) : null;
 };

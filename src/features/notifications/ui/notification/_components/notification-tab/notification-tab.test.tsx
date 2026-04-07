@@ -3,7 +3,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { Notification } from '@/shared/types/generated-client';
 
-import { notificationApi, notificationRepository } from '../../../../api';
+import { notificationApi } from '../../../../api';
 
 import { NotificationTab } from './notification-tab';
 
