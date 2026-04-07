@@ -1,4 +1,4 @@
-// notifications.queries.ts
+//notification.queries.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { notificationApi } from '../api/notifications.api';

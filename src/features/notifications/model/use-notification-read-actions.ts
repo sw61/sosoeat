@@ -1,7 +1,7 @@
-import { useMarkAllAsRead, useMarkAsRead } from './notification.quries';
+import { useMarkAllAsRead, useMarkAsRead } from './notification.queries';
 
 export const useNotificationReadActions = (notificationId?: number) => {
-  const { mutate: mutate, isPending, isError } = useMarkAsRead();
+  const { mutate: mutate } = useMarkAsRead();
   const { mutate: mutateAll } = useMarkAllAsRead();
   const markAsRead = () => {
     if (notificationId == null) {

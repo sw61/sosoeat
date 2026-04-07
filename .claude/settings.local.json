@@ -5,7 +5,9 @@
       "Bash(ov health:*)",
       "Bash(ov ls:*)",
       "Bash(ov reindex:*)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(gh repo:*)",
+      "Bash(cmd /c \"gh --version\")"
     ]
   }
 }

@@ -1,6 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-
-import { useNotificationList, useUnreadCount } from './notification.quries';
+import { useNotificationList, useUnreadCount } from './notification.queries';
 
 export const useNotificationService = () => {
   const { isLoading, error, data: notifications, isPending } = useNotificationList();

@@ -22,7 +22,7 @@ const badgeVariants = cva(
       { size: 'small', overMax: false, className: '' },
       { size: 'large', overMax: false, className: 'w-10' },
       { size: 'small', overMax: true, className: 'min-w-4 w-auto px-[3px]' },
-      { size: 'large', overMax: true, className: 'w-4' },
+      { size: 'large', overMax: true, className: 'min-w-4 px-[3px]' },
     ],
     defaultVariants: {
       size: 'large',

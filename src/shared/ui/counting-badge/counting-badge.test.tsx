@@ -40,16 +40,16 @@ describe('CountingBadge', () => {
       expect(screen.getByText('99')).toBeInTheDocument();
     });
 
-    it('large 사이즈에서 99+ 일 때 현재 overMax 스타일이 적용된다', () => {
+    it("large 사이즈에서 99+ 일 때 현재 'min-w-4 w-auto px-[3px]'스타일이 적용된다", () => {
       render(<CountingBadge count={100} />);
       const badge = screen.getByText('99+');
-      expect(badge).toHaveClass('w-auto', 'w-4');
+      expect(badge).toHaveClass('min-w-4', 'w-auto', 'px-[3px]');
     });
 
-    it('small 사이즈에서 99+ 일 때 h-4 w-4 px-0 text-[10px] leading-[10px] 스타일이 적용된다', () => {
+    it('small 사이즈에서 99+ 일 때 min-w-4 px-[3px] 스타일이 적용된다', () => {
       render(<CountingBadge count={100} size="small" />);
       const badge = screen.getByText('99+');
-      expect(badge).toHaveClass('h-4', 'w-4', 'px-0', 'text-[10px]', 'leading-[10px]');
+      expect(badge).toHaveClass('min-w-4', 'px-[3px]');
     });
   });
 
