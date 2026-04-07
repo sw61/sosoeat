@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Heart, MessageCircle, UserRound } from 'lucide-react';
 
@@ -74,6 +74,12 @@ export function MeetingCommentItem({
   });
 
   const isPending = id < 0;
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const handleLike = () => {
     const nextIsLiked = !localIsLiked;
