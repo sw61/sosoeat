@@ -32,7 +32,7 @@ export const Default: Story = {
   },
 };
 
-export const largeScreen: Story = {
+export const LargeScreen: Story = {
   render: function SearchBarStory(args) {
     const [value, setValue] = useState('');
     return (

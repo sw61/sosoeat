@@ -5,10 +5,11 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { startOfDay } from 'date-fns';
 
-import { meetingsQueryOptions } from '@/entities/meeting/model/meetings.options';
-import { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
-import { MeetingFilterBarProps } from '@/widgets/search/ui/meeting-filter-bar';
-import { RegionSelection } from '@/widgets/search/ui/region-select-modal';
+import { meetingsQueryOptions } from '@/entities/meeting';
+import type { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
+
+import type { MeetingFilterBarProps } from '../ui/meeting-filter-bar';
+import type { RegionSelection } from '../ui/region-select-modal';
 
 type DateChangeParams = {
   valueStart: Date | null;

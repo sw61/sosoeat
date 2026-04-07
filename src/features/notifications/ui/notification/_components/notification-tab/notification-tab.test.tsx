@@ -1,7 +1,8 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import { notificationRepository } from '@/features/notifications/api';
 import { Notification } from '@/shared/types/generated-client';
+
+import { notificationRepository } from '../../../../api';
 
 import { NotificationTab } from './notification-tab';
 

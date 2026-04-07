@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { notificationRepository } from '@/features/notifications/api';
 import type { Notification, NotificationTypeEnum } from '@/shared/types/generated-client';
+
+import { notificationRepository } from '../../api';
 
 import { Notification as NotificationComponent } from './index';
 

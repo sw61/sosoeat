@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 
-import { useAuthStore } from '@/entities/auth/model/auth-store';
-import { Host, MeetingWithHost } from '@/shared/types/generated-client';
-import { MeetingList } from '@/shared/types/generated-client/models/MeetingList';
+import { useAuthStore } from '@/entities/auth';
+import type { Host, MeetingWithHost } from '@/shared/types/generated-client';
+import type { MeetingList } from '@/shared/types/generated-client/models/MeetingList';
 
 import { useSearchPage } from '../..';
 

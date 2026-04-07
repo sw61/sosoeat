@@ -1,5 +1,6 @@
 export {
+  formatNotificationMetaRelativeTime,
   getNotificationDescription,
   notificationTitleForType,
   thumbnailForType,
-} from '../../../../../model';
+} from '../../../model';

@@ -9,7 +9,7 @@ import { Bell, ChevronRight } from 'lucide-react';
 import { AuthUser, useAuthStore } from '@/entities/auth';
 import { useLogout } from '@/features/auth';
 import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
-import { Notification } from '@/features/notifications/ui/notification';
+import { Notification } from '@/features/notifications';
 import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';

@@ -4,6 +4,7 @@ import MeetingSearchBanner from './meeting-search-banner';
 
 jest.mock('next/image', () => {
   function MockImage({ alt, src }: { alt: string; src: string }) {
+    // eslint-disable-next-line @next/next/no-img-element
     return <img alt={alt} src={src} data-testid="banner-image" />;
   }
   return { __esModule: true, default: MockImage };

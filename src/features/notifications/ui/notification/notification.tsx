@@ -1,6 +1,9 @@
 'use client';
 
-import { useIsMaxWidth767, useNotificationService } from '@/features/notifications/model';
+import { cn } from '@/shared/lib/utils';
+import { Skeleton } from '@/shared/ui/skeleton';
+
+import { useIsMaxWidth767, useNotificationService } from '../../model';
 
 import { NotificationDialog, NotificationPopover } from './components';
 
@@ -8,12 +11,9 @@ export const Notification = ({ triggerClassName = '' }: { triggerClassName?: str
   const { list, unreadCount, isLoading } = useNotificationService();
   const isNarrow = useIsMaxWidth767();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  console.log('Notification list:', list);
-
-  return isNarrow ? (
+  return isLoading ? (
+    <Skeleton className={cn('size-8 rounded-full', triggerClassName)} aria-label="알림 로딩 중" />
+  ) : isNarrow ? (
     <NotificationDialog triggerClassName={triggerClassName} list={list} unreadCount={unreadCount} />
   ) : (
     <NotificationPopover

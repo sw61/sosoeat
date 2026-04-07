@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import { Check, Triangle } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 import {

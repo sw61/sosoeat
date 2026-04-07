@@ -3,6 +3,7 @@
 import type { Notification } from '@/shared/types/generated-client';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 
+import { useNotificationReadActions } from '../../../../model/notification.service';
 import { NotificationTab } from '../notification-tab';
 
 import type { NotificationPanelBodyProps } from './notification-panel-body.types';
@@ -14,6 +15,9 @@ export const NotificationPanelBody = ({
   unreadCount,
 }: NotificationPanelBodyProps) => {
   const showBadge = unreadCount != null && unreadCount > 0;
+  console.log('Notification list:', list);
+
+  const { markAllAsRead } = useNotificationReadActions();
 
   return (
     <div className="flex h-full min-h-0 flex-col pt-6 pb-4">
@@ -31,6 +35,7 @@ export const NotificationPanelBody = ({
           <button
             type="button"
             className="shrink-0 text-xs leading-4 font-semibold text-[#FF6600] transition-opacity hover:opacity-80"
+            onClick={markAllAsRead}
           >
             모두 읽기
           </button>

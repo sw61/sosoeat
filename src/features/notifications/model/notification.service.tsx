@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import type { Notification, NotificationTypeEnum } from '@/shared/types/generated-client';
 
+import { notificationApi } from '../api';
 import { ApprovedIcon } from '../ui/notification/_components/notification-tab/_components/icons/approved-icon';
 import { CommentIcon } from '../ui/notification/_components/notification-tab/_components/icons/comment-icon';
 import { MeetingIcon } from '../ui/notification/_components/notification-tab/_components/icons/meeting-icon';
@@ -11,7 +12,7 @@ import { UserIcon } from '../ui/notification/_components/notification-tab/_compo
 
 import { notificationQueryOptions } from './notifications.options';
 
-export const getNotificationDescription = async (props: Notification) => {
+export const getNotificationDescription = (props: Notification) => {
   switch (props.type) {
     case 'MEETING_CONFIRMED':
       return `${props.message ?? ''}`;
@@ -70,5 +71,30 @@ export const useNotificationService = () => {
     list,
     isLoading,
     error,
+  };
+};
+
+export const useNotificationReadActions = (notificationId?: number) => {
+  const markAsRead = async () => {
+    try {
+      if (notificationId == null) {
+        return;
+      }
+      await notificationApi.markAsRead(notificationId);
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      await notificationApi.markAllAsRead();
+    } catch (error) {
+      console.error('Failed to mark all notifications as read:', error);
+    }
+  };
+  return {
+    markAsRead,
+    markAllAsRead,
   };
 };

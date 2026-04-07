@@ -1,16 +1,16 @@
 'use client';
 
-import { useAuthStore } from '@/entities/auth/model/auth-store';
-import { MainPageCard } from '@/entities/meeting/ui/main-page-card';
+import { useAuthStore } from '@/entities/auth';
+import { MainPageCard } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
 import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
 import { useModal } from '@/shared/lib/use-modal';
-import { Skeleton } from '@/shared/ui/skeleton';
-import useSearchPage from '@/widgets/search/model/use-search-page';
-import { EmptyPage } from '@/widgets/search/ui/empty-page';
-import { MeetingFilterBar } from '@/widgets/search/ui/meeting-filter-bar';
-import { MeetingMakeButton } from '@/widgets/search/ui/meeting-make-button';
-import { MeetingSearchBanner } from '@/widgets/search/ui/meeting-search-banner';
+
+import useSearchPage from '../../model/use-search-page';
+import { EmptyPage } from '../empty-page';
+import { MeetingFilterBar } from '../meeting-filter-bar';
+import { MeetingMakeButton } from '../meeting-make-button';
+import { MeetingSearchBanner } from '../meeting-search-banner';
 
 import SearchSkeleton from './search-skeleton';
 
