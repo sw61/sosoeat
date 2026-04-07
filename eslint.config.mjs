@@ -71,8 +71,8 @@ const eslintConfig = [
 
       // FSD (Feature-Sliced Design) 규칙
       'feature-sliced/layers-slices': 'error',
-      'feature-sliced/absolute-relative': 'warn',
-      'feature-sliced/public-api': 'warn',
+      'feature-sliced/absolute-relative': 'error',
+      'feature-sliced/public-api': 'error',
 
       // 사용자 정의 규칙 최적화
       'no-undef': 'off', // TypeScript에서 이미 처리함
