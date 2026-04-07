@@ -1,8 +1,9 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { Notification } from '@/shared/types/generated-client';
 
-import { notificationRepository } from '../../../../api';
+import { notificationApi, notificationRepository } from '../../../../api';
 
 import { NotificationTab } from './notification-tab';
 
@@ -38,10 +39,22 @@ const testNotifications: Notification[] = [
     createdAt: new Date('2025-01-14T12:00:00Z'),
   },
 ];
+const renderWithClient = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: { mutations: { retry: false }, queries: { retry: false } },
+  });
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
+
+jest.mock('@/features/notifications/api/notifications.api', () => ({
+  notificationApi: {
+    markAsRead: jest.fn().mockResolvedValue(true),
+  },
+}));
 
 describe('NotificationTab', () => {
   beforeEach(() => {
-    jest.spyOn(notificationRepository, 'readNotification').mockResolvedValue(true);
+    jest.spyOn(notificationApi, 'markAsRead').mockResolvedValue({ ok: true } as Response);
   });
 
   afterEach(() => {
@@ -49,19 +62,17 @@ describe('NotificationTab', () => {
   });
 
   it('알림을 정상 렌더링한다', () => {
-    render(<NotificationTab {...testNotifications[0]} />);
+    renderWithClient(<NotificationTab {...testNotifications[0]} />);
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
   it('버튼이 잘 동작하는지', async () => {
-    render(<NotificationTab {...testNotifications[0]} />);
+    renderWithClient(<NotificationTab {...testNotifications[0]} />);
 
     fireEvent.click(screen.getByRole('button'));
 
     await waitFor(() => {
-      expect(notificationRepository.readNotification).toHaveBeenCalledWith({
-        notificationId: 1,
-      });
+      expect(notificationApi.markAsRead).toHaveBeenCalledWith(1);
     });
   });
 });

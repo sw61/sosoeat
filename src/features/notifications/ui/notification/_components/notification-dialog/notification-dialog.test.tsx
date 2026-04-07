@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -58,10 +59,21 @@ const testNotifications: Notification[] = [
   },
 ];
 
+const renderWithClient = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
+
 describe('NotificationDialog', () => {
   it('열었을 때 패널과 주입한 list가 보인다', async () => {
     const user = userEvent.setup();
-    render(<NotificationDialog list={testNotifications} />);
+    renderWithClient(<NotificationDialog list={testNotifications} />);
 
     await user.click(screen.getByRole('button', { name: '알림 열기' }));
 

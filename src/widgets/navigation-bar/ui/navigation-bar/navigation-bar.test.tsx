@@ -1,7 +1,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { useAuthStore } from '@/entities/auth';
@@ -20,7 +20,9 @@ const mockUseRouter = useRouter as jest.Mock;
 const mockUseSearchParams = useSearchParams as jest.Mock;
 
 const renderWithClient = (ui: React.ReactElement) => {
-  const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
+  const queryClient = new QueryClient({
+    defaultOptions: { mutations: { retry: false }, queries: { retry: false } },
+  });
   return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
 };
 
@@ -81,9 +83,11 @@ describe('NavigationBar', () => {
   });
 
   describe('로그인 상태', () => {
-    it('알림 버튼이 표시된다', () => {
+    it('알림 버튼이 표시된다', async () => {
       renderWithClient(<NavigationBar initialUser={MOCK_USER} />);
-      expect(screen.getAllByRole('button', { name: '알림' }).length).toBeGreaterThan(0);
+      await waitFor(() => {
+        expect(screen.getAllByRole('button', { name: '알림 열기' }).length).toBeGreaterThan(0);
+      });
     });
 
     it('프로필 메뉴가 표시된다', () => {

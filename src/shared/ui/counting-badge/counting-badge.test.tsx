@@ -14,12 +14,14 @@ describe('CountingBadge', () => {
       expect(screen.getByText('0')).toBeInTheDocument();
     });
 
-    it('large 스타일이 적용된다', () => {
+    it('large 기본 스타일이 적용된다', () => {
       render(<CountingBadge count={3} />);
       const badge = screen.getByText('3');
       expect(badge).toHaveClass(
         'h-4',
-        'px-[7px]',
+        'w-10',
+        'text-xs',
+        'font-semibold',
         'rounded-full',
         'bg-sosoeat-orange-600',
         'text-white'
@@ -38,16 +40,16 @@ describe('CountingBadge', () => {
       expect(screen.getByText('99')).toBeInTheDocument();
     });
 
-    it('large 사이즈에서 99+ 일 때 px-[5px] w-auto 스타일이 적용된다', () => {
+    it('large 사이즈에서 99+ 일 때 현재 overMax 스타일이 적용된다', () => {
       render(<CountingBadge count={100} />);
       const badge = screen.getByText('99+');
-      expect(badge).toHaveClass('px-[5px]', 'w-auto');
+      expect(badge).toHaveClass('w-auto', 'w-4');
     });
 
-    it('small 사이즈에서 99+ 일 때 px-1 w-auto 스타일이 적용된다', () => {
+    it('small 사이즈에서 99+ 일 때 h-4 w-4 px-0 text-[10px] leading-[10px] 스타일이 적용된다', () => {
       render(<CountingBadge count={100} size="small" />);
       const badge = screen.getByText('99+');
-      expect(badge).toHaveClass('px-1', 'w-auto');
+      expect(badge).toHaveClass('h-4', 'w-4', 'px-0', 'text-[10px]', 'leading-[10px]');
     });
   });
 
@@ -60,13 +62,7 @@ describe('CountingBadge', () => {
     it('small 스타일이 적용된다', () => {
       render(<CountingBadge count={3} size="small" />);
       const badge = screen.getByText('3');
-      expect(badge).toHaveClass(
-        'h-3',
-        'w-3',
-        'rounded-full',
-        'bg-sosoeat-orange-600',
-        'text-white'
-      );
+      expect(badge).toHaveClass('h-4', 'w-4', 'px-0', 'text-[10px]', 'leading-[10px]');
     });
   });
 });

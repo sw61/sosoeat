@@ -1,3 +1,5 @@
+import { QueryClient } from '@tanstack/react-query';
+
 import type { Notification } from '@/shared/types/generated-client';
 
 import { notificationApi } from '../api/notifications.api';
@@ -45,5 +47,21 @@ export const notificationQueryOptions = {
     },
     staleTime: 1000 * 60, // 1분
     gcTime: 1000 * 60 * 5, // 5분
+  }),
+  matchAsRead: (queryClient: QueryClient) => ({
+    mutationKey: ['notifications', 'read'],
+    mutationFn: (notificationId: number) => notificationApi.markAsRead(notificationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'unreadCount'] });
+    },
+  }),
+  matchAsReadAll: (queryClient: QueryClient) => ({
+    mutationKey: ['notifications', 'readAll'],
+    mutationFn: () => notificationApi.markAllAsRead(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'unreadCount'] });
+    },
   }),
 };

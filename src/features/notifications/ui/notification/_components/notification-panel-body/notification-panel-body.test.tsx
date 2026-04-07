@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 
 import { Notification } from '@/shared/types/generated-client';
@@ -27,9 +28,20 @@ const mockData: Notification[] = [
   },
 ];
 
+const renderWithClient = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
+
 describe('NotificationPanelBody', () => {
   it('제목과 목록 슬롯을 렌더한다', () => {
-    render(
+    renderWithClient(
       <NotificationPanelBody
         titleId="notification-title"
         listScrollClassName="scroll-area"

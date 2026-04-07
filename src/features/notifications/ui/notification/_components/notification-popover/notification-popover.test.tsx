@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -46,10 +47,22 @@ const mockData: Notification[] = [
     createdAt: new Date('2025-01-15T10:00:00Z'),
   },
 ];
+
+const renderWithClient = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
+
 describe('NotificationPopover', () => {
   it('열었을 때 주입한 list가 보인다', async () => {
     const user = userEvent.setup();
-    render(<NotificationPopover list={mockData} />);
+    renderWithClient(<NotificationPopover list={mockData} />);
 
     await user.click(screen.getByRole('button', { name: '알림 열기' }));
 

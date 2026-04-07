@@ -21,17 +21,11 @@ export const notificationApi = {
     return response;
   },
   markAsRead: async (notificationId: number) => {
-    const response = await fetchClient.post(`/notifications/${notificationId}/read`);
-    if (!response.ok) {
-      throw new Error('Failed to mark notification as read');
-    }
-    return response.ok;
+    const response = await fetchClient.put(`/notifications/${notificationId}/read`);
+    return response;
   },
   markAllAsRead: async () => {
-    const response = await fetchClient.post('/notifications/read-all');
-    if (!response.ok) {
-      throw new Error('Failed to mark all notifications as read');
-    }
-    return response.ok;
+    const response = await fetchClient.put('/notifications/read-all');
+    return response;
   },
 };

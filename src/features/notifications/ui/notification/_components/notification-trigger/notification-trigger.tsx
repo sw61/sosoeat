@@ -16,16 +16,23 @@ export const NotificationTrigger = React.forwardRef<HTMLButtonElement, Notificat
       <Button
         ref={ref}
         type={type}
-        className={cn('relative inline-flex cursor-pointer border-0 bg-transparent p-0', className)}
+        className={cn(
+          'relative inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center overflow-visible rounded-[14px] border-0 bg-transparent p-0',
+          className
+        )}
         {...props}
         aria-label={props['aria-label'] ?? '알림 열기'}
       >
         <Bell
-          className={`${unreadCount > 0 ? 'text-sosoeat-orange-600' : 'text-sosoeat-gray-600'} h-5 w-5`}
+          className={cn(
+            unreadCount > 0 ? 'text-sosoeat-orange-600' : 'text-sosoeat-gray-600',
+            'absolute top-[10px] left-[10px] size-5'
+          )}
+          strokeWidth={1.5}
           aria-hidden="true"
         />
         {unreadCount > 0 ? (
-          <span className="absolute -top-2 -right-2">
+          <span className="pointer-events-none absolute top-0 right-0 z-10 translate-x-[1px] -translate-y-[1px]">
             <CountingBadge count={unreadCount} size="small" />
           </span>
         ) : null}

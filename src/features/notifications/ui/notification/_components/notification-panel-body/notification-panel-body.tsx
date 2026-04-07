@@ -22,14 +22,18 @@ export const NotificationPanelBody = ({
     <div className="flex h-full min-h-0 flex-col pt-6 pb-4">
       <div className="m-0 flex flex-row items-center space-y-0 p-0">
         <div className="flex h-6 w-full items-center justify-between px-6">
-          <div className="flex min-w-0 items-center gap-2">
+          <div className="relative flex min-w-0 items-center">
             <h2
               id={titleId}
-              className="m-0 p-0 text-base leading-6 font-semibold tracking-[-0.02em] text-[#111827]"
+              className="m-0 p-0 pr-7 text-base leading-6 font-semibold tracking-[-0.02em] text-[#111827]"
             >
               알림 내역
             </h2>
-            {showBadge ? <CountingBadge count={unreadCount} /> : null}
+            {showBadge ? (
+              <span className="pointer-events-none absolute top-1/2 right-0 z-10 -translate-y-1/2">
+                <CountingBadge count={unreadCount} />
+              </span>
+            ) : null}
           </div>
           <button
             type="button"

@@ -19,9 +19,7 @@ export const NotificationTab = (props: Notification) => {
       type="button"
       variant="ghost"
       className={NOTIFICATION_ROW_BUTTON_CLASS}
-      onClick={() => {
-        void markAsRead();
-      }}
+      onClick={markAsRead}
     >
       <NotificationTabBody
         thumbnail={getNotificationThumbnail(thumbnailKey)}
