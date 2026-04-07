@@ -7,10 +7,9 @@ import { Calendar, Mail, Pencil } from 'lucide-react';
 import { EditProfileModal } from '@/features/profile-edit';
 import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
+import { User } from '@/shared/types/generated-client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-
-import { mypageRepository } from '../../model/mypage.repository';
 
 import { UserCardProps } from './user-card.types';
 
@@ -20,17 +19,10 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
   const [localEmail, setLocalEmail] = useState(email);
   const [localImageUrl, setLocalImageUrl] = useState(imageUrl);
 
-  const handleProfileUpdate = async (data: { name: string; email: string; imageUrl?: string }) => {
-    const updated = await mypageRepository.patchMe({
-      name: data.name,
-      email: data.email,
-      image: data.imageUrl,
-    });
-    if (updated) {
-      setLocalName(updated.name);
-      setLocalEmail(updated.email);
-      setLocalImageUrl(updated.image);
-    }
+  const handleSuccess = (updated: User) => {
+    setLocalName(updated.name);
+    setLocalEmail(updated.email);
+    setLocalImageUrl(updated.image);
   };
 
   return (
@@ -94,7 +86,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
           initialEmail={localEmail}
           initialName={localName}
           initialImageUrl={localImageUrl}
-          onSubmit={handleProfileUpdate}
+          onSuccess={handleSuccess}
         />
       </div>
     </div>

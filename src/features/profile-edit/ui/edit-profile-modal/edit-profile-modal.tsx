@@ -21,6 +21,8 @@ import {
 import { Field, FieldContent, FieldGroup, FieldLabel } from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';
 
+import { useUpdateProfile } from '../../model/use-update-profile';
+
 import type {
   EditProfileModalProps,
   ProfileFieldProps,
@@ -96,7 +98,7 @@ export function EditProfileModal({
   initialName = '',
   initialEmail = '',
   initialImageUrl = '',
-  onSubmit,
+  onSuccess,
   open: externalOpen,
   onOpenChange: externalOnOpenChange,
 }: EditProfileModalProps) {
@@ -108,9 +110,15 @@ export function EditProfileModal({
   const open = externalOpen ?? internalOpen;
   const setOpen = externalOnOpenChange ?? setInternalOpen;
 
+  const { mutate, isPending } = useUpdateProfile({
+    onSuccess: (data) => {
+      onSuccess?.(data);
+      setOpen(false);
+    },
+  });
+
   const handleSubmit = () => {
-    onSubmit?.({ name, email, imageUrl });
-    setOpen(false);
+    mutate({ name, email, image: imageUrl });
   };
 
   return (
@@ -168,9 +176,10 @@ export function EditProfileModal({
           </DialogClose>
           <Button
             onClick={handleSubmit}
+            disabled={isPending}
             className={`${styles.actionButton} bg-sosoeat-orange-600 text-white`}
           >
-            수정하기
+            {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : '수정하기'}
           </Button>
         </DialogFooter>
       </DialogContent>
