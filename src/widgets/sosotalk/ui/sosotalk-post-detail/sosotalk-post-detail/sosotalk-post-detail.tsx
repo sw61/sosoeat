@@ -1,6 +1,6 @@
 'use client';
 
-import { SosoTalkCommentSection } from '@/widgets/sosotalk/ui/sosotalk-comment-section';
+import { SosoTalkCommentSection } from '../../sosotalk-comment-section';
 
 import type { SosoTalkPostDetailProps } from './sosotalk-post-detail.types';
 import { SosoTalkPostDetailActions } from './sosotalk-post-detail-actions';

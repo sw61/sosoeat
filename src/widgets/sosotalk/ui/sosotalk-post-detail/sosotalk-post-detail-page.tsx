@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 import { useAuthStore } from '@/entities/auth';
-import type { CommentItemData } from '@/entities/comment/ui/comment-item';
+import type { CommentItemData } from '@/entities/comment';
 import {
   useCreateSosoTalkComment,
   useCreateSosoTalkPostLike,

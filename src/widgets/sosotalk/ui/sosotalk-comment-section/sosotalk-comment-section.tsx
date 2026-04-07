@@ -2,8 +2,7 @@
 
 import { MessageSquareText } from 'lucide-react';
 
-import { CommentInput } from '@/entities/comment/ui/comment-input';
-import { CommentItem } from '@/entities/comment/ui/comment-item';
+import { CommentInput, CommentItem } from '@/entities/comment';
 import { cn } from '@/shared/lib/utils';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 

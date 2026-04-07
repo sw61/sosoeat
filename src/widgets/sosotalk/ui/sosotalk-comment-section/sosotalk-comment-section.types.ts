@@ -1,4 +1,4 @@
-import type { CommentItemData } from '@/entities/comment/ui/comment-item';
+import type { CommentItemData } from '@/entities/comment';
 
 export interface SosoTalkCommentSectionProps {
   comments: CommentItemData[];
