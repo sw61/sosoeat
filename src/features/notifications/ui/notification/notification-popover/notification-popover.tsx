@@ -14,7 +14,6 @@ import type { NotificationPopoverProps } from './notification-popover.types';
 
 export const NotificationPopover = ({
   triggerClassName,
-  list,
   unreadCount,
 }: NotificationPopoverProps) => {
   const titleId = React.useId();
@@ -32,12 +31,7 @@ export const NotificationPopover = ({
         aria-labelledby={titleId}
         className={cn(POPOVER_PANEL_CLASS)}
       >
-        <NotificationPanelBody
-          titleId={titleId}
-          listScrollClassName={scrollAreaDesktopClass}
-          list={list}
-          unreadCount={unreadCount}
-        />
+        <NotificationPanelBody titleId={titleId} listScrollClassName={scrollAreaDesktopClass} />
       </PopoverContent>
     </Popover>
   );
