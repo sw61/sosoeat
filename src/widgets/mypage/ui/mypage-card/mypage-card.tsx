@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { Calendar, Clock, LucideIcon, MapPin, UserRound } from 'lucide-react';
 
-import { EstablishmentStatusBadge } from '@/entities/meeting/ui/establishment-status-badge';
+import { EstablishmentStatusBadge } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardContent, CardDescription, CardTitle } from '@/shared/ui/card';

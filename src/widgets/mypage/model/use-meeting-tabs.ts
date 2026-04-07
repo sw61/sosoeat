@@ -2,14 +2,10 @@
 
 import { useMemo } from 'react';
 
-import {
-  useCreatedMeetings,
-  useFavoriteMeetings,
-  useJoinedMeetings,
-} from '@/widgets/mypage/model/mypage.queries';
-import { toFavoriteMeetingCards, toUserMeetingCards } from '@/widgets/mypage/model/mypage.service';
-
 import { TabValue } from '../ui/meeting-tabs/meeting-tabs.types';
+
+import { useCreatedMeetings, useFavoriteMeetings, useJoinedMeetings } from './mypage.queries';
+import { toFavoriteMeetingCards, toUserMeetingCards } from './mypage.service';
 
 export function useMeetingTabs(activeTab: TabValue) {
   const joinedQuery = useJoinedMeetings(activeTab === 'all');

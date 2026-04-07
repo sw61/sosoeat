@@ -3,14 +3,14 @@ import { Suspense } from 'react';
 import { format } from 'date-fns';
 
 import {
+  CountCard,
   fetchFavoriteCountServer,
   fetchMeetingCountServer,
   fetchMeServer,
   fetchPostCountServer,
-} from '@/widgets/mypage/model/mypage.repository.server';
-import { CountCard } from '@/widgets/mypage/ui/count-card';
-import { MeetingTabs } from '@/widgets/mypage/ui/meeting-tabs';
-import { UserCard } from '@/widgets/mypage/ui/user-card';
+  MeetingTabs,
+  UserCard,
+} from '@/widgets/mypage';
 
 export default async function MyPage() {
   const user = await fetchMeServer();

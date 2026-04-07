@@ -4,11 +4,12 @@ import { useState } from 'react';
 
 import { Calendar, Mail, Pencil } from 'lucide-react';
 
-import { EditProfileModal } from '@/features/profile-edit/ui/edit-profile-modal';
+import { EditProfileModal } from '@/features/profile-edit';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { mypageRepository } from '@/widgets/mypage/model/mypage.repository';
+
+import { mypageRepository } from '../../model/mypage.repository';
 
 import { UserCardProps } from './user-card.types';
 
