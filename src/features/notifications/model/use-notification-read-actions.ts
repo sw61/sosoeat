@@ -4,31 +4,23 @@ import { notificationQueryOptions } from './notifications.options';
 
 export const useNotificationReadActions = (notificationId?: number) => {
   const queryClient = useQueryClient();
-  const mutation = useMutation(notificationQueryOptions.matchAsRead(queryClient));
-  const mutationAll = useMutation(notificationQueryOptions.matchAsReadAll(queryClient));
+  const {
+    mutate: mutate,
+    isPending,
+    isError,
+  } = useMutation(notificationQueryOptions.matchAsRead(queryClient));
+  const { mutate: mutateAll } = useMutation(notificationQueryOptions.matchAsReadAll(queryClient));
 
   const markAsRead = () => {
-    try {
-      if (notificationId == null) {
-        return false;
-      }
-      mutation.mutateAsync(notificationId);
-      return;
-    } catch (error) {
-      console.error('Failed to mark notification as read:', error);
+    if (notificationId == null) {
       return false;
     }
+    mutate(notificationId);
+    return;
   };
 
   const markAllAsRead = () => {
-    try {
-      mutationAll.mutateAsync();
-
-      return;
-    } catch (error) {
-      console.error('Failed to mark all notifications as read:', error);
-      return false;
-    }
+    mutateAll();
   };
 
   return {

@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import type { Notification, NotificationTypeEnum } from '@/shared/types/generated-client';
 
-import { notificationRepository } from '../../api';
+import { notificationApi } from '../../api/notifications.api';
 
-import { Notification as NotificationComponent } from './index';
+import { Notification as NotificationComponent } from './notification';
 
 const mockNotificationList: Notification[] = [
   {
@@ -36,14 +36,12 @@ const mockNotificationList: Notification[] = [
 ];
 
 /**
- * notificationRepository의 fetchLatestNotifications를 mock 데이터로 오버라이드
+ * notificationApi의 조회 메서드를 mock 데이터로 오버라이드합니다.
  * 이 설정은 모든 story에서 실제 API 호출을 차단합니다.
-//  */
-// const originalFetch = notificationRepository.fetchLatestNotifications;
-notificationRepository.fetchLatestNotifications = async () => ({
-  data: mockNotificationList,
-  unread: mockNotificationList.filter((notification) => !notification.isRead).length,
-});
+ */
+notificationApi.getNotificationList = async () => mockNotificationList;
+notificationApi.getUnreadCount = async () =>
+  mockNotificationList.filter((notification) => !notification.isRead).length;
 
 const meta: Meta<typeof NotificationComponent> = {
   title: 'Components/common/notification/Notification',
