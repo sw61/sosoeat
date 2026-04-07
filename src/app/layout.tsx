@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 
-import { Providers } from '@/app/providers';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
 import { Toaster } from '@/shared/ui/sonner';
-import { Footer } from '@/widgets/footer/ui/footer/footer';
+import { Footer } from '@/widgets/footer';
 import { NavigationBar } from '@/widgets/navigation-bar';
+
+import { Providers } from './providers';
 
 import './globals.css';
 

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { HeartButton } from '@/features/favorites/ui/heart-button/heart-button';
+import { HeartButton } from './heart-button';
 
 jest.mock('next/image', () => ({
   __esModule: true,
