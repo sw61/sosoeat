@@ -3,15 +3,15 @@
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 
-import { ImageUploadField } from './_components/image-upload-field';
-import { PostEditorToolbar } from './_components/post-editor-toolbar';
-import { useSosoTalkPostEditor } from './hooks/use-sosotalk-post-editor';
 import {
   SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH,
   SOSOTALK_POST_EDITOR_MIN_HEIGHT,
   SOSOTALK_POST_EDITOR_TITLE_MAX_LENGTH,
-} from './sosotalk-post-editor.constants';
-import type { SosoTalkPostEditorProps } from './sosotalk-post-editor.types';
+  type SosoTalkPostEditorProps,
+  useSosoTalkPostEditor,
+} from '../../model';
+import { ImageUploadField } from '../image-upload-field';
+import { PostEditorToolbar } from '../post-editor-toolbar';
 
 export const SosoTalkPostEditor = ({
   className,

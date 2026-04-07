@@ -1,11 +1,12 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { SosoTalkPostEditor } from './sosotalk-post-editor';
 import {
   SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH,
   SOSOTALK_POST_EDITOR_TITLE_MAX_LENGTH,
-} from './sosotalk-post-editor.constants';
+} from '../../model';
+
+import { SosoTalkPostEditor } from './sosotalk-post-editor';
 
 beforeEach(() => {
   document.execCommand = jest.fn();

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { AuthUser, useAuthStore } from '@/entities/auth';
-import { AuthInitializer } from '@/features/auth/ui/auth-initializer/auth-initializer';
+import { AuthInitializer } from '@/features/auth';
 import { setCommentSessionExpiredHandler } from '@/shared/api/comment-client';
 import { setSessionExpiredHandler } from '@/shared/api/fetch-client';
 import { LoginRequireModal, SessionExpiredModal } from '@/widgets/auth';

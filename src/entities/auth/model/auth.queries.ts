@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { LoginRequest, SignupRequest } from '@/shared/types/generated-client/models';
 
-import { authApi } from '../api/auth.api';
+import { authApi } from './auth.api';
 
 /**
  * [Entity] useLoginMutation

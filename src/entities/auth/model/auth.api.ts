@@ -1,7 +1,7 @@
 import { fetchClient } from '@/shared/api/fetch-client';
 import { LoginRequest, SignupRequest } from '@/shared/types/generated-client/models';
 
-import { AuthUser } from '../model/auth.types';
+import { AuthUser } from './auth.types';
 
 export type AuthResponse = { user: AuthUser };
 

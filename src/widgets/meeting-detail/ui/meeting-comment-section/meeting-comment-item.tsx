@@ -11,7 +11,7 @@ import {
   useLikeComment,
   useUpdateComment,
 } from '@/entities/comment';
-import { useModal } from '@/shared/hooks/use-modal';
+import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 

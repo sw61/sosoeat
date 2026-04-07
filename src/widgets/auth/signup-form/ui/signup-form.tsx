@@ -2,10 +2,8 @@
 
 import Link from 'next/link';
 
-import { STEP_TO_NUMBER } from '@/features/auth/signup/model/signup-form.constants';
-import { SignupStep } from '@/features/auth/signup/model/signup-form.types';
-import { useSignUp } from '@/features/auth/signup/model/use-signup';
-import { useSignupForm } from '@/features/auth/signup/model/use-signup-form';
+import type { SignupStep } from '@/features/auth/model';
+import { STEP_TO_NUMBER, useSignUp, useSignupForm } from '@/features/auth/model';
 import { Funnel, Step } from '@/shared/ui/funnel/funnel';
 
 import {

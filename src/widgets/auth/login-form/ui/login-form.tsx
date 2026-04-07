@@ -4,8 +4,7 @@ import { Suspense } from 'react';
 
 import { Eye, EyeOff } from 'lucide-react';
 
-import { getErrorAnimationClasses, getInputClasses } from '@/features/auth/lib/auth.utils';
-import { useLoginForm } from '@/features/auth/login/model/use-login-form';
+import { getErrorAnimationClasses, getInputClasses, useLoginForm } from '@/features/auth/model';
 import { AuthSubmitButton } from '@/features/auth/ui/auth-submit-button/auth-submit-button';
 import { LoginRequest } from '@/shared/types/generated-client/models';
 import { Field, FieldContent, FieldError, FieldGroup, FieldLabel } from '@/shared/ui/field';

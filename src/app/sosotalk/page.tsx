@@ -1,4 +1,4 @@
-import { SosoTalkMainPage } from '@/widgets/sosotalk/ui/sosotalk-main-page';
+import { SosoTalkMainPage } from '@/widgets/sosotalk';
 
 export default function SosoTalkPage() {
   return <SosoTalkMainPage />;

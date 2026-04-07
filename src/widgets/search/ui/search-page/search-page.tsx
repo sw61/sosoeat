@@ -4,7 +4,7 @@ import { useAuthStore } from '@/entities/auth/model/auth-store';
 import { MainPageCard } from '@/entities/meeting/ui/main-page-card';
 import { HeartButton } from '@/features/favorites';
 import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
-import { useModal } from '@/shared/hooks/use-modal';
+import { useModal } from '@/shared/lib/use-modal';
 import { Skeleton } from '@/shared/ui/skeleton';
 import useSearchPage from '@/widgets/search/model/use-search-page';
 import { EmptyPage } from '@/widgets/search/ui/empty-page';

@@ -5,9 +5,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronLeft } from 'lucide-react';
 
-import { getErrorAnimationClasses, getInputClasses } from '@/features/auth/lib/auth.utils';
-import { nameSchema } from '@/features/auth/signup/model/signup-form.schema';
-import { MiddleStepProps, NameValues } from '@/features/auth/signup/model/signup-form.types';
+import type { MiddleStepProps, NameValues } from '@/features/auth/model';
+import { getErrorAnimationClasses, getInputClasses, nameSchema } from '@/features/auth/model';
 import { AuthSubmitButton } from '@/features/auth/ui/auth-submit-button/auth-submit-button';
 import { Button } from '@/shared/ui/button';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/shared/ui/field';

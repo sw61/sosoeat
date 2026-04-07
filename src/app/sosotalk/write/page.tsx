@@ -1,4 +1,4 @@
-import { SosoTalkWritePageClient } from '@/features/sosotalk-write/ui/sosotalk-write-page-client';
+import { SosoTalkWritePageClient } from '@/features/sosotalk-write';
 
 interface SosoTalkWritePageProps {
   searchParams?: Promise<{

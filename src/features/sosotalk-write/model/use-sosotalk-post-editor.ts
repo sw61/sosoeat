@@ -6,16 +6,15 @@ import { useEffect, useRef, useState } from 'react';
 import {
   SOSOTALK_POST_EDITOR_CONTENT_MAX_LENGTH,
   SOSOTALK_POST_EDITOR_TITLE_MAX_LENGTH,
-} from '../sosotalk-post-editor.constants';
-import type { ActiveFormats } from '../sosotalk-post-editor.internal-types';
-import type { SosoTalkPostEditorProps } from '../sosotalk-post-editor.types';
+} from './sosotalk-post-editor.constants';
+import type { ActiveFormats } from './sosotalk-post-editor.internal-types';
+import type { SosoTalkPostEditorProps } from './sosotalk-post-editor.types';
 import {
   calculateEffectiveContentLength,
   extractTextFromHtml,
   toInitialHtml,
   toInitialText,
-} from '../sosotalk-post-editor.utils';
-
+} from './sosotalk-post-editor.utils';
 import { useSosoTalkPostEditorImage } from './use-sosotalk-post-editor-image';
 
 const DEFAULT_ACTIVE_FORMATS: ActiveFormats = {

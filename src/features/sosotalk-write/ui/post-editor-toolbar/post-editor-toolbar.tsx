@@ -2,10 +2,11 @@
 
 import { cn } from '@/shared/lib/utils';
 
-import { SOSOTALK_POST_EDITOR_ACCEPTED_IMAGE_TYPES } from '../../sosotalk-post-editor.constants';
-
-import { POST_EDITOR_TOOLBAR_ACTIONS } from './post-editor-toolbar.constants';
-import type { PostEditorToolbarProps } from './post-editor-toolbar.types';
+import {
+  POST_EDITOR_TOOLBAR_ACTIONS,
+  type PostEditorToolbarProps,
+  SOSOTALK_POST_EDITOR_ACCEPTED_IMAGE_TYPES,
+} from '../../model';
 
 export function PostEditorToolbar({
   activeFormats,

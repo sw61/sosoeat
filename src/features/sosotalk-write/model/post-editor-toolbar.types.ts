@@ -1,6 +1,6 @@
 import type { ChangeEventHandler, ComponentType, RefObject } from 'react';
 
-import type { ActiveFormatKey, ActiveFormats } from '../../sosotalk-post-editor.internal-types';
+import type { ActiveFormatKey, ActiveFormats } from './sosotalk-post-editor.internal-types';
 
 export type PostEditorToolbarAction = {
   label: string;

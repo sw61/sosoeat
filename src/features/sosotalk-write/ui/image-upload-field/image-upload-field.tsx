@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 
-import { ImageUploadFieldProps } from './image-upload-field.types';
+import type { ImageUploadFieldProps } from '../../model';
 
 export function ImageUploadField({
   className,

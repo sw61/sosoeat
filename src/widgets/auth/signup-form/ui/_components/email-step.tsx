@@ -4,9 +4,8 @@ import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { getErrorAnimationClasses, getInputClasses } from '@/features/auth/lib/auth.utils';
-import { emailSchema } from '@/features/auth/signup/model/signup-form.schema';
-import { EmailValues, FirstStepProps } from '@/features/auth/signup/model/signup-form.types';
+import type { EmailValues, FirstStepProps } from '@/features/auth/model';
+import { emailSchema, getErrorAnimationClasses, getInputClasses } from '@/features/auth/model';
 import { AuthSubmitButton } from '@/features/auth/ui/auth-submit-button/auth-submit-button';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';

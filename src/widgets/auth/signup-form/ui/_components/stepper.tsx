@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 
 import { Check } from 'lucide-react';
 
-import { SIGNUP_STEPS } from '@/features/auth/signup/model/signup-form.constants';
+import { SIGNUP_STEPS } from '@/features/auth/model';
 import { cn } from '@/shared/lib/utils';
 
 interface SignupStepperProps {

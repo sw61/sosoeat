@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import type { Meeting } from '@/entities/meeting';
 import { MeetingEditModal, toMeetingEditFormData } from '@/features/meeting-edit';
-import { useModal } from '@/shared/hooks/use-modal';
+import { useModal } from '@/shared/lib/use-modal';
 
 import {
   meetingDetailKeys,

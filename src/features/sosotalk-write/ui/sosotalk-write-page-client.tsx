@@ -11,7 +11,8 @@ import {
   useUpdateSosoTalkPost,
 } from '@/entities/post';
 
-import type { SosoTalkPostSubmitPayload } from './sosotalk-post-editor';
+import type { SosoTalkPostSubmitPayload } from '../model';
+
 import { SosoTalkPostEditor } from './sosotalk-post-editor';
 
 interface SosoTalkWritePageClientProps {

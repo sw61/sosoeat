@@ -1,11 +1,9 @@
-export type { AuthResponse } from './api/auth.api';
-export { authApi } from './api/auth.api';
+export type { AuthResponse, AuthStore, AuthUser } from './model';
 export {
+  authApi,
+  useAuthStore,
   useLoginMutation,
   useLogoutMutation,
   useSignUpMutation,
   useSocialLoginMutation,
-} from './model/auth.queries';
-export type { AuthUser } from './model/auth.types';
-export type { AuthStore } from './model/auth-store';
-export { useAuthStore } from './model/auth-store';
+} from './model';

@@ -1,5 +1,5 @@
-import { STEP_HEADING_MAP } from '@/features/auth/signup/model/signup-form.constants';
-import { type SignupStep } from '@/features/auth/signup/model/signup-form.types';
+import type { SignupStep } from '@/features/auth/model';
+import { STEP_HEADING_MAP } from '@/features/auth/model';
 
 interface SignupStepHeaderProps {
   step: SignupStep;
