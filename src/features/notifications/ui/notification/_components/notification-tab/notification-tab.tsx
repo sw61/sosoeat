@@ -3,36 +3,29 @@
 import type { Notification } from '@/shared/types/generated-client';
 import { Button } from '@/shared/ui/button';
 
-import { notificationRepository } from '../../../../api';
-import {
-  formatNotificationMetaRelativeTime,
-  getNotificationDescription,
-  notificationTitleForType,
-  thumbnailForType,
-} from '../../../../model';
+import { getNotificationViewModel, useNotificationReadActions } from '../../../../model';
 
 import { NotificationTabBody } from './_components/notification-tab-body/notification-tab-body';
 import { NOTIFICATION_ROW_BUTTON_CLASS } from './notification-tab.constants';
+import { getNotificationThumbnail } from './notification-thumbnail';
 
 export const NotificationTab = (props: Notification) => {
-  const description = getNotificationDescription(props);
-  const metaRight = formatNotificationMetaRelativeTime(props.createdAt);
-  const highlighted = !props.isRead;
-  const isMeetingConfirmed = props.type === 'MEETING_CONFIRMED';
+  const { description, highlighted, isMeetingConfirmed, metaRight, thumbnailKey, title } =
+    getNotificationViewModel(props);
+  const { markAsRead } = useNotificationReadActions(props.id);
+
   return (
     <Button
       type="button"
       variant="ghost"
       className={NOTIFICATION_ROW_BUTTON_CLASS}
       onClick={() => {
-        void notificationRepository.readNotification({
-          notificationId: props.id,
-        });
+        void markAsRead();
       }}
     >
       <NotificationTabBody
-        thumbnail={thumbnailForType(props.type)}
-        title={notificationTitleForType(props.type)}
+        thumbnail={getNotificationThumbnail(thumbnailKey)}
+        title={title}
         isMeetingConfirmed={isMeetingConfirmed}
         metaRight={metaRight}
         description={description}
