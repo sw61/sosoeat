@@ -114,7 +114,7 @@ export function MyPageCard({
     <Card
       className={cn(
         'flex overflow-hidden rounded-4xl border-none p-0 shadow-none',
-        'gap-0 max-md:w-85.75 max-md:flex-col md:h-60 md:w-132.5 md:flex-row md:items-center md:gap-4 md:px-4',
+        'gap-0 max-md:w-85.75 max-md:flex-col md:h-60 md:w-132.5 md:flex-row md:items-center md:gap-4 md:px-4 lg:w-full',
         className
       )}
     >
