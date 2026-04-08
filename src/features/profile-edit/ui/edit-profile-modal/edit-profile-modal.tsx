@@ -51,7 +51,8 @@ async function getCroppedImg(imageSrc: string, pixelCrop: Area): Promise<Blob> {
   const canvas = document.createElement('canvas');
   canvas.width = pixelCrop.width;
   canvas.height = pixelCrop.height;
-  const ctx = canvas.getContext('2d')!;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Canvas 2D context를 가져올 수 없습니다.');
   ctx.drawImage(
     image,
     pixelCrop.x,
@@ -93,13 +94,18 @@ function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
 
   const handleCropConfirm = async () => {
     if (!rawSrc || !croppedAreaPixels) return;
-    const blob = await getCroppedImg(rawSrc, croppedAreaPixels);
-    const file = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
-    const publicUrl = await mutateAsync(file);
-    if (publicUrl) onChange(publicUrl);
-    URL.revokeObjectURL(rawSrc);
-    setRawSrc(null);
-    setCropModalOpen(false);
+    try {
+      const blob = await getCroppedImg(rawSrc, croppedAreaPixels);
+      const file = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
+      const publicUrl = await mutateAsync(file);
+      if (publicUrl) onChange(publicUrl);
+      setCropModalOpen(false);
+    } catch (error) {
+      console.error('프로필 이미지 처리 중 오류가 발생했습니다:', error);
+    } finally {
+      URL.revokeObjectURL(rawSrc);
+      setRawSrc(null);
+    }
   };
 
   const handleCropCancel = () => {
@@ -129,7 +135,7 @@ function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
           size="icon"
           disabled={isPending}
           onClick={() => inputRef.current?.click()}
-          className="border-sosoeat-gray-300 absolute right-1 bottom-1 rounded-full bg-white text-gray-600 md:right-1 md:bottom-0"
+          className="border-sosoeat-gray-300 absolute right-1 bottom-1 rounded-full border bg-white text-gray-600 md:right-1 md:bottom-0"
         >
           {isPending ? (
             <Loader2 className="h-4 w-4 animate-spin" />
