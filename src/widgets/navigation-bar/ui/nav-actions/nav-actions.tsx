@@ -50,6 +50,7 @@ export function NavActions({ user, onOpenCreateModal, onLogout }: NavActionsProp
           <button
             className="hidden cursor-pointer items-center gap-1 outline-none md:flex"
             aria-label="프로필 메뉴"
+            suppressHydrationWarning
           >
             <Avatar className="bg-sosoeat-gray-200 shrink-0">
               <AvatarImage src={user.image ?? undefined} alt={user.name} />

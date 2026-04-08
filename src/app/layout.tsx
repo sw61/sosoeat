@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { getFavoritesCount } from '@/features/favorites/index.server';
+import { getFavoritesCount } from '@/entities/favorites/index.server';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
 import { Toaster } from '@/shared/ui/sonner';
 import { Footer } from '@/widgets/footer';

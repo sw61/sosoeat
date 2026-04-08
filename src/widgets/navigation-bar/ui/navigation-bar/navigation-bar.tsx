@@ -1,16 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-import { useQueryClient } from '@tanstack/react-query';
-
 import { AuthUser, useAuthStore } from '@/entities/auth';
+import { useFavoritesCount } from '@/entities/favorites';
 import { useLogout } from '@/features/auth';
-import { favoriteKeys, useFavoritesCount } from '@/features/favorites';
 import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
 import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
@@ -35,25 +31,11 @@ export function NavigationBar({
 
   const { setLoginRequired } = useAuthStore();
   const user = isInitialized ? storeUser : initialUser;
-  const { data: favoritesCount } = useFavoritesCount(initialFavoritesCount, { enabled: !!user });
-  const queryClient = useQueryClient();
-  const prevUserIdRef = useRef<number | null | undefined>(initialUser?.id);
+  const { data: favoritesCount } = useFavoritesCount(initialFavoritesCount, {
+    enabled: !!user,
+  });
 
   const { mutateAsync: createMeeting } = useCreateMeeting();
-
-  useEffect(() => {
-    if (!isInitialized) return;
-
-    const prevId = prevUserIdRef.current;
-    const currId = storeUser?.id;
-
-    if (prevId == null && currId != null) {
-      queryClient.invalidateQueries({ queryKey: favoriteKeys.count() });
-    } else if (prevId != null && currId == null) {
-      queryClient.setQueryData(favoriteKeys.count(), 0);
-    }
-    prevUserIdRef.current = currId;
-  }, [isInitialized, storeUser?.id, queryClient]);
 
   const handleOpenCreateModal = () => {
     if (!user) {

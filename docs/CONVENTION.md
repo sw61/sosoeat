@@ -74,10 +74,10 @@ app > widgets > features > entities > shared
 
 ```ts
 // ✅ 올바른 import — 슬라이스 루트(public API)를 통해 접근
-import { useFavoritesCount } from '@/features/favorites';
+import { useFavoritesCount } from '@/entities/favorites';
 
 // ❌ 잘못된 import — 내부 경로 직접 참조 금지
-import { useFavoritesCount } from '@/features/favorites/model/use-favorites-count';
+import { useFavoritesCount } from '@/entities/favorites/model/favorites.queries';
 ```
 
 > [!NOTE]
@@ -92,7 +92,7 @@ import { useFavoritesCount } from '@/features/favorites/model/use-favorites-coun
 export { getFavoritesCount } from './api/favorites.server';
 
 // ✅ 서버 컴포넌트에서 사용
-import { getFavoritesCount } from '@/features/favorites/index.server';
+import { getFavoritesCount } from '@/entities/favorites/index.server';
 ```
 
 ### 슬라이스 내부 세그먼트 구조
@@ -168,19 +168,43 @@ const meta = {
 
 `model/` 폴더 내 TanStack Query 관련 파일은 4가지 유형으로 구분합니다.
 
-| #   | 파일명                     | 역할                                   | 생성 기준                             |
-| --- | -------------------------- | -------------------------------------- | ------------------------------------- |
-| 1   | `[domain].queries.ts`      | Query Key + `useQuery` + `useMutation` | 기본, 항상 생성                       |
-| 2   | `[domain].options.ts`      | SSR prefetch용 순수 옵션 객체          | SSR prefetch가 필요할 때만            |
-| 3   | `use-[domain].ts`          | 여러 훅 조합 래퍼                      | 같은 도메인 훅 3개 이상 조합 시       |
-| 4   | `use-[action]-[domain].ts` | 단일 액션 + UI 상태(`useState`) 결합   | mutation과 UI 상태가 강하게 결합될 때 |
+| #   | 파일명                     | 역할                                 | 위치       | 생성 기준                             |
+| --- | -------------------------- | ------------------------------------ | ---------- | ------------------------------------- |
+| 1   | `[domain].queries.ts`      | Query Key + `useQuery`               | `entities` | 기본, 항상 생성                       |
+| 2   | `[domain].mutations.ts`    | `useMutation`                        | `features` | 기본, 항상 생성                       |
+| 3   | `[domain].options.ts`      | SSR prefetch용 순수 옵션 객체        | `entities` | SSR prefetch가 필요할 때만            |
+| 4   | `use-[domain].ts`          | 여러 훅 조합 래퍼                    | `features` | 같은 도메인 훅 3개 이상 조합 시       |
+| 5   | `use-[action]-[domain].ts` | 단일 액션 + UI 상태(`useState`) 결합 | `features` | mutation과 UI 상태가 강하게 결합될 때 |
 
 **핵심 규칙:**
 
-- `useQuery`와 `useMutation`은 조회/변경으로 파일을 나누지 않습니다. 분리 기준은 **도메인**입니다.
+- **`useQuery`는 `entities`**, **`useMutation`은 `features`** 에 위치합니다. FSD 레이어 의미(조회 vs 액션)와 일치합니다.
+  - `entities/favorites/model/favorites.queries.ts` → `useQuery`, Query Key factory
+  - `features/favorites/model/favorites.mutations.ts` → `useMutation`
 - Query Key는 반드시 **factory 함수**(`xxxKeys`)로 정의합니다. raw 배열 직접 사용 금지.
+- Query Key factory 위치는 사용 범위에 따라 결정합니다.
+  - **`queries.ts` 내부에 함께 정의**: key가 해당 파일 내에서만 사용되는 경우
+  - **`model/[domain]-keys.ts`로 분리**: SSR prefetch나 서버 컴포넌트에서 key를 함께 참조해야 하는 경우 (`queries.ts`에 `'use client'`가 붙어 서버에서 import할 수 없을 때)
 - `useQueryClient()`는 훅 내부에서 사용합니다. `QueryClient`를 외부에서 주입받는 패턴 금지.
 - `useMemo`, `useCallback` 사용 금지 (React Compiler가 처리).
+
+**예외 케이스:**
+
+- **Widget 전용 복합 쿼리**: 여러 entity를 조합해야 하는 경우(예: 모임 목록 + 찜 상태를 동시에 가져오는 경우) `widgets/*/model/` 에 별도 `queries.ts`를 둘 수 있습니다.
+- **Optimistic Update**: `useMutation`의 `onMutate`/`onError`에서 캐시를 직접 조작해야 하는 경우, entity의 Query Key factory를 `features`에서 import해서 사용합니다. Key를 직접 복사하거나 하드코딩하지 않습니다.
+
+  ```ts
+  // features/favorites/model/favorites.mutations.ts
+  import { favoritesKeys } from '@/entities/favorites'; // ✅ entity에서 Key 참조
+
+  useMutation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: favoritesKeys.count() });
+    },
+  });
+  ```
+
+- **entity에서만 쓰이는 mutation**: 외부 feature 없이 entity 내부에서만 사용하는 간단한 mutation(예: 단순 캐시 초기화)은 예외적으로 `entities/*/model/queries.ts` 하단에 위치할 수 있습니다. 단, PR에서 사유를 명시해야 합니다.
 
 ---
 

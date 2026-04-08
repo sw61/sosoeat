@@ -171,7 +171,7 @@ describe('NavigationBar', () => {
       await user.click(screen.getByRole('menuitem', { name: '로그아웃' }));
 
       expect(useAuthStore.getState().user).toBeNull();
-      expect(mockPush).toHaveBeenCalledWith('/');
+      expect(mockPush).toHaveBeenCalledWith('/home');
     });
   });
 

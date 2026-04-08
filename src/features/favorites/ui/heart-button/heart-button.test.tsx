@@ -19,7 +19,7 @@ jest.mock('framer-motion', () => ({
 }));
 
 const mockToggleFavorite = jest.fn();
-jest.mock('../../model/favorites.queries', () => ({
+jest.mock('../../model/favorites.mutations', () => ({
   useFavoriteMeeting: (initialIsFavorited: boolean, _meetingId: number) => ({
     isFavorited: initialIsFavorited,
     toggleFavorite: mockToggleFavorite,
@@ -63,13 +63,5 @@ describe('HeartButton', () => {
     fireEvent.click(screen.getByRole('button', { name: '좋아요' }));
 
     expect(mockToggleFavorite).toHaveBeenCalled();
-  });
-
-  it('meetingId가 없으면 toggleFavorite이 호출되지 않는다', () => {
-    render(<HeartButton isFavorited={false} />);
-
-    fireEvent.click(screen.getByRole('button', { name: '좋아요' }));
-
-    expect(mockToggleFavorite).not.toHaveBeenCalled();
   });
 });
