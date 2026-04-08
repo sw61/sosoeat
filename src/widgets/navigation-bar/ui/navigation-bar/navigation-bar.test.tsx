@@ -105,13 +105,13 @@ describe('NavigationBar', () => {
     });
 
     it('찜한 모임 메뉴와 배지가 표시되며 /mypage?tab=liked로 이동한다', () => {
-      renderWithClient(<NavigationBar initialUser={MOCK_USER} initialFavoritesCount={0} />);
+      renderWithClient(<NavigationBar initialUser={MOCK_USER} initialFavoritesCount={5} />);
       const links = screen.getAllByRole('link', { name: /찜한 모임/ });
       expect(links.length).toBeGreaterThan(0);
       links.forEach((link) => {
         expect(link).toHaveAttribute('href', '/mypage?tab=liked');
       });
-      expect(screen.getAllByText('0').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('5').length).toBeGreaterThan(0);
     });
 
     it('모임 만들기 버튼이 표시된다', () => {

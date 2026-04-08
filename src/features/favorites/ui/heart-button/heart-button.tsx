@@ -53,12 +53,12 @@ export function HeartButton({
         onClick={toggleFavorite}
       >
         <motion.div
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-          whileTap={{
-            scale: isFavoritedState ? 1 : [0.1, 1.15, 0.6, 1],
-            transition: { duration: 1, ease: 'easeOut' },
-          }}
+          key={String(isFavoritedState)}
+          animate={
+            isFavoritedState ? { scale: [0.7, 1.25, 0.9, 1.05, 1] } : { scale: [1.1, 0.85, 1] }
+          }
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          whileTap={{ scale: 0.8, transition: { duration: 0.1 } }}
           className={HEART_BUTTON_ICON_WRAPPER_CLASS}
         >
           <Image src={src} alt="좋아요" width={iconPx} height={iconPx} />

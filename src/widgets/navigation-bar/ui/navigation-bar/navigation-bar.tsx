@@ -77,6 +77,7 @@ export function NavigationBar({
               user={user}
               pathname={pathname}
               searchParams={searchParams}
+              favoritesCount={favoritesCount ?? initialFavoritesCount}
               onLoginRequired={() => setLoginRequired(true)}
               onLogout={performLogout}
             />

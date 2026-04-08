@@ -13,22 +13,24 @@ export const useToggleFavorite = () => {
 
   return useMutation({
     mutationFn: ({ meetingId, isFavorited }: { meetingId: number; isFavorited: boolean }) =>
-      isFavorited ? favoritesApi.favoriteDelete(meetingId) : favoritesApi.favoritePost(meetingId),
+      isFavorited ? favoritesApi.favoritePost(meetingId) : favoritesApi.favoriteDelete(meetingId),
     onMutate: async ({ meetingId, isFavorited }) => {
       await queryClient.cancelQueries({ queryKey: favoriteKeys.count() });
+      await queryClient.cancelQueries({ queryKey: favoriteKeys.status(meetingId) });
       const previousCount = queryClient.getQueryData<number>(favoriteKeys.count());
       const previousStatus = queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId));
       queryClient.setQueryData(favoriteKeys.count(), (prev: number = 0) =>
-        isFavorited ? Math.max(0, prev - 1) : prev + 1
+        isFavorited ? prev + 1 : Math.max(0, prev - 1)
       );
       return { previousCount, previousStatus, meetingId };
     },
-    onError: (_err, { meetingId }, context) => {
-      queryClient.setQueryData(favoriteKeys.status(meetingId), context?.previousStatus);
+    onError: (_err, _vars, context) => {
+      queryClient.setQueryData(favoriteKeys.status(context!.meetingId), context?.previousStatus);
       queryClient.setQueryData(favoriteKeys.count(), context?.previousCount);
     },
-    onSuccess: () => {
+    onSuccess: (_data, { meetingId, isFavorited }) => {
       queryClient.invalidateQueries({ queryKey: favoriteKeys.count() });
+      queryClient.setQueryData(favoriteKeys.status(meetingId), isFavorited);
     },
   });
 };
@@ -60,10 +62,11 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
 
     timerRef.current = setTimeout(() => {
       // 최종 상태가 커밋 상태와 다를 때만 API 호출
-      if (nextLocalState !== committedRef.current) {
-        committedRef.current = nextLocalState;
-        // nextLocalState가 true면 이미 찜 상태 → API는 delete(false), 아니면 add(true)
-        toggleMutate({ meetingId, isFavorited: nextLocalState });
+      const finalState =
+        queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId)) ?? committedRef.current;
+      if (finalState !== committedRef.current) {
+        committedRef.current = finalState;
+        toggleMutate({ meetingId, isFavorited: finalState });
       }
     }, DEBOUNCE_MS);
   };

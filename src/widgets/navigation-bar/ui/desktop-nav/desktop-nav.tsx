@@ -5,6 +5,7 @@ import { type ReadonlyURLSearchParams } from 'next/navigation';
 
 import { AuthUser } from '@/entities/auth';
 import { cn } from '@/shared/lib/utils';
+import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 
 import { getIsActive, getNavHref, NAV_ITEMS } from '../../lib/nav.constants';
 
@@ -41,10 +42,8 @@ export function DesktopNav({
         ) : (
           <Link key={item.href} href={href} className={className}>
             {item.label}
-            {'showBadge' in item && item.showBadge && !!user && (
-              <span className="bg-sosoeat-orange-600 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white">
-                {favoritesCount}
-              </span>
+            {'showBadge' in item && item.showBadge && !!user && favoritesCount > 0 && (
+              <CountingBadge count={favoritesCount} size="large" />
             )}
           </Link>
         );

@@ -8,6 +8,7 @@ import { ChevronRight } from 'lucide-react';
 
 import { AuthUser } from '@/entities/auth';
 import { cn } from '@/shared/lib/utils';
+import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 import {
   Sheet,
   SheetClose,
@@ -23,6 +24,7 @@ interface MobileSheetProps {
   user: AuthUser | null;
   pathname: string | null;
   searchParams: ReadonlyURLSearchParams | null;
+  favoritesCount: number;
   onLoginRequired: () => void;
   onLogout: () => void;
 }
@@ -31,6 +33,7 @@ export function MobileSheet({
   user,
   pathname,
   searchParams,
+  favoritesCount,
   onLoginRequired,
   onLogout,
 }: MobileSheetProps) {
@@ -55,17 +58,24 @@ export function MobileSheet({
                 ? 'text-sosoeat-orange-600 bg-sosoeat-orange-100'
                 : 'text-muted-foreground hover:text-sosoeat-orange-600'
             );
+            const showBadge = 'showBadge' in item && item.showBadge && !!user && favoritesCount > 0;
             return href === null ? (
               <SheetClose key={item.href} asChild>
                 <button onClick={onLoginRequired} className={className}>
-                  {item.label}
+                  <span className="flex items-center gap-1.5">
+                    {item.label}
+                    {showBadge && <CountingBadge count={favoritesCount} size="small" />}
+                  </span>
                   <ChevronRight className="h-4 w-4 shrink-0" />
                 </button>
               </SheetClose>
             ) : (
               <SheetClose key={item.href} asChild>
                 <Link href={href} className={className}>
-                  {item.label}
+                  <span className="flex items-center gap-1.5">
+                    {item.label}
+                    {showBadge && <CountingBadge count={favoritesCount} size="small" />}
+                  </span>
                   <ChevronRight className="h-4 w-4 shrink-0" />
                 </Link>
               </SheetClose>
