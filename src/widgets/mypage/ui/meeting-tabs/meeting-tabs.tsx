@@ -55,7 +55,7 @@ export function MeetingTabs() {
           ) : cards.length === 0 ? (
             <MeetingTabsEmpty />
           ) : (
-            <div className="flex flex-col items-center gap-4 py-4 lg:flex-row lg:flex-wrap lg:justify-center">
+            <div className="grid grid-cols-1 justify-items-center gap-4 py-4 lg:grid-cols-2 lg:justify-items-start">
               {cards.map((card) => (
                 <MyPageCard key={card.meetingId} {...card} />
               ))}
