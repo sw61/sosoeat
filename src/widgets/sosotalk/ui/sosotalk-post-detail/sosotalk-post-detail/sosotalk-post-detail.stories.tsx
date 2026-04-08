@@ -9,12 +9,12 @@ import { SosoTalkPostDetail } from './sosotalk-post-detail';
 const comments = [
   {
     id: '1',
-    authorName: '마민준',
+    authorName: '마루준',
     authorImageUrl:
       'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=120&auto=format&fit=crop',
     createdAt: '03월 18일 18:42',
     relativeTime: '12분 전',
-    content: '혹시 1명 더 신청 가능할까요? 퇴근하고 바로 가면 시간 맞을 것 같아요.',
+    content: '혹시 1명 더 요청 가능할까요? 퇴근하고 바로 가면 시간 맞을 것 같아요.',
   },
   {
     id: '2',
@@ -23,7 +23,7 @@ const comments = [
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=400',
     createdAt: '03월 18일 18:50',
     relativeTime: '방금 전',
-    content: '가능해요. 오시기 전에 댓글 한 번만 더 남겨주시면 자리 잡아둘게요.',
+    content: '가능해요! 오시기 전에 댓글 한 번만 더 남겨주시면 자리 잡아둘게요.',
     isAuthorComment: true,
   },
 ];
@@ -67,7 +67,7 @@ function InteractiveDetail(args: ComponentProps<typeof SosoTalkPostDetail>) {
       inputPlaceholder="댓글을 입력해 주세요"
       onChangeInput={setValue}
       onSubmitComment={() => setValue('')}
-      currentUserName="마민준"
+      currentUserName="마루준"
       currentUserImageUrl="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=120&auto=format&fit=crop"
     />
   );
@@ -77,7 +77,7 @@ export const Default: Story = {
   args: {
     title: '마포 고깃집 같이 가실 분?',
     contentHtml:
-      '<p>저녁 7시에 마포 고깃집에서 <strong>삼겹살</strong> 먹을 분 구합니다. 1인당 2만원 예상됩니다.</p><p><br></p><p><em>편하게 식사하고 이야기 나누실 분</em>이면 좋겠어요. 시간 맞는 분은 댓글로 남겨주세요.</p>',
+      '<p>오늘 7시에 마포 고깃집에서 <strong>삼겹살</strong> 드실 분 구합니다. 1인당 2만원 예상입니다.</p><p><br></p><p><em>편하게 식사하고 이야기 나누실 분</em>이면 좋겠어요. 시간 맞는 분은 댓글로 남겨주세요.</p>',
     imageUrl:
       'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=1200',
     authorName: '김민수',
@@ -99,7 +99,7 @@ export const WithoutImage: Story = {
     title: '모임 추천 부탁드려요 :D',
     contentHtml:
       '<p>안녕하세요. 요즘 모임을 찾아보고 있는데 어떤 모임이 좋을지 모르겠어요.</p><p><br></p><p>저는 <strong>자연</strong>, <em>풍경 보는 것</em>을 좋아하고 강아지에도 관심이 많습니다.</p><ul><li>추천 모임</li><li>주의할 점</li></ul><p>자유롭게 댓글 달아주세요.</p>',
-    authorName: '달래리',
+    authorName: '오채린',
     likeCount: 8,
     commentCount: 3,
     createdAt: '2024.01.25',

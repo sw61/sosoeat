@@ -65,11 +65,11 @@ export function SosoTalkCard({
 
             <div className="flex items-center gap-[10px]">
               <span className="flex items-center gap-[2px]">
-                <span>♥</span>
+                <span>좋아요</span>
                 <span>{likeCount}</span>
               </span>
               <span className="flex items-center gap-[2px]">
-                <span>💬</span>
+                <span>댓글</span>
                 <span>{commentCount}</span>
               </span>
             </div>

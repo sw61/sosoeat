@@ -28,7 +28,7 @@ export function SosoTalkPostDetailActions({
       {hasMeta ? (
         <div className="text-sosoeat-gray-500 flex items-center gap-2 text-sm font-medium md:text-base">
           {createdDateLabel ? <span>{createdDateLabel}</span> : null}
-          {createdDateLabel && typeof viewCount === 'number' ? <span aria-hidden>·</span> : null}
+          {createdDateLabel && typeof viewCount === 'number' ? <span aria-hidden>|</span> : null}
           {typeof viewCount === 'number' ? (
             <span className="inline-flex items-center gap-1.5">
               <Eye className="h-4 w-4 shrink-0" />

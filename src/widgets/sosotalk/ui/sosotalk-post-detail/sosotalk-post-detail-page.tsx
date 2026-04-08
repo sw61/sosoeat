@@ -137,7 +137,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
       });
       handleCancelEditComment();
     } catch {
-      // 수정 실패 시 입력값을 유지해서 다시 시도할 수 있도록 둡니다.
+      // 수정 입력값을 유지해서 다시 시도할 수 있도록 둡니다.
     }
   };
 
@@ -278,7 +278,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
             })
           )}
           inputValue={commentInput}
-          inputPlaceholder="댓글을 입력해 주세요."
+          inputPlaceholder="댓글을 입력해 주세요"
           onChangeInput={setCommentInput}
           onSubmitComment={() => void handleSubmitComment()}
           currentUserName={currentUser?.name}
