@@ -42,15 +42,18 @@ export function NavigationBar({
   const { mutateAsync: createMeeting } = useCreateMeeting();
 
   useEffect(() => {
+    if (!isInitialized) return;
+
     const prevId = prevUserIdRef.current;
     const currId = storeUser?.id;
+
     if (prevId == null && currId != null) {
       queryClient.invalidateQueries({ queryKey: favoriteKeys.count() });
     } else if (prevId != null && currId == null) {
       queryClient.setQueryData(favoriteKeys.count(), 0);
     }
     prevUserIdRef.current = currId;
-  }, [storeUser?.id, queryClient]);
+  }, [isInitialized, storeUser?.id, queryClient]);
 
   const handleOpenCreateModal = () => {
     if (!user) {
