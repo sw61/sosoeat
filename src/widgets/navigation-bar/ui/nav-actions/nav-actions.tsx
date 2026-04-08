@@ -3,8 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Bell } from 'lucide-react';
-
 import { AuthUser } from '@/entities/auth';
 import { Notification } from '@/features/notifications';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
@@ -15,19 +13,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown';
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
 
-// TODO: 알림 기능 구현 시 React Query로 교체 예정
-// ex) const { data: hasUnread = false } = useHasUnreadNotification();
-const hasUnread = false;
-
-interface DesktopActionsProps {
+interface NavActionsProps {
   user: AuthUser | null;
   onOpenCreateModal: () => void;
   onLogout: () => void;
 }
 
-export function DesktopActions({ user, onOpenCreateModal, onLogout }: DesktopActionsProps) {
+export function NavActions({ user, onOpenCreateModal, onLogout }: NavActionsProps) {
   if (!user) {
     return (
       <Link
@@ -41,21 +34,6 @@ export function DesktopActions({ user, onOpenCreateModal, onLogout }: DesktopAct
 
   return (
     <>
-      <Sheet>
-        <SheetTrigger asChild>
-          <button className="relative cursor-pointer p-1 md:hidden" aria-label="알림">
-            <Bell className="text-sosoeat-orange-600 h-5 w-5" />
-            {hasUnread && (
-              <span className="bg-sosoeat-orange-600 absolute top-0.5 right-0.5 h-1.5 w-1.5 rounded-full" />
-            )}
-          </button>
-        </SheetTrigger>
-        <SheetContent side="right" className="w-64 p-0 pt-12">
-          <SheetTitle className="sr-only">알림</SheetTitle>
-          <SheetDescription className="sr-only">알림 목록 패널</SheetDescription>
-        </SheetContent>
-      </Sheet>
-
       <Button
         size="lg"
         className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white md:mr-1 md:flex"

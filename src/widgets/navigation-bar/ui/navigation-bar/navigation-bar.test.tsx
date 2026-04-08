@@ -14,6 +14,10 @@ jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
 }));
 
+jest.mock('@/features/notifications', () => ({
+  Notification: () => <button aria-label="알림 열기">알림</button>,
+}));
+
 const mockPush = jest.fn();
 const mockUsePathname = usePathname as jest.Mock;
 const mockUseRouter = useRouter as jest.Mock;

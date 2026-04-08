@@ -7,6 +7,7 @@ import { type ReadonlyURLSearchParams } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 
 import { AuthUser } from '@/entities/auth';
+import { cn } from '@/shared/lib/utils';
 import {
   Sheet,
   SheetClose,
@@ -16,7 +17,7 @@ import {
   SheetTrigger,
 } from '@/shared/ui/sheet';
 
-import { getIsActive, getNavHref, NAV_ITEMS } from '../desktop-nav/desktop-nav';
+import { getIsActive, getNavHref, NAV_ITEMS } from '../../lib/nav.constants';
 
 interface MobileSheetProps {
   user: AuthUser | null;
@@ -48,11 +49,12 @@ export function MobileSheet({
           {NAV_ITEMS.map((item) => {
             const isActive = getIsActive(item, pathname, searchParams);
             const href = getNavHref(item, user);
-            const className = `flex h-[72px] items-center justify-between rounded-md px-3 text-sm font-medium transition-colors ${
+            const className = cn(
+              'flex h-[72px] items-center justify-between rounded-md px-3 text-sm font-medium transition-colors',
               isActive
                 ? 'text-sosoeat-orange-600 bg-sosoeat-orange-100'
                 : 'text-muted-foreground hover:text-sosoeat-orange-600'
-            }`;
+            );
             return href === null ? (
               <SheetClose key={item.href} asChild>
                 <button onClick={onLoginRequired} className={className}>

@@ -19,7 +19,7 @@ jest.mock('framer-motion', () => ({
 }));
 
 const mockToggleFavorite = jest.fn();
-jest.mock('../../model/use-toggle-favorite', () => ({
+jest.mock('../../model/favorites.queries', () => ({
   useFavoriteMeeting: (initialIsFavorited: boolean, _meetingId: number) => ({
     isFavorited: initialIsFavorited,
     toggleFavorite: mockToggleFavorite,

@@ -15,9 +15,9 @@ import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create'
 import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
 
-import { DesktopActions } from '../desktop-actions/desktop-actions';
 import { DesktopNav } from '../desktop-nav/desktop-nav';
 import { MobileSheet } from '../mobile-sheet/mobile-sheet';
+import { NavActions } from '../nav-actions/nav-actions';
 
 export function NavigationBar({
   initialUser,
@@ -32,11 +32,14 @@ export function NavigationBar({
   const isInitialized = useAuthStore((state) => state.isInitialized);
   const { mutate: performLogout } = useLogout();
   const { isOpen, open, close } = useModal();
-  const { mutateAsync: createMeeting } = useCreateMeeting();
+
   const { setLoginRequired } = useAuthStore();
-  const { data: favoritesCount } = useFavoritesCount(initialFavoritesCount, { enabled: !!storeUser });
+  const user = isInitialized ? storeUser : initialUser;
+  const { data: favoritesCount } = useFavoritesCount(initialFavoritesCount, { enabled: !!user });
   const queryClient = useQueryClient();
-  const prevUserIdRef = useRef<number | null | undefined>(storeUser?.id);
+  const prevUserIdRef = useRef<number | null | undefined>(initialUser?.id);
+
+  const { mutateAsync: createMeeting } = useCreateMeeting();
 
   useEffect(() => {
     const prevId = prevUserIdRef.current;
@@ -48,8 +51,6 @@ export function NavigationBar({
     }
     prevUserIdRef.current = currId;
   }, [storeUser?.id, queryClient]);
-
-  const user = isInitialized ? storeUser : initialUser;
 
   const handleOpenCreateModal = () => {
     if (!user) {
@@ -82,17 +83,17 @@ export function NavigationBar({
           />
 
           <div className="flex items-center gap-2">
-            <DesktopActions
+            <NavActions
               user={user}
               onOpenCreateModal={handleOpenCreateModal}
-              onLogout={() => performLogout()}
+              onLogout={performLogout}
             />
             <MobileSheet
               user={user}
               pathname={pathname}
               searchParams={searchParams}
               onLoginRequired={() => setLoginRequired(true)}
-              onLogout={() => performLogout()}
+              onLogout={performLogout}
             />
           </div>
         </div>
