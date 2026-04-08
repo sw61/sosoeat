@@ -67,4 +67,27 @@ describe('SosoTalkPostDetail', () => {
     expect(screen.getByText('박지수')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('댓글을 입력해 주세요.')).toBeInTheDocument();
   });
+
+  it('좋아요 요청 중에는 좋아요 버튼을 비활성화한다', () => {
+    render(
+      <SosoTalkPostDetail
+        title="마포 고깃집 같이 가실 분?"
+        contentHtml="<p>본문입니다.</p>"
+        authorName="김민수"
+        createdAt="6시간 전"
+        likeCount={24}
+        commentCount={3}
+        isLikePending
+        comments={[]}
+        inputValue=""
+        inputPlaceholder="댓글을 입력해 주세요."
+        onChangeInput={() => undefined}
+        onSubmitComment={() => undefined}
+        currentUserName="마루준"
+      />
+    );
+
+    expect(screen.getByRole('button', { name: '좋아요 24개' })).toBeDisabled();
+    expect(screen.getByPlaceholderText('댓글을 입력해 주세요.')).toBeInTheDocument();
+  });
 });

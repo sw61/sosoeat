@@ -51,8 +51,12 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
 
   const commentCount = data?.count?.comments ?? data?.comments?.length ?? 0;
   const comments = data?.comments ?? [];
-  const isLiked = optimisticIsLiked ?? data?.isLiked ?? false;
-  const displayedLikeCount = (data?.likeCount ?? 0) + (isLiked ? 1 : 0) - (data?.isLiked ? 1 : 0);
+  const serverIsLiked = data?.isLiked ?? false;
+  const isLikePending = createLikeMutation.isPending || deleteLikeMutation.isPending;
+  const shouldUseOptimisticLike =
+    optimisticIsLiked != null && (isLikePending || serverIsLiked !== optimisticIsLiked);
+  const isLiked = shouldUseOptimisticLike ? optimisticIsLiked : serverIsLiked;
+  const displayedLikeCount = (data?.likeCount ?? 0) + (isLiked ? 1 : 0) - (serverIsLiked ? 1 : 0);
   const isEditingCommentMissing =
     editingCommentId != null && !comments.some((comment) => comment.id === editingCommentId);
 
@@ -64,7 +68,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
   };
 
   const handleLikeClick = async () => {
-    if (!isValidPostId || createLikeMutation.isPending || deleteLikeMutation.isPending || !data) {
+    if (!isValidPostId || isLikePending || !data) {
       return;
     }
 
@@ -78,8 +82,6 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
         await deleteLikeMutation.mutateAsync(numericPostId);
       }
     } catch {
-      setOptimisticIsLiked(data.isLiked);
-    } finally {
       setOptimisticIsLiked(null);
     }
   };
@@ -259,6 +261,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           viewCount={data.viewCount}
           isAuthor={currentUser?.id === data.author.id}
           isLiked={isLiked}
+          isLikePending={isLikePending}
           onEditClick={handleEditClick}
           onDeleteClick={() => void handleDeleteClick()}
           onLikeClick={() => void handleLikeClick()}

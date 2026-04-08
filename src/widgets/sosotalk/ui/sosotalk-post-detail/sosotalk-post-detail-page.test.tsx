@@ -106,8 +106,20 @@ const mockPostDetailResponse = {
   isLiked: false,
 };
 
+let currentPostDetailResponse = mockPostDetailResponse;
+
 describe('SosoTalkPostDetailPage', () => {
   beforeEach(() => {
+    currentPostDetailResponse = {
+      ...mockPostDetailResponse,
+      author: { ...mockPostDetailResponse.author },
+      count: { ...mockPostDetailResponse.count },
+      comments: mockPostDetailResponse.comments.map((comment) => ({
+        ...comment,
+        author: { ...comment.author },
+      })),
+    };
+
     window.history.pushState({}, '', '/sosotalk/1');
 
     Object.defineProperty(navigator, 'share', {
@@ -148,11 +160,11 @@ describe('SosoTalkPostDetailPage', () => {
         })
     );
 
-    useGetSosoTalkPostDetail.mockReturnValue({
-      data: mockPostDetailResponse,
+    useGetSosoTalkPostDetail.mockImplementation(() => ({
+      data: currentPostDetailResponse,
       isLoading: false,
       isError: false,
-    });
+    }));
 
     useCreateSosoTalkComment.mockReturnValue({
       mutateAsync: mockCreateCommentMutateAsync,
@@ -208,7 +220,7 @@ describe('SosoTalkPostDetailPage', () => {
       })
     );
 
-    render(<SosoTalkPostDetailPage postId="1" />);
+    const { rerender } = render(<SosoTalkPostDetailPage postId="1" />);
 
     await user.click(screen.getByRole('button', { name: '좋아요 24개' }));
 
@@ -218,7 +230,19 @@ describe('SosoTalkPostDetailPage', () => {
     resolveLike?.();
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '좋아요 24개' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '좋아요 25개' })).toBeInTheDocument();
+    });
+
+    currentPostDetailResponse = {
+      ...currentPostDetailResponse,
+      likeCount: 25,
+      isLiked: true,
+    };
+
+    rerender(<SosoTalkPostDetailPage postId="1" />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '좋아요 25개' })).toBeInTheDocument();
     });
   });
 
