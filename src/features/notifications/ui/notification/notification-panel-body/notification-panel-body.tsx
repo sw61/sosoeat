@@ -1,9 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+
 import type { Notification } from '@/shared/types/generated-client';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 
 import { useNotificationReadActions } from '../../../model/use-notification-read-actions';
+import { useNotificationInfiniteListRead } from '../../../model/use-notification-service';
 import { NotificationTab } from '../notification-tab/notification-tab';
 
 import type { NotificationPanelBodyProps } from './notification-panel-body.types';
@@ -11,12 +15,26 @@ import type { NotificationPanelBodyProps } from './notification-panel-body.types
 export const NotificationPanelBody = ({
   titleId,
   listScrollClassName,
-  list,
   unreadCount,
 }: NotificationPanelBodyProps) => {
-  const showBadge = unreadCount != null && unreadCount > 0;
+  const { isLoading, isPending, fetchNextPage, hasNextPage, isFetchingNextPage, error, list } =
+    useNotificationInfiniteListRead({ size: 5 });
 
+  const showBadge = unreadCount != null && unreadCount > 0;
   const { markAllAsRead } = useNotificationReadActions();
+  const [root, setsRoot] = useState<HTMLDivElement | null>(null);
+
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+    rootMargin: '100px',
+    root,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <div className="flex h-full min-h-0 flex-col pt-6 pb-4">
@@ -48,10 +66,24 @@ export const NotificationPanelBody = ({
       </div>
 
       <div className="mt-6 flex min-h-0 flex-1 flex-col">
-        <div className={listScrollClassName}>
+        <div className={listScrollClassName} ref={setsRoot}>
           {list.map((notification: Notification) => (
             <NotificationTab key={notification.id} {...notification} />
           ))}
+          <div ref={ref} className="flex h-1 items-center justify-center" />
+          {!hasNextPage && list.length > 0 ? (
+            <div className="flex h-12 items-center justify-center text-sm text-gray-500">
+              모든 알림을 불러왔어요
+            </div>
+          ) : isLoading || isPending ? (
+            <div className="flex h-12 items-center justify-center">
+              <span className="loader" />
+            </div>
+          ) : error ? (
+            <div className="flex h-12 items-center justify-center text-sm text-red-500">
+              알림을 불러오는 중 오류가 발생했습니다.
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

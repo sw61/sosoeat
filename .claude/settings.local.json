@@ -7,7 +7,9 @@
       "Bash(ov reindex:*)",
       "Bash(xargs grep:*)",
       "Bash(gh repo:*)",
-      "Bash(cmd /c \"gh --version\")"
+      "Bash(cmd /c \"gh --version\")",
+      "Bash(npx jest:*)",
+      "Bash(npx eslint:*)"
     ]
   }
 }

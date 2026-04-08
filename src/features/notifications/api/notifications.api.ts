@@ -1,27 +1,30 @@
 import { fetchClient } from '@/shared/api/fetch-client';
-import { Notification } from '@/shared/types/generated-client';
+import {
+  Notification,
+  NotificationList,
+  TeamIdNotificationsGetRequest,
+} from '@/shared/types/generated-client';
 
 export const notificationApi = {
-  getNotificationOption: async (options: { isRead?: boolean; cursor?: string; size?: number }) => {
+  getNotificationOption: async (options: Omit<TeamIdNotificationsGetRequest, 'teamId'>) => {
     const params = new URLSearchParams();
     if (options.isRead !== undefined) params.append('isRead', String(options.isRead));
     if (options.cursor) params.append('cursor', options.cursor);
     if (options.size) params.append('size', String(options.size));
 
-    const response = await fetchClient.get(
-      `/notifications?isRead=${options.isRead}&size=${options.size}${options.cursor ? `&cursor=${options.cursor}` : ''}`
-    );
-    const data = await response.json();
-    const items = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
+    const response = await fetchClient.get(`/notifications?${params.toString()}`);
+    const data: NotificationList = await response.json();
 
-    return items.map((item: Notification) => ({
+    const items = data.data.map((item: Notification) => ({
       ...item,
       createdAt: new Date(item.createdAt as unknown as string),
     }));
+
+    return { ...data, data: items };
   },
   getNotificationList: async () => {
     const response = await fetchClient.get('/notifications');
-    const data = await response.json();
+    const data: NotificationList = await response.json();
 
     const items = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
 

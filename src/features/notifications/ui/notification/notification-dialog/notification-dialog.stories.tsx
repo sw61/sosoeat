@@ -1,46 +1,58 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import type { Notification } from '@/shared/types/generated-client';
+import { Notification } from '@/shared/types/generated-client';
+
+import { notificationKeys } from '../../../model/notification.queries';
 
 import { NotificationDialog } from './notification-dialog';
 
-const notificationListDemoData: Notification[] = [
+const mockData: Notification[] = [
   {
     id: 1,
-    teamId: 'team-1',
+    teamId: 'dallaem',
     userId: 1,
     type: 'MEETING_CONFIRMED',
-    message: '모임이 확정되었어요.',
-    data: {
-      meetingId: 101,
-      meetingName: '성수 브런치 모임',
-    },
+    message: '모임이 확정되었습니다.',
+    data: { meetingName: 'Team Sync' },
     isRead: false,
-    createdAt: new Date('2026-04-06T09:00:00'),
+    createdAt: new Date('2025-01-15T12:00:00Z'),
   },
   {
     id: 2,
-    teamId: 'team-1',
+    teamId: 'dallaem',
     userId: 1,
     type: 'COMMENT',
-    message: '새 댓글이 달렸어요.',
-    data: {
-      postId: 22,
-      postTitle: '주말 맛집 추천',
-      commentId: 7,
-    },
+    message: '새 댓글이 달렸습니다.',
+    data: {},
     isRead: true,
-    createdAt: new Date('2026-04-06T08:30:00'),
+    createdAt: new Date('2025-01-15T10:00:00Z'),
   },
 ];
 
 const meta = {
   title: 'Components/common/notification/Dialog',
   component: NotificationDialog,
+  decorators: [
+    (Story) => {
+      const queryClient = new QueryClient();
+
+      queryClient.setQueryData(notificationKeys.list({ size: 5 }), {
+        pages: [{ data: [...mockData], hasMore: false, nextCursor: null }],
+        pageParams: [undefined],
+      });
+
+      return (
+        <QueryClientProvider client={queryClient}>
+          <Story />
+        </QueryClientProvider>
+      );
+    },
+  ],
 } satisfies Meta<typeof NotificationDialog>;
 
 export default meta;
 
 export const Default: StoryObj<typeof NotificationDialog> = {
-  render: () => <NotificationDialog list={notificationListDemoData} unreadCount={3} />,
+  render: () => <NotificationDialog unreadCount={3} />,
 };

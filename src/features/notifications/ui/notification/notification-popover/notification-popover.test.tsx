@@ -1,30 +1,16 @@
+import { useInView } from 'react-intersection-observer';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Notification } from '@/shared/types/generated-client';
 
+import { useNotificationReadActions } from '../../../model/use-notification-read-actions';
+import { useNotificationInfiniteListRead } from '../../../model/use-notification-service';
+
 import { NotificationPopover } from './notification-popover';
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: function MockImage({
-    src,
-    alt,
-    width,
-    height,
-    className,
-  }: {
-    src: string;
-    alt: string;
-    width?: number;
-    height?: number;
-    className?: string;
-  }) {
-    // eslint-disable-next-line @next/next/no-img-element -- Jest mock for next/image
-    return <img src={src} alt={alt} width={width} height={height} className={className} />;
-  },
-}));
 const mockData: Notification[] = [
   {
     id: 1,
@@ -48,21 +34,67 @@ const mockData: Notification[] = [
   },
 ];
 
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: function MockImage({
+    src,
+    alt,
+    width,
+    height,
+    className,
+  }: {
+    src: string;
+    alt: string;
+    width?: number;
+    height?: number;
+    className?: string;
+  }) {
+    // eslint-disable-next-line @next/next/no-img-element -- Jest mock for next/image
+    return <img src={src} alt={alt} width={width} height={height} className={className} />;
+  },
+}));
+
+jest.mock('@/features/notifications/model/use-notification-service', () => ({
+  useNotificationInfiniteListRead: jest.fn(),
+  useNotificationService: jest.fn(),
+}));
+
+jest.mock('@/features/notifications/model/use-notification-read-actions', () => ({
+  useNotificationReadActions: jest.fn(),
+}));
+
+jest.mock('react-intersection-observer', () => ({
+  useInView: jest.fn(),
+}));
+
 const renderWithClient = (ui: React.ReactElement) => {
   const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
-    },
+    defaultOptions: { queries: { retry: false } },
   });
   return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
 };
 
+beforeEach(() => {
+  (useNotificationInfiniteListRead as jest.Mock).mockReturnValue({
+    isLoading: false,
+    isPending: false,
+    fetchNextPage: jest.fn(),
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    error: null,
+    list: mockData,
+  });
+  (useNotificationReadActions as jest.Mock).mockReturnValue({
+    markAllAsRead: jest.fn(),
+    markAsRead: jest.fn(),
+  });
+  (useInView as jest.Mock).mockReturnValue({ ref: jest.fn(), inView: false });
+});
+
 describe('NotificationPopover', () => {
   it('열었을 때 주입한 list가 보인다', async () => {
     const user = userEvent.setup();
-    renderWithClient(<NotificationPopover list={mockData} />);
+    renderWithClient(<NotificationPopover />);
 
     await user.click(screen.getByRole('button', { name: '알림 열기' }));
 

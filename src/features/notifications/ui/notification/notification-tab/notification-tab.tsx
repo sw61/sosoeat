@@ -3,7 +3,7 @@
 import type { Notification } from '@/shared/types/generated-client';
 import { Button } from '@/shared/ui/button';
 
-import { getNotificationViewModel } from '../../../model/notification-view.utils';
+import { getNotificationViewModel } from '../../../lib/notification-view.utils';
 import { useNotificationReadActions } from '../../../model/use-notification-read-actions';
 import { NotificationTabBody } from '../notification-tab-body/notification-tab-body';
 
