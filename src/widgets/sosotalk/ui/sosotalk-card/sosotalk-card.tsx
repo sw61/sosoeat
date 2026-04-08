@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { Heart, MessageCircle } from 'lucide-react';
 
-import { getSosoTalkPostDetail } from '@/entities/post';
+import { sosotalkPostDetailQueryOptions } from '@/entities/post';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar/avatar';
 
 import type { SosoTalkCardProps } from './sosotalk-card.types';
@@ -25,11 +25,7 @@ export function SosoTalkCard({
   const queryClient = useQueryClient();
 
   const prefetchPostDetail = () => {
-    void queryClient.prefetchQuery({
-      queryKey: ['sosotalk-post-detail', id],
-      queryFn: () => getSosoTalkPostDetail(id),
-      staleTime: 30_000,
-    });
+    void queryClient.prefetchQuery(sosotalkPostDetailQueryOptions(id));
   };
 
   return (
