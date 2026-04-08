@@ -1,1 +1,0 @@
-export { formatNotificationMetaRelativeTime } from '../../../../../../model';

@@ -1,10 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-
-import { notificationQueryOptions } from './notifications.options';
+import { useNotificationList, useUnreadCount } from './notification.queries';
 
 export const useNotificationService = () => {
-  const { isLoading, error, data: notifications } = useQuery(notificationQueryOptions.list);
-  const { data: unreadCountData } = useQuery(notificationQueryOptions.unreadCount);
+  const { isLoading, error, data: notifications, isPending } = useNotificationList();
+  const { data: unreadCountData } = useUnreadCount();
 
   const list = Array.isArray(notifications)
     ? notifications
@@ -16,6 +14,7 @@ export const useNotificationService = () => {
     unreadCount: unreadCountData ?? 0,
     list,
     isLoading,
+    isPending,
     error,
   };
 };

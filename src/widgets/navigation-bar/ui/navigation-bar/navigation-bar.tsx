@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { type ReadonlyURLSearchParams, usePathname, useSearchParams } from 'next/navigation';
 
-import { Bell, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 import { AuthUser, useAuthStore } from '@/entities/auth';
 import { useLogout } from '@/features/auth';
@@ -35,10 +35,6 @@ const NAV_ITEMS = [
   { href: '/mypage?tab=liked', label: '찜한 모임', showBadge: true },
   { href: '/sosotalk', label: '소소토크' },
 ] as const;
-
-// TODO: 알림 기능 구현 시 React Query로 교체 예정
-// ex) const { data: hasUnread = false } = useHasUnreadNotification();
-const hasUnread = false;
 
 // TODO: 찜 컴포넌트 분리 시 아래 상수 제거 후 컴포넌트로 교체
 // ex) import { WishGroupBadge } from '@/components/common/wish-group-badge'
@@ -126,21 +122,7 @@ export function NavigationBar({ initialUser }: { initialUser: AuthUser | null })
           <div className="flex items-center gap-2">
             {user ? (
               <>
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <button className="relative cursor-pointer p-1 md:hidden" aria-label="알림">
-                      <Bell className="text-sosoeat-orange-600 h-5 w-5" />
-                      {hasUnread && (
-                        <span className="bg-sosoeat-orange-600 absolute top-0.5 right-0.5 h-1.5 w-1.5 rounded-full" />
-                      )}
-                    </button>
-                  </SheetTrigger>
-                  <SheetContent side="right" className="w-64 p-0 pt-12">
-                    <SheetTitle className="sr-only">알림</SheetTitle>
-                    <SheetDescription className="sr-only">알림 목록 패널</SheetDescription>
-                  </SheetContent>
-                </Sheet>
-
+                <Notification />
                 <Button
                   size="lg"
                   className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white md:mr-1 md:flex"
@@ -149,8 +131,6 @@ export function NavigationBar({ initialUser }: { initialUser: AuthUser | null })
                   <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
                   모임 만들기
                 </Button>
-
-                <Notification />
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
