@@ -42,7 +42,7 @@ export const useTimeFormatter = (registrationEnd: Date | null) => {
     const date: number = registrationEndDate.getDate();
     const hours: string = registrationEndDate.getHours().toString().padStart(2, '0');
     const minutes: string = registrationEndDate.getMinutes().toString().padStart(2, '0');
-    return `${month}월 ${date}일 ${hours}:${minutes} 모집 마감이에요!`;
+    return `${month}월 ${date}일 ${hours}:${minutes} 모집 마감!`;
   };
 
   useEffect(() => {
