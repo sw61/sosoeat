@@ -21,6 +21,7 @@ export function SosoTalkPostDetail({
   viewCount,
   isAuthor = false,
   isLiked = false,
+  isLikePending = false,
   onMoreClick,
   onEditClick,
   onDeleteClick,
@@ -57,6 +58,7 @@ export function SosoTalkPostDetail({
               likeCount={likeCount}
               commentCount={commentCount}
               isLiked={isLiked}
+              isLikePending={isLikePending}
               onLikeClick={onLikeClick}
               onCommentClick={onCommentClick}
               onShareClick={onShareClick}

@@ -14,6 +14,7 @@ export interface SosoTalkPostDetailProps {
   viewCount?: number;
   isAuthor?: boolean;
   isLiked?: boolean;
+  isLikePending?: boolean;
   onMoreClick?: () => void;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
@@ -53,6 +54,7 @@ export interface SosoTalkPostActionsProps {
   likeCount?: number;
   commentCount?: number;
   isLiked?: boolean;
+  isLikePending?: boolean;
   onLikeClick?: () => void;
   onCommentClick?: () => void;
   onShareClick?: () => void | Promise<void>;
