@@ -8,6 +8,7 @@ export type {
 export { commentApi } from './api/comment.api';
 export {
   commentKeys,
+  useCommentCount,
   useComments,
   useCreateComment,
   useDeleteComment,

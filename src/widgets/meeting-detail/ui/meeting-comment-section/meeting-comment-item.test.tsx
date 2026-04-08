@@ -123,21 +123,48 @@ describe('MeetingCommentItem', () => {
   });
 
   describe('좋아요', () => {
-    it('좋아요 버튼 클릭 시 useLikeComment mutate가 호출된다', async () => {
+    beforeEach(() => jest.useFakeTimers());
+    afterEach(() => jest.useRealTimers());
+
+    it('좋아요 버튼 클릭 시 300ms 후 useLikeComment mutate가 호출된다', async () => {
       const mockMutate = jest.fn();
       const commentsModule = jest.mocked(
         jest.requireMock('@/entities/comment') as { useLikeComment: jest.Mock }
       );
       commentsModule.useLikeComment.mockReturnValue({ mutate: mockMutate });
 
-      const user = userEvent.setup();
+      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
       render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
       await user.click(screen.getByRole('button', { name: '좋아요' }));
+      jest.advanceTimersByTime(300);
 
-      expect(mockMutate).toHaveBeenCalledWith({ commentId: 1, isLiked: false });
+      expect(mockMutate).toHaveBeenCalledWith(
+        { commentId: 1, isLiked: false },
+        expect.objectContaining({ onError: expect.any(Function) })
+      );
+    });
+
+    it('연속 클릭 시 마지막 상태로 1번만 호출된다', async () => {
+      const mockMutate = jest.fn();
+      const commentsModule = jest.mocked(
+        jest.requireMock('@/entities/comment') as { useLikeComment: jest.Mock }
+      );
+      commentsModule.useLikeComment.mockReturnValue({ mutate: mockMutate });
+
+      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+      render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
+        wrapper: createWrapper(),
+      });
+
+      await user.click(screen.getByRole('button', { name: '좋아요' }));
+      await user.click(screen.getByRole('button', { name: '좋아요' }));
+      await user.click(screen.getByRole('button', { name: '좋아요' }));
+      jest.advanceTimersByTime(300);
+
+      expect(mockMutate).toHaveBeenCalledTimes(1);
     });
   });
 

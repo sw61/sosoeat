@@ -173,48 +173,21 @@ export const useLikeComment = (meetingId: number) => {
     mutationFn: ({ commentId, isLiked }: { commentId: number; isLiked: boolean }) =>
       isLiked ? commentApi.unlikeComment(commentId) : commentApi.likeComment(commentId),
 
-    onMutate: async ({ commentId, isLiked }) => {
-      await queryClient.cancelQueries({ queryKey: commentKeys.list(meetingId) });
-      const previousComments = queryClient.getQueryData(commentKeys.list(meetingId));
-
-      queryClient.setQueryData(commentKeys.list(meetingId), (old: Comment[] | undefined) => {
-        if (!old) return old;
-        return old.map((comment) => {
-          if (comment.id === commentId) {
-            return {
-              ...comment,
-              isLiked: !isLiked,
-              likeCount: isLiked ? comment.likeCount - 1 : comment.likeCount + 1,
-            };
-          }
-          return {
-            ...comment,
-            replies: comment.replies?.map((reply) =>
-              reply.id === commentId
-                ? {
-                    ...reply,
-                    isLiked: !isLiked,
-                    likeCount: isLiked ? reply.likeCount - 1 : reply.likeCount + 1,
-                  }
-                : reply
-            ),
-          };
-        });
-      });
-
-      return { previousComments };
-    },
-
-    onError: (_, __, context) => {
-      if (context?.previousComments) {
-        queryClient.setQueryData(commentKeys.list(meetingId), context.previousComments);
-      }
+    onError: () => {
       toast.error('좋아요 처리 중 오류가 발생했습니다.');
     },
 
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: commentKeys.list(meetingId) });
     },
+  });
+};
+
+export const useCommentCount = (meetingId: number, initialCount?: number) => {
+  return useQuery({
+    queryKey: commentKeys.count(meetingId),
+    queryFn: () => commentApi.getCommentCount(meetingId),
+    initialData: initialCount !== undefined ? { count: initialCount } : undefined,
   });
 };
 
