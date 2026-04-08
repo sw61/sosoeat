@@ -135,7 +135,7 @@ function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
           size="icon"
           disabled={isPending}
           onClick={() => inputRef.current?.click()}
-          className="border-sosoeat-gray-300 absolute right-1 bottom-1 rounded-full border bg-white text-gray-600 md:right-1 md:bottom-0"
+          className="border-sosoeat-gray-300 absolute right-1 bottom-1 cursor-pointer rounded-full border bg-white text-gray-600 md:right-1 md:bottom-0"
         >
           {isPending ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -156,11 +156,11 @@ function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
               type="button"
               variant="ghost"
               size="icon-sm"
-              className="size-8 shrink-0 text-[#737373] hover:bg-transparent hover:text-[#737373]"
+              className="size-8 shrink-0 cursor-pointer text-[#737373] hover:bg-transparent hover:text-[#737373]"
               aria-label="닫기"
               onClick={handleCropCancel}
             >
-              <XIcon className="size-6" strokeWidth={1.8} />
+              <XIcon className="size-6 cursor-pointer" strokeWidth={1.8} />
             </Button>
           </DialogHeader>
 
@@ -189,13 +189,13 @@ function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
               step={0.01}
               value={zoom}
               onChange={(e) => setZoom(Number(e.target.value))}
-              className="h-1 w-full accent-orange-500"
+              className="h-1 w-full cursor-pointer accent-orange-500"
             />
           </div>
 
           <DialogFooter className="flex flex-row gap-3 border-0 bg-white">
             <Button
-              className={`${styles.actionButton} border-sosoeat-gray-300 border bg-white text-gray-700 hover:bg-gray-50`}
+              className={`${styles.actionButton} border-sosoeat-gray-300 hover:bg-sosoeat-gray-100 cursor-pointer border bg-white text-gray-700`}
               onClick={handleCropCancel}
             >
               취소
@@ -203,7 +203,7 @@ function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
             <Button
               disabled={isPending}
               onClick={handleCropConfirm}
-              className={`${styles.actionButton} bg-sosoeat-orange-600 text-white`}
+              className={`${styles.actionButton} bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 cursor-pointer text-white`}
             >
               {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : '적용하기'}
             </Button>
@@ -251,7 +251,7 @@ export function EditProfileModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="bg-sosoeat-gray-200 text-sosoeat-gray-700 ring-sosoeat-gray-300 hidden h-[34.45px] w-[104.04px] flex-row items-center justify-center gap-1 rounded-xl text-xs font-bold ring-1 md:flex">
+        <button className="bg-sosoeat-gray-200 text-sosoeat-gray-700 ring-sosoeat-gray-300 hidden h-[34.45px] w-[104.04px] cursor-pointer flex-row items-center justify-center gap-1 rounded-xl text-xs font-bold ring-1 md:flex">
           <PencilLine className="h-[12.99px] w-[12.99px]" />
           프로필 수정
         </button>
@@ -267,7 +267,7 @@ export function EditProfileModal({
               type="button"
               variant="ghost"
               size="icon-sm"
-              className="size-8 shrink-0 text-[#737373] hover:bg-transparent hover:text-[#737373]"
+              className="size-8 shrink-0 cursor-pointer text-[#737373] hover:bg-transparent hover:text-[#737373]"
               aria-label="닫기"
             >
               <XIcon className="size-6" strokeWidth={1.8} />
@@ -296,14 +296,14 @@ export function EditProfileModal({
         <DialogFooter className="flex flex-row gap-3 border-0 bg-white">
           <DialogClose asChild>
             <Button
-              className={`${styles.actionButton} border-sosoeat-gray-300 border bg-white text-gray-700 hover:bg-gray-50`}
+              className={`${styles.actionButton} border-sosoeat-gray-300 hover:bg-sosoeat-gray-100 cursor-pointer border bg-white text-gray-700`}
             >
               취소
             </Button>
           </DialogClose>
           <Button
             onClick={handleSubmit}
-            className={`${styles.actionButton} bg-sosoeat-orange-600 text-white`}
+            className={`${styles.actionButton} bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 cursor-pointer text-white`}
           >
             수정하기
           </Button>
