@@ -64,7 +64,7 @@ function InteractiveDetail(args: ComponentProps<typeof SosoTalkPostDetail>) {
       onShareClick={() => undefined}
       comments={comments}
       inputValue={value}
-      inputPlaceholder="댓글을 입력해 주세요"
+      inputPlaceholder="댓글을 입력해 주세요."
       onChangeInput={setValue}
       onSubmitComment={() => setValue('')}
       currentUserName="마루준"

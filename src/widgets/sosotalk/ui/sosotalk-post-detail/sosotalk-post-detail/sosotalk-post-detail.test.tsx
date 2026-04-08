@@ -42,7 +42,7 @@ describe('SosoTalkPostDetail', () => {
     render(
       <SosoTalkPostDetail
         title="마포 고깃집 같이 가실 분?"
-        contentHtml="<p><strong>삼겹살</strong> 드실 분 구해요</p>"
+        contentHtml="<p><strong>삼겹살</strong> 드실 분 구해요.</p>"
         authorName="김민수"
         createdAt="6시간 전"
         likeCount={24}
@@ -56,7 +56,7 @@ describe('SosoTalkPostDetail', () => {
           },
         ]}
         inputValue=""
-        inputPlaceholder="댓글을 입력해 주세요"
+        inputPlaceholder="댓글을 입력해 주세요."
         onChangeInput={() => undefined}
         onSubmitComment={() => undefined}
         currentUserName="마루준"
@@ -65,6 +65,6 @@ describe('SosoTalkPostDetail', () => {
 
     expect(screen.getByText('삼겹살', { selector: 'strong' })).toBeInTheDocument();
     expect(screen.getByText('박지수')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('댓글을 입력해 주세요')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('댓글을 입력해 주세요.')).toBeInTheDocument();
   });
 });

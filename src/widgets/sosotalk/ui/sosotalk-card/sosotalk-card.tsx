@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useQueryClient } from '@tanstack/react-query';
+import { Heart, MessageCircle } from 'lucide-react';
 
 import { getSosoTalkPostDetail } from '@/entities/post';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar/avatar';
@@ -64,12 +65,12 @@ export function SosoTalkCard({
             </div>
 
             <div className="flex items-center gap-[10px]">
-              <span className="flex items-center gap-[2px]">
-                <span>좋아요</span>
+              <span className="flex items-center gap-[4px]">
+                <Heart className="h-3.5 w-3.5 shrink-0" />
                 <span>{likeCount}</span>
               </span>
-              <span className="flex items-center gap-[2px]">
-                <span>댓글</span>
+              <span className="flex items-center gap-[4px]">
+                <MessageCircle className="h-3.5 w-3.5 shrink-0" />
                 <span>{commentCount}</span>
               </span>
             </div>

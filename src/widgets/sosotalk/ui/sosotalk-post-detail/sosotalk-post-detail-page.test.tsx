@@ -72,7 +72,7 @@ const mockPostDetailResponse = {
   id: 1,
   teamId: 'dallaem',
   title: '마포 고깃집 같이 가실 분?',
-  content: '<p>오늘 저녁 같이 식사하실 분 구해요</p>',
+  content: '<p>오늘 저녁 같이 식사하실 분 구해요.</p>',
   image: 'https://example.com/post-image.jpg',
   authorId: 10,
   viewCount: 20,
@@ -98,7 +98,7 @@ const mockPostDetailResponse = {
         name: '마루준',
         image: 'https://example.com/comment-author.jpg',
       },
-      content: '참여하고 싶어요!',
+      content: '참여하고 싶어요.',
       createdAt: new Date('2026-03-18T09:05:00.000Z'),
       updatedAt: new Date('2026-03-18T09:05:00.000Z'),
     },
@@ -229,13 +229,13 @@ describe('SosoTalkPostDetailPage', () => {
     render(<SosoTalkPostDetailPage postId="1" />);
 
     const textarea = screen.getByPlaceholderText('댓글을 입력해 주세요');
-    await user.type(textarea, '새 댓글입니다');
+    await user.type(textarea, '새 댓글입니다.');
     await user.click(screen.getByRole('button', { name: '댓글 전송' }));
 
     expect(mockCreateCommentMutateAsync).toHaveBeenCalledWith({
       postId: 1,
       payload: {
-        content: '새 댓글입니다',
+        content: '새 댓글입니다.',
       },
     });
     expect(textarea).toHaveValue('');
@@ -252,14 +252,14 @@ describe('SosoTalkPostDetailPage', () => {
 
     const [editTextarea] = screen.getAllByRole('textbox');
     await user.clear(editTextarea);
-    await user.type(editTextarea, '수정된 댓글입니다');
+    await user.type(editTextarea, '수정된 댓글입니다.');
     await user.click(screen.getByRole('button', { name: '댓글 수정' }));
 
     expect(mockUpdateCommentMutateAsync).toHaveBeenCalledWith({
       postId: 1,
       commentId: 101,
       payload: {
-        content: '수정된 댓글입니다',
+        content: '수정된 댓글입니다.',
       },
     });
     expect(screen.queryByRole('button', { name: '취소' })).not.toBeInTheDocument();
