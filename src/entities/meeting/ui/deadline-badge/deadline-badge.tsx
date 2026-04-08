@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
 
-import { useTimeFormatter } from '../../model/use-time-formater';
+import { useTimeFormatter } from '../../model/use-time-formatter';
 
 import { DEADLINE_BADGE_CLASS } from './deadline-badge.constants';
 import type { DeadlineBadgeProps } from './deadline-badge.types';
@@ -17,6 +17,7 @@ const variantBadgeClassName = {
 
 export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineBadgeProps) {
   const timeFormatterResult = useTimeFormatter(registrationEnd);
+  if (!timeFormatterResult) return null;
   const {
     contentText,
     isEnded,
@@ -32,29 +33,7 @@ export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineB
       variant="outline"
       className={cn(DEADLINE_BADGE_CLASS, variantBadgeClassName[variant], className)}
     >
-      {showCountdown ? (
-        <Image
-          src={variant === 'groupEat' ? '/icons/alarm-clock-eat.svg' : '/icons/alarm-clock-buy.svg'}
-          alt=""
-          width={20}
-          height={20}
-          className="size-5 shrink-0"
-        />
-      ) : (
-        <Image
-          src={
-            variant === 'groupEat'
-              ? '/icons/group-eat-calendar.svg'
-              : '/icons/group-buy-calendar.svg'
-          }
-          alt=""
-          width={20}
-          height={20}
-          className="size-5 shrink-0"
-        />
-      )}
-
-      <div className={'relative min-h-[1.25em] overflow-hidden'}>
+      <div className={'min-h-[1.25em] overflow-hidden'}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={isEnded ? 'ended' : contentText}
@@ -62,11 +41,34 @@ export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineB
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.25 }}
-            className="block"
+            className="block flex w-full gap-1"
           >
-            <div className="relative w-[223px] overflow-hidden">
-              {isEnded ? '마감 종료' : contentText}
-            </div>
+            {showCountdown ? (
+              <Image
+                src={
+                  variant === 'groupEat'
+                    ? '/icons/alarm-clock-eat.svg'
+                    : '/icons/alarm-clock-buy.svg'
+                }
+                alt=""
+                width={20}
+                height={20}
+                className="size-5 shrink-0"
+              />
+            ) : (
+              <Image
+                src={
+                  variant === 'groupEat'
+                    ? '/icons/group-eat-calendar.svg'
+                    : '/icons/group-buy-calendar.svg'
+                }
+                alt=""
+                width={20}
+                height={20}
+                className="size-5 shrink-0"
+              />
+            )}
+            <div className="w-full overflow-hidden">{isEnded ? '마감 종료' : contentText}</div>
           </motion.span>
         </AnimatePresence>
       </div>

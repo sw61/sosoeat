@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render, screen } from '@testing-library/react';
 
-import { useTimeFormatter } from '../../model/use-time-formater';
+import { useTimeFormatter } from '../../model/use-time-formatter';
 
 import { DeadlineBadge } from './deadline-badge';
 
@@ -28,7 +28,7 @@ jest.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-jest.mock('../../model/use-time-formater', () => ({
+jest.mock('../../model/use-time-formatter', () => ({
   useTimeFormatter: jest.fn(),
 }));
 

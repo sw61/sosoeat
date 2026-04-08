@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import type { MeetingWithHost } from '@/shared/types/generated-client';
 
-import { useTimeFormatter } from '../../model/use-time-formater';
+import { useTimeFormatter } from '../../model/use-time-formatter';
 
 import { MainPageCard } from './main-page-card';
 
@@ -68,7 +68,7 @@ function createMockMeeting(overrides: Partial<MeetingWithHost> = {}): MeetingWit
   };
 }
 
-jest.mock('@/entities/meeting/model/use-time-formater', () => ({
+jest.mock('../../model/use-time-formatter', () => ({
   useTimeFormatter: jest.fn(),
 }));
 

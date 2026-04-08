@@ -33,15 +33,12 @@ export const useTimeFormatter = (registrationEnd: Date | null) => {
   };
 
   const expectedDateText = () => {
-    const registrationEndDate =
-      typeof registrationEnd === 'string' ? new Date(registrationEnd) : registrationEnd;
+    if (!endDate) return '';
 
-    if (!registrationEndDate) return '';
-
-    const month: number = registrationEndDate.getMonth() + 1;
-    const date: number = registrationEndDate.getDate();
-    const hours: string = registrationEndDate.getHours().toString().padStart(2, '0');
-    const minutes: string = registrationEndDate.getMinutes().toString().padStart(2, '0');
+    const month: number = endDate.getMonth() + 1;
+    const date: number = endDate.getDate();
+    const hours: string = endDate.getHours().toString().padStart(2, '0');
+    const minutes: string = endDate.getMinutes().toString().padStart(2, '0');
     return `${month}월 ${date}일 ${hours}:${minutes} 모집 마감!`;
   };
 
