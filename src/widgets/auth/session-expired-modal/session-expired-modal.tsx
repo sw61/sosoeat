@@ -21,7 +21,7 @@ export const SessionExpiredModal = () => {
   const handleCancel = async () => {
     logout();
     setSessionExpired(false);
-    router.push('/');
+    router.push('/home');
   };
 
   return (

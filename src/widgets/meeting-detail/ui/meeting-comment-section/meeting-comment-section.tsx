@@ -6,7 +6,7 @@ import { MessageSquareText } from 'lucide-react';
 
 import { useAuthStore } from '@/entities/auth';
 import type { Comment } from '@/entities/comment';
-import { CommentInput, useComments, useCreateComment } from '@/entities/comment';
+import { CommentInput, useCommentCount, useComments, useCreateComment } from '@/entities/comment';
 import { cn } from '@/shared/lib/utils';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 import { ScrollArea } from '@/shared/ui/scroll-area';
@@ -23,32 +23,24 @@ function toMeetingCommentTree(raw: Comment[]): MeetingComment[] {
   return list;
 }
 
-function countNonDeleted(nodes: MeetingComment[]): number {
-  let n = 0;
-  const walk = (c: MeetingComment) => {
-    if (!c.isDeleted) n += 1;
-    c.replies?.forEach(walk);
-  };
-  nodes.forEach(walk);
-  return n;
-}
-
 export function MeetingCommentSection({
   meetingId,
   initialComments,
+  initialCommentCount,
   commentSync,
   className,
 }: MeetingCommentSectionProps) {
   const [commentText, setCommentText] = useState('');
   const { isAuthenticated, user } = useAuthStore();
   const { data: comments } = useComments(meetingId, initialComments as Comment[], commentSync);
+  const { data: countData } = useCommentCount(meetingId, initialCommentCount);
   const { mutate: createComment, isPending: isCreateCommentPending } = useCreateComment(meetingId, {
     nickname: user?.name ?? '',
     profileUrl: user?.image ?? null,
   });
 
   const tree = toMeetingCommentTree(comments ?? []);
-  const totalCommentCount = countNonDeleted(tree);
+  const totalCommentCount = countData?.count ?? 0;
   const visibleRoots = tree.filter(
     (comment) => !comment.isDeleted || comment.replies?.some((r) => !r.isDeleted)
   );

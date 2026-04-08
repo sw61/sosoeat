@@ -13,6 +13,7 @@ export function SosoTalkPostDetailActions({
   likeCount = 0,
   commentCount = 0,
   isLiked = false,
+  isLikePending = false,
   onLikeClick,
   onCommentClick,
   onShareClick,
@@ -28,7 +29,7 @@ export function SosoTalkPostDetailActions({
       {hasMeta ? (
         <div className="text-sosoeat-gray-500 flex items-center gap-2 text-sm font-medium md:text-base">
           {createdDateLabel ? <span>{createdDateLabel}</span> : null}
-          {createdDateLabel && typeof viewCount === 'number' ? <span aria-hidden>·</span> : null}
+          {createdDateLabel && typeof viewCount === 'number' ? <span aria-hidden>|</span> : null}
           {typeof viewCount === 'number' ? (
             <span className="inline-flex items-center gap-1.5">
               <Eye className="h-4 w-4 shrink-0" />
@@ -41,16 +42,18 @@ export function SosoTalkPostDetailActions({
       <div className="flex items-center gap-4 md:gap-6">
         <motion.button
           type="button"
+          disabled={isLikePending}
+          aria-busy={isLikePending}
           aria-pressed={isLiked}
           aria-label={`좋아요 ${likeCount}개`}
           onClick={onLikeClick}
           whileHover={{ y: -2, scale: 1.04 }}
-          whileTap={{ scale: 0.92 }}
+          whileTap={{ scale: isLikePending ? 1 : 0.92 }}
           className={`inline-flex items-center gap-2 transition-colors duration-150 ${
             isLiked
               ? 'text-sosoeat-orange-600'
               : 'text-sosoeat-gray-900 hover:text-sosoeat-orange-600'
-          }`}
+          } ${isLikePending ? 'cursor-not-allowed opacity-55' : ''}`}
         >
           <motion.span
             animate={

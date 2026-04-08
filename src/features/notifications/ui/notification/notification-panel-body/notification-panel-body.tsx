@@ -22,7 +22,7 @@ export const NotificationPanelBody = ({
 
   const showBadge = unreadCount != null && unreadCount > 0;
   const { markAllAsRead } = useNotificationReadActions();
-  const [root, setsRoot] = useState<HTMLDivElement | null>(null);
+  const [root, setRoot] = useState<HTMLDivElement | null>(null);
 
   const { ref, inView } = useInView({
     threshold: 0.5,
@@ -66,7 +66,7 @@ export const NotificationPanelBody = ({
       </div>
 
       <div className="mt-6 flex min-h-0 flex-1 flex-col">
-        <div className={listScrollClassName} ref={setsRoot}>
+        <div className={listScrollClassName} ref={setRoot}>
           {list.map((notification: Notification) => (
             <NotificationTab key={notification.id} {...notification} />
           ))}

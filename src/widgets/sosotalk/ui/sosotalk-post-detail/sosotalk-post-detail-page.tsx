@@ -51,8 +51,12 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
 
   const commentCount = data?.count?.comments ?? data?.comments?.length ?? 0;
   const comments = data?.comments ?? [];
-  const isLiked = optimisticIsLiked ?? data?.isLiked ?? false;
-  const displayedLikeCount = (data?.likeCount ?? 0) + (isLiked ? 1 : 0) - (data?.isLiked ? 1 : 0);
+  const serverIsLiked = data?.isLiked ?? false;
+  const isLikePending = createLikeMutation.isPending || deleteLikeMutation.isPending;
+  const shouldUseOptimisticLike =
+    optimisticIsLiked != null && (isLikePending || serverIsLiked !== optimisticIsLiked);
+  const isLiked = shouldUseOptimisticLike ? optimisticIsLiked : serverIsLiked;
+  const displayedLikeCount = (data?.likeCount ?? 0) + (isLiked ? 1 : 0) - (serverIsLiked ? 1 : 0);
   const isEditingCommentMissing =
     editingCommentId != null && !comments.some((comment) => comment.id === editingCommentId);
 
@@ -64,7 +68,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
   };
 
   const handleLikeClick = async () => {
-    if (!isValidPostId || createLikeMutation.isPending || deleteLikeMutation.isPending || !data) {
+    if (!isValidPostId || isLikePending || !data) {
       return;
     }
 
@@ -78,8 +82,6 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
         await deleteLikeMutation.mutateAsync(numericPostId);
       }
     } catch {
-      setOptimisticIsLiked(data.isLiked);
-    } finally {
       setOptimisticIsLiked(null);
     }
   };
@@ -137,7 +139,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
       });
       handleCancelEditComment();
     } catch {
-      // 수정 실패 시 입력값을 유지해서 다시 시도할 수 있도록 둡니다.
+      // 수정 입력값을 유지해서 다시 시도할 수 있도록 둡니다.
     }
   };
 
@@ -259,6 +261,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           viewCount={data.viewCount}
           isAuthor={currentUser?.id === data.author.id}
           isLiked={isLiked}
+          isLikePending={isLikePending}
           onEditClick={handleEditClick}
           onDeleteClick={() => void handleDeleteClick()}
           onLikeClick={() => void handleLikeClick()}
@@ -278,7 +281,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
             })
           )}
           inputValue={commentInput}
-          inputPlaceholder="댓글을 입력해 주세요."
+          inputPlaceholder="댓글을 입력해 주세요"
           onChangeInput={setCommentInput}
           onSubmitComment={() => void handleSubmitComment()}
           currentUserName={currentUser?.name}
@@ -295,9 +298,7 @@ function SosoTalkPostDetailPageLayout({ children }: { children: ReactNode }) {
   return (
     <div className="bg-sosoeat-gray-100 flex min-h-screen flex-col">
       <main className="flex-1 px-4 py-8 md:px-6 md:py-10">
-        <div className="mx-auto w-full max-w-[1280px]">
-          <div className="mx-auto w-full max-w-[860px] xl:max-w-[960px]">{children}</div>
-        </div>
+        <div className="mx-auto w-full max-w-[1280px]">{children}</div>
       </main>
     </div>
   );

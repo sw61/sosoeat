@@ -4,7 +4,10 @@ import { useEffect, useRef } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { useAuthStore, useSocialLoginMutation } from '@/entities/auth';
+import { favoriteKeys, favoritesApi } from '@/entities/favorites';
 import { getSafeCallbackUrl, SOCIAL_CALLBACK_URL_KEY } from '@/shared/utils/url';
 
 export const useSocialLogin = () => {
@@ -15,6 +18,7 @@ export const useSocialLogin = () => {
   const isProcessed = useRef(false);
 
   const mutation = useSocialLoginMutation();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (isProcessed.current) return;
@@ -33,11 +37,15 @@ export const useSocialLogin = () => {
     mutation.mutate(
       { accessToken, refreshToken },
       {
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
           const storedCallbackUrl = sessionStorage.getItem(SOCIAL_CALLBACK_URL_KEY);
           sessionStorage.removeItem(SOCIAL_CALLBACK_URL_KEY);
+          await queryClient.prefetchQuery({
+            queryKey: favoriteKeys.count(),
+            queryFn: () => favoritesApi.getCount(),
+          });
           login(data.user);
-          router.replace(getSafeCallbackUrl(storedCallbackUrl));
+          router.replace(getSafeCallbackUrl(storedCallbackUrl, '/home'));
         },
         onError: () => {
           router.replace('/login?error=session_error');
