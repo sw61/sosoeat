@@ -33,6 +33,10 @@ describe('HeartButton', () => {
     });
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('renders the empty heart icon by default', () => {
     render(<HeartButton meetingId={1} isFavorited={false} />);
 

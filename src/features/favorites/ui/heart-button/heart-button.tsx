@@ -23,7 +23,7 @@ const sizeIcon = {
   sm: 24,
 } as const;
 
-/** 바깥 원(ring) — 버튼 크기 */
+/** 바깥 ring 버튼 크기 */
 const ringSizeClass = {
   lg: 'size-[60px]',
   md: 'size-[50px]',
@@ -51,7 +51,7 @@ export function HeartButton({
         disabled={isPending}
         aria-busy={isPending}
         onClick={() => {
-          if (meetingId === undefined || isPending) {
+          if (meetingId === undefined) {
             if (process.env.NODE_ENV !== 'production') {
               console.error(
                 'HeartButton: meetingId is required for toggleFavorite but was undefined.'
@@ -59,6 +59,7 @@ export function HeartButton({
             }
             return;
           }
+
           toggleFavorite(meetingId);
         }}
       >
@@ -72,7 +73,7 @@ export function HeartButton({
             scale: isPending || isFavoritedState ? 1 : [0.1, 1.15, 0.6, 1],
             transition: { duration: 1, ease: 'easeOut' },
           }}
-          className={cn(HEART_BUTTON_ICON_WRAPPER_CLASS, 'transition-opacity')}
+          className={HEART_BUTTON_ICON_WRAPPER_CLASS}
         >
           <Image src={src} alt="좋아요" width={iconPx} height={iconPx} />
         </motion.div>

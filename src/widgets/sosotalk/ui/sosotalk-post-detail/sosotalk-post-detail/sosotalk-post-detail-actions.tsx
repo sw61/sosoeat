@@ -13,6 +13,7 @@ export function SosoTalkPostDetailActions({
   likeCount = 0,
   commentCount = 0,
   isLiked = false,
+  isLikePending = false,
   onLikeClick,
   onCommentClick,
   onShareClick,
@@ -41,16 +42,18 @@ export function SosoTalkPostDetailActions({
       <div className="flex items-center gap-4 md:gap-6">
         <motion.button
           type="button"
+          disabled={isLikePending}
+          aria-busy={isLikePending}
           aria-pressed={isLiked}
           aria-label={`좋아요 ${likeCount}개`}
           onClick={onLikeClick}
           whileHover={{ y: -2, scale: 1.04 }}
-          whileTap={{ scale: 0.92 }}
+          whileTap={{ scale: isLikePending ? 1 : 0.92 }}
           className={`inline-flex items-center gap-2 transition-colors duration-150 ${
             isLiked
               ? 'text-sosoeat-orange-600'
               : 'text-sosoeat-gray-900 hover:text-sosoeat-orange-600'
-          }`}
+          } ${isLikePending ? 'cursor-not-allowed opacity-55' : ''}`}
         >
           <motion.span
             animate={
