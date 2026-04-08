@@ -72,7 +72,7 @@ export const WithDropdownSubConfirm: Story = {
             onChange: setCommitted,
           }}
         />
-        <pre className="text-muted-foreground max-w-md text-xs wrap-break-word">
+        <pre className="text-muted-foreground max-w-md text-xs break-words">
           {JSON.stringify(committed, null, 2)}
         </pre>
       </div>
@@ -101,7 +101,7 @@ export const WithRegionCascade: Story = {
             onChange: setCommitted,
           }}
         />
-        <pre className="text-muted-foreground max-w-md text-xs wrap-break-word">
+        <pre className="text-muted-foreground max-w-md text-xs break-words">
           {JSON.stringify(committed, null, 2)}
         </pre>
       </div>
@@ -137,13 +137,13 @@ export const WithExternalDraft: Story = {
         <div className="text-muted-foreground grid gap-2 text-xs">
           <div>
             <span className="text-foreground font-medium">draft (외부 state)</span>
-            <pre className="bg-muted/50 mt-1 rounded-md p-2 wrap-break-word">
+            <pre className="bg-muted/50 mt-1 rounded-md p-2 break-words">
               {JSON.stringify(draft, null, 2)}
             </pre>
           </div>
           <div>
             <span className="text-foreground font-medium">committed (확인 후)</span>
-            <pre className="bg-muted/50 mt-1 rounded-md p-2 wrap-break-word">
+            <pre className="bg-muted/50 mt-1 rounded-md p-2 break-words">
               {JSON.stringify(committed, null, 2)}
             </pre>
           </div>

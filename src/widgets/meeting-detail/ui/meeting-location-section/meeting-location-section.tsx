@@ -1,4 +1,5 @@
 import { KakaoMapLoader } from './_components/kakao-map-loader';
+import { MeetingLocationAddressRow } from './_components/meeting-location-address-row';
 
 function hasValidMapCoords(latitude: number | null, longitude: number | null): boolean {
   if (latitude == null || longitude == null) return false;
@@ -27,20 +28,20 @@ export function MeetingLocationSection({
 
   const showMap = mapCoords != null && kakaoMapAppKey !== '';
 
+  if (!showMap) {
+    return null;
+  }
+
   return (
     <section>
       <h2 className="text-sosoeat-gray-900 mb-3 text-2xl font-semibold">모임 장소</h2>
       <div className="border-sosoeat-gray-200 mt-5 overflow-hidden rounded-[16px] border">
-        {showMap ? (
-          <KakaoMapLoader
-            appKey={kakaoMapAppKey}
-            latitude={mapCoords.latitude}
-            longitude={mapCoords.longitude}
-          />
-        ) : null}
-        <div className="px-5 py-4">
-          <p className="text-sosoeat-gray-900 text-sm font-medium">{address}</p>
-        </div>
+        <KakaoMapLoader
+          appKey={kakaoMapAppKey}
+          latitude={mapCoords.latitude}
+          longitude={mapCoords.longitude}
+        />
+        <MeetingLocationAddressRow address={address} />
       </div>
     </section>
   );

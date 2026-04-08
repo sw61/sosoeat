@@ -1,3 +1,5 @@
+import { useInView } from 'react-intersection-observer';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -53,6 +55,9 @@ const mockNotifications: NotificationList = {
   nextCursor: '',
   hasMore: false,
 };
+jest.mock('react-intersection-observer', () => ({
+  useInView: jest.fn(),
+}));
 
 const MAX_WIDTH_QUERY = '(max-width: 767px)';
 
@@ -105,6 +110,7 @@ describe('Notification', () => {
 
   it('트리거 클릭 시 알림 내역과 목록이 보인다 (넓은 화면: Popover)', async () => {
     const user = userEvent.setup();
+    (useInView as jest.Mock).mockReturnValue({ ref: jest.fn(), inView: false });
     renderWithClient(<Nt />);
     await user.click(await screen.findByRole('button', { name: '알림 열기' })); // ← findBy
 

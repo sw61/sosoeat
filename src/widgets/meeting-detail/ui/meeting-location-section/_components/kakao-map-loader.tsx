@@ -7,7 +7,9 @@ import Script from 'next/script';
 
 const KakaoMap = dynamic(() => import('@/shared/ui/kakao-map/kakao-map').then((m) => m.KakaoMap), {
   ssr: false,
-  loading: () => <div className="bg-sosoeat-gray-100 h-[240px] w-full md:h-[320px] lg:h-[352px]" />,
+  loading: () => (
+    <div className="bg-sosoeat-gray-100 h-[240px] w-full cursor-grab outline-none select-none **:select-none md:h-[320px] lg:h-[352px]" />
+  ),
 });
 
 interface KakaoMapLoaderProps {
@@ -29,7 +31,7 @@ export function KakaoMapLoader({ appKey, latitude, longitude }: KakaoMapLoaderPr
       {sdkReady ? (
         <KakaoMap latitude={latitude} longitude={longitude} />
       ) : (
-        <div className="bg-sosoeat-gray-100 h-[240px] w-full md:h-[320px] lg:h-[352px]" />
+        <div className="bg-sosoeat-gray-100 h-[240px] w-full cursor-grab outline-none select-none **:select-none md:h-[320px] lg:h-[352px]" />
       )}
     </>
   );

@@ -71,7 +71,7 @@ const mockDeleteLikeMutateAsync = jest.fn();
 const mockPostDetailResponse = {
   id: 1,
   teamId: 'dallaem',
-  title: '마포 고깃집 같이 가실 분',
+  title: '마포 고깃집 같이 가실 분?',
   content: '<p>오늘 저녁 같이 식사하실 분 구해요.</p>',
   image: 'https://example.com/post-image.jpg',
   authorId: 10,
@@ -98,7 +98,7 @@ const mockPostDetailResponse = {
         name: '마루준',
         image: 'https://example.com/comment-author.jpg',
       },
-      content: '참여하고 싶어요!',
+      content: '참여하고 싶어요.',
       createdAt: new Date('2026-03-18T09:05:00.000Z'),
       updatedAt: new Date('2026-03-18T09:05:00.000Z'),
     },
@@ -252,7 +252,7 @@ describe('SosoTalkPostDetailPage', () => {
 
     render(<SosoTalkPostDetailPage postId="1" />);
 
-    const textarea = screen.getByPlaceholderText('댓글을 입력해 주세요.');
+    const textarea = screen.getByPlaceholderText('댓글을 입력해 주세요');
     await user.type(textarea, '새 댓글입니다.');
     await user.click(screen.getByRole('button', { name: '댓글 전송' }));
 

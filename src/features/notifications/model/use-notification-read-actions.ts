@@ -1,26 +1,18 @@
-import { notificationApi, notificationRepository } from '../api';
+import { useMarkAllAsRead, useMarkAsRead } from './notification.queries';
 
 export const useNotificationReadActions = (notificationId?: number) => {
-  const markAsRead = async () => {
-    try {
-      if (notificationId == null) {
-        return false;
-      }
-
-      return await notificationRepository.readNotification({ notificationId });
-    } catch (error) {
-      console.error('Failed to mark notification as read:', error);
+  const { mutate: mutate } = useMarkAsRead();
+  const { mutate: mutateAll } = useMarkAllAsRead();
+  const markAsRead = () => {
+    if (notificationId == null) {
       return false;
     }
+    mutate(notificationId);
+    return;
   };
 
-  const markAllAsRead = async () => {
-    try {
-      return await notificationApi.markAllAsRead();
-    } catch (error) {
-      console.error('Failed to mark all notifications as read:', error);
-      return false;
-    }
+  const markAllAsRead = () => {
+    mutateAll();
   };
 
   return {
