@@ -42,6 +42,11 @@ const mockNotificationList: Notification[] = [
 notificationApi.getNotificationList = async () => mockNotificationList;
 notificationApi.getUnreadCount = async () =>
   mockNotificationList.filter((notification) => !notification.isRead).length;
+notificationApi.getNotificationOption = async () => ({
+  data: [...mockNotificationList],
+  hasMore: false,
+  nextCursor: '',
+});
 
 const meta: Meta<typeof NotificationComponent> = {
   title: 'Components/common/notification/Notification',
