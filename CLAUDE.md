@@ -114,9 +114,37 @@ FSD의 핵심은 **하위 레이어는 상위 레이어를 참조할 수 없다*
   - 내부 전용 훅/유틸은 index.ts에 노출하지 않음
 - 자동 생성 코드 (`types/generated-client/`)는 예외
 
-## 컨벤션
+## 📋 컨벤션 및 개발 가이드
 
-👉 **[프로젝트 컨벤션 가이드](./docs/CONVENTION.md)**
+모든 개발 규칙은 **[프로젝트 컨벤션 가이드](./docs/CONVENTION.md)** 에 정의되어 있습니다.
+
+### 핵심 요점 (Quick Reference)
+
+#### 명명 규칙
+
+- **폴더/파일**: `kebab-case` (예: `user-profile/`, `use-auth.ts`)
+- **컴포넌트**: `PascalCase` (예: `Avatar`, `LoginButton`)
+- **훅/함수**: `camelCase` (예: `useAuth`, `formatDate`)
+- **타입/인터페이스**: `PascalCase` + `interface` 선호 (예: `UserProps`)
+
+#### FSD 레이어 의존성
+
+- 상위 레이어는 모든 하위 레이어 참조 가능
+- 하위 레이어는 상위 레이어 참조 불가
+- **같은 레이어 간 참조 금지** (예: `features/auth` → `features/favorites` 불가)
+
+#### Public API 규칙 (index.ts)
+
+- 슬라이스는 **index.ts를 통해서만 외부 노출**
+- 서버 전용 함수(`*.server.ts`)는 **index.server.ts에만 export**
+- 내부 경로 직접 참조 금지
+
+#### TanStack Query
+
+- `useQuery` → `entities/*/model/[domain].queries.ts`
+- `useMutation` → `features/*/model/[domain].mutations.ts`
+- Query Key는 **factory 함수**로 정의 (raw 배열 금지)
+- `useQueryClient()`는 훅 내부에서만 호출
 
 ## Git
 
