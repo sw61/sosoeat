@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { CountingBadge } from './counting-badge';
 
 const meta = {
-  title: './',
+  title: 'shared/ui/CountingBadge',
   component: CountingBadge,
   parameters: {
     layout: 'centered',

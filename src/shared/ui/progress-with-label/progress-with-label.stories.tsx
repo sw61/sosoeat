@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ProgressWithLabel } from './progress-with-label';
 
 const meta = {
-  title: './',
+  title: 'shared/ui/ProgressWithLabel',
   component: ProgressWithLabel,
 } satisfies Meta<typeof ProgressWithLabel>;
 

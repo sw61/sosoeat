@@ -49,12 +49,12 @@ export default function SearchPage() {
         <MeetingSearchBanner />
         <div className="flex w-full flex-col gap-4 px-4 md:px-0">
           <MeetingFilterBar
-            sortBy={sortBy}
-            sortOrder={sortOrder}
+            sortBy={sortBy ?? 'dateTime'}
+            sortOrder={sortOrder ?? 'desc'}
             regionCommitted={regionCommitted}
             dateStart={dateStart}
             dateEnd={dateEnd}
-            typeFilter={typeFilter}
+            typeFilter={typeFilter ?? 'all'}
             onTypeFilterChange={handleTypeFilterChange}
             onDateChange={handleDateChange}
             onRegionChange={handleRegionChange}

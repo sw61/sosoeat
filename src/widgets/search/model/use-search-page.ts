@@ -72,12 +72,16 @@ const useSearchPage = () => {
 
   const options: Omit<TeamIdMeetingsGetRequest, 'teamId'> = {
     size: MEETINGS_PAGE_SIZE,
-    type: typeFilter === 'all' ? undefined : typeFilter,
+    type:
+      typeFilter === 'all' || typeFilter == null
+        ? undefined
+        : (typeFilter as 'groupEat' | 'groupBuy'),
     region,
     dateStart: dateStart ?? undefined,
     dateEnd: dateEndExclusiveIso == null ? undefined : new Date(dateEndExclusiveIso),
-    sortBy: sortBy,
-    sortOrder: sortOrder,
+    sortBy:
+      sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
+    sortOrder: sortOrder === null ? undefined : (sortOrder as 'asc' | 'desc'),
   };
   const {
     data: meetingList,
