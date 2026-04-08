@@ -43,12 +43,14 @@ export const AlertModal = ({
       <DialogContent showCloseButton aria-modal="true" className={ALERT_MODAL_CONTENT_CLASS}>
         <DialogTitle className="text-center text-lg font-semibold md:text-2xl">{title}</DialogTitle>
 
-        {/* 설명이 있을 경우에만 렌더링 */}
-        {description && (
-          <DialogDescription className="text-sosoeat-gray-700 mt-0.5 text-center text-sm break-keep whitespace-pre-wrap md:mt-2 md:text-lg">
-            {description}
-          </DialogDescription>
-        )}
+        <DialogDescription
+          className={cn(
+            'text-sosoeat-gray-700 mt-0.5 text-center text-sm break-keep whitespace-pre-wrap md:mt-2 md:text-lg',
+            !description && 'sr-only'
+          )}
+        >
+          {description ?? title}
+        </DialogDescription>
 
         <DialogFooter className="mt-8 flex-row gap-3 border-none bg-transparent p-0 md:mt-14 md:gap-4">
           <Button

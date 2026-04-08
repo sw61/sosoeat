@@ -15,4 +15,12 @@ export const favoritesApi = {
     }
     return response.ok;
   },
+  async getCount(): Promise<number> {
+    const response = await fetchClient.get('/favorites/count');
+    if (!response.ok) {
+      throw new Error('Failed to fetch favorites count');
+    }
+    const data = await response.json();
+    return data.count || 0;
+  },
 };

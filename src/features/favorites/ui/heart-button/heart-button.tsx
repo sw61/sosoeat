@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 
-import { useFavoriteMeeting } from '../../model/use-favorites';
+import { useFavoriteMeeting } from '../../model/use-toggle-favorite';
 
 import {
   HEART_BUTTON_CLASS,
@@ -36,7 +36,11 @@ export function HeartButton({
   isFavorited = false,
   meetingId,
 }: HeartButtonProps) {
-  const { isFavorited: isFavoritedState, toggleFavorite } = useFavoriteMeeting(isFavorited);
+  const {
+    isFavorited: isFavoritedState,
+    toggleFavorite,
+    isPending,
+  } = useFavoriteMeeting(isFavorited, meetingId ?? -1);
 
   const src = isFavoritedState ? '/icons/main-page-heart.svg' : '/icons/main-page-not-heart.svg';
   const iconPx = sizeIcon[size];
@@ -46,6 +50,7 @@ export function HeartButton({
       <Button
         variant="ghost"
         size="icon"
+        disabled={isPending}
         className={cn(HEART_BUTTON_CLASS, ringSizeClass[size])}
         onClick={() => {
           if (meetingId === undefined) {
@@ -56,7 +61,7 @@ export function HeartButton({
             }
             return;
           }
-          toggleFavorite(meetingId);
+          toggleFavorite();
         }}
       >
         <motion.div

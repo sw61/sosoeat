@@ -7,11 +7,13 @@
 ## 📑 목차
 
 1. [📂 프로젝트 및 컴포넌트 구조](#1-프로젝트-및-컴포넌트-구조)
-2. [🏷️ 명명 규칙 (Naming)](#2-명명-규칙-naming)
-3. [🎨 스토리북 경로 컨벤션](#3-스토리북-경로-컨벤션)
-4. [🚀 코드 스타일 및 패턴](#4-코드-스타일-및-패턴)
-5. [🛠️ 리팩토링 원칙](#5-리팩토링-원칙)
-6. [📝 협업 및 테스트 규칙](#6-협업-및-테스트-규칙)
+2. [🗂️ FSD 규칙](#2-fsd-규칙)
+3. [🏷️ 명명 규칙 (Naming)](#3-명명-규칙-naming)
+4. [🎨 스토리북 경로 컨벤션](#4-스토리북-경로-컨벤션)
+5. [🚀 코드 스타일 및 패턴](#5-코드-스타일-및-패턴)
+6. [🔄 TanStack Query 컨벤션](#6-tanstack-query-컨벤션)
+7. [🛠️ 리팩토링 원칙](#7-리팩토링-원칙)
+8. [📝 협업 및 테스트 규칙](#8-협업-및-테스트-규칙)
 
 ---
 
@@ -43,7 +45,71 @@
 
 ---
 
-## 2. 🏷️ 명명 규칙 (Naming)
+## 2. 🗂️ FSD 규칙
+
+본 프로젝트는 **Feature-Sliced Design(FSD)** 방법론을 따릅니다.
+
+### 레이어 의존성 방향
+
+하위 레이어는 상위 레이어를 참조할 수 없습니다.
+
+```
+app > widgets > features > entities > shared
+```
+
+| 레이어     | 참조 가능 대상                   |
+| :--------- | :------------------------------- |
+| `app`      | 모든 레이어                      |
+| `widgets`  | `features`, `entities`, `shared` |
+| `features` | `entities`, `shared`             |
+| `entities` | `shared`                         |
+| `shared`   | 없음                             |
+
+> [!CAUTION]
+> 같은 레이어 간 참조는 금지됩니다. 예를 들어 `features/auth`에서 `features/favorites`를 import하거나, `entities/meeting`에서 `entities/user`를 import해서는 안 됩니다.
+
+### Public API 규칙 (index.ts)
+
+각 슬라이스는 **`index.ts`를 통해서만 외부에 노출**됩니다. 슬라이스 내부 경로를 직접 참조하는 것은 금지됩니다.
+
+```ts
+// ✅ 올바른 import — 슬라이스 루트(public API)를 통해 접근
+import { useFavoritesCount } from '@/features/favorites';
+
+// ❌ 잘못된 import — 내부 경로 직접 참조 금지
+import { useFavoritesCount } from '@/features/favorites/model/use-favorites-count';
+```
+
+> [!NOTE]
+> 이 규칙은 ESLint(`@conarti/eslint-plugin-feature-sliced`의 `feature-sliced/public-api`)로 자동 강제됩니다. 위반 시 lint 오류가 발생합니다.
+
+> [!CAUTION]
+> **서버 전용 함수(`*.server.ts`)는 `index.ts`에 export하지 않습니다.** `next/headers`, `apiServer` 등 서버 전용 모듈을 포함하는 파일이 `index.ts`를 통해 노출되면, `'use client'` 컴포넌트가 해당 슬라이스를 import할 때 서버 모듈이 클라이언트 번들로 끌려 들어가 빌드 에러가 발생합니다.
+> 서버 전용 심볼은 슬라이스 루트에 **`index.server.ts`** 를 별도로 만들어 export합니다.
+
+```ts
+// ✅ index.server.ts — 서버 전용 Public API
+export { getFavoritesCount } from './api/favorites.server';
+
+// ✅ 서버 컴포넌트에서 사용
+import { getFavoritesCount } from '@/features/favorites/index.server';
+```
+
+### 슬라이스 내부 세그먼트 구조
+
+```
+features/favorites/
+├── api/              # API 호출 함수 (fetchClient, apiServer 사용)
+├── model/            # 비즈니스 로직, 커스텀 훅, 스키마, 스토어
+├── ui/               # UI 컴포넌트
+├── lib/              # (선택) 도메인 내부 전용 유틸 함수
+├── index.ts          # Public API (클라이언트) — 외부에 노출할 심볼만 명시적으로 export
+└── index.server.ts   # Public API (서버 전용) — *.server.ts 심볼만 export
+```
+
+---
+
+## 3. 🏷️ 명명 규칙 (Naming)
 
 | 대상                  | 규칙         | 예시                              |
 | :-------------------- | :----------- | :-------------------------------- |
@@ -59,7 +125,7 @@
 
 ---
 
-## 3. 🎨 스토리북 경로 컨벤션
+## 4. 🎨 스토리북 경로 컨벤션
 
 Storybook 내에서의 컴포넌트 계층 구조는 다음과 같은 명명 규칙을 따릅니다. `.stories.tsx` 파일의 `title` 속성을 통해 다음과 같이 설정합니다.
 
@@ -78,13 +144,13 @@ const meta = {
 
 ---
 
-## 4. 🚀 코드 스타일 및 패턴
+## 5. 🚀 코드 스타일 및 패턴
 
 ### ✅ 기본 문법 및 패턴
 
 - **함수 정의**: 특별한 제약이 없다면 **화살표 함수(`=>`)** 사용을 지향합니다.
 - **상태 관리(Zustand)**: 불필요한 리렌더링 방지를 위해 **Selector 방식**으로 상태를 구독하는 것을 권장합니다.
-- **데이터 처리(TanStack Query)**: `services/`에서 API 호출부와 Query 훅을 통합 관리하는 것을 권장합니다.
+- **데이터 처리(TanStack Query)**: 파일 유형과 작성 패턴은 [TanStack Query 컨벤션](#6-tanstack-query-컨벤션)을 따릅니다.
 - **임포트(Import)**: 가독성을 위해 `React 관련 -> 외부 라이브러리 -> @/* 내부 경로 -> 상대 경로` 순으로 정렬하는 것을 권장합니다.
 
 ### 🛠️ 라이브러리 및 유틸 활용
@@ -96,7 +162,29 @@ const meta = {
 
 ---
 
-## 5. 🛠️ 리팩토링 원칙
+## 6. 🔄 TanStack Query 컨벤션
+
+> 상세 내용은 👉 **[TanStack Query 컨벤션 가이드](./tanstack-query-convention.md)**
+
+`model/` 폴더 내 TanStack Query 관련 파일은 4가지 유형으로 구분합니다.
+
+| #   | 파일명                     | 역할                                   | 생성 기준                             |
+| --- | -------------------------- | -------------------------------------- | ------------------------------------- |
+| 1   | `[domain].queries.ts`      | Query Key + `useQuery` + `useMutation` | 기본, 항상 생성                       |
+| 2   | `[domain].options.ts`      | SSR prefetch용 순수 옵션 객체          | SSR prefetch가 필요할 때만            |
+| 3   | `use-[domain].ts`          | 여러 훅 조합 래퍼                      | 같은 도메인 훅 3개 이상 조합 시       |
+| 4   | `use-[action]-[domain].ts` | 단일 액션 + UI 상태(`useState`) 결합   | mutation과 UI 상태가 강하게 결합될 때 |
+
+**핵심 규칙:**
+
+- `useQuery`와 `useMutation`은 조회/변경으로 파일을 나누지 않습니다. 분리 기준은 **도메인**입니다.
+- Query Key는 반드시 **factory 함수**(`xxxKeys`)로 정의합니다. raw 배열 직접 사용 금지.
+- `useQueryClient()`는 훅 내부에서 사용합니다. `QueryClient`를 외부에서 주입받는 패턴 금지.
+- `useMemo`, `useCallback` 사용 금지 (React Compiler가 처리).
+
+---
+
+## 7. 🛠️ 리팩토링 원칙
 
 유지보수 효율을 높이기 위해 다음 원칙을 수시로 적용합니다.
 
@@ -107,7 +195,7 @@ const meta = {
 
 ---
 
-## 6. 📝 협업 및 테스트 규칙
+## 8. 📝 협업 및 테스트 규칙
 
 ### 🌿 브랜치 및 커밋 전략
 
