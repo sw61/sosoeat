@@ -34,7 +34,10 @@ export default async function RootLayout({
       <body className="min-w-[375px] overscroll-none">
         <NuqsAdapter>
           <Providers initialUser={initialUser}>
-            <NavigationBar initialUser={initialUser} />
+            <NavigationBar
+              initialUser={initialUser}
+              initialFavoritesCount={initialFavoritesCount}
+            />
             <main>{children}</main>
             <Footer />
           </Providers>
