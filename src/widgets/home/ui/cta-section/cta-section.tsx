@@ -4,23 +4,11 @@ import Link from 'next/link';
 
 import { Star, Users } from 'lucide-react';
 
-import { useAuthStore } from '@/entities/auth';
-import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
-import { useModal } from '@/shared/lib/use-modal';
+import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
 import { Button } from '@/shared/ui/button';
 
 export function CtaSection() {
-  const { isOpen, open, close } = useModal();
-  const { mutateAsync: createMeeting } = useCreateMeeting();
-  const { isAuthenticated, setLoginRequired } = useAuthStore();
-
-  const handleOpenCreateModal = () => {
-    if (!isAuthenticated) {
-      setLoginRequired(true);
-      return;
-    }
-    open();
-  };
+  const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
 
   return (
     <section className="bg-sosoeat-orange-600 relative z-10 mt-16 flex w-full flex-col items-center justify-center gap-8 px-6 py-16 text-white md:mt-[100px] md:py-24">
@@ -33,7 +21,7 @@ export function CtaSection() {
 
       <div className="flex w-full max-w-[400px] flex-row gap-2 px-4 sm:w-auto sm:max-w-none sm:px-0">
         <Button
-          onClick={handleOpenCreateModal}
+          onClick={handleOpen}
           className="text-sosoeat-orange-600 h-[56px] flex-1 cursor-pointer rounded-2xl bg-white text-base font-bold hover:bg-white/90 sm:w-[180px]"
         >
           <Star className="mr-1 h-4 w-4" />
