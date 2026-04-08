@@ -27,7 +27,7 @@ const BANNERS: Banner[] = [
     imageUrl:
       'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021008378-d25ae489-1950-4c33-9e91-d962b4e63c14.jpg',
     alt: '신선한 오늘의 추천 메뉴',
-    href: '/meetings',
+    href: '/search',
   },
   {
     imageUrl:
@@ -39,7 +39,7 @@ const BANNERS: Banner[] = [
     imageUrl:
       'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021087340-27221ae9-edba-448c-97ee-775ae7e75b75.jpg',
     alt: '저녁 모임을 위한 정갈한 요리',
-    href: '/meetings',
+    href: '/search',
   },
 ];
 
@@ -84,16 +84,14 @@ export function MainBanner() {
           {BANNERS.map((banner, index) => (
             <CarouselItem
               key={`${banner.imageUrl}-${index}`}
-              className="relative h-[450px] w-full min-w-0 shrink-0 grow-0 basis-full p-0"
+              className="w-full min-w-0 shrink-0 grow-0 basis-full p-0"
             >
               {banner.href ? (
-                <Link href={banner.href} className="relative block size-full">
+                <Link href={banner.href} className="block">
                   <BannerImage banner={banner} index={index} />
                 </Link>
               ) : (
-                <div className="relative size-full">
-                  <BannerImage banner={banner} index={index} />
-                </div>
+                <BannerImage banner={banner} index={index} />
               )}
             </CarouselItem>
           ))}
@@ -154,7 +152,7 @@ export function MainBanner() {
 
 function BannerImage({ banner, index }: { banner: Banner; index: number }) {
   return (
-    <>
+    <div className="relative h-[450px]">
       <Image
         src={banner.imageUrl}
         alt={banner.alt}
@@ -162,10 +160,9 @@ function BannerImage({ banner, index }: { banner: Banner; index: number }) {
         priority={index === 0}
         className="object-cover"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-        quality={index === 0 ? 85 : 75}
       />
       {/* 가독성을 위한 오버레이 */}
       <div className="absolute inset-0 bg-black/55" />
-    </>
+    </div>
   );
 }

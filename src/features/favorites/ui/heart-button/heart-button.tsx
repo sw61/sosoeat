@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 
-import { useFavoriteMeeting } from '../../model/use-favorites';
+import { useFavoriteMeeting } from '../../model/favorites.mutations';
 
 import {
   HEART_BUTTON_CLASS,
@@ -36,7 +36,10 @@ export function HeartButton({
   isFavorited = false,
   meetingId,
 }: HeartButtonProps) {
-  const { isFavorited: isFavoritedState, toggleFavorite } = useFavoriteMeeting(isFavorited);
+  const { isFavorited: isFavoritedState, toggleFavorite } = useFavoriteMeeting(
+    isFavorited,
+    meetingId
+  );
 
   const src = isFavoritedState ? '/icons/main-page-heart.svg' : '/icons/main-page-not-heart.svg';
   const iconPx = sizeIcon[size];
@@ -47,25 +50,15 @@ export function HeartButton({
         variant="ghost"
         size="icon"
         className={cn(HEART_BUTTON_CLASS, ringSizeClass[size])}
-        onClick={() => {
-          if (meetingId === undefined) {
-            if (process.env.NODE_ENV !== 'production') {
-              console.error(
-                'HeartButton: meetingId is required for toggleFavorite but was undefined.'
-              );
-            }
-            return;
-          }
-          toggleFavorite(meetingId);
-        }}
+        onClick={toggleFavorite}
       >
         <motion.div
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-          whileTap={{
-            scale: isFavoritedState ? 1 : [0.1, 1.15, 0.6, 1],
-            transition: { duration: 1, ease: 'easeOut' },
-          }}
+          key={String(isFavoritedState)}
+          animate={
+            isFavoritedState ? { scale: [0.7, 1.25, 0.9, 1.05, 1] } : { scale: [1.1, 0.85, 1] }
+          }
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          whileTap={{ scale: 0.8, transition: { duration: 0.1 } }}
           className={HEART_BUTTON_ICON_WRAPPER_CLASS}
         >
           <Image src={src} alt="좋아요" width={iconPx} height={iconPx} />

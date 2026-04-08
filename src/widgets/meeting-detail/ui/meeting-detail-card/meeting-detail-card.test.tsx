@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -5,6 +6,11 @@ import type { Meeting } from '@/entities/meeting';
 
 import { MeetingDetailCard } from './meeting-detail-card';
 import type { MeetingStatus } from './meeting-detail-card.types';
+
+const renderWithQuery = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
 
 const mockMeeting: Meeting = {
   id: 1,
@@ -23,7 +29,7 @@ const mockMeeting: Meeting = {
   hostId: 1,
   teamId: 'test-team',
   createdBy: 1,
-  updatedAt: '2024/03/01T00:00:00.000Z',
+  updatedAt: '2024-03-01T00:00:00.000Z',
   host: { id: 1, name: '김소소' },
   isFavorited: false,
 };
@@ -39,7 +45,7 @@ const GUEST_PROPS = { ...BASE_PROPS, role: 'guest' as const };
 
 describe('MeetingDetailCard', () => {
   it('모임 제목, 날짜, 지역명, 상세주소가 렌더링된다', () => {
-    render(<MeetingDetailCard {...DEFAULT_PROPS} />);
+    renderWithQuery(<MeetingDetailCard {...DEFAULT_PROPS} />);
 
     expect(screen.getByText('강남 맛집 탐방 함께해요!')).toBeInTheDocument();
     // KST 변환: 2024-03-15T09:30Z → 18:30 KST
@@ -49,13 +55,13 @@ describe('MeetingDetailCard', () => {
   });
 
   it('호스트 이름이 항상 노출된다', () => {
-    render(<MeetingDetailCard {...DEFAULT_PROPS} />);
+    renderWithQuery(<MeetingDetailCard {...DEFAULT_PROPS} />);
 
     expect(screen.getByText('김소소')).toBeInTheDocument();
   });
 
   it('confirmedAt이 있으면 개설완료 뱃지가 노출된다', () => {
-    render(
+    renderWithQuery(
       <MeetingDetailCard
         {...DEFAULT_PROPS}
         meeting={{ ...mockMeeting, confirmedAt: '2024-03-10T00:00:00.000Z' }}
@@ -67,26 +73,26 @@ describe('MeetingDetailCard', () => {
 
   describe('더보기(...) 버튼', () => {
     it('host 역할이면 더보기 버튼이 노출된다', () => {
-      render(<MeetingDetailCard {...HOST_PROPS} />);
+      renderWithQuery(<MeetingDetailCard {...HOST_PROPS} />);
 
       expect(screen.getAllByRole('button', { name: '더보기' }).length).toBeGreaterThanOrEqual(1);
     });
 
     it('guest 역할이면 더보기 버튼이 노출되지 않는다', () => {
-      render(<MeetingDetailCard {...GUEST_PROPS} />);
+      renderWithQuery(<MeetingDetailCard {...GUEST_PROPS} />);
 
       expect(screen.queryAllByRole('button', { name: '더보기' })).toHaveLength(0);
     });
 
     it('participant 역할이면 더보기 버튼이 노출되지 않는다', () => {
-      render(<MeetingDetailCard {...DEFAULT_PROPS} />);
+      renderWithQuery(<MeetingDetailCard {...DEFAULT_PROPS} />);
 
       expect(screen.queryAllByRole('button', { name: '더보기' })).toHaveLength(0);
     });
 
     it('더보기 버튼 클릭 시 수정하기/삭제하기 메뉴가 열린다', async () => {
       const user = userEvent.setup();
-      render(<MeetingDetailCard {...HOST_PROPS} />);
+      renderWithQuery(<MeetingDetailCard {...HOST_PROPS} />);
 
       await user.click(screen.getAllByRole('button', { name: '더보기' })[0]);
 
@@ -97,7 +103,7 @@ describe('MeetingDetailCard', () => {
     it('수정하기 클릭 시 onEdit이 호출된다', async () => {
       const onEdit = jest.fn();
       const user = userEvent.setup();
-      render(<MeetingDetailCard {...HOST_PROPS} onEdit={onEdit} />);
+      renderWithQuery(<MeetingDetailCard {...HOST_PROPS} onEdit={onEdit} />);
 
       await user.click(screen.getAllByRole('button', { name: '더보기' })[0]);
       await user.click(screen.getByText('수정하기'));
@@ -108,7 +114,7 @@ describe('MeetingDetailCard', () => {
     it('삭제하기 클릭 시 onDelete가 호출된다', async () => {
       const onDelete = jest.fn();
       const user = userEvent.setup();
-      render(<MeetingDetailCard {...HOST_PROPS} onDelete={onDelete} />);
+      renderWithQuery(<MeetingDetailCard {...HOST_PROPS} onDelete={onDelete} />);
 
       await user.click(screen.getAllByRole('button', { name: '더보기' })[0]);
       await user.click(screen.getByText('삭제하기'));
@@ -119,25 +125,25 @@ describe('MeetingDetailCard', () => {
 
   describe('액션 버튼', () => {
     it('status가 closed이면 "모집 마감" 버튼이 disabled 상태로 렌더링된다', () => {
-      render(<MeetingDetailCard {...DEFAULT_PROPS} status="closed" />);
+      renderWithQuery(<MeetingDetailCard {...DEFAULT_PROPS} status="closed" />);
 
       expect(screen.getAllByRole('button', { name: '모집 마감' })[0]).toBeDisabled();
     });
 
     it('guest이면 "참여하기" 버튼이 렌더링된다', () => {
-      render(<MeetingDetailCard {...GUEST_PROPS} />);
+      renderWithQuery(<MeetingDetailCard {...GUEST_PROPS} />);
 
       expect(screen.getAllByRole('button', { name: '참여하기' }).length).toBeGreaterThanOrEqual(1);
     });
 
     it('participant이고 미참여이면 "참여하기" 버튼이 렌더링된다', () => {
-      render(<MeetingDetailCard {...DEFAULT_PROPS} isJoined={false} />);
+      renderWithQuery(<MeetingDetailCard {...DEFAULT_PROPS} isJoined={false} />);
 
       expect(screen.getAllByRole('button', { name: '참여하기' }).length).toBeGreaterThanOrEqual(1);
     });
 
     it('participant이고 참여 완료이면 "참여 취소하기" 버튼이 렌더링된다', () => {
-      render(<MeetingDetailCard {...DEFAULT_PROPS} isJoined={true} />);
+      renderWithQuery(<MeetingDetailCard {...DEFAULT_PROPS} isJoined={true} />);
 
       expect(
         screen.getAllByRole('button', { name: '참여 취소하기' }).length
@@ -145,7 +151,7 @@ describe('MeetingDetailCard', () => {
     });
 
     it('host이고 open 상태이면 "모임 확정하기" 버튼이 렌더링된다', () => {
-      render(<MeetingDetailCard {...HOST_PROPS} status="open" />);
+      renderWithQuery(<MeetingDetailCard {...HOST_PROPS} status="open" />);
 
       expect(
         screen.getAllByRole('button', { name: '모임 확정하기' }).length
@@ -153,7 +159,7 @@ describe('MeetingDetailCard', () => {
     });
 
     it('host이고 confirmed 상태이면 "공유하기" 버튼이 렌더링된다', () => {
-      render(<MeetingDetailCard {...HOST_PROPS} status="confirmed" />);
+      renderWithQuery(<MeetingDetailCard {...HOST_PROPS} status="confirmed" />);
 
       expect(screen.getAllByRole('button', { name: '공유하기' }).length).toBeGreaterThanOrEqual(1);
     });
@@ -161,7 +167,7 @@ describe('MeetingDetailCard', () => {
     it('"참여하기" 클릭 시 onJoin이 호출된다', async () => {
       const onJoin = jest.fn();
       const user = userEvent.setup();
-      render(<MeetingDetailCard {...DEFAULT_PROPS} isJoined={false} onJoin={onJoin} />);
+      renderWithQuery(<MeetingDetailCard {...DEFAULT_PROPS} isJoined={false} onJoin={onJoin} />);
 
       await user.click(screen.getAllByRole('button', { name: '참여하기' })[0]);
 
@@ -171,7 +177,7 @@ describe('MeetingDetailCard', () => {
     it('"참여 취소하기" 클릭 시 onCancel이 호출된다', async () => {
       const onCancel = jest.fn();
       const user = userEvent.setup();
-      render(<MeetingDetailCard {...DEFAULT_PROPS} isJoined={true} onCancel={onCancel} />);
+      renderWithQuery(<MeetingDetailCard {...DEFAULT_PROPS} isJoined={true} onCancel={onCancel} />);
 
       await user.click(screen.getAllByRole('button', { name: '참여 취소하기' })[0]);
 
@@ -181,7 +187,7 @@ describe('MeetingDetailCard', () => {
     it('"모임 확정하기" 클릭 시 onConfirm이 호출된다', async () => {
       const onConfirm = jest.fn();
       const user = userEvent.setup();
-      render(<MeetingDetailCard {...HOST_PROPS} status="open" onConfirm={onConfirm} />);
+      renderWithQuery(<MeetingDetailCard {...HOST_PROPS} status="open" onConfirm={onConfirm} />);
 
       await user.click(screen.getAllByRole('button', { name: '모임 확정하기' })[0]);
 
@@ -191,7 +197,7 @@ describe('MeetingDetailCard', () => {
     it('"공유하기" 클릭 시 onShare가 호출된다', async () => {
       const onShare = jest.fn();
       const user = userEvent.setup();
-      render(<MeetingDetailCard {...HOST_PROPS} status="confirmed" onShare={onShare} />);
+      renderWithQuery(<MeetingDetailCard {...HOST_PROPS} status="confirmed" onShare={onShare} />);
 
       await user.click(screen.getAllByRole('button', { name: '공유하기' })[0]);
 

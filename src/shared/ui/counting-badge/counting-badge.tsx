@@ -11,7 +11,7 @@ const badgeVariants = cva(
     variants: {
       size: {
         small: 'h-4 w-4 px-0 text-[10px] leading-[10px] font-bold',
-        large: 'h-4 text-xs font-semibold',
+        large: 'h-5 text-xs font-semibold',
       },
       overMax: {
         true: 'w-auto',
@@ -20,7 +20,7 @@ const badgeVariants = cva(
     },
     compoundVariants: [
       { size: 'small', overMax: false, className: '' },
-      { size: 'large', overMax: false, className: 'w-10' },
+      { size: 'large', overMax: false, className: 'min-w-5' },
       { size: 'small', overMax: true, className: 'min-w-4 w-auto px-[3px]' },
       { size: 'large', overMax: true, className: 'min-w-4 px-[3px]' },
     ],

@@ -29,7 +29,7 @@ describe('AlertModal', () => {
 
     it('지정된 title이 올바르게 표시된다', () => {
       render(<AlertModal {...DEFAULT_PROPS} title="커스텀 타이틀" />);
-      expect(screen.getByText('커스텀 타이틀')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: '커스텀 타이틀' })).toBeInTheDocument();
     });
 
     it('description prop을 전달하면 설명 문구가 렌더링된다', () => {
