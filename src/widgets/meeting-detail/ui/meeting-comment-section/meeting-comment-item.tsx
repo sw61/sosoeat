@@ -88,11 +88,13 @@ export function MeetingCommentItem({
 
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
+      if (nextIsLiked === prevServerLike.isLiked) return;
+
       likeComment(
         { commentId: id, isLiked: localIsLiked },
         {
           onError: () => {
-            setLocalIsLiked(localIsLiked);
+            setLocalIsLiked(isLiked);
             setLocalLikeCount(likeCount);
           },
         }
