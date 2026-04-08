@@ -51,7 +51,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
             <div className="flex flex-col gap-1">
               <div className="flex items-center py-1">
                 <CardTitle className={cn('px-2 text-base font-bold')}>{localName}</CardTitle>
-                <button onClick={open}>
+                <button type="button" aria-label="프로필 수정" onClick={open}>
                   <Pencil className="text-sosoeat-gray-600 size-3 shrink-0" />
                 </button>
               </div>
