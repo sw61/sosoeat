@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
+import { withNuqsTestingAdapter } from 'nuqs/adapters/testing';
 
 import { useAuthStore } from '@/entities/auth';
 import type { Host, MeetingWithHost } from '@/shared/types/generated-client';
@@ -9,15 +10,34 @@ import { useSearchPage } from '../..';
 
 import SearchPage from './search-page';
 
-const renderWithClient = (ui: React.ReactElement) => {
-  const queryClient = new QueryClient({
+const createQueryClient = () =>
+  new QueryClient({
     defaultOptions: {
       queries: { retry: false },
       mutations: { retry: false },
     },
   });
 
-  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+const renderWithClient = (ui: React.ReactElement) => {
+  const queryClient = createQueryClient();
+  const NuqsWrapper = withNuqsTestingAdapter({ searchParams: {} });
+  const Wrapper = ({ children }: { children: React.ReactNode }) => (
+    <NuqsWrapper>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </NuqsWrapper>
+  );
+  return render(ui, { wrapper: Wrapper });
+};
+
+const renderHookWithClient = <T,>(hook: () => T) => {
+  const queryClient = createQueryClient();
+  const NuqsWrapper = withNuqsTestingAdapter({ searchParams: {} });
+  const Wrapper = ({ children }: { children: React.ReactNode }) => (
+    <NuqsWrapper>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </NuqsWrapper>
+  );
+  return renderHook(hook, { wrapper: Wrapper });
 };
 
 export const mockHost: Host = {
@@ -118,7 +138,7 @@ describe('SearchPage', () => {
       isError: false,
     });
     // Test implementation will go here
-    const { result } = renderHook(() => useSearchPage());
+    const { result } = renderHookWithClient(() => useSearchPage());
     expect(result.current.isLoading).toBe(true);
   });
 
@@ -129,7 +149,7 @@ describe('SearchPage', () => {
       isError: true,
     });
     // Test implementation will go here
-    const { result } = renderHook(() => useSearchPage());
+    const { result } = renderHookWithClient(() => useSearchPage());
     expect(result.current.isError).toBe(true);
   });
 
@@ -151,7 +171,7 @@ describe('SearchPage', () => {
       isError: false,
     });
     // Test implementation will go here
-    const { result } = renderHook(() => useSearchPage());
+    const { result } = renderHookWithClient(() => useSearchPage());
     expect(result.current.meetingData).toEqual(mockMeetingList.data);
   });
 
