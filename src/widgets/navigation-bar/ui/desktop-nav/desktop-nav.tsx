@@ -42,7 +42,7 @@ export function DesktopNav({
           <Link key={item.href} href={href} className={className}>
             {item.label}
             {'showBadge' in item && item.showBadge && !!user && (
-              <span className="bg-sosoeat-orange-600 flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white">
+              <span className="bg-sosoeat-orange-600 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white">
                 {favoritesCount}
               </span>
             )}
