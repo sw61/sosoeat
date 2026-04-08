@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { Star, Users } from 'lucide-react';
 
@@ -10,7 +10,6 @@ import { useModal } from '@/shared/lib/use-modal';
 import { Button } from '@/shared/ui/button';
 
 export function CtaSection() {
-  const router = useRouter();
   const { isOpen, open, close } = useModal();
   const { mutateAsync: createMeeting } = useCreateMeeting();
   const { isAuthenticated, setLoginRequired } = useAuthStore();
@@ -21,10 +20,6 @@ export function CtaSection() {
       return;
     }
     open();
-  };
-
-  const handleGoToSearch = () => {
-    router.push('/search');
   };
 
   return (
@@ -45,12 +40,14 @@ export function CtaSection() {
           모임 만들기
         </Button>
         <Button
-          onClick={handleGoToSearch}
+          asChild
           variant="outline"
           className="h-[56px] flex-1 cursor-pointer rounded-2xl border-[1.2px] border-white/40 bg-white/15 text-base font-bold text-white hover:bg-white/20 hover:text-white sm:w-[180px]"
         >
-          <Users className="mr-1 h-4 w-4" />
-          모임 둘러보기
+          <Link href="/search">
+            <Users className="mr-1 h-4 w-4" />
+            모임 둘러보기
+          </Link>
         </Button>
       </div>
 
