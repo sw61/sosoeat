@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useRef, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -51,21 +51,14 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
 
   const commentCount = data?.count?.comments ?? data?.comments?.length ?? 0;
   const comments = data?.comments ?? [];
-  const isLiked = optimisticIsLiked ?? data?.isLiked ?? false;
-  const displayedLikeCount = (data?.likeCount ?? 0) + (isLiked ? 1 : 0) - (data?.isLiked ? 1 : 0);
+  const serverIsLiked = data?.isLiked ?? false;
   const isLikePending = createLikeMutation.isPending || deleteLikeMutation.isPending;
+  const shouldUseOptimisticLike =
+    optimisticIsLiked != null && (isLikePending || serverIsLiked !== optimisticIsLiked);
+  const isLiked = shouldUseOptimisticLike ? optimisticIsLiked : serverIsLiked;
+  const displayedLikeCount = (data?.likeCount ?? 0) + (isLiked ? 1 : 0) - (serverIsLiked ? 1 : 0);
   const isEditingCommentMissing =
     editingCommentId != null && !comments.some((comment) => comment.id === editingCommentId);
-
-  useEffect(() => {
-    if (optimisticIsLiked == null || isLikePending || !data) {
-      return;
-    }
-
-    if (data.isLiked === optimisticIsLiked) {
-      setOptimisticIsLiked(null);
-    }
-  }, [data, isLikePending, optimisticIsLiked]);
 
   const handleCommentClick = () => {
     commentSectionRef.current?.scrollIntoView({
