@@ -71,7 +71,7 @@ const mockDeleteLikeMutateAsync = jest.fn();
 const mockPostDetailResponse = {
   id: 1,
   teamId: 'dallaem',
-  title: '마포 고깃집 같이 가실 분',
+  title: '마포 고깃집 같이 가실 분?',
   content: '<p>오늘 저녁 같이 식사하실 분 구해요.</p>',
   image: 'https://example.com/post-image.jpg',
   authorId: 10,
@@ -98,7 +98,7 @@ const mockPostDetailResponse = {
         name: '마루준',
         image: 'https://example.com/comment-author.jpg',
       },
-      content: '참여하고 싶어요!',
+      content: '참여하고 싶어요.',
       createdAt: new Date('2026-03-18T09:05:00.000Z'),
       updatedAt: new Date('2026-03-18T09:05:00.000Z'),
     },
@@ -106,8 +106,20 @@ const mockPostDetailResponse = {
   isLiked: false,
 };
 
+let currentPostDetailResponse = mockPostDetailResponse;
+
 describe('SosoTalkPostDetailPage', () => {
   beforeEach(() => {
+    currentPostDetailResponse = {
+      ...mockPostDetailResponse,
+      author: { ...mockPostDetailResponse.author },
+      count: { ...mockPostDetailResponse.count },
+      comments: mockPostDetailResponse.comments.map((comment) => ({
+        ...comment,
+        author: { ...comment.author },
+      })),
+    };
+
     window.history.pushState({}, '', '/sosotalk/1');
 
     Object.defineProperty(navigator, 'share', {
@@ -148,11 +160,11 @@ describe('SosoTalkPostDetailPage', () => {
         })
     );
 
-    useGetSosoTalkPostDetail.mockReturnValue({
-      data: mockPostDetailResponse,
+    useGetSosoTalkPostDetail.mockImplementation(() => ({
+      data: currentPostDetailResponse,
       isLoading: false,
       isError: false,
-    });
+    }));
 
     useCreateSosoTalkComment.mockReturnValue({
       mutateAsync: mockCreateCommentMutateAsync,
@@ -208,7 +220,7 @@ describe('SosoTalkPostDetailPage', () => {
       })
     );
 
-    render(<SosoTalkPostDetailPage postId="1" />);
+    const { rerender } = render(<SosoTalkPostDetailPage postId="1" />);
 
     await user.click(screen.getByRole('button', { name: '좋아요 24개' }));
 
@@ -218,7 +230,19 @@ describe('SosoTalkPostDetailPage', () => {
     resolveLike?.();
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '좋아요 24개' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '좋아요 25개' })).toBeInTheDocument();
+    });
+
+    currentPostDetailResponse = {
+      ...currentPostDetailResponse,
+      likeCount: 25,
+      isLiked: true,
+    };
+
+    rerender(<SosoTalkPostDetailPage postId="1" />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '좋아요 25개' })).toBeInTheDocument();
     });
   });
 
@@ -228,7 +252,7 @@ describe('SosoTalkPostDetailPage', () => {
 
     render(<SosoTalkPostDetailPage postId="1" />);
 
-    const textarea = screen.getByPlaceholderText('댓글을 입력해 주세요.');
+    const textarea = screen.getByPlaceholderText('댓글을 입력해 주세요');
     await user.type(textarea, '새 댓글입니다.');
     await user.click(screen.getByRole('button', { name: '댓글 전송' }));
 

@@ -43,18 +43,24 @@ const useSearchPage = () => {
   );
   const [typeFilter, setTypeFilter] = useQueryState<'all' | 'groupEat' | 'groupBuy'>(
     'typeFilter',
-    parseAsStringLiteral(['all', 'groupEat', 'groupBuy'] as const).withOptions({ history: 'push' })
+    parseAsStringLiteral(['all', 'groupEat', 'groupBuy'] as const)
+      .withDefault('all')
+      .withOptions({ history: 'push' })
   );
   const [sortOrder, setSortOrder] = useQueryState<'asc' | 'desc'>(
     'sortOrder',
-    parseAsStringLiteral(['asc', 'desc'] as const).withOptions({ history: 'push' })
+    parseAsStringLiteral(['asc', 'desc'] as const)
+      .withDefault('asc')
+      .withOptions({ history: 'push' })
   );
 
   const [sortBy, setSortBy] = useQueryState<MeetingFilterBarProps['sortBy']>(
     'sortBy',
-    parseAsStringLiteral(['participantCount', 'dateTime', 'registrationEnd'] as const).withOptions({
-      history: 'push',
-    })
+    parseAsStringLiteral(['participantCount', 'dateTime', 'registrationEnd'] as const)
+      .withDefault('dateTime')
+      .withOptions({
+        history: 'push',
+      })
   );
 
   const region =
@@ -71,7 +77,7 @@ const useSearchPage = () => {
         ? undefined
         : (typeFilter as 'groupEat' | 'groupBuy'),
     region,
-    dateStart: dateStart == null ? undefined : dateStart,
+    dateStart: dateStart ?? undefined,
     dateEnd: dateEndExclusiveIso == null ? undefined : new Date(dateEndExclusiveIso),
     sortBy:
       sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),

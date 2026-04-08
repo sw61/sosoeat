@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 // eslint-disable-next-line feature-sliced/absolute-relative
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
+import { getFavoritesCount } from '@/entities/favorites/index.server';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
 import { Toaster } from '@/shared/ui/sonner';
 import { Footer } from '@/widgets/footer';
@@ -26,6 +27,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const initialUser = await CookieStorage.getUser();
+  const initialFavoritesCount = initialUser ? await getFavoritesCount() : 0;
 
   return (
     <html lang="ko">

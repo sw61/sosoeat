@@ -6,7 +6,11 @@ import {
   MeetingLocationSection,
   MeetingRecommendedSection,
 } from '@/widgets/meeting-detail';
-import { fetchMeetingCommentsForPage, getMeetingById } from '@/widgets/meeting-detail/index.server';
+import {
+  fetchMeetingCommentCountForPage,
+  fetchMeetingCommentsForPage,
+  getMeetingById,
+} from '@/widgets/meeting-detail/index.server';
 
 // ─── Page ────────────────────────────────────────────────────
 
@@ -20,9 +24,10 @@ export default async function MeetingDetailPage({ params }: Props) {
 
   const meetingData = await getMeetingById(meetingId);
 
-  const [meetingList, initialComments] = await Promise.all([
+  const [meetingList, initialComments, initialCommentCount] = await Promise.all([
     getMeetings({ region: meetingData.region, size: 4 }).catch(() => ({ data: [] })),
     fetchMeetingCommentsForPage(meetingId, meetingData),
+    fetchMeetingCommentCountForPage(meetingId),
   ]);
 
   return (
@@ -49,6 +54,7 @@ export default async function MeetingDetailPage({ params }: Props) {
       <MeetingCommentSection
         meetingId={meetingId}
         initialComments={initialComments}
+        initialCommentCount={initialCommentCount}
         commentSync={{
           id: meetingData.id,
           hostId: meetingData.hostId,

@@ -30,3 +30,10 @@ export async function fetchMeetingCommentsForPage(
 
   return (await response.json()) as MeetingComment[];
 }
+
+export async function fetchMeetingCommentCountForPage(meetingId: number): Promise<number> {
+  const response = await commentServer.get(`/meetings/${meetingId}/comments/count`);
+  if (!response.ok) return 0;
+  const data = (await response.json()) as { count: number };
+  return data.count;
+}

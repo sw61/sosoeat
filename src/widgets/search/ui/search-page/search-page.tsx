@@ -45,7 +45,7 @@ export default function SearchPage() {
 
   return (
     <div className="bg-sosoeat-gray-100 min-h-[calc(100vh-156px)] pb-8">
-      <div className="mx-auto flex max-w-[1140px] flex-col items-center justify-center gap-4 md:px-4">
+      <div className="mx-auto flex max-w-[1140px] flex-col items-center justify-center gap-4 md:px-4 md:pt-4">
         <MeetingSearchBanner />
         <div className="flex w-full flex-col gap-4 px-4 md:px-0">
           <MeetingFilterBar
