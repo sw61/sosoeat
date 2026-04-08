@@ -3,6 +3,8 @@
 import { Copy } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { writeClipboardText } from '@/shared/lib/write-clipboard-text';
+
 interface MeetingLocationAddressRowProps {
   address: string;
 }
@@ -10,7 +12,7 @@ interface MeetingLocationAddressRowProps {
 export function MeetingLocationAddressRow({ address }: MeetingLocationAddressRowProps) {
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(address);
+      await writeClipboardText(address);
       toast.success('주소가 복사되었습니다.');
     } catch {
       toast.error('복사에 실패했습니다.');
@@ -19,7 +21,7 @@ export function MeetingLocationAddressRow({ address }: MeetingLocationAddressRow
 
   return (
     <div className="flex flex-wrap items-center gap-[12px] bg-white px-5 py-4">
-      <p className="text-sosoeat-gray-900 max-w-[calc(100%-5.5rem)] min-w-0 shrink text-sm font-bold wrap-break-word">
+      <p className="text-sosoeat-gray-900 max-w-[calc(100%-5.5rem)] min-w-0 shrink text-sm font-bold break-words">
         {address}
       </p>
       <button
