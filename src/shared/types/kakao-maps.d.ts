@@ -29,7 +29,7 @@ declare namespace kakao.maps {
   }
 
   class CustomOverlay {
-    constructor(options: { position: LatLng; content: string; yAnchor?: number });
+    constructor(options: { position: LatLng; content: string; yAnchor?: number; xAnchor?: number });
     setMap(map: Map | null): void;
   }
 
