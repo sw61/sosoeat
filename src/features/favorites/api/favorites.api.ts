@@ -1,19 +1,17 @@
 import { fetchClient } from '@/shared/api/fetch-client';
 
 export const favoritesApi = {
-  async favoritePost(meetingId: number): Promise<boolean> {
+  async favoritePost(meetingId: number): Promise<void> {
     const response = await fetchClient.post(`/meetings/${meetingId}/favorites`);
     if (!response.ok) {
       throw new Error('Failed to favorite the meeting');
     }
-    return response.ok;
   },
-  async favoriteDelete(meetingId: number): Promise<boolean> {
+  async favoriteDelete(meetingId: number): Promise<void> {
     const response = await fetchClient.delete(`/meetings/${meetingId}/favorites`);
     if (!response.ok) {
       throw new Error('Failed to unfavorite the meeting');
     }
-    return response.ok;
   },
   async getCount(): Promise<number> {
     const response = await fetchClient.get('/favorites/count');
@@ -21,6 +19,6 @@ export const favoritesApi = {
       throw new Error('Failed to fetch favorites count');
     }
     const data = await response.json();
-    return data.count || 0;
+    return data.count ?? 0;
   },
 };

@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 
-import { useFavoriteMeeting } from '../../model/use-toggle-favorite';
+import { useFavoriteMeeting } from '../../model/favorites.queries';
 
 import {
   HEART_BUTTON_CLASS,

@@ -10,13 +10,14 @@ export const favoriteKeys = {
   status: (meetingId: number) => ['favorites', 'status', meetingId] as const,
 } as const;
 
-export const useFavoritesCount = (initialCount: number) => {
+export const useFavoritesCount = (initialCount: number, options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: favoriteKeys.count(),
     queryFn: () => favoritesApi.getCount(),
     initialData: initialCount,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    ...options,
   });
 };
 
@@ -39,4 +40,23 @@ export const useToggleFavorite = () => {
       queryClient.invalidateQueries({ queryKey: favoriteKeys.count() });
     },
   });
+};
+
+export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: number) => {
+  const { data: isFavorited = initialIsFavorited } = useQuery({
+    queryKey: favoriteKeys.status(meetingId),
+    queryFn: () => initialIsFavorited,
+    initialData: initialIsFavorited,
+    staleTime: Infinity,
+    enabled: meetingId !== -1,
+  });
+
+  const { mutate: toggleMutate, isPending } = useToggleFavorite();
+
+  const toggleFavorite = () => {
+    if (isPending) return;
+    toggleMutate({ meetingId, isFavorited });
+  };
+
+  return { isFavorited, toggleFavorite, isPending };
 };

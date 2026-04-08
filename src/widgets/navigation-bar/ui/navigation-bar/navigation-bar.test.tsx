@@ -14,6 +14,10 @@ jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
 }));
 
+jest.mock('@/features/notifications', () => ({
+  Notification: () => <button aria-label="알림 열기">알림</button>,
+}));
+
 const mockPush = jest.fn();
 const mockUsePathname = usePathname as jest.Mock;
 const mockUseRouter = useRouter as jest.Mock;
@@ -83,7 +87,7 @@ describe('NavigationBar', () => {
   describe('로그인 상태', () => {
     it('알림 버튼이 표시된다', () => {
       renderWithClient(<NavigationBar initialUser={MOCK_USER} initialFavoritesCount={0} />);
-      expect(screen.getAllByRole('button', { name: '알림' }).length).toBeGreaterThan(0);
+      expect(screen.getAllByRole('button', { name: '알림 열기' }).length).toBeGreaterThan(0);
     });
 
     it('프로필 메뉴가 표시된다', () => {
