@@ -9,7 +9,8 @@
       "Bash(gh repo:*)",
       "Bash(cmd /c \"gh --version\")",
       "Bash(npx jest:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(ov add-resource:*)"
     ]
   }
 }
