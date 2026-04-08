@@ -8,7 +8,7 @@ import { notificationApi } from '../api/notifications.api';
 // Query Key Factory
 export const notificationKeys = {
   list: (options?: Omit<TeamIdNotificationsGetRequest, 'teamId'>) =>
-    ['notifications', 'list', options] as const,
+    options ? (['notifications', 'list', options] as const) : (['notifications', 'list'] as const),
   unreadCount: () => ['notifications', 'unread-count'] as const,
 } as const;
 

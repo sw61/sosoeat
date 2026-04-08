@@ -1,6 +1,6 @@
 import type { Notification, NotificationTypeEnum } from '@/shared/types/generated-client';
 
-import { formatNotificationMetaRelativeTime } from '../lib/format-notification-meta-time';
+import { formatNotificationMetaRelativeTime } from './format-notification-meta-time';
 
 export type NotificationThumbnailKey = 'approved' | 'comment' | 'meeting' | 'user';
 
