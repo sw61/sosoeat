@@ -2,12 +2,9 @@
 
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-
-import { useAuthStore } from '@/entities/auth';
 import { MainPageCard } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
-import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
-import { useModal } from '@/shared/lib/use-modal';
+import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
 
 import useSearchPage from '../../model/use-search-page';
 import { EmptyPage } from '../empty-page';
@@ -18,22 +15,12 @@ import { MeetingSearchBanner } from '../meeting-search-banner';
 import SearchSkeleton from './search-skeleton';
 
 export default function SearchPage() {
-  const { isOpen, open, close } = useModal();
-  const { mutateAsync: createMeeting } = useCreateMeeting();
-  const { isAuthenticated, setLoginRequired } = useAuthStore();
-
   const { ref, inView } = useInView({
     threshold: 0.5,
     root: null,
   });
 
-  const handleOpenCreateModal = () => {
-    if (!isAuthenticated) {
-      setLoginRequired(true);
-      return;
-    }
-    open();
-  };
+  const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
 
   const {
     regionCommitted,
@@ -122,7 +109,7 @@ export default function SearchPage() {
               </span>
             )
           )}
-          <MeetingMakeButton onClick={handleOpenCreateModal} />
+          <MeetingMakeButton onClick={handleOpen} />
         </div>
         <MeetingCreateModal open={isOpen} onClose={close} onSubmit={createMeeting} />
       </div>
