@@ -47,7 +47,7 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
     queryKey: favoriteKeys.status(meetingId),
     queryFn: () => initialIsFavorited,
     initialData: initialIsFavorited,
-    staleTime: Infinity,
+    staleTime: 0,
     enabled: meetingId !== -1,
   });
 
