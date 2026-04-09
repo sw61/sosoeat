@@ -18,6 +18,24 @@ interface UseSosoTalkWritePageParams {
   editPostId?: number;
 }
 
+const resolveCreateImageUrl = async (
+  payload: SosoTalkPostSubmitPayload
+): Promise<string | undefined> => {
+  if (payload.imageFile) {
+    return uploadSosoTalkPostImage(payload.imageFile);
+  }
+
+  return payload.displayImageUrl || undefined;
+};
+
+const resolveUpdateImageValue = async (payload: SosoTalkPostSubmitPayload): Promise<string> => {
+  if (payload.imageFile) {
+    return uploadSosoTalkPostImage(payload.imageFile);
+  }
+
+  return payload.displayImageUrl;
+};
+
 export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,24 +43,6 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
   const { data, isLoading, isError } = useGetSosoTalkPostDetail(editPostId);
   const createPostMutation = useCreateSosoTalkPost();
   const updatePostMutation = useUpdateSosoTalkPost();
-
-  const resolveCreateImageUrl = async (
-    payload: SosoTalkPostSubmitPayload
-  ): Promise<string | undefined> => {
-    if (payload.imageFile) {
-      return uploadSosoTalkPostImage(payload.imageFile);
-    }
-
-    return payload.displayImageUrl || undefined;
-  };
-
-  const resolveUpdateImageValue = async (payload: SosoTalkPostSubmitPayload): Promise<string> => {
-    if (payload.imageFile) {
-      return uploadSosoTalkPostImage(payload.imageFile);
-    }
-
-    return payload.displayImageUrl;
-  };
 
   const handleCreateSubmit = async (payload: SosoTalkPostSubmitPayload) => {
     if (isSubmitting || createPostMutation.isPending) {
