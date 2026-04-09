@@ -2,8 +2,9 @@
 
 import { MessageSquareText } from 'lucide-react';
 
-import { CommentInput, CommentItem } from '@/entities/comment';
+import { SosoTalkCommentItem } from '@/entities/sosotalk-comment';
 import { cn } from '@/shared/lib/utils';
+import { CommentInput } from '@/shared/ui/comment-input';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 
 import type { SosoTalkCommentSectionProps } from './sosotalk-comment-section.types';
@@ -36,7 +37,7 @@ export function SosoTalkCommentSection({
 
       <div className="mt-6 space-y-2">
         {comments.map((comment) => (
-          <CommentItem
+          <SosoTalkCommentItem
             key={comment.id}
             authorName={comment.authorName}
             authorImageUrl={comment.authorImageUrl}

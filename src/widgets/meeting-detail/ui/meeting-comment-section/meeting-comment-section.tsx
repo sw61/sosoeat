@@ -5,9 +5,11 @@ import { useState } from 'react';
 import { MessageSquareText } from 'lucide-react';
 
 import { useAuthStore } from '@/entities/auth';
-import type { Comment } from '@/entities/comment';
-import { CommentInput, useCommentCount, useComments, useCreateComment } from '@/entities/comment';
+import type { MeetingComment as Comment } from '@/entities/meeting-comment';
+import { useCommentCount, useComments } from '@/entities/meeting-comment';
+import { useCreateComment } from '@/features/meeting-comment';
 import { cn } from '@/shared/lib/utils';
+import { CommentInput } from '@/shared/ui/comment-input';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 

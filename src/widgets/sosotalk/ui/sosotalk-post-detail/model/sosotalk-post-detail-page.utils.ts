@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-import type { CommentItemData } from '@/entities/comment';
 import type { GetSosoTalkPostDetailResponse } from '@/entities/post';
+import type { SosoTalkCommentItemData } from '@/entities/sosotalk-comment';
 import type { Comment } from '@/shared/types/generated-client/models/Comment';
 
 const SOSOTALK_AUTHOR_IMAGE_FALLBACK =
@@ -33,7 +33,7 @@ export function mapCommentToCommentItemData(
     onEditSubmit,
     onEditCancel,
   }: MapCommentToCommentItemDataOptions
-): CommentItemData {
+): SosoTalkCommentItemData {
   return {
     id: String(comment.id),
     authorName: comment.author.name,

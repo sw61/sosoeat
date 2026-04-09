@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { MeetingCommentItem } from './meeting-comment-item';
 import type { MeetingComment } from './meeting-comment-section.types';
 
-jest.mock('@/entities/comment', () => ({
+jest.mock('@/features/meeting-comment', () => ({
   useLikeComment: jest.fn(() => ({ mutate: jest.fn() })),
   useUpdateComment: jest.fn(() => ({ mutate: jest.fn() })),
   useDeleteComment: jest.fn(() => ({ mutate: jest.fn() })),
@@ -129,7 +129,7 @@ describe('MeetingCommentItem', () => {
     it('좋아요 버튼 클릭 시 300ms 후 useLikeComment mutate가 호출된다', async () => {
       const mockMutate = jest.fn();
       const commentsModule = jest.mocked(
-        jest.requireMock('@/entities/comment') as { useLikeComment: jest.Mock }
+        jest.requireMock('@/features/meeting-comment') as { useLikeComment: jest.Mock }
       );
       commentsModule.useLikeComment.mockReturnValue({ mutate: mockMutate });
 
@@ -150,7 +150,7 @@ describe('MeetingCommentItem', () => {
     it('연속 클릭 시 마지막 상태로 1번만 호출된다', async () => {
       const mockMutate = jest.fn();
       const commentsModule = jest.mocked(
-        jest.requireMock('@/entities/comment') as { useLikeComment: jest.Mock }
+        jest.requireMock('@/features/meeting-comment') as { useLikeComment: jest.Mock }
       );
       commentsModule.useLikeComment.mockReturnValue({ mutate: mockMutate });
 

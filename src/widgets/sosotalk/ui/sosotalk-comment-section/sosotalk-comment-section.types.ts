@@ -1,7 +1,7 @@
-import type { CommentItemData } from '@/entities/comment';
+import type { SosoTalkCommentItemData } from '@/entities/sosotalk-comment';
 
 export interface SosoTalkCommentSectionProps {
-  comments: CommentItemData[];
+  comments: SosoTalkCommentItemData[];
   commentCount?: number;
   inputValue?: string;
   inputPlaceholder?: string;
