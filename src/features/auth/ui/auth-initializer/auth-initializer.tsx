@@ -10,15 +10,11 @@ import { AuthUser, useAuthStore } from '@/entities/auth';
  * accessToken 검증은 프록시/미들웨어가 담당하므로 여기서는 수행하지 않습니다.
  */
 export function AuthInitializer({ initialUser }: { initialUser: AuthUser | null }) {
-  const login = useAuthStore((state) => state.login);
-  const setInitialized = useAuthStore((state) => state.setInitialized);
+  const initialize = useAuthStore((state) => state.initialize);
 
   useEffect(() => {
-    if (initialUser) {
-      login(initialUser);
-    }
-    setInitialized(true);
-  }, [initialUser, login, setInitialized]);
+    initialize(initialUser);
+  }, [initialUser, initialize]);
 
   return null;
 }

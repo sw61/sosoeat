@@ -1,4 +1,4 @@
-# TanStack Query 컨벤션
+# 04 TanStack Query 컨벤션
 
 이 프로젝트에서 TanStack Query를 작성하는 방식을 정리한 가이드입니다.
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { CookieStorage } from '@/shared/lib/cookie-storage';
+import { createBffErrorResponse, forwardBackendError } from '@/shared/lib/error-handler';
 import { LoginRequest, LoginResponse } from '@/shared/types/generated-client/models';
 
 const BASE_URL = process.env.API_BASE_URL;
@@ -23,8 +24,7 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      return NextResponse.json(errorData, { status: response.status });
+      return forwardBackendError(response, { method: 'POST', path: '/api/auth/login' });
     }
 
     const data: LoginResponse = await response.json();
@@ -39,7 +39,6 @@ export async function POST(request: Request) {
     // 보안을 위해 accessToken, refreshToken은 제외하고 user만 클라이언트에 반환
     return NextResponse.json({ user: data.user });
   } catch (error) {
-    console.error('[AuthLoginBFF] Error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return createBffErrorResponse(error, '/api/auth/login');
   }
 }

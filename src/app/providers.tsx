@@ -20,26 +20,10 @@ export function Providers({
   const [queryClient] = useState(() => new QueryClient());
 
   useEffect(() => {
-    // 세션 만료 시 Zustand 상태를 초기화하고 모달을 띄우는 콜백을 주입합니다.
-    // - 로그인 상태에서 401: 세션 만료 모달
-    // - 비로그인 상태에서 401: 로그인 요구 모달
-    // getState()로 직접 참조하여 stale closure 방지
-    setSessionExpiredHandler(() => {
-      const { isAuthenticated, setSessionExpired, setLoginRequired } = useAuthStore.getState();
-      if (isAuthenticated) {
-        setSessionExpired(true);
-      } else {
-        setLoginRequired(true);
-      }
-    });
-    setCommentSessionExpiredHandler(() => {
-      const { isAuthenticated, setSessionExpired, setLoginRequired } = useAuthStore.getState();
-      if (isAuthenticated) {
-        setSessionExpired(true);
-      } else {
-        setLoginRequired(true);
-      }
-    });
+    // 401 응답 시 인증 상태에 따라 적절한 모달을 띄우는 핸들러를 주입합니다.
+    const handleAuthError = () => useAuthStore.getState().handleAuthError();
+    setSessionExpiredHandler(handleAuthError);
+    setCommentSessionExpiredHandler(handleAuthError);
   }, []);
 
   return (

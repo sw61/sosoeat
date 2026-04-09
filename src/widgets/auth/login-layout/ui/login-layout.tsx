@@ -6,7 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-import { isSafeCallbackUrl, SOCIAL_CALLBACK_URL_KEY } from '@/shared/utils/url';
+import { STORAGE_KEYS } from '@/shared/lib/storage-keys';
+import { isSafeCallbackUrl } from '@/shared/utils/url';
 
 interface LoginLayoutProps {
   children: React.ReactNode;
@@ -28,7 +29,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
 
   const handleSocialLogin = () => {
     if (callbackUrl && isSafeCallbackUrl(callbackUrl)) {
-      sessionStorage.setItem(SOCIAL_CALLBACK_URL_KEY, callbackUrl);
+      sessionStorage.setItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL, callbackUrl);
     }
   };
 
