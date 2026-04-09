@@ -22,6 +22,7 @@ export function useProfileImageEditor(onChange: (url: string) => void) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (rawSrc) URL.revokeObjectURL(rawSrc);
     setRawSrc(URL.createObjectURL(file));
     setCrop({ x: 0, y: 0 });
     setZoom(1);
