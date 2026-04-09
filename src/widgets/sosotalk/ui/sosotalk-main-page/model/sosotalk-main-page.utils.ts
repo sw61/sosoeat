@@ -1,6 +1,9 @@
 import type { GetSosoTalkPostListParams } from '@/entities/post';
 
-import type { SosoTalkSortValue, SosoTalkTabValue } from '../sosotalk-filter-bar';
+import type {
+  SosoTalkSortValue,
+  SosoTalkTabValue,
+} from '../../sosotalk-filter-bar/sosotalk-filter-bar.types';
 
 const SORT_BY_MAP: Record<SosoTalkSortValue, GetSosoTalkPostListParams['sortBy']> = {
   comments: 'commentCount',

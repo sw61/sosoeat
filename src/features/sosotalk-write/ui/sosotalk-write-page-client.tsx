@@ -6,9 +6,13 @@ import { SosoTalkPostEditor } from './sosotalk-post-editor';
 
 interface SosoTalkWritePageClientProps {
   editPostId?: number;
+  isInvalidEditPostId?: boolean;
 }
 
-export function SosoTalkWritePageClient({ editPostId }: SosoTalkWritePageClientProps) {
+export function SosoTalkWritePageClient({
+  editPostId,
+  isInvalidEditPostId = false,
+}: SosoTalkWritePageClientProps) {
   const {
     data,
     isEditMode,
@@ -20,6 +24,10 @@ export function SosoTalkWritePageClient({ editPostId }: SosoTalkWritePageClientP
   } = useSosoTalkWritePage({
     editPostId,
   });
+
+  if (isInvalidEditPostId) {
+    return <div className="py-20 text-center text-sm text-gray-500">올바르지 않은 게시글입니다.</div>;
+  }
 
   if (!isEditMode) {
     return (
