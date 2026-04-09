@@ -98,8 +98,8 @@ export const MeetingFilterBar = ({
                 {regionCommitted == null || regionCommitted.length === 0
                   ? '지역 전체'
                   : regionCommitted.length === 1
-                    ? `${regionCommitted[0].district} ${regionCommitted[0].province}`
-                    : `${regionCommitted[0].district} ${regionCommitted[0].province} 외 ${regionCommitted.length - 1}`}
+                    ? `${regionCommitted[0].province} ${regionCommitted[0].district}`
+                    : `${regionCommitted[0].province} ${regionCommitted[0].district} 외 ${regionCommitted.length - 1}`}
               </span>
               <ChevronDown className="text-sosoeat-gray-600 size-4 shrink-0" aria-hidden />
             </button>

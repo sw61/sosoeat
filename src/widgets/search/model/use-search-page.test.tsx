@@ -10,6 +10,7 @@ import useSearchPage from './use-search-page';
 jest.mock('@tanstack/react-query', () => ({
   ...jest.requireActual('@tanstack/react-query'),
   useInfiniteQuery: jest.fn(),
+  useQueries: jest.fn(() => []),
 }));
 
 const renderHookWithClient = (hook: () => ReturnType<typeof useSearchPage>) => {
