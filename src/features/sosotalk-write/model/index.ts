@@ -24,3 +24,4 @@ export {
 } from './sosotalk-post-editor.utils';
 export { useSosoTalkPostEditor } from './use-sosotalk-post-editor';
 export { useSosoTalkPostEditorImage } from './use-sosotalk-post-editor-image';
+export { useSosoTalkWritePage } from './use-sosotalk-write-page';
