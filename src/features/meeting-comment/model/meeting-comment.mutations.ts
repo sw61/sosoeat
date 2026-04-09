@@ -5,8 +5,10 @@ import {
   CreateMeetingCommentRequest,
   MeetingComment,
   meetingCommentApi,
- meetingCommentKeys,  SyncMeetingRequest,
-  UpdateMeetingCommentRequest } from '@/entities/meeting-comment';
+  meetingCommentKeys,
+  SyncMeetingRequest,
+  UpdateMeetingCommentRequest,
+} from '@/entities/meeting-comment';
 
 type CommentAuthor = {
   nickname: string;
