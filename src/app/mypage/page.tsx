@@ -17,7 +17,7 @@ export default async function MyPage() {
   const [meetingCount, favoriteCount, postCount] = await Promise.all([
     fetchMeetingCountServer(),
     fetchFavoriteCountServer(),
-    user ? fetchPostCountServer(user.id) : Promise.resolve(0),
+    fetchPostCountServer(),
   ]);
 
   return (

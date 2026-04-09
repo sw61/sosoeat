@@ -1,7 +1,7 @@
 import { fetchClient } from '@/shared/api/fetch-client';
 import { FavoriteList, UserMeetingsResponse } from '@/shared/types/generated-client';
 
-export const mypageRepository = {
+export const mypageApi = {
   fetchJoinedMeetings: async (): Promise<UserMeetingsResponse> => {
     const res = await fetchClient.get('/users/me/meetings?type=joined');
     if (!res.ok) return { data: [], nextCursor: '', hasMore: false };
