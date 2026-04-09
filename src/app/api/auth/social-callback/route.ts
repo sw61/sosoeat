@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { fetchUserInfo } from '@/shared/lib/auth-utils';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
-import { createErrorResponse } from '@/shared/lib/error-handler';
+import { createBffErrorResponse } from '@/shared/lib/error-handler';
 
 /**
  * [BFF] POST /api/auth/social-callback
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const { accessToken, refreshToken } = body;
 
     if (!accessToken || !refreshToken) {
-      return NextResponse.json({ message: 'Missing tokens' }, { status: 400 });
+      return createBffErrorResponse('Missing tokens', '/api/auth/social-callback', 400);
     }
 
     const user = await fetchUserInfo(accessToken);
@@ -23,6 +23,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ user });
   } catch (error) {
-    return createErrorResponse(error, 'Internal Server Error');
+    return createBffErrorResponse(error, '/api/auth/social-callback');
   }
 }

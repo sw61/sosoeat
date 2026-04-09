@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { createErrorResponse } from '@/shared/lib/error-handler';
+import { createBffErrorResponse } from '@/shared/lib/error-handler';
 import { silentRefresh } from '@/shared/lib/silent-refresh';
 
 /**
@@ -13,11 +13,11 @@ export async function POST() {
     const refreshed = await silentRefresh();
 
     if (!refreshed) {
-      return NextResponse.json({ message: 'Refresh token expired' }, { status: 401 });
+      return createBffErrorResponse('Refresh token expired', '/api/auth/refresh', 401);
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    return createErrorResponse(error, 'Internal Server Error', 500);
+    return createBffErrorResponse(error, '/api/auth/refresh');
   }
 }
