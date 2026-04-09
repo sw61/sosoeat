@@ -1,22 +1,17 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-
 import Link from 'next/link';
 
 import { Plus } from 'lucide-react';
 
-import type { GetSosoTalkPostListParams } from '@/entities/post';
-import { mapPostToSosoTalkCardItem, useGetSosoTalkPostList } from '@/entities/post';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 
+import { useSosoTalkMainPage } from './model';
 import { SosoTalkBanner } from '../sosotalk-banner';
 import { SosoTalkCard } from '../sosotalk-card';
 import {
   SosoTalkFilterBar,
-  type SosoTalkSortValue,
-  type SosoTalkTabValue,
 } from '../sosotalk-filter-bar';
 
 interface SosoTalkMainPageProps {
@@ -27,27 +22,8 @@ const SOSOTALK_BANNER_IMAGE =
   'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop';
 
 export const SosoTalkMainPage = ({ className }: SosoTalkMainPageProps) => {
-  const [activeTab, setActiveTab] = useState<SosoTalkTabValue>('all');
-  const [activeSort, setActiveSort] = useState<SosoTalkSortValue>('latest');
-
-  const queryParams = useMemo<GetSosoTalkPostListParams>(
-    () => ({
-      type: activeTab === 'popular' ? 'best' : 'all',
-      sortBy:
-        activeSort === 'comments'
-          ? 'commentCount'
-          : activeSort === 'likes'
-            ? 'likeCount'
-            : 'createdAt',
-      sortOrder: 'desc' as const,
-      size: 10,
-    }),
-    [activeSort, activeTab]
-  );
-
-  const { data, isLoading, isError } = useGetSosoTalkPostList(queryParams);
-
-  const posts = useMemo(() => data?.data.map(mapPostToSosoTalkCardItem) ?? [], [data]);
+  const { activeSort, activeTab, isError, isLoading, posts, setActiveSort, setActiveTab } =
+    useSosoTalkMainPage();
 
   return (
     <div className={cn('bg-background min-h-screen w-full bg-[#f9f9f9] pb-24 md:pb-28', className)}>
