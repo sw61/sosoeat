@@ -2,6 +2,8 @@
 
 import { useRef, useState } from 'react';
 
+import { toast } from 'sonner';
+
 import {
   useCreateSosoTalkComment,
   useDeleteSosoTalkComment,
@@ -54,7 +56,7 @@ export function useSosoTalkPostDetailCommentActions({
       });
       setCommentInput('');
     } catch {
-      // Keep the current input so the user can retry.
+      toast.error('댓글 등록에 실패했어요. 다시 시도해 주세요.');
     }
   };
 
@@ -91,7 +93,7 @@ export function useSosoTalkPostDetailCommentActions({
       });
       handleCancelEditComment();
     } catch {
-      // Keep the current input so the user can retry.
+      toast.error('댓글 수정에 실패했어요. 다시 시도해 주세요.');
     }
   };
 
@@ -115,7 +117,7 @@ export function useSosoTalkPostDetailCommentActions({
         handleCancelEditComment();
       }
     } catch {
-      // Keep the current screen so the user can retry.
+      toast.error('댓글 삭제에 실패했어요. 다시 시도해 주세요.');
     }
   };
 

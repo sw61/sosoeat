@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { toast } from 'sonner';
+
 import {
   useCreateSosoTalkPostLike,
   useDeleteSosoTalkPost,
@@ -52,6 +54,7 @@ export function useSosoTalkPostDetailPostActions({
       }
     } catch {
       setOptimisticIsLiked(null);
+      toast.error('좋아요 처리에 실패했어요. 다시 시도해 주세요.');
     }
   };
 
@@ -74,11 +77,14 @@ export function useSosoTalkPostDetailPostActions({
 
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(window.location.href);
+        toast.success('링크를 복사했어요.');
       }
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
         return;
       }
+
+      toast.error('공유에 실패했어요. 다시 시도해 주세요.');
     }
   };
 
@@ -96,7 +102,7 @@ export function useSosoTalkPostDetailPostActions({
       await deletePostMutation.mutateAsync({ postId });
       router.push('/sosotalk');
     } catch {
-      // Keep the current screen so the user can retry.
+      toast.error('게시글 삭제에 실패했어요. 다시 시도해 주세요.');
     }
   };
 
