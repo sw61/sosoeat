@@ -115,7 +115,8 @@ export default function SearchPage() {
           ) : inView && hasNextPage ? (
             <SearchSkeleton />
           ) : (
-            !hasNextPage && (
+            !hasNextPage &&
+            meetingData.length !== 0 && (
               <span className="text-sosoeat-gray-600 col-span-full flex justify-center">
                 더 이상 모임이 없습니다.
               </span>

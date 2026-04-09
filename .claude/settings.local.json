@@ -13,7 +13,9 @@
       "Bash(ov add-resource:*)",
       "Bash(gh api:*)",
       "Bash(gh label:*)",
-      "Bash(gh pr:*)"
+      "Bash(gh pr:*)",
+      "Bash(git push:*)",
+      "Skill(plan-eng-review)"
     ]
   }
 }
