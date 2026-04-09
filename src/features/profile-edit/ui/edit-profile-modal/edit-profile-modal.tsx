@@ -44,8 +44,7 @@ export function EditProfileModal({
   const { mutate, isPending } = useUpdateProfile(onSuccess);
 
   const handleSubmit = () => {
-    mutate({ name, email, image: imageUrl || undefined });
-    setOpen(false);
+    mutate({ name, email, image: imageUrl || undefined }, { onSuccess: () => setOpen(false) });
   };
 
   return (
