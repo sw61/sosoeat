@@ -11,13 +11,11 @@
       "Bash(npx jest:*)",
       "Bash(npx eslint:*)",
       "Bash(ov add-resource:*)",
-      "Bash(gh api:*)",
-      "Bash(gh label:*)",
-      "Bash(gh pr:*)",
-      "Bash(git push:*)",
+      "Bash(gh issue:*)",
+      "Bash(git checkout:*)",
       "Skill(plan-eng-review)",
-      "Bash(npx tsc:*)",
-      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('lint-staged:', d.get\\('devDependencies',{}\\).get\\('lint-staged','not found'\\)\\); print\\('husky:', d.get\\('devDependencies',{}\\).get\\('husky','not found'\\)\\)\")"
+      "Bash(grep -n \"region\\\\|Region\" src/shared/types/generated-client/*.ts)",
+      "Bash(grep -n \"region\" src/shared/types/generated-client/models/*.ts)"
     ]
   }
 }
