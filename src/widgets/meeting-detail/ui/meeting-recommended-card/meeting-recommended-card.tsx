@@ -36,7 +36,13 @@ export default function RecommendedMeetingCard({ meeting, onClick }: Recommended
         {/* ── 썸네일 ── */}
         <div className="pb-[14px]">
           <div className="relative h-[160px] w-full overflow-hidden rounded-3xl">
-            <Image src={meeting.image} alt={meeting.name} fill className="object-cover" />
+            <Image
+              src={meeting.image}
+              alt={meeting.name}
+              fill
+              sizes="302px"
+              className="object-cover"
+            />
             <div
               className="absolute right-5 bottom-5 cursor-pointer"
               onClick={(e) => e.stopPropagation()}

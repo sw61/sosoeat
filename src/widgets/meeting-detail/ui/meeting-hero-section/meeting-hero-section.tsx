@@ -83,6 +83,8 @@ export function MeetingHeroSection({ meeting: initialMeeting }: MeetingHeroSecti
             src={meeting.image}
             alt={meeting.name}
             fill
+            priority
+            sizes="(max-width: 768px) 670px, 654px"
             draggable={false}
             className="object-cover"
           />
