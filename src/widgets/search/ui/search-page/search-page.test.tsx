@@ -1,4 +1,6 @@
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
+
+import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing';
 
@@ -10,35 +12,26 @@ import { useSearchPage } from '../..';
 
 import SearchPage from './search-page';
 
-const createQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
-    },
+const NuqsWrapper = withNuqsTestingAdapter({ searchParams: {} });
+const renderWithNuqs = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient();
+  return render(ui, {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={queryClient}>
+        <NuqsWrapper>{children}</NuqsWrapper>
+      </QueryClientProvider>
+    ),
   });
-
-const renderWithClient = (ui: React.ReactElement) => {
-  const queryClient = createQueryClient();
-  const NuqsWrapper = withNuqsTestingAdapter({ searchParams: {} });
-  const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    <NuqsWrapper>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </NuqsWrapper>
-  );
-  return render(ui, { wrapper: Wrapper });
 };
 
-const renderHookWithClient = <T,>(hook: () => T) => {
-  const queryClient = createQueryClient();
-  const NuqsWrapper = withNuqsTestingAdapter({ searchParams: {} });
-  const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    <NuqsWrapper>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </NuqsWrapper>
-  );
-  return renderHook(hook, { wrapper: Wrapper });
-};
+const renderHookWithNuqs = <T,>(hook: () => T) =>
+  renderHook(hook, {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={new QueryClient()}>
+        <NuqsWrapper>{children}</NuqsWrapper>
+      </QueryClientProvider>
+    ),
+  });
 
 export const mockHost: Host = {
   id: 1,
@@ -111,19 +104,42 @@ export const mockEmptyMeetingList: MeetingList = {
   hasMore: false,
 };
 
+const mockInfiniteData = (list: MeetingList) => ({
+  pages: [list],
+  pageParams: [undefined],
+});
+
 jest.mock('@tanstack/react-query', () => ({
   ...jest.requireActual('@tanstack/react-query'),
-  useQuery: jest.fn(),
+  useInfiniteQuery: jest.fn(),
 }));
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+  }),
+}));
+jest.mock('react-intersection-observer', () => ({
+  useInView: jest.fn(),
+}));
+
+const defaultInfiniteReturn = {
+  data: mockInfiniteData(mockMeetingList),
+  isLoading: false,
+  isError: false,
+  hasNextPage: false,
+  isFetching: false,
+  fetchNextPage: jest.fn(),
+};
 
 describe('SearchPage', () => {
   beforeEach(() => {
-    (useQuery as jest.Mock).mockReturnValue({
-      data: mockMeetingList,
-      isLoading: false,
-      isError: false,
+    (useInfiniteQuery as jest.Mock).mockReturnValue(defaultInfiniteReturn);
+    (useInView as jest.Mock).mockReturnValue({
+      ref: jest.fn(),
+      inView: false,
     });
-
     useAuthStore.setState({
       isAuthenticated: false,
       user: null,
@@ -132,57 +148,83 @@ describe('SearchPage', () => {
   });
 
   it('isLoading일때 SearchSkeleton을 렌더링해야 한다', () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      data: mockMeetingList,
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      ...defaultInfiniteReturn,
+      data: undefined,
       isLoading: true,
-      isError: false,
     });
-    // Test implementation will go here
-    const { result } = renderHookWithClient(() => useSearchPage());
+    const { result } = renderHookWithNuqs(() => useSearchPage());
     expect(result.current.isLoading).toBe(true);
   });
 
   it('isError일때 에러 메시지를 렌더링해야 한다', () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      data: mockMeetingList,
-      isLoading: false,
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      ...defaultInfiniteReturn,
       isError: true,
     });
-    // Test implementation will go here
-    const { result } = renderHookWithClient(() => useSearchPage());
+    const { result } = renderHookWithNuqs(() => useSearchPage());
     expect(result.current.isError).toBe(true);
   });
 
   it('meetingData=[] 일때 Empty Page가 보여야한다.', () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      data: mockEmptyMeetingList,
-      isLoading: false,
-      isError: false,
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      ...defaultInfiniteReturn,
+      data: mockInfiniteData(mockEmptyMeetingList),
     });
-    renderWithClient(<SearchPage />);
-    // Test implementation will go here
+    renderWithNuqs(<SearchPage />);
     expect(screen.getAllByAltText('Empty Page')).toHaveLength(2);
   });
 
-  it('meetingData가 있을 때, 검색 결과를 렌더링해야 한다', () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      data: mockMeetingList,
-      isLoading: false,
-      isError: false,
-    });
-    // Test implementation will go here
-    const { result } = renderHookWithClient(() => useSearchPage());
+  it('meetingData가 있을 때 검색 결과를 렌더링해야 한다', () => {
+    const { result } = renderHookWithNuqs(() => useSearchPage());
     expect(result.current.meetingData).toEqual(mockMeetingList.data);
   });
 
-  it('비로그인 + 모임만들기 버튼 클릭 시 로그인 모달이 열려야 한다', () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      data: mockEmptyMeetingList,
-      isLoading: false,
-      isError: false,
+  it('isFetching=true일 때 SearchSkeleton이 보여야 한다', () => {
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      ...defaultInfiniteReturn,
+      data: undefined,
+      isLoading: true,
+      isFetching: true,
+    });
+    (useInView as jest.Mock).mockReturnValue({
+      ref: jest.fn(),
+      inView: true,
     });
 
-    renderWithClient(<SearchPage />);
+    renderWithNuqs(<SearchPage />);
+    const skeletons = document.querySelectorAll('.animate-pulse');
+    expect(skeletons.length).toBeGreaterThan(0);
+  });
+
+  it('hasNextPage=false일 때 "더 이상 모임이 없습니다" 텍스트가 보여야 한다', () => {
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      ...defaultInfiniteReturn,
+      hasNextPage: false,
+      isFetching: false,
+    });
+    renderWithNuqs(<SearchPage />);
+    expect(screen.getByText('더 이상 모임이 없습니다.')).toBeInTheDocument();
+  });
+
+  it('hasNextPage=true이고 isFetching=false일 때 "더 이상 모임이 없습니다" 텍스트가 보이지 않아야 한다', () => {
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      ...defaultInfiniteReturn,
+      hasNextPage: true,
+      isFetching: false,
+    });
+
+    renderWithNuqs(<SearchPage />);
+    expect(screen.queryByText('더 이상 모임이 없습니다.')).not.toBeInTheDocument();
+  });
+
+  it('비로그인 + 모임만들기 버튼 클릭 시 로그인 모달이 열려야 한다', () => {
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      ...defaultInfiniteReturn,
+      data: mockInfiniteData(mockEmptyMeetingList),
+    });
+
+    renderWithNuqs(<SearchPage />);
 
     const createMeetingButton = screen.getByRole('button', { name: /모임 만들기/i });
     fireEvent.click(createMeetingButton);
@@ -191,10 +233,9 @@ describe('SearchPage', () => {
   });
 
   it('로그인 + 모임만들기 버튼 클릭 시 모임 생성 모달이 열려야한다.', () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      data: mockEmptyMeetingList,
-      isLoading: false,
-      isError: false,
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      ...defaultInfiniteReturn,
+      data: mockInfiniteData(mockEmptyMeetingList),
     });
 
     useAuthStore.setState({
@@ -207,7 +248,7 @@ describe('SearchPage', () => {
       },
     });
 
-    renderWithClient(<SearchPage />);
+    renderWithNuqs(<SearchPage />);
 
     const createMeetingButton = screen.getByRole('button', { name: /모임 만들기/i });
     fireEvent.click(createMeetingButton);

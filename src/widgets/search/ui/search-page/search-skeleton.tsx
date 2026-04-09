@@ -2,7 +2,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 
 const SearchSkeleton = () => {
   return (
-    <div className="grid grid-cols-1 justify-center justify-items-center gap-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6.75">
+    <div className="grid w-full grid-cols-1 justify-center justify-items-center gap-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6.75">
       {Array.from({ length: 10 }).map((_, index) => (
         <div
           key={`meeting-skeleton-${index}`}

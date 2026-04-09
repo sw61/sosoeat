@@ -7,12 +7,11 @@ import { Plus } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 
-import { useSosoTalkMainPage } from './model';
 import { SosoTalkBanner } from '../sosotalk-banner';
 import { SosoTalkCard } from '../sosotalk-card';
-import {
-  SosoTalkFilterBar,
-} from '../sosotalk-filter-bar';
+import { SosoTalkFilterBar } from '../sosotalk-filter-bar';
+
+import { useSosoTalkMainPage } from './model';
 
 interface SosoTalkMainPageProps {
   className?: string;

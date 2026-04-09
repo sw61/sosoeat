@@ -59,7 +59,7 @@ describe('RegionSelectModal', () => {
     expect(screen.getAllByRole('button', { name: '닫기' })).toHaveLength(2);
   });
 
-  it('dropdownSub가 있으면 취소·확인과 헤더 닫기(X)가 있다', async () => {
+  it('dropdownSub가 있으면 취소·초기화·확인과 헤더 닫기(X)가 있다', async () => {
     const user = userEvent.setup();
 
     render(
@@ -73,6 +73,7 @@ describe('RegionSelectModal', () => {
     await user.click(screen.getByRole('button', { name: '열기' }));
 
     expect(await screen.findByRole('button', { name: '취소' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '초기화' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '확인' })).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: '닫기' })).toHaveLength(1);
   });
@@ -87,7 +88,7 @@ describe('RegionSelectModal', () => {
         title="지역 선택"
         dropdownSub={{
           ...dropdownFixture,
-          value: { province: '서울', district: '강남구' },
+          value: [{ province: '서울', district: '강남구' }],
           onChange,
         }}
       />
@@ -99,7 +100,7 @@ describe('RegionSelectModal', () => {
     await user.click(screen.getByRole('button', { name: '확인' }));
 
     expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith({ province: '서울', district: '강남구' });
+    expect(onChange).toHaveBeenCalledWith([{ province: '서울', district: '강남구' }]);
 
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -116,7 +117,7 @@ describe('RegionSelectModal', () => {
         title="지역 선택"
         dropdownSub={{
           ...dropdownFixture,
-          value: { province: '서울', district: '강남구' },
+          value: [{ province: '서울', district: '강남구' }],
           onChange,
         }}
       />
@@ -147,7 +148,7 @@ describe('RegionSelectModal', () => {
         onDraftChange={onDraftChange}
         dropdownSub={{
           ...dropdownFixture,
-          value: { province: '서울', district: '서초구' },
+          value: [{ province: '서울', district: '서초구' }],
           onChange,
         }}
       />
@@ -156,7 +157,71 @@ describe('RegionSelectModal', () => {
     await user.click(screen.getByRole('button', { name: '열기' }));
     await screen.findByRole('dialog');
 
-    expect(onDraftChange).toHaveBeenCalledWith({ province: '서울', district: '서초구' });
+    expect(onDraftChange).toHaveBeenCalledWith([{ province: '서울', district: '서초구' }]);
+  });
+
+  it('초기화 클릭 시 onChange에 null이 전달된다', async () => {
+    const user = userEvent.setup();
+    const onChange = jest.fn();
+
+    render(
+      <RegionSelectModal
+        trigger={<Button type="button">열기</Button>}
+        title="지역 선택"
+        dropdownSub={{
+          ...dropdownFixture,
+          value: [{ province: '서울', district: '강남구' }],
+          onChange,
+        }}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: '열기' }));
+    await screen.findByRole('dialog');
+
+    await user.click(screen.getByRole('button', { name: '초기화' }));
+    await user.click(screen.getByRole('button', { name: '확인' }));
+
+    expect(onChange).toHaveBeenCalledWith(null);
+  });
+
+  it('regionCascade에서 두 구·군을 선택하면 배열에 둘 다 포함된다', async () => {
+    const user = userEvent.setup();
+    const onChange = jest.fn();
+    const cascadeRegions = [
+      { id: 'seoul', name: '서울특별시', nameEn: 'Seoul', districts: ['강남구', '서초구'] },
+    ];
+
+    render(
+      <RegionSelectModal
+        trigger={<Button type="button">열기</Button>}
+        title="지역 선택"
+        regionCascade={{ regions: cascadeRegions }}
+        dropdownSub={{
+          data: { label: '_', options: [] },
+          value: null,
+          onChange,
+        }}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: '열기' }));
+    await screen.findByRole('dialog');
+
+    await user.click(screen.getByRole('button', { name: '서울특별시' }));
+    await user.click(await screen.findByRole('menuitemcheckbox', { name: '강남구' }));
+
+    await user.click(screen.getByRole('button', { name: /서울특별시/ }));
+    await user.click(await screen.findByRole('menuitemcheckbox', { name: '서초구' }));
+
+    await user.click(screen.getByRole('button', { name: '확인' }));
+
+    expect(onChange).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        { province: '서울특별시', district: '강남구' },
+        { province: '서울특별시', district: '서초구' },
+      ])
+    );
   });
 
   it('contentClassName이 Dialog 루트에 합쳐진다', async () => {

@@ -75,7 +75,7 @@ export const RegionSelectModal = ({
 }: RegionSelectModalProps) => {
   const triggerAsChild = React.isValidElement(trigger);
 
-  const { open, draftValue, setDraft, handleOpenChange, handleConfirm, showCascade } =
+  const { open, draftValue, setDraft, handleOpenChange, handleConfirm, handleReset, showCascade } =
     useRegionSelectModal({
       dropdownSub,
       regionCascade,
@@ -141,6 +141,14 @@ export const RegionSelectModal = ({
                     취소
                   </Button>
                 </DialogClose>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className={cancelButtonClass}
+                  onClick={handleReset}
+                >
+                  초기화
+                </Button>
                 <Button type="button" className={confirmButtonClass} onClick={handleConfirm}>
                   확인
                 </Button>
