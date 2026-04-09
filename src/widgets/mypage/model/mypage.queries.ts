@@ -8,24 +8,23 @@ export const mypageQueryKeys = {
   favoriteMeetings: ['mypage-favorite-meetings'] as const,
 };
 
-export const useJoinedMeetings = (enabled = true) =>
+export const useJoinedMeetings = () =>
   useQuery({
     queryKey: mypageQueryKeys.joinedMeetings,
     queryFn: mypageApi.fetchJoinedMeetings,
-    enabled,
+    staleTime: 1000 * 60 * 5,
   });
 
-export const useCreatedMeetings = (enabled = true) =>
+export const useCreatedMeetings = () =>
   useQuery({
     queryKey: mypageQueryKeys.createdMeetings,
     queryFn: mypageApi.fetchCreatedMeetings,
-    enabled,
+    staleTime: 1000 * 60 * 5,
   });
 
-export const useFavoriteMeetings = (enabled = true) =>
+export const useFavoriteMeetings = () =>
   useQuery({
     queryKey: mypageQueryKeys.favoriteMeetings,
     queryFn: mypageApi.fetchFavoriteMeetings,
-    enabled,
-    refetchOnMount: 'always',
+    staleTime: 1000 * 60 * 5,
   });

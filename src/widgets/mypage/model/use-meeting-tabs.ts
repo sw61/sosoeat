@@ -8,9 +8,9 @@ import { useCreatedMeetings, useFavoriteMeetings, useJoinedMeetings } from './my
 import { toFavoriteMeetingCards, toUserMeetingCards } from './mypage.service';
 
 export function useMeetingTabs(activeTab: TabValue) {
-  const joinedQuery = useJoinedMeetings(activeTab === 'all');
-  const createdQuery = useCreatedMeetings(activeTab === 'created');
-  const favoriteQuery = useFavoriteMeetings(activeTab === 'favorite');
+  const joinedQuery = useJoinedMeetings();
+  const createdQuery = useCreatedMeetings();
+  const favoriteQuery = useFavoriteMeetings();
 
   const cards = useMemo(() => {
     if (activeTab === 'all' && joinedQuery.data) {
