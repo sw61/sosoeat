@@ -35,7 +35,7 @@ export const useSocialLogin = () => {
       return;
     }
 
-    const storedCallbackUrl = localStorage.getItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
+    const storedCallbackUrl = sessionStorage.getItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
 
     mutation.mutate(
       { accessToken, refreshToken },
@@ -52,7 +52,7 @@ export const useSocialLogin = () => {
           router.replace('/login?error=session_error');
         },
         onSettled: () => {
-          localStorage.removeItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
+          sessionStorage.removeItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
         },
       }
     );
