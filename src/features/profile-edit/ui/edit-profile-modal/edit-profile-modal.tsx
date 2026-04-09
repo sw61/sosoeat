@@ -160,7 +160,7 @@ function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
               aria-label="닫기"
               onClick={handleCropCancel}
             >
-              <XIcon className="size-6 cursor-pointer" strokeWidth={1.8} />
+              <XIcon className="size-6" strokeWidth={1.8} />
             </Button>
           </DialogHeader>
 

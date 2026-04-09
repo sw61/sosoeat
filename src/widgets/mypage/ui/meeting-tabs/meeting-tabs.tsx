@@ -34,7 +34,7 @@ export function MeetingTabs() {
 
   const { cards: fetchedCards, isLoading } = useMeetingTabs(activeTab);
 
-  const cards = fetchedCards;
+  const cards = fetchedCards ?? [];
 
   return (
     <Tabs
