@@ -186,7 +186,7 @@ const meta = {
   - **`queries.ts` 내부에 함께 정의**: key가 해당 파일 내에서만 사용되는 경우
   - **`model/[domain]-keys.ts`로 분리**: SSR prefetch나 서버 컴포넌트에서 key를 함께 참조해야 하는 경우 (`queries.ts`에 `'use client'`가 붙어 서버에서 import할 수 없을 때)
 - `useQueryClient()`는 훅 내부에서 사용합니다. `QueryClient`를 외부에서 주입받는 패턴 금지.
-- `useMemo`, `useCallback` 사용 금지 (React Compiler가 처리).
+- **React Compiler 1.0 사용 중**: 기본적으로 `useMemo`, `useCallback` 불필요. 필요 시 성능 이슈나 복잡한 계산 등의 사유를 명시하여 사용 가능.
 
 **예외 케이스:**
 

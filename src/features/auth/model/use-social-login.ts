@@ -8,7 +8,8 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { useAuthStore, useSocialLoginMutation } from '@/entities/auth';
 import { favoriteKeys, favoritesApi } from '@/entities/favorites';
-import { getSafeCallbackUrl, SOCIAL_CALLBACK_URL_KEY } from '@/shared/utils/url';
+import { STORAGE_KEYS } from '@/shared/lib/storage-keys';
+import { getSafeCallbackUrl } from '@/shared/utils/url';
 
 export const useSocialLogin = () => {
   const router = useRouter();
@@ -34,12 +35,12 @@ export const useSocialLogin = () => {
       return;
     }
 
+    const storedCallbackUrl = localStorage.getItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
+
     mutation.mutate(
       { accessToken, refreshToken },
       {
         onSuccess: async (data) => {
-          const storedCallbackUrl = sessionStorage.getItem(SOCIAL_CALLBACK_URL_KEY);
-          sessionStorage.removeItem(SOCIAL_CALLBACK_URL_KEY);
           await queryClient.prefetchQuery({
             queryKey: favoriteKeys.count(),
             queryFn: () => favoritesApi.getCount(),
@@ -49,6 +50,9 @@ export const useSocialLogin = () => {
         },
         onError: () => {
           router.replace('/login?error=session_error');
+        },
+        onSettled: () => {
+          localStorage.removeItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
         },
       }
     );
