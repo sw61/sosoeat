@@ -10,7 +10,12 @@
       "Bash(cmd /c \"gh --version\")",
       "Bash(npx jest:*)",
       "Bash(npx eslint:*)",
-      "Bash(ov add-resource:*)"
+      "Bash(ov add-resource:*)",
+      "Bash(gh issue:*)",
+      "Bash(git checkout:*)",
+      "Skill(plan-eng-review)",
+      "Bash(grep -n \"region\\\\|Region\" src/shared/types/generated-client/*.ts)",
+      "Bash(grep -n \"region\" src/shared/types/generated-client/models/*.ts)"
     ]
   }
 }

@@ -36,19 +36,6 @@ export const MeetingFilterBar = ({
   onDateChange = () => {},
   onRegionChange = () => {},
 }: MeetingFilterBarProps) => {
-  // const [selectedSortLabel, setSelectedSortLabel] = useState<string | null>(null);
-  // const DEFAULT_SORT = { sortBy: 'participantCount', sortOrder: 'desc' } as const;
-
-  // const handleSortItemChecked = (option: SortOption) => {
-  //   const isSelected = selectedSortLabel === option.label;
-  //   if (isSelected) {
-  //     setSelectedSortLabel(null);
-  //     onSortChange(DEFAULT_SORT.sortBy, DEFAULT_SORT.sortOrder);
-  //     return;
-  //   }
-  //   setSelectedSortLabel(option.label);
-  //   onSortChange(option.sortBy, option.sortOrder);
-  // };
   const [selectedSortLabel, setSelectedSortLabel] = useState<string | null>(() => {
     const selectedOption = options.find(
       (option) => option.sortBy === _sortBy && option.sortOrder === _sortOrder
@@ -108,9 +95,11 @@ export const MeetingFilterBar = ({
           trigger={
             <button type="button" className={cn(meetingFilterPillTriggerClass, 'min-w-24')}>
               <span>
-                {regionCommitted == null
+                {regionCommitted == null || regionCommitted.length === 0
                   ? '지역 전체'
-                  : `${regionCommitted.province} ${regionCommitted.district}`}
+                  : regionCommitted.length === 1
+                    ? `${regionCommitted[0].district} ${regionCommitted[0].province}`
+                    : `${regionCommitted[0].district} ${regionCommitted[0].province} 외 ${regionCommitted.length - 1}`}
               </span>
               <ChevronDown className="text-sosoeat-gray-600 size-4 shrink-0" aria-hidden />
             </button>

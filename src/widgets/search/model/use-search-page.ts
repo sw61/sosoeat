@@ -64,7 +64,11 @@ const useSearchPage = () => {
   );
 
   const region =
-    regionCommitted == null ? undefined : `${regionCommitted.district} ${regionCommitted.province}`;
+    regionCommitted == null || regionCommitted.length === 0
+      ? undefined
+      : regionCommitted.length === 1
+        ? `${regionCommitted[0].district} ${regionCommitted[0].province}`
+        : undefined;
   const dateEndExclusiveIso =
     dateEnd == null
       ? undefined
@@ -88,7 +92,14 @@ const useSearchPage = () => {
     isLoading,
     isError,
   } = useQuery<MeetingList>(meetingsQueryOptions.options(options));
-  const meetingData = meetingList?.data ?? [];
+
+  const rawMeetingData = meetingList?.data ?? [];
+  const meetingData =
+    regionCommitted != null && regionCommitted.length >= 2
+      ? rawMeetingData.filter((m) =>
+          regionCommitted.some((sel) => m.region?.includes(sel.district))
+        )
+      : rawMeetingData;
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
     setTypeFilter(value);

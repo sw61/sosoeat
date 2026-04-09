@@ -32,7 +32,7 @@ export function useRegionSelectModal({
     if (!open) return;
     if (dropdownSub != null) {
       const v = dropdownSub.value;
-      const seed = v == null ? null : { province: v.province, district: v.district };
+      const seed = v == null ? null : [...v];
       setDraft(seed);
     } else {
       setDraft(null);
@@ -48,12 +48,17 @@ export function useRegionSelectModal({
     setOpen(false);
   };
 
+  const handleReset = () => {
+    setDraft(null);
+  };
+
   return {
     open,
     draftValue,
     setDraft,
     handleOpenChange,
     handleConfirm,
+    handleReset,
     showCascade,
   };
 }

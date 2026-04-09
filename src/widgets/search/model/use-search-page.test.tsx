@@ -29,10 +29,10 @@ describe('useSearchPage', () => {
     const { result } = renderHookWithClient(() => useSearchPage());
 
     act(() => {
-      result.current.handleRegionChange({ province: '서울', district: '강남구' });
+      result.current.handleRegionChange([{ province: '서울', district: '강남구' }]);
     });
 
-    expect(result.current.regionCommitted).toEqual({ province: '서울', district: '강남구' });
+    expect(result.current.regionCommitted).toEqual([{ province: '서울', district: '강남구' }]);
   });
 
   it('handleDateChange에서 값이 모두 없으면 날짜 상태를 초기화해야 한다', () => {

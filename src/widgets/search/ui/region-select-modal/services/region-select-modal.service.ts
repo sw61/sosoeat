@@ -3,14 +3,14 @@ import type { DropdownSubProp } from '@/shared/ui/dropdown-sub/dropdown-sub.type
 import type { RegionModalDropdownSub, RegionSelection } from '../region-select-modal.types';
 
 export function selectionToRecord(s: RegionSelection): Record<string, string> {
-  if (s == null) return {};
-  return { [s.province]: s.district };
+  if (s == null || s.length === 0) return {};
+  return Object.fromEntries(s.map(({ province, district }) => [province, district]));
 }
 
 export function recordToSelection(r: Record<string, string>): RegionSelection {
-  const keys = Object.keys(r).sort();
-  if (keys.length === 0) return null;
-  return { province: keys[0], district: r[keys[0]]! };
+  const entries = Object.entries(r);
+  if (entries.length === 0) return null;
+  return entries.map(([province, district]) => ({ province, district }));
 }
 
 export function omitRegionModalValueOnChange(
