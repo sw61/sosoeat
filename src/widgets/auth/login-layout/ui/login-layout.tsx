@@ -29,7 +29,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
 
   const handleSocialLogin = () => {
     if (callbackUrl && isSafeCallbackUrl(callbackUrl)) {
-      localStorage.setItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL, callbackUrl);
+      sessionStorage.setItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL, callbackUrl);
     }
   };
 
