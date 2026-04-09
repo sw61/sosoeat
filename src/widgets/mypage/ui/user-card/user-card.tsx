@@ -7,7 +7,7 @@ import { Calendar, Mail, Pencil } from 'lucide-react';
 import { EditProfileModal } from '@/features/profile-edit';
 import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { Avatar, AvatarImage } from '@/shared/ui/avatar';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 
 import { mypageRepository } from '../../model/mypage.repository';
@@ -45,13 +45,17 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
         <CardHeader>
           <div className="flex items-center gap-6 md:hidden">
             <Avatar className="h-[83px] w-[83px] shrink-0 border-2 border-white">
-              <AvatarImage src={localImageUrl} />
-              <AvatarFallback></AvatarFallback>
+              <AvatarImage src={localImageUrl || '/images/basic-profile.svg'} />
             </Avatar>
             <div className="flex flex-col gap-1">
               <div className="flex items-center py-1">
                 <CardTitle className={cn('px-2 text-base font-bold')}>{localName}</CardTitle>
-                <button type="button" aria-label="프로필 수정" onClick={open}>
+                <button
+                  type="button"
+                  aria-label="프로필 수정"
+                  onClick={open}
+                  className="cursor-pointer"
+                >
                   <Pencil className="text-sosoeat-gray-600 size-3 shrink-0" />
                 </button>
               </div>
@@ -65,8 +69,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
 
           <div className="hidden items-center gap-6 md:flex">
             <Avatar className="h-42.25 w-42.25 shrink-0">
-              <AvatarImage src={localImageUrl} />
-              <AvatarFallback></AvatarFallback>
+              <AvatarImage src={localImageUrl || '/images/basic-profile.svg'} />
             </Avatar>
             <div className="flex flex-col gap-1">
               <CardTitle className="w-full text-[28px] font-bold">{localName}</CardTitle>

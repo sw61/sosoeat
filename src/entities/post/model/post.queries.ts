@@ -189,10 +189,7 @@ export const useCreateSosoTalkPost = () => {
 
 export const useCreateSosoTalkPostLike = createSosoTalkLikeMutation(true, createSosoTalkPostLike);
 
-export const useDeleteSosoTalkPostLike = createSosoTalkLikeMutation(
-  false,
-  deleteSosoTalkPostLike
-);
+export const useDeleteSosoTalkPostLike = createSosoTalkLikeMutation(false, deleteSosoTalkPostLike);
 
 export const useCreateSosoTalkComment = () => {
   const queryClient = useQueryClient();

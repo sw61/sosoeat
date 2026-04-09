@@ -10,10 +10,6 @@ import {
   getSosoTalkPostList,
 } from '../api/posts.api';
 
-import type {
-  GetSosoTalkPostDetailResponse,
-  GetSosoTalkPostListResponse,
-} from './post.types';
 import {
   sosotalkPostDetailQueryOptions,
   sosotalkPostListQueryOptions,
@@ -21,6 +17,7 @@ import {
   useCreateSosoTalkPostLike,
   useDeleteSosoTalkPostLike,
 } from './post.queries';
+import type { GetSosoTalkPostDetailResponse, GetSosoTalkPostListResponse } from './post.types';
 
 jest.mock('../api/posts.api', () => ({
   createSosoTalkPostLike: jest.fn(),
@@ -159,7 +156,9 @@ describe('sosotalk like mutations', () => {
 
     await waitFor(() =>
       expect(
-        queryClient.getQueryData<GetSosoTalkPostDetailResponse>(sosotalkQueryKeys.postDetail(POST_ID))
+        queryClient.getQueryData<GetSosoTalkPostDetailResponse>(
+          sosotalkQueryKeys.postDetail(POST_ID)
+        )
       ).toMatchObject({
         isLiked: true,
         likeCount: 5,
@@ -168,8 +167,8 @@ describe('sosotalk like mutations', () => {
     expect(
       queryClient.getQueryData<GetSosoTalkPostListResponse>(sosotalkQueryKeys.postList(LIST_PARAMS))
     ).toMatchObject({
-        data: [expect.objectContaining({ id: POST_ID, likeCount: 5 })],
-      });
+      data: [expect.objectContaining({ id: POST_ID, likeCount: 5 })],
+    });
 
     deferred.resolve({});
     await mutationPromise;

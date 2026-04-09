@@ -51,7 +51,7 @@ export const SosoTalkMainPage = ({ className }: SosoTalkMainPageProps) => {
 
   return (
     <div className={cn('bg-background min-h-screen w-full bg-[#f9f9f9] pb-24 md:pb-28', className)}>
-      <main className="mx-auto flex w-full max-w-[1280px] flex-col pt-0 xl:pt-4 xl:px-0">
+      <main className="mx-auto flex w-full max-w-[1280px] flex-col pt-0 xl:px-0 xl:pt-4">
         <SosoTalkBanner imageUrl={SOSOTALK_BANNER_IMAGE} alt="소소톡 배너 이미지" />
 
         <div className="px-4 md:px-6 xl:px-0">

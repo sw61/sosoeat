@@ -53,7 +53,7 @@ export function NavActions({ user, onOpenCreateModal, onLogout }: NavActionsProp
             suppressHydrationWarning
           >
             <Avatar className="bg-sosoeat-gray-200 shrink-0">
-              <AvatarImage src={user.image ?? undefined} alt={user.name} />
+              <AvatarImage src={user.image || '/images/basic-profile.svg'} alt={user.name} />
               <AvatarFallback className="text-sosoeat-gray-500 text-sm font-medium">
                 {user.name[0]}
               </AvatarFallback>
