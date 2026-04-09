@@ -9,7 +9,7 @@ export function MeetingTypeSection() {
       <div className="flex gap-3 md:gap-6 lg:gap-9">
         {/* 함께먹기 */}
         <Link
-          href="/meetings?type=group-eat"
+          href="/search?typeFilter=groupEat"
           className="bg-sosoeat-orange-600 relative flex-1 overflow-hidden rounded-2xl p-4 md:p-5 lg:p-6"
         >
           <div className="flex flex-col gap-2">
@@ -32,7 +32,7 @@ export function MeetingTypeSection() {
 
         {/* 공동구매 */}
         <Link
-          href="/meetings?type=group-buy"
+          href="/search?typeFilter=groupBuy"
           className="bg-sosoeat-blue-600 relative flex-1 overflow-hidden rounded-2xl p-4 md:p-5 lg:p-6"
         >
           <div className="flex flex-col gap-2">
