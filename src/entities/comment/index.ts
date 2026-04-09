@@ -18,5 +18,3 @@ export {
 } from './model/comment.queries';
 export type { CommentInputProps } from './ui/comment-input';
 export { CommentInput } from './ui/comment-input';
-export type { CommentItemData, CommentItemProps } from './ui/comment-item';
-export { CommentItem } from './ui/comment-item';
