@@ -59,3 +59,7 @@ storybook-static
 # GitHub issue drafts (로컬/자동 생성용 — 레포에 올리지 않음)
 docs/issue-drafts/
 .gstack/
+
+# Claude Code local settings
+.claude/settings.local.json
+
