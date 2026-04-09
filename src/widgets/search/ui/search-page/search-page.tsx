@@ -1,5 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+
 import { useAuthStore } from '@/entities/auth';
 import { MainPageCard } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
@@ -18,6 +21,11 @@ export default function SearchPage() {
   const { isOpen, open, close } = useModal();
   const { mutateAsync: createMeeting } = useCreateMeeting();
   const { isAuthenticated, setLoginRequired } = useAuthStore();
+
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+    root: null,
+  });
 
   const handleOpenCreateModal = () => {
     if (!isAuthenticated) {
@@ -41,7 +49,17 @@ export default function SearchPage() {
     sortOrder,
     isLoading,
     isError,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useSearchPage();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <div className="bg-sosoeat-gray-100 min-h-[calc(100vh-156px)] pb-8">
@@ -87,7 +105,21 @@ export default function SearchPage() {
                   )}
                 />
               ))}
+              <div ref={ref} className="col-span-full flex h-1 items-center justify-center" />
             </div>
+          )}
+          {isFetching ? (
+            <span className="text-sosoeat-gray-600 col-span-full flex justify-center">
+              Loading...
+            </span>
+          ) : inView && hasNextPage ? (
+            <SearchSkeleton />
+          ) : (
+            !hasNextPage && (
+              <span className="text-sosoeat-gray-600 col-span-full flex justify-center">
+                더 이상 모임이 없습니다.
+              </span>
+            )
           )}
           <MeetingMakeButton onClick={handleOpenCreateModal} />
         </div>
