@@ -4,7 +4,11 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { MainPageCard } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
-import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
+import {
+  MeetingCreateModal,
+  useCreateMeeting,
+  useMeetingCreateTrigger,
+} from '@/features/meeting-create';
 
 import useSearchPage from '../../model/use-search-page';
 import { EmptyPage } from '../empty-page';
@@ -13,6 +17,7 @@ import { MeetingMakeButton } from '../meeting-make-button';
 import { MeetingSearchBanner } from '../meeting-search-banner';
 
 import SearchSkeleton from './search-skeleton';
+import { useModal } from '@/shared/lib/use-modal';
 
 export default function SearchPage() {
   const { ref, inView } = useInView({
