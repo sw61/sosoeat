@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -27,6 +27,10 @@ export function MeetingTabs() {
   const urlTab: TabValue = TAB_PARAM_MAP[tabParam] ?? 'all';
   const [optimisticTab, setOptimisticTab] = useState<TabValue>(urlTab);
   const activeTab = isPending ? optimisticTab : urlTab;
+
+  useEffect(() => {
+    setOptimisticTab(urlTab);
+  }, [urlTab]);
 
   const setActiveTab = (value: TabValue) => {
     setOptimisticTab(value);
