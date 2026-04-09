@@ -1,11 +1,10 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { startOfDay } from 'date-fns';
 import { parseAsIsoDate, parseAsJson, parseAsStringLiteral, useQueryState } from 'nuqs';
 
-import { meetingsQueryOptions } from '@/entities/meeting';
-import type { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
+import { useSearchInfiniteOptions } from '@/entities/meeting';
+import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 
 import type { MeetingFilterBarProps } from '../ui/meeting-filter-bar';
 import type { RegionSelection } from '../ui/region-select-modal';
@@ -91,15 +90,12 @@ const useSearchPage = () => {
     data: meetingList,
     isLoading,
     isError,
-  } = useQuery<MeetingList>(meetingsQueryOptions.options(options));
-
-  const rawMeetingData = meetingList?.data ?? [];
-  const meetingData =
-    regionCommitted != null && regionCommitted.length >= 2
-      ? rawMeetingData.filter((m) =>
-          regionCommitted.some((sel) => m.region?.includes(sel.district))
-        )
-      : rawMeetingData;
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useSearchInfiniteOptions(options);
+  const meetingData = meetingList?.pages.flatMap((page) => page.data) ?? [];
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
     setTypeFilter(value);
@@ -148,6 +144,10 @@ const useSearchPage = () => {
     sortOrder,
     isLoading,
     isError,
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage,
   };
 };
 
