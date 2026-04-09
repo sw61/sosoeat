@@ -12,10 +12,7 @@ export default async function SosoTalkWritePage({ searchParams }: SosoTalkWriteP
   const hasEditPostIdParam = editPostIdParam != null;
   const parsedEditPostId =
     editPostIdParam && /^\d+$/.test(editPostIdParam) ? Number(editPostIdParam) : undefined;
-  const editPostId =
-    parsedEditPostId != null && Number.isInteger(parsedEditPostId) && parsedEditPostId > 0
-      ? parsedEditPostId
-      : undefined;
+  const editPostId = parsedEditPostId != null && parsedEditPostId > 0 ? parsedEditPostId : undefined;
   const isInvalidEditPostId = hasEditPostIdParam && editPostId == null;
 
   return (
