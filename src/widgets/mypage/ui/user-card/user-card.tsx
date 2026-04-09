@@ -10,8 +10,6 @@ import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarImage } from '@/shared/ui/avatar';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 
-import { mypageRepository } from '../../model/mypage.repository';
-
 import { UserCardProps } from './user-card.types';
 
 export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCardProps) {
@@ -20,17 +18,10 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
   const [localEmail, setLocalEmail] = useState(email);
   const [localImageUrl, setLocalImageUrl] = useState(imageUrl);
 
-  const handleProfileUpdate = async (data: { name: string; email: string; imageUrl?: string }) => {
-    const updated = await mypageRepository.patchMe({
-      name: data.name,
-      email: data.email,
-      image: data.imageUrl,
-    });
-    if (updated) {
-      setLocalName(updated.name);
-      setLocalEmail(updated.email);
-      setLocalImageUrl(updated.image);
-    }
+  const handleProfileSuccess = (user: { name: string; email: string; image?: string }) => {
+    setLocalName(user.name);
+    setLocalEmail(user.email);
+    setLocalImageUrl(user.image);
   };
 
   return (
@@ -97,7 +88,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
           initialEmail={localEmail}
           initialName={localName}
           initialImageUrl={localImageUrl}
-          onSubmit={handleProfileUpdate}
+          onSuccess={handleProfileSuccess}
         />
       </div>
     </div>
