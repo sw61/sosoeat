@@ -4,7 +4,10 @@ import { useMemo, useState } from 'react';
 
 import { mapPostToSosoTalkCardItem, useGetSosoTalkPostList } from '@/entities/post';
 
-import type { SosoTalkSortValue, SosoTalkTabValue } from '../sosotalk-filter-bar';
+import type {
+  SosoTalkSortValue,
+  SosoTalkTabValue,
+} from '../../sosotalk-filter-bar/sosotalk-filter-bar.types';
 
 import { createSosoTalkMainPageQueryParams } from './sosotalk-main-page.utils';
 
