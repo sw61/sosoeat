@@ -29,7 +29,6 @@ export function useSosoTalkPostDetailPage(postId: string) {
   });
 
   return {
-    commentSectionRef: commentActions.commentSectionRef,
     currentUser,
     data,
     comments,
