@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { HeartButton } from './heart-button';
 
 const meta = {
-  title: './',
+  title: 'features/favorites/ui/HeartButton',
   component: HeartButton,
   args: {
     meetingId: 1,

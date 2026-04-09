@@ -5,7 +5,7 @@ import { useAuthStore } from '@/entities/auth';
 import { NavigationBar } from './navigation-bar';
 
 const meta: Meta<typeof NavigationBar> = {
-  title: './',
+  title: 'widgets/navigation-bar/ui/NavigationBar',
   component: NavigationBar,
   parameters: {
     layout: 'fullscreen',

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { MeetingCreateForm } from './meeting-create-modal';
 
 const meta: Meta<typeof MeetingCreateForm> = {
-  title: './',
+  title: 'features/meeting-create/ui/MeetingCreateForm',
   component: MeetingCreateForm,
   parameters: {
     layout: 'centered',

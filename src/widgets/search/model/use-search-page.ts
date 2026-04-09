@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-
 import { useQuery } from '@tanstack/react-query';
 import { startOfDay } from 'date-fns';
+import { parseAsIsoDate, parseAsJson, parseAsStringLiteral, useQueryState } from 'nuqs';
 
 import { meetingsQueryOptions } from '@/entities/meeting';
 import type { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
@@ -19,12 +18,50 @@ type DateChangeParams = {
 const MEETINGS_PAGE_SIZE = 10;
 
 const useSearchPage = () => {
-  const [regionCommitted, setRegionCommitted] = useState<RegionSelection>(null);
-  const [dateStart, setDateStart] = useState<Date | null>(null);
-  const [dateEnd, setDateEnd] = useState<Date | null>(null);
-  const [typeFilter, setTypeFilter] = useState<'all' | 'groupEat' | 'groupBuy'>('all');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [sortBy, setSortBy] = useState<MeetingFilterBarProps['sortBy']>('participantCount');
+  const [regionCommitted, setRegionCommitted] = useQueryState<RegionSelection>(
+    'regionCommitted',
+    parseAsJson<RegionSelection>((value) => {
+      if (
+        value !== null &&
+        typeof value === 'object' &&
+        'province' in value &&
+        'district' in value
+      ) {
+        return value as RegionSelection;
+      }
+      return null;
+    }).withOptions({ history: 'push' })
+  );
+
+  const [dateStart, setDateStart] = useQueryState<Date>(
+    'dateStart',
+    parseAsIsoDate.withOptions({ history: 'push' })
+  );
+  const [dateEnd, setDateEnd] = useQueryState<Date>(
+    'dateEnd',
+    parseAsIsoDate.withOptions({ history: 'push' })
+  );
+  const [typeFilter, setTypeFilter] = useQueryState<'all' | 'groupEat' | 'groupBuy'>(
+    'typeFilter',
+    parseAsStringLiteral(['all', 'groupEat', 'groupBuy'] as const)
+      .withDefault('all')
+      .withOptions({ history: 'push' })
+  );
+  const [sortOrder, setSortOrder] = useQueryState<'asc' | 'desc'>(
+    'sortOrder',
+    parseAsStringLiteral(['asc', 'desc'] as const)
+      .withDefault('asc')
+      .withOptions({ history: 'push' })
+  );
+
+  const [sortBy, setSortBy] = useQueryState<MeetingFilterBarProps['sortBy']>(
+    'sortBy',
+    parseAsStringLiteral(['participantCount', 'dateTime', 'registrationEnd'] as const)
+      .withDefault('dateTime')
+      .withOptions({
+        history: 'push',
+      })
+  );
 
   const region =
     regionCommitted == null ? undefined : `${regionCommitted.district} ${regionCommitted.province}`;
@@ -35,12 +72,16 @@ const useSearchPage = () => {
 
   const options: Omit<TeamIdMeetingsGetRequest, 'teamId'> = {
     size: MEETINGS_PAGE_SIZE,
-    type: typeFilter === 'all' ? undefined : typeFilter,
+    type:
+      typeFilter === 'all' || typeFilter == null
+        ? undefined
+        : (typeFilter as 'groupEat' | 'groupBuy'),
     region,
-    dateStart: dateStart == null ? undefined : dateStart,
+    dateStart: dateStart ?? undefined,
     dateEnd: dateEndExclusiveIso == null ? undefined : new Date(dateEndExclusiveIso),
-    sortBy: sortBy,
-    sortOrder: sortOrder,
+    sortBy:
+      sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
+    sortOrder: sortOrder === null ? undefined : (sortOrder as 'asc' | 'desc'),
   };
   const {
     data: meetingList,

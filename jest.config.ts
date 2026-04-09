@@ -17,4 +17,11 @@ const config: Config = {
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/', '<rootDir>/tests/'],
 };
 
-export default createJestConfig(config);
+const jestConfig = async () => {
+  const nextConfig = await createJestConfig(config)();
+  return {
+    ...nextConfig,
+    transformIgnorePatterns: ['node_modules/(?!nuqs/)'],
+  };
+};
+export default jestConfig;

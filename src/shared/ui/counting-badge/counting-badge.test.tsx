@@ -18,13 +18,13 @@ describe('CountingBadge', () => {
       render(<CountingBadge count={3} />);
       const badge = screen.getByText('3');
       expect(badge).toHaveClass(
-        'h-4',
-        'w-10',
+        'h-5',
         'text-xs',
         'font-semibold',
         'rounded-full',
         'bg-sosoeat-orange-600',
-        'text-white'
+        'text-white',
+        'min-w-5'
       );
     });
   });

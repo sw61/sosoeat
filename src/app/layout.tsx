@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
 
+// eslint-disable-next-line feature-sliced/absolute-relative
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+
+import { getFavoritesCount } from '@/entities/favorites/index.server';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
 import { Toaster } from '@/shared/ui/sonner';
 import { Footer } from '@/widgets/footer';
@@ -23,15 +27,21 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const initialUser = await CookieStorage.getUser();
+  const initialFavoritesCount = initialUser ? await getFavoritesCount() : 0;
 
   return (
     <html lang="ko">
       <body className="min-w-[375px] overscroll-none">
-        <Providers initialUser={initialUser}>
-          <NavigationBar initialUser={initialUser} />
-          <main>{children}</main>
-          <Footer />
-        </Providers>
+        <NuqsAdapter>
+          <Providers initialUser={initialUser}>
+            <NavigationBar
+              initialUser={initialUser}
+              initialFavoritesCount={initialFavoritesCount}
+            />
+            <main>{children}</main>
+            <Footer />
+          </Providers>
+        </NuqsAdapter>
         <Toaster />
       </body>
     </html>

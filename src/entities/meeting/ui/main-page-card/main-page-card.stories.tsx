@@ -6,7 +6,7 @@ import type { MeetingWithHost } from '@/shared/types/generated-client';
 import { MainPageCard } from './main-page-card';
 
 const meta = {
-  title: './',
+  title: 'entities/meeting/ui/MainPageCard',
   component: MainPageCard,
 } satisfies Meta<typeof MainPageCard>;
 
