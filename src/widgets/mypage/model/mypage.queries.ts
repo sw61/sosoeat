@@ -1,6 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-
-import { UpdateUserRequest } from '@/shared/types/generated-client';
+import { useQuery } from '@tanstack/react-query';
 
 import { mypageRepository } from './mypage.repository';
 
@@ -30,9 +28,4 @@ export const useFavoriteMeetings = (enabled = true) =>
     queryFn: mypageRepository.fetchFavoriteMeetings,
     enabled,
     refetchOnMount: 'always',
-  });
-
-export const usePatchMe = () =>
-  useMutation({
-    mutationFn: (body: UpdateUserRequest) => mypageRepository.patchMe(body),
   });
