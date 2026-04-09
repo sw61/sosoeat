@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { CookieStorage } from './cookie-storage';
+import { createErrorResponse, forwardBackendError, type RequestContext } from './error-handler';
 import { silentRefresh } from './silent-refresh';
 
 /**
@@ -29,11 +30,22 @@ export async function createProxyRequest(
     headers.set('Content-Type', contentType);
   }
 
-  const response = await fetch(targetUrl, {
+  const context: RequestContext = {
     method: request.method,
-    headers,
-    body,
-  });
+    path: request.nextUrl.pathname,
+  };
+
+  let response: globalThis.Response;
+  try {
+    response = await fetch(targetUrl, {
+      method: request.method,
+      headers,
+      body,
+    });
+  } catch (error) {
+    // 네트워크 오류 (백엔드 서버 다운, 연결 실패 등)
+    return createErrorResponse(error, 'Service Unavailable', 503, context);
+  }
 
   // 401 발생 시 토큰 갱신 후 1회 재시도
   if (response.status === 401 && !retry) {
@@ -43,6 +55,15 @@ export async function createProxyRequest(
     }
   }
 
+  // ⚠️ 중요: response.json()을 소비하는 작업은 정상 응답 처리 전에 수행되어야 함
+  // forwardBackendError()는 response.json()을 호출하므로,
+  // 이후 response.body로 접근할 수 없습니다.
+  // 따라서 !response.ok 체크는 정상 응답 스트리밍 전에 반드시 먼저 처리되어야 합니다.
+  if (!response.ok) {
+    return forwardBackendError(response, context);
+  }
+
+  // 정상 응답 스트리밍
   const responseHeaders = new Headers();
   response.headers.forEach((value, key) => {
     if (key !== 'content-encoding' && key !== 'transfer-encoding') {

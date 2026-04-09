@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { CookieStorage } from '@/shared/lib/cookie-storage';
-import { createErrorResponse } from '@/shared/lib/error-handler';
+import { createBffErrorResponse } from '@/shared/lib/error-handler';
 
 const BASE_URL = process.env.API_BASE_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
@@ -30,7 +30,7 @@ export async function POST() {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    return createErrorResponse(error, 'Internal Server Error');
+    return createBffErrorResponse(error, '/api/auth/logout');
   } finally {
     // 2. 서버 세션(쿠키) 파기 — 백엔드 결과와 무관하게 항상 실행
     await CookieStorage.clearSession().catch((error) => {
