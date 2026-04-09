@@ -1,4 +1,4 @@
-import type { SosoTalkCommentItemData } from '../../sosotalk-comment-section/sosotalk-comment-section.types';
+import type { SosoTalkCommentItemData } from '@/entities/sosotalk-comment';
 
 export interface SosoTalkPostDetailProps {
   title: string;
