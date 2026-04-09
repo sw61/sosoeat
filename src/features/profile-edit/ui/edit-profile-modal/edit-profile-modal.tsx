@@ -118,7 +118,7 @@ function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorProps) {
     <div className="flex justify-center">
       <div className="relative h-[116px] w-[116px]">
         <Image
-          src={imageUrl || '/default-profile.png'}
+          src={imageUrl || '/images/basic-profile.svg'}
           alt="프로필 이미지"
           fill
           className="ring-sosoeat-gray-300 rounded-full object-cover ring-1"
