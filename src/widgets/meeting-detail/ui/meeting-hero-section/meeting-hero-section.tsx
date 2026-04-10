@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -7,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/entities/auth';
 import type { Meeting } from '@/entities/meeting';
-import { MeetingEditModal, toMeetingEditFormData } from '@/features/meeting-edit';
+import { toMeetingEditFormData } from '@/features/meeting-edit';
 import { useModal } from '@/shared/lib/use-modal';
 
 import {
@@ -21,6 +22,10 @@ import {
 import { MeetingDetailCard } from '../meeting-detail-card';
 
 import { useMeetingRole } from './hooks/use-meeting-role';
+
+const MeetingEditModal = dynamic(() =>
+  import('@/features/meeting-edit').then((m) => m.MeetingEditModal)
+);
 
 interface MeetingHeroSectionProps {
   meeting: Meeting;
