@@ -30,9 +30,11 @@ export const useToggleFavorite = () => {
       queryClient.setQueryData(favoriteKeys.count(), context?.previousCount);
     },
     onSuccess: (_data, { meetingId, isFavorited }) => {
-      queryClient.invalidateQueries({ queryKey: favoriteKeys.count() });
-      queryClient.invalidateQueries({ queryKey: favoriteKeys.list() });
       queryClient.setQueryData(favoriteKeys.status(meetingId), isFavorited);
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: favoriteKeys.count() }),
+        queryClient.invalidateQueries({ queryKey: favoriteKeys.list() }),
+      ]);
     },
   });
 };
