@@ -70,7 +70,7 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
         },
       });
 
-      router.push(`/sosotalk/${createdPost.id}`);
+      router.replace(`/sosotalk/${createdPost.id}`);
     } catch {
       toast.error('게시글 등록에 실패했어요. 다시 시도해 주세요.');
     } finally {
@@ -102,7 +102,7 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
         },
       });
 
-      router.push(`/sosotalk/${editPostId}`);
+      router.replace(`/sosotalk/${editPostId}`);
     } catch {
       toast.error('게시글 수정에 실패했어요. 다시 시도해 주세요.');
     } finally {
