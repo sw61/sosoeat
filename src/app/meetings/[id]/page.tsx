@@ -41,9 +41,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function MeetingDetailPage({ params }: Props) {
   const { id } = await params;
   const meetingId = Number(id);
+  const meeting = await getMeetingById(meetingId).catch(() => null);
 
   return (
     <main className="space-y-[30px] py-10">
+      {meeting && <link rel="preload" as="image" href={meeting.image} />}
       <Suspense fallback={<MeetingHeroSkeleton />}>
         <MeetingHeroFetcher meetingId={meetingId} />
       </Suspense>
