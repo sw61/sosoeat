@@ -101,12 +101,12 @@ export const useJoinMeeting = (id: number) => {
       toast.error(error.message || '모임 참여 중 오류가 발생했습니다.');
     },
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       toast.success('모임에 참여했습니다.');
     },
     onSettled: (_data, error) => {
       if (error == null) {
         void queryClient.invalidateQueries({ queryKey: meetingDetailKeys.detail(id) });
-        void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       }
     },
   });
@@ -139,12 +139,12 @@ export const useLeaveMeeting = (id: number) => {
       toast.error(error.message || '모임 참여 취소 중 오류가 발생했습니다.');
     },
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       toast.success('모임 참여를 취소했습니다.');
     },
     onSettled: (_data, error) => {
       if (error == null) {
         void queryClient.invalidateQueries({ queryKey: meetingDetailKeys.detail(id) });
-        void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       }
     },
   });
