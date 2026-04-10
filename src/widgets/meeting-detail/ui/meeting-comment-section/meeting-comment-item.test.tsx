@@ -7,6 +7,10 @@ import { useAuthStore } from '@/entities/auth';
 import { MeetingCommentItem } from './meeting-comment-item';
 import type { MeetingComment } from './meeting-comment-section.types';
 
+jest.mock('@/entities/auth', () => ({
+  useAuthStore: jest.fn(),
+}));
+
 jest.mock('@/features/meeting-comment', () => ({
   useLikeComment: jest.fn(() => ({ mutate: jest.fn() })),
   useUpdateComment: jest.fn(() => ({ mutate: jest.fn() })),
@@ -16,6 +20,10 @@ jest.mock('@/features/meeting-comment', () => ({
 jest.mock('./format-date', () => ({
   formatCommentDate: jest.fn((date: string) => date),
 }));
+
+const { useAuthStore } = jest.requireMock('@/entities/auth') as {
+  useAuthStore: jest.Mock;
+};
 
 const mockComment: MeetingComment = {
   id: 1,
@@ -42,6 +50,16 @@ const createWrapper = () => {
 };
 
 describe('MeetingCommentItem', () => {
+  beforeEach(() => {
+    useAuthStore.mockReturnValue({
+      isAuthenticated: true,
+      user: {
+        name: '\uB9C8\uB8E8',
+        image: null,
+      },
+    });
+  });
+
   it('renders author, content, date, and like count', () => {
     render(<MeetingCommentItem comment={{ ...mockComment, isMine: false }} meetingId={2} />, {
       wrapper: createWrapper(),
@@ -92,7 +110,9 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(screen.queryByRole('button', { name: '\uB354\uBCF4\uAE30' })).not.toBeInTheDocument();
+      const button = screen.getByRole('button', { name: '\uB354\uBCF4\uAE30' });
+
+      expect(button.closest('div.invisible')).toBeTruthy();
     });
   });
 

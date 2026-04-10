@@ -61,15 +61,15 @@ interface SosoTalkShareModalProps {
 const KAKAO_JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
 
 const toAbsoluteImageUrl = (imageUrl?: string) => {
-  if (typeof window === 'undefined') {
-    return imageUrl ?? '';
+  const path = imageUrl || '/images/logo.svg';
+
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
   }
 
-  if (imageUrl?.startsWith('http://') || imageUrl?.startsWith('https://')) {
-    return imageUrl;
-  }
+  if (typeof window === 'undefined') return path;
 
-  return window.location.origin + (imageUrl || '/images/logo.svg');
+  return `${window.location.origin}${path.startsWith('/') ? '' : '/'}${path}`;
 };
 
 export function SosoTalkShareModal({

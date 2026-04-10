@@ -217,6 +217,12 @@ describe('SosoTalkPostDetailPage', () => {
 
     render(<SosoTalkPostDetailPage postId="1" />);
 
+    useGetSosoTalkPostDetail.mockReturnValue({
+      data: currentPostDetailResponse,
+      isLoading: false,
+      isError: false,
+    });
+
     await user.click(screen.getByRole('button', { name: '공유' }));
 
     const dialog = screen.getByRole('dialog');
