@@ -110,9 +110,13 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      const button = screen.getByRole('button', { name: '\uB354\uBCF4\uAE30' });
+      const button = screen.getByRole('button', {
+        name: '\uB354\uBCF4\uAE30',
+        hidden: true,
+      });
 
-      expect(button.closest('div.invisible')).toBeTruthy();
+      expect(button.parentElement).toHaveClass('invisible');
+      expect(button.parentElement).toHaveClass('pointer-events-none');
     });
   });
 
