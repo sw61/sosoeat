@@ -1,7 +1,7 @@
 import type { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 
 import { meetingsApi } from '../api/meetings.api';
-import { getMeetings } from '../index.server';
+import type { getMeetings } from '../index.server';
 
 const searchKeys = {
   all: () => ['search'] as const,

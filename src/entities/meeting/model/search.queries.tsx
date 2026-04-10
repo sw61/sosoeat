@@ -4,7 +4,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client/apis/MeetingsApi';
 
-import { getMeetings } from '../index.server';
+import type { getMeetings } from '../index.server';
 
 import { meetingsQueryOptions } from './meetings.options';
 

@@ -1,6 +1,6 @@
 import { SearchParams } from 'nuqs';
 
-import { getMeetings } from '@/entities/meeting';
+import { getMeetings } from '@/entities/meeting/index.server';
 import { MeetingSearchBanner, SearchPage, searchParamsCache } from '@/widgets/search';
 
 type PageProps = {

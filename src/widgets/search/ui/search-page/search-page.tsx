@@ -3,7 +3,8 @@
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { getMeetings, MainPageCard } from '@/entities/meeting';
+import { MainPageCard } from '@/entities/meeting';
+import type { getMeetings } from '@/entities/meeting/index.server';
 import { HeartButton } from '@/features/favorites';
 import {
   MeetingCreateModal,

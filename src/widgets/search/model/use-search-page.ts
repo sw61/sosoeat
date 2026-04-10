@@ -11,7 +11,8 @@ import {
   useQueryState,
 } from 'nuqs';
 
-import { getMeetings, useSearchInfiniteOption } from '@/entities/meeting';
+import { useSearchInfiniteOption } from '@/entities/meeting';
+import type { getMeetings } from '@/entities/meeting/index.server';
 import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 
 import type { MeetingFilterBarProps } from '../ui/meeting-filter-bar';
