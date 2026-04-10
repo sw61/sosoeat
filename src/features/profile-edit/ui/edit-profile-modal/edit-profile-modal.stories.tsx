@@ -18,6 +18,5 @@ export const Default: Story = {
   name: '반응형',
   args: {
     initialName: '김민준',
-    initialEmail: 'sosoeat@codeit.com',
   },
 };

@@ -26,7 +26,9 @@ export function SosoTalkWritePageClient({
   });
 
   if (isInvalidEditPostId) {
-    return <div className="py-20 text-center text-sm text-gray-500">올바르지 않은 게시글입니다.</div>;
+    return (
+      <div className="py-20 text-center text-sm text-gray-500">올바르지 않은 게시글입니다.</div>
+    );
   }
 
   if (!isEditMode) {

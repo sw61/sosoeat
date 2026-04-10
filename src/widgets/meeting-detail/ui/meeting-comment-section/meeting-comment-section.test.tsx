@@ -9,10 +9,18 @@ import type { MeetingComment } from './meeting-comment-section.types';
 
 const mockMutate = jest.fn();
 
-jest.mock('@/entities/comment', () => ({
-  ...jest.requireActual('@/entities/comment'),
+jest.mock('@/entities/meeting-comment', () => ({
+  ...jest.requireActual('@/entities/meeting-comment'),
   useComments: jest.fn(() => ({ data: [] })),
+  useCommentCount: jest.fn(() => ({ data: { count: 0 } })),
+}));
+
+jest.mock('@/features/meeting-comment', () => ({
   useCreateComment: jest.fn(() => ({ mutate: mockMutate, isPending: false })),
+}));
+
+jest.mock('@/shared/ui/comment-input', () => ({
+  CommentInput: jest.requireActual('@/shared/ui/comment-input').CommentInput,
 }));
 
 const mockComments: MeetingComment[] = [

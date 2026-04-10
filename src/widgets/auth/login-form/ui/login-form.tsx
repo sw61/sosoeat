@@ -29,7 +29,7 @@ const LoginFormContent = (props: LoginFormProps) => {
   } = useLoginForm(props);
 
   return (
-    <form onSubmit={handleFormSubmit} className="w-full" noValidate>
+    <form onSubmit={handleFormSubmit} className="w-full px-4 md:px-0" noValidate>
       <FieldGroup className="gap-4">
         <Field orientation="vertical" className="gap-1">
           <FieldLabel htmlFor="email" className="text-sm font-normal duration-200 md:text-base">

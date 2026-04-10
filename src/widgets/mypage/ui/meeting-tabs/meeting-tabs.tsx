@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -22,15 +22,22 @@ const TAB_PARAM_MAP: Record<string, TabValue> = {
 export function MeetingTabs() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const tabParam = searchParams?.get('tab') ?? 'all';
-  const activeTab: TabValue = TAB_PARAM_MAP[tabParam] ?? 'all';
+  const urlTab: TabValue = TAB_PARAM_MAP[tabParam] ?? 'all';
+  const [optimisticTab, setOptimisticTab] = useState<TabValue>(urlTab);
+  const activeTab = isPending ? optimisticTab : urlTab;
 
-  const setActiveTab = useCallback(
-    (value: TabValue) => {
-      router.push(`/mypage?tab=${value}`);
-    },
-    [router]
-  );
+  useEffect(() => {
+    setOptimisticTab(urlTab);
+  }, [urlTab]);
+
+  const setActiveTab = (value: TabValue) => {
+    setOptimisticTab(value);
+    startTransition(() => {
+      router.replace(`/mypage?tab=${value}`);
+    });
+  };
 
   const { cards: fetchedCards, isLoading } = useMeetingTabs(activeTab);
 

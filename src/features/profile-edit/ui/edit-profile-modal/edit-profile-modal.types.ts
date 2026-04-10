@@ -6,7 +6,7 @@ export interface EditProfileModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   initialName?: string;
-  initialEmail?: string;
+
   initialImageUrl?: string;
   onSuccess?: (user: User) => void;
 }
