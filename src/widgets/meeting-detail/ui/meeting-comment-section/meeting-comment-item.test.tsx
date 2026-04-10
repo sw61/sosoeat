@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { useAuthStore } from '@/entities/auth';
+
 import { MeetingCommentItem } from './meeting-comment-item';
 import type { MeetingComment } from './meeting-comment-section.types';
 
@@ -11,7 +13,6 @@ jest.mock('@/features/meeting-comment', () => ({
   useDeleteComment: jest.fn(() => ({ mutate: jest.fn() })),
   useCreateComment: jest.fn(() => ({ mutate: jest.fn() })),
 }));
-
 jest.mock('./format-date', () => ({
   formatCommentDate: jest.fn((date: string) => date),
 }));
@@ -20,7 +21,8 @@ const mockComment: MeetingComment = {
   id: 1,
   parentId: null,
   author: { nickname: '\uB9C8\uB8E8', profileUrl: null },
-  content: '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?',
+  content:
+    '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?',
   isDeleted: false,
   createdAt: '03/12',
   likeCount: 3,
@@ -41,13 +43,15 @@ const createWrapper = () => {
 
 describe('MeetingCommentItem', () => {
   it('renders author, content, date, and like count', () => {
-    render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
+    render(<MeetingCommentItem comment={{ ...mockComment, isMine: false }} meetingId={2} />, {
       wrapper: createWrapper(),
     });
 
     expect(screen.getByText('\uB9C8\uB8E8')).toBeInTheDocument();
     expect(
-      screen.getByText('\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?')
+      screen.getByText(
+        '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?'
+      )
     ).toBeInTheDocument();
     expect(screen.getByText('03/12')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
@@ -55,9 +59,12 @@ describe('MeetingCommentItem', () => {
 
   describe('host badge', () => {
     it('shows the host badge for host comments', () => {
-      render(<MeetingCommentItem comment={{ ...mockComment, isHostComment: true }} meetingId={1} />, {
-        wrapper: createWrapper(),
-      });
+      render(
+        <MeetingCommentItem comment={{ ...mockComment, isHostComment: true }} meetingId={1} />,
+        {
+          wrapper: createWrapper(),
+        }
+      );
 
       expect(screen.getByText('\uC791\uC131\uC790')).toBeInTheDocument();
     });
@@ -81,7 +88,7 @@ describe('MeetingCommentItem', () => {
     });
 
     it('hides the menu button for other users comments', () => {
-      render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
+      render(<MeetingCommentItem comment={mockComment} meetingId={2} />, {
         wrapper: createWrapper(),
       });
 
@@ -102,7 +109,10 @@ describe('MeetingCommentItem', () => {
 
     it('hides like and reply actions', () => {
       render(
-        <MeetingCommentItem comment={{ ...mockComment, isDeleted: true, isMine: true }} meetingId={1} />,
+        <MeetingCommentItem
+          comment={{ ...mockComment, isDeleted: true, isMine: true }}
+          meetingId={1}
+        />,
         {
           wrapper: createWrapper(),
         }
@@ -160,6 +170,13 @@ describe('MeetingCommentItem', () => {
   });
 
   describe('replies', () => {
+    beforeEach(() => {
+      useAuthStore.setState({ isAuthenticated: true });
+    });
+    afterEach(() => {
+      useAuthStore.setState({ isAuthenticated: false });
+    });
+
     it('applies the reply background style for nested replies', () => {
       const { container } = render(
         <MeetingCommentItem comment={{ ...mockComment, parentId: 1 }} isReply meetingId={1} />,
@@ -197,7 +214,9 @@ describe('MeetingCommentItem', () => {
       expect(screen.getByRole('button', { name: '\uB2F5\uAE00' })).toBeInTheDocument();
 
       rerender(
-        <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+        <QueryClientProvider
+          client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+        >
           <MeetingCommentItem comment={{ ...mockComment, parentId: 1 }} isReply meetingId={1} />
         </QueryClientProvider>
       );

@@ -23,8 +23,7 @@ interface UseSosoTalkPostDetailPostActionsParams {
   postId: number;
 }
 
-const MOBILE_SHARE_USER_AGENT =
-  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+const MOBILE_SHARE_USER_AGENT = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
 
 export function useSosoTalkPostDetailPostActions({
   data,

@@ -87,9 +87,9 @@ export function MeetingCommentItem({
                 <span className="text-sosoeat-gray-600 text-xs">
                   {formatCommentDate(createdAt)}
                 </span>
-                <div className={cn((!isMine || isDeleted) && 'pointer-events-none invisible')}>
+                {isMine && !isDeleted && (
                   <EllipsisMenu onEdit={() => setIsEditing(true)} onDelete={openDeleteModal} />
-                </div>
+                )}
               </div>
             </div>
 
