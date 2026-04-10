@@ -1,14 +1,13 @@
 import { CalendarDays, ChevronLeft, MoreHorizontal } from 'lucide-react';
 
-import {
-  ActionMenu,
-  ActionMenuContent,
-  ActionMenuItem,
-  ActionMenuSeparator,
-  ActionMenuTrigger,
-} from '@/shared/ui/action-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar/avatar';
 import { Button } from '@/shared/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown';
 
 import type { SosoTalkPostHeaderProps } from './sosotalk-post-detail.types';
 
@@ -45,8 +44,8 @@ export function SosoTalkPostDetailHeader({
         </div>
 
         {isAuthor ? (
-          <ActionMenu>
-            <ActionMenuTrigger asChild>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <button
                 type="button"
                 className="text-sosoeat-gray-500 hover:text-sosoeat-gray-700 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors"
@@ -55,15 +54,14 @@ export function SosoTalkPostDetailHeader({
               >
                 <MoreHorizontal className="h-7 w-7" />
               </button>
-            </ActionMenuTrigger>
-            <ActionMenuContent>
-              <ActionMenuItem onClick={onEditClick}>수정하기</ActionMenuItem>
-              <ActionMenuSeparator />
-              <ActionMenuItem variant="destructive" onClick={onDeleteClick}>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[120px]">
+              <DropdownMenuItem onClick={onEditClick}>수정하기</DropdownMenuItem>
+              <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
                 삭제하기
-              </ActionMenuItem>
-            </ActionMenuContent>
-          </ActionMenu>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : null}
       </div>
 

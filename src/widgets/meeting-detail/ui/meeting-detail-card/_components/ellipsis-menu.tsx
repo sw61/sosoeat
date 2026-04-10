@@ -4,14 +4,13 @@ import { useSyncExternalStore } from 'react';
 
 import { EllipsisVerticalIcon } from 'lucide-react';
 
-import {
-  ActionMenu,
-  ActionMenuContent,
-  ActionMenuItem,
-  ActionMenuSeparator,
-  ActionMenuTrigger,
-} from '@/shared/ui/action-menu';
 import { Button } from '@/shared/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown';
 
 interface EllipsisMenuProps {
   onEdit?: () => void;
@@ -31,26 +30,25 @@ export function EllipsisMenu({ onEdit, onDelete, isDeletePending }: EllipsisMenu
   if (!mounted) return null;
 
   return (
-    <ActionMenu>
-      <ActionMenuTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon-sm" className="cursor-pointer" aria-label="더보기">
           <EllipsisVerticalIcon className="text-sosoeat-gray-500 size-5" />
         </Button>
-      </ActionMenuTrigger>
-      <ActionMenuContent>
-        <ActionMenuItem className="cursor-pointer" onClick={onEdit}>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem className="cursor-pointer" onClick={onEdit}>
           수정하기
-        </ActionMenuItem>
-        <ActionMenuSeparator />
-        <ActionMenuItem
+        </DropdownMenuItem>
+        <DropdownMenuItem
           variant="destructive"
           className="cursor-pointer data-disabled:cursor-not-allowed"
           disabled={isDeletePending}
           onClick={onDelete}
         >
           삭제하기
-        </ActionMenuItem>
-      </ActionMenuContent>
-    </ActionMenu>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

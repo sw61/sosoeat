@@ -5,15 +5,14 @@ import Link from 'next/link';
 
 import { AuthUser } from '@/entities/auth';
 import { Notification } from '@/features/notifications';
-import {
-  ActionMenu,
-  ActionMenuContent,
-  ActionMenuItem,
-  ActionMenuSeparator,
-  ActionMenuTrigger,
-} from '@/shared/ui/action-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown';
 
 interface NavActionsProps {
   user: AuthUser | null;
@@ -46,8 +45,8 @@ export function NavActions({ user, onOpenCreateModal, onLogout }: NavActionsProp
 
       <Notification />
 
-      <ActionMenu>
-        <ActionMenuTrigger asChild>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
           <button
             className="hidden cursor-pointer items-center gap-1 outline-none md:flex"
             aria-label="프로필 메뉴"
@@ -60,19 +59,16 @@ export function NavActions({ user, onOpenCreateModal, onLogout }: NavActionsProp
               </AvatarFallback>
             </Avatar>
           </button>
-        </ActionMenuTrigger>
-        <ActionMenuContent>
-          <ActionMenuItem asChild>
-            <Link href="/mypage" className="cursor-pointer">
-              마이페이지
-            </Link>
-          </ActionMenuItem>
-          <ActionMenuSeparator />
-          <ActionMenuItem variant="destructive" className="cursor-pointer" onClick={onLogout}>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem className="h-10" asChild>
+            <Link href="/mypage">마이페이지</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="h-10" variant="destructive" onClick={onLogout}>
             로그아웃
-          </ActionMenuItem>
-        </ActionMenuContent>
-      </ActionMenu>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </>
   );
 }
