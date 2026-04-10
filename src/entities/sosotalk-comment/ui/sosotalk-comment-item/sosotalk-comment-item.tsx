@@ -2,6 +2,7 @@ import { MoreHorizontal } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { CommentInput } from '@/shared/ui/comment-input';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown';
 
-import { CommentInput } from '../comment-input';
+import type { SosoTalkCommentItemProps } from './sosotalk-comment-item.types';
 
-import type { CommentItemProps } from './comment-item.types';
-
-export function CommentItem({
+export function SosoTalkCommentItem({
   authorName,
   authorImageUrl,
   createdAt,
@@ -29,7 +28,7 @@ export function CommentItem({
   onEditSubmit,
   onEditCancel,
   className,
-}: CommentItemProps) {
+}: SosoTalkCommentItemProps) {
   return (
     <article
       className={cn(

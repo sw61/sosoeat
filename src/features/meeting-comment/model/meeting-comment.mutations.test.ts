@@ -4,14 +4,18 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { toast } from 'sonner';
 
-import { commentApi } from '../api/comment.api';
+import { meetingCommentApi, meetingCommentKeys } from '@/entities/meeting-comment';
 
-import { commentKeys, useCreateComment, useDeleteComment } from './comment.queries';
+import { useCreateComment, useDeleteComment } from './meeting-comment.mutations';
 
-jest.mock('../api/comment.api', () => ({
-  commentApi: {
+jest.mock('@/entities/meeting-comment', () => ({
+  meetingCommentApi: {
     createComment: jest.fn(),
     deleteComment: jest.fn(),
+  },
+  meetingCommentKeys: {
+    list: (meetingId: number) => ['meeting-comments', meetingId],
+    count: (meetingId: number) => ['meeting-comments', meetingId, 'count'],
   },
 }));
 
@@ -22,8 +26,8 @@ jest.mock('sonner', () => ({
   },
 }));
 
-const mockCreateComment = commentApi.createComment as jest.Mock;
-const mockDeleteComment = commentApi.deleteComment as jest.Mock;
+const mockCreateComment = meetingCommentApi.createComment as jest.Mock;
+const mockDeleteComment = meetingCommentApi.deleteComment as jest.Mock;
 
 const MEETING_ID = 1;
 
@@ -55,7 +59,7 @@ describe('useCreateComment', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(invalidateSpy).toHaveBeenCalledWith({
-      queryKey: commentKeys.list(MEETING_ID),
+      queryKey: meetingCommentKeys.list(MEETING_ID),
     });
   });
 
@@ -87,7 +91,7 @@ describe('useDeleteComment', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(invalidateSpy).toHaveBeenCalledWith({
-      queryKey: commentKeys.list(MEETING_ID),
+      queryKey: meetingCommentKeys.list(MEETING_ID),
     });
   });
 

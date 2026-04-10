@@ -5,13 +5,13 @@ import { type ReactNode } from 'react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
+import { SosoTalkPostDetail } from './sosotalk-post-detail/sosotalk-post-detail';
 import {
-  SOSOTALK_AUTHOR_IMAGE_FALLBACK,
   formatSosoTalkRelativeTime,
   mapCommentToCommentItemData,
+  SOSOTALK_AUTHOR_IMAGE_FALLBACK,
   useSosoTalkPostDetailPage,
 } from './model';
-import { SosoTalkPostDetail } from './sosotalk-post-detail/sosotalk-post-detail';
 
 interface SosoTalkPostDetailPageProps {
   postId: string;

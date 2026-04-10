@@ -1,6 +1,6 @@
 import { commentClient } from '@/shared/api/comment-client';
 
-export type Comment = {
+export type MeetingComment = {
   id: number;
   parentId: number | null;
   content: string;
@@ -14,19 +14,19 @@ export type Comment = {
   isLiked: boolean;
   isHostComment: boolean;
   isMine: boolean;
-  replies: Comment[];
+  replies: MeetingComment[];
 };
 
-export type CreateCommentRequest = {
+export type CreateMeetingCommentRequest = {
   content: string;
   parentId?: number | null;
 };
 
-export type UpdateCommentRequest = {
+export type UpdateMeetingCommentRequest = {
   content: string;
 };
 
-export type CommentCountResponse = {
+export type MeetingCommentCountResponse = {
   count: number;
 };
 
@@ -37,12 +37,15 @@ export type SyncMeetingRequest = {
 };
 
 /**
- * [Service Layer] commentApi
- * comment server와 연동하여 댓글 관련 비동기 작업을 처리합니다.
+ * [Service Layer] meetingCommentApi
+ * comment server와 연동하여 모임 댓글 관련 비동기 작업을 처리합니다.
  * 클라이언트 컴포넌트 전용 (comment-client 사용)
  */
-export const commentApi = {
-  async getComments(meetingId: number, syncMeeting?: SyncMeetingRequest): Promise<Comment[]> {
+export const meetingCommentApi = {
+  async getComments(
+    meetingId: number,
+    syncMeeting?: SyncMeetingRequest
+  ): Promise<MeetingComment[]> {
     let response = await commentClient.get(`/meetings/${meetingId}/comments`);
 
     if (response.status === 404 && syncMeeting?.teamId) {
@@ -63,7 +66,7 @@ export const commentApi = {
     return response.json();
   },
 
-  async getCommentCount(meetingId: number): Promise<CommentCountResponse> {
+  async getCommentCount(meetingId: number): Promise<MeetingCommentCountResponse> {
     const response = await commentClient.get(`/meetings/${meetingId}/comments/count`);
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -72,7 +75,10 @@ export const commentApi = {
     return response.json();
   },
 
-  async createComment(meetingId: number, payload: CreateCommentRequest): Promise<Comment> {
+  async createComment(
+    meetingId: number,
+    payload: CreateMeetingCommentRequest
+  ): Promise<MeetingComment> {
     const response = await commentClient.post(`/meetings/${meetingId}/comments`, payload);
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -81,7 +87,10 @@ export const commentApi = {
     return response.json();
   },
 
-  async updateComment(commentId: number, payload: UpdateCommentRequest): Promise<Comment> {
+  async updateComment(
+    commentId: number,
+    payload: UpdateMeetingCommentRequest
+  ): Promise<MeetingComment> {
     const response = await commentClient.patch(`/comments/${commentId}`, payload);
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

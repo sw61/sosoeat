@@ -4,10 +4,10 @@ import { useLayoutEffect, useRef } from 'react';
 
 import { Send } from 'lucide-react';
 
-import { cn } from '@/shared/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
-import { Button } from '@/shared/ui/button';
-import { Textarea } from '@/shared/ui/textarea';
+import { cn } from '../../lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '../avatar';
+import { Button } from '../button';
+import { Textarea } from '../textarea';
 
 import type { CommentInputProps } from './comment-input.types';
 

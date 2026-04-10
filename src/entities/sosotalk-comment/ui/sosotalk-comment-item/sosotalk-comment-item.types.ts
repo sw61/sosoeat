@@ -1,4 +1,4 @@
-export interface CommentItemData {
+export interface SosoTalkCommentItemData {
   id: string;
   authorName: string;
   authorImageUrl?: string;
@@ -16,6 +16,6 @@ export interface CommentItemData {
   onEditCancel?: () => void;
 }
 
-export interface CommentItemProps extends Omit<CommentItemData, 'id'> {
+export interface SosoTalkCommentItemProps extends Omit<SosoTalkCommentItemData, 'id'> {
   className?: string;
 }

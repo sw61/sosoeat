@@ -2,8 +2,8 @@
 
 import { MessageSquareText } from 'lucide-react';
 
-import { CommentInput } from '@/entities/comment';
 import { cn } from '@/shared/lib/utils';
+import { CommentInput } from '@/shared/ui/comment-input';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 
 import { SosoTalkCommentItem } from './sosotalk-comment-item';
