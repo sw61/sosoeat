@@ -19,6 +19,9 @@ interface UseSosoTalkWritePageParams {
   editPostId?: number;
 }
 
+const hasRequiredImage = (payload: SosoTalkPostSubmitPayload) =>
+  payload.imageFile != null || payload.displayImageUrl.trim().length > 0;
+
 const resolveCreateImageUrl = async (
   payload: SosoTalkPostSubmitPayload
 ): Promise<string | undefined> => {
@@ -50,6 +53,11 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
       return;
     }
 
+    if (!hasRequiredImage(payload)) {
+      toast.error('이미지는 필수입니다.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -72,6 +80,11 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
 
   const handleEditSubmit = async (payload: SosoTalkPostSubmitPayload) => {
     if (editPostId == null || editPostId <= 0 || isSubmitting || updatePostMutation.isPending) {
+      return;
+    }
+
+    if (!hasRequiredImage(payload)) {
+      toast.error('이미지는 필수입니다.');
       return;
     }
 

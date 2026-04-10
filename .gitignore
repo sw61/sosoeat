@@ -72,4 +72,11 @@ graphify-out/obsidian/
 src/graphify-out/
 
 # Claude Code local settings
+.claude/settings.local.json
+
+# Codex local settings
+.codex/
+
+# Graphify cache
+src/graphify-out/cache/
 .claude/settings.local.json/

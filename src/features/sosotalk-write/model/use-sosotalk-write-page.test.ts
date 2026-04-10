@@ -98,7 +98,7 @@ describe('useSosoTalkWritePage', () => {
         contentHtml: '<p>저녁 같이 드실 분</p>',
         contentText: '저녁 같이 드실 분',
         imageFile: null,
-        displayImageUrl: '',
+        displayImageUrl: 'https://example.com/fallback.png',
       });
     });
 
@@ -164,7 +164,7 @@ describe('useSosoTalkWritePage', () => {
         contentHtml: '<p>수정 본문</p>',
         contentText: '수정 본문',
         imageFile: null,
-        displayImageUrl: '',
+        displayImageUrl: 'https://example.com/original.png',
       });
     });
 

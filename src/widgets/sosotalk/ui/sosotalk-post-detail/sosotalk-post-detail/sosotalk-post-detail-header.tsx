@@ -1,6 +1,7 @@
-import { CalendarDays, MoreHorizontal } from 'lucide-react';
+import { CalendarDays, ChevronLeft, MoreHorizontal } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar/avatar';
+import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,12 +18,26 @@ export function SosoTalkPostDetailHeader({
   createdAt,
   createdAtDateTime,
   isAuthor = false,
+  onBackClick,
   onMoreClick,
   onEditClick,
   onDeleteClick,
 }: SosoTalkPostHeaderProps) {
   return (
     <header className="flex flex-col gap-4 md:gap-5">
+      <div>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="text-sosoeat-gray-700 hover:text-sosoeat-gray-900 -ml-2 text-[14px]"
+          onClick={onBackClick}
+        >
+          <ChevronLeft className="h-4 w-4" />
+          목록으로
+        </Button>
+      </div>
+
       <div className="flex items-start justify-between gap-6">
         <div className="flex flex-1 flex-col">
           <h1 className="text-sosoeat-gray-900 text-2xl font-semibold md:text-3xl">{title}</h1>

@@ -22,6 +22,7 @@ export function SosoTalkPostDetail({
   isAuthor = false,
   isLiked = false,
   isLikePending = false,
+  onBackClick,
   onMoreClick,
   onEditClick,
   onDeleteClick,
@@ -47,6 +48,7 @@ export function SosoTalkPostDetail({
             createdAt={createdAt}
             createdAtDateTime={createdAtDateTime}
             isAuthor={isAuthor}
+            onBackClick={onBackClick}
             onMoreClick={onMoreClick}
             onEditClick={onEditClick}
             onDeleteClick={onDeleteClick}

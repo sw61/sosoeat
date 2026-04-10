@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { useQueryClient } from '@tanstack/react-query';
 
+import { useAuthStore } from '@/entities/auth';
 import type { Meeting } from '@/entities/meeting';
 import { MeetingEditModal, toMeetingEditFormData } from '@/features/meeting-edit';
 import { useModal } from '@/shared/lib/use-modal';
@@ -30,6 +31,7 @@ export function MeetingHeroSection({ meeting: initialMeeting }: MeetingHeroSecti
   const queryClient = useQueryClient();
   const { data: meetingData } = useMeetingDetail(initialMeeting.id, initialMeeting);
   const meeting = meetingData ?? initialMeeting;
+  const { isAuthenticated, setLoginRequired } = useAuthStore();
 
   const { role, status } = useMeetingRole(meeting);
   const { isOpen: isEditOpen, open: openEdit, close: closeEdit } = useModal();
@@ -48,6 +50,15 @@ export function MeetingHeroSection({ meeting: initialMeeting }: MeetingHeroSecti
     joinMutation.isPending || leaveMutation.isPending || confirmMutation.isPending;
   const isDeletePending = deleteMutation.isPending;
 
+  const handleJoin = () => {
+    if (!isAuthenticated) {
+      setLoginRequired(true);
+      return;
+    }
+
+    joinMutation.mutate();
+  };
+
   const cardProps =
     role === 'host'
       ? {
@@ -65,13 +76,13 @@ export function MeetingHeroSection({ meeting: initialMeeting }: MeetingHeroSecti
         ? {
             role: 'participant' as const,
             isJoined: true,
-            onJoin: () => joinMutation.mutate(),
+            onJoin: handleJoin,
             onCancel: () => leaveMutation.mutate(),
             isActionPending,
           }
         : {
             role: 'guest' as const,
-            onJoin: () => joinMutation.mutate(),
+            onJoin: handleJoin,
             isActionPending,
           };
 

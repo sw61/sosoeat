@@ -25,6 +25,7 @@ export function useSosoTalkPostDetailCommentActions({
   const [commentInput, setCommentInput] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editingCommentInput, setEditingCommentInput] = useState('');
+  const [pendingDeleteCommentId, setPendingDeleteCommentId] = useState<number | null>(null);
   const commentSectionRef = useRef<HTMLDivElement>(null);
   const createCommentMutation = useCreateSosoTalkComment();
   const updateCommentMutation = useUpdateSosoTalkComment();
@@ -98,24 +99,33 @@ export function useSosoTalkPostDetailCommentActions({
   };
 
   const handleDeleteComment = async (commentId: number) => {
-    if (!isValidPostId || deleteCommentMutation.isPending || typeof window === 'undefined') {
+    if (!isValidPostId || deleteCommentMutation.isPending) {
       return;
     }
 
-    const shouldDelete = window.confirm('댓글을 삭제할까요?');
-    if (!shouldDelete) {
+    setPendingDeleteCommentId(commentId);
+  };
+
+  const handleCancelDeleteComment = () => {
+    setPendingDeleteCommentId(null);
+  };
+
+  const handleConfirmDeleteComment = async () => {
+    if (!isValidPostId || deleteCommentMutation.isPending || pendingDeleteCommentId == null) {
       return;
     }
 
     try {
       await deleteCommentMutation.mutateAsync({
         postId,
-        commentId,
+        commentId: pendingDeleteCommentId,
       });
 
-      if (editingCommentId === commentId) {
+      if (editingCommentId === pendingDeleteCommentId) {
         handleCancelEditComment();
       }
+
+      setPendingDeleteCommentId(null);
     } catch {
       toast.error('댓글 삭제에 실패했어요. 다시 시도해 주세요.');
     }
@@ -126,11 +136,14 @@ export function useSosoTalkPostDetailCommentActions({
     commentInput,
     editingCommentId,
     editingCommentInput,
+    pendingDeleteCommentId,
     isEditPending: updateCommentMutation.isPending,
     setCommentInput,
     setEditingCommentInput,
     handleCancelEditComment,
+    handleCancelDeleteComment,
     handleCommentClick,
+    handleConfirmDeleteComment,
     handleDeleteComment,
     handleStartEditComment,
     handleSubmitComment,
