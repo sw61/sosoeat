@@ -89,7 +89,7 @@ const LoginFormContent = (props: LoginFormProps) => {
           </div>
         </div>
 
-        <AuthSubmitButton isActive={true} isLoading={isPending} label="로그인" />
+        <AuthSubmitButton isLoading={isPending} label="로그인" />
       </FieldGroup>
     </form>
   );

@@ -6,13 +6,13 @@ import { Button, buttonVariants } from '@/shared/ui/button';
 
 interface AuthSubmitButtonProps
   extends React.ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
-  isActive: boolean;
+  isActive?: boolean;
   isLoading?: boolean;
   label: string;
 }
 
 export const AuthSubmitButton = ({
-  isActive,
+  isActive = true,
   isLoading = false,
   label,
   className,

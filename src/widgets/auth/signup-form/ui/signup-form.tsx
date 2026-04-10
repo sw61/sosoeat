@@ -52,7 +52,6 @@ export const SignupForm = ({ defaultStep = 'email' }: SignupFormProps) => {
               <PasswordStep
                 onNext={handlePasswordNext}
                 onPrev={handlePrev}
-                isLoading={isPending}
                 defaultValues={
                   formData.password
                     ? {

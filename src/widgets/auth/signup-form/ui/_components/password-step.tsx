@@ -16,7 +16,6 @@ import { Input } from '@/shared/ui/input';
 export const PasswordStep = ({
   onNext,
   onPrev,
-  isLoading,
   defaultValues,
 }: MiddleStepProps<PasswordValues>) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -116,18 +115,12 @@ export const PasswordStep = ({
           type="button"
           variant="outline"
           onClick={onPrev}
-          disabled={isLoading}
           className="bg-sosoeat-gray-100 mt-2 h-[52px] rounded-[16px] px-4 text-base font-semibold text-gray-500 shadow-sm transition-colors"
         >
           <ChevronLeft className="h-6 w-6" />
           <span>이전</span>
         </Button>
-        <AuthSubmitButton
-          label="다음"
-          isActive={true}
-          isLoading={isLoading}
-          className="h-[52px] flex-1"
-        />
+        <AuthSubmitButton label="다음" className="h-[52px] flex-1" />
       </div>
     </form>
   );

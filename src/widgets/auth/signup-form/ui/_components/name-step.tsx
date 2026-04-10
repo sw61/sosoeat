@@ -70,12 +70,7 @@ export const NameStep = ({
           <ChevronLeft className="h-6 w-6" />
           <span>이전</span>
         </Button>
-        <AuthSubmitButton
-          label="회원가입"
-          isActive={true}
-          isLoading={isLoading}
-          className="h-[52px] flex-1"
-        />
+        <AuthSubmitButton label="회원가입" isLoading={isLoading} className="h-[52px] flex-1" />
       </div>
     </form>
   );

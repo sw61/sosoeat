@@ -91,12 +91,7 @@ export const EmailStep = ({ onNext, defaultValues }: EmailStepProps) => {
         </Field>
       </div>
 
-      <AuthSubmitButton
-        label="다음"
-        isActive={true}
-        isLoading={isCheckingEmail}
-        className="mt-4 h-13"
-      />
+      <AuthSubmitButton label="다음" isLoading={isCheckingEmail} className="mt-4 h-13" />
     </form>
   );
 };
