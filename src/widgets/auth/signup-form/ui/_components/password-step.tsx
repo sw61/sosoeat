@@ -24,17 +24,17 @@ export const PasswordStep = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, touchedFields },
+    formState: { errors, isValid },
   } = useForm<PasswordValues>({
     resolver: zodResolver(passwordSchema),
-    mode: 'all',
+    mode: 'onBlur',
     defaultValues,
   });
 
-  const passwordError = touchedFields.password ? errors.password : undefined;
+  const passwordError = errors.password;
   const hasPasswordError = !!passwordError?.message?.trim();
 
-  const confirmError = touchedFields.passwordConfirm ? errors.passwordConfirm : undefined;
+  const confirmError = errors.passwordConfirm;
   const hasConfirmError = !!confirmError?.message?.trim();
 
   const onSubmit = (data: PasswordValues) => {
@@ -65,7 +65,7 @@ export const PasswordStep = ({
                 aria-label="비밀번호 표시 토글"
                 className="text-sosoeat-gray-800 hover:text-sosoeat-gray-900 absolute top-1/2 right-4 -translate-y-1/2 focus:outline-none"
               >
-                {showPassword ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
+                {showPassword ? <Eye className="h-6 w-6" /> : <EyeOff className="h-6 w-6" />}
               </button>
             </div>
             <div className={getErrorAnimationClasses(hasPasswordError)}>
@@ -97,7 +97,7 @@ export const PasswordStep = ({
                 aria-label="비밀번호 확인 표시 토글"
                 className="text-sosoeat-gray-800 hover:text-sosoeat-gray-900 absolute top-1/2 right-4 -translate-y-1/2 focus:outline-none"
               >
-                {showConfirmPassword ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
+                {showConfirmPassword ? <Eye className="h-6 w-6" /> : <EyeOff className="h-6 w-6" />}
               </button>
             </div>
             <div className={getErrorAnimationClasses(hasConfirmError)}>

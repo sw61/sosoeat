@@ -1,27 +1,25 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useAuthStore } from '@/entities/auth';
-import { useLogout } from '@/features/auth';
+import { useLogoutMutation } from '@/features/auth';
 import { AlertModal } from '@/shared/ui/alert-modal/alert-modal';
 
 export const SessionExpiredModal = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const { isSessionExpired, setSessionExpired } = useAuthStore();
-  const { mutate: logout } = useLogout();
+  const { mutate: logout } = useLogoutMutation();
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
     logout();
     setSessionExpired(false);
-    router.push(`/login?callbackUrl=${encodeURIComponent(pathname ?? '')}`);
+    router.push('/login');
   };
 
-  const handleCancel = async () => {
+  const handleCancel = () => {
     logout();
     setSessionExpired(false);
-    router.push('/home');
   };
 
   return (
