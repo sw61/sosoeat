@@ -15,6 +15,7 @@ export function SosoTalkPostDetail({
   authorImageUrl,
   likeCount = 0,
   commentCount = 0,
+  canLike = true,
   createdAt,
   createdAtDateTime,
   createdDateLabel,
@@ -59,6 +60,7 @@ export function SosoTalkPostDetail({
               viewCount={viewCount}
               likeCount={likeCount}
               commentCount={commentCount}
+              canLike={canLike}
               isLiked={isLiked}
               isLikePending={isLikePending}
               onLikeClick={onLikeClick}

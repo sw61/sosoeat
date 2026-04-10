@@ -18,6 +18,12 @@ jest.mock('framer-motion', () => ({
   },
 }));
 
+const mockSetLoginRequired = jest.fn();
+
+jest.mock('@/entities/auth', () => ({
+  useAuthStore: jest.fn(),
+}));
+
 const mockToggleFavorite = jest.fn();
 jest.mock('../../model/favorites.mutations', () => ({
   useFavoriteMeeting: (initialIsFavorited: boolean, _meetingId: number) => ({
@@ -26,12 +32,21 @@ jest.mock('../../model/favorites.mutations', () => ({
   }),
 }));
 
+const { useAuthStore } = jest.requireMock('@/entities/auth') as {
+  useAuthStore: jest.Mock;
+};
+
 describe('HeartButton', () => {
   beforeEach(() => {
     mockToggleFavorite.mockClear();
+    mockSetLoginRequired.mockClear();
+    useAuthStore.mockReturnValue({
+      isAuthenticated: true,
+      setLoginRequired: mockSetLoginRequired,
+    });
   });
 
-  it('기본 상태에서 빈 하트 아이콘이 렌더링된다', () => {
+  it('기본 상태에서는 빈 하트 아이콘이 렌더링된다', () => {
     render(<HeartButton meetingId={1} isFavorited={false} />);
 
     expect(screen.getByRole('button', { name: '좋아요' })).toBeInTheDocument();
@@ -41,7 +56,7 @@ describe('HeartButton', () => {
     );
   });
 
-  it('찜 상태에서 채운 하트 아이콘이 렌더링된다', () => {
+  it('찜 상태에서는 채운 하트 아이콘이 렌더링된다', () => {
     render(<HeartButton meetingId={1} isFavorited />);
 
     expect(screen.getByRole('button', { name: '좋아요' })).toBeInTheDocument();
@@ -51,17 +66,32 @@ describe('HeartButton', () => {
     );
   });
 
-  it('className이 CardAction에 합쳐진다', () => {
+  it('className이 CardAction 래퍼에 합쳐진다', () => {
     const { container } = render(<HeartButton meetingId={1} className="custom-heart-class" />);
 
     expect(container.querySelector('.custom-heart-class')).toBeInTheDocument();
   });
 
-  it('버튼 클릭 시 toggleFavorite이 호출된다', () => {
+  it('로그인 상태에서 클릭하면 toggleFavorite를 호출한다', () => {
     render(<HeartButton meetingId={42} isFavorited={false} />);
 
     fireEvent.click(screen.getByRole('button', { name: '좋아요' }));
 
     expect(mockToggleFavorite).toHaveBeenCalled();
+    expect(mockSetLoginRequired).not.toHaveBeenCalled();
+  });
+
+  it('비로그인 상태에서는 좋아요 반응 대신 로그인 모달만 연다', () => {
+    useAuthStore.mockReturnValue({
+      isAuthenticated: false,
+      setLoginRequired: mockSetLoginRequired,
+    });
+
+    render(<HeartButton meetingId={42} isFavorited={false} />);
+
+    fireEvent.click(screen.getByRole('button', { name: '좋아요' }));
+
+    expect(mockToggleFavorite).not.toHaveBeenCalled();
+    expect(mockSetLoginRequired).toHaveBeenCalledWith(true);
   });
 });

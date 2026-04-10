@@ -1,6 +1,6 @@
 'use client';
 
-import { MessageSquareText } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 import { CommentInput } from '@/shared/ui/comment-input';
@@ -30,7 +30,7 @@ export function SosoTalkCommentSection({
       )}
     >
       <div className="flex items-center gap-2">
-        <MessageSquareText className="text-sosoeat-orange-600 size-5" />
+        <MessageCircle className="text-sosoeat-orange-600 size-5 fill-current stroke-[1.8]" />
         <h2 className="text-sosoeat-gray-900 text-lg font-semibold">댓글</h2>
         <CountingBadge count={totalCommentCount} />
       </div>

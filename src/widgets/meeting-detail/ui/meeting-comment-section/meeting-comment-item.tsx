@@ -42,7 +42,6 @@ export function MeetingCommentItem({
     editText,
     setEditText,
     isReplying,
-    setIsReplying,
     replyText,
     setReplyText,
     localIsLiked,
@@ -53,6 +52,8 @@ export function MeetingCommentItem({
     handleLike,
     handleEditSubmit,
     handleDelete,
+    handleToggleReplying,
+    handleCancelReply,
     handleReplySubmit,
   } = useMeetingCommentItem({ commentId: id, meetingId, content, isLiked, likeCount });
 
@@ -149,7 +150,7 @@ export function MeetingCommentItem({
                   <button
                     type="button"
                     aria-label="답글"
-                    onClick={() => setIsReplying((prev) => !prev)}
+                    onClick={handleToggleReplying}
                     disabled={isPending}
                     className="text-sosoeat-gray-500 hover:text-sosoeat-orange-600 flex cursor-pointer items-center gap-1 text-sm transition-colors disabled:opacity-40"
                   >
@@ -173,7 +174,7 @@ export function MeetingCommentItem({
                 <div className="flex gap-1">
                   <button
                     type="button"
-                    onClick={() => setIsReplying(false)}
+                    onClick={handleCancelReply}
                     className="cursor-pointer rounded-lg px-3 py-1 text-sm text-gray-500 hover:bg-gray-100"
                   >
                     취소

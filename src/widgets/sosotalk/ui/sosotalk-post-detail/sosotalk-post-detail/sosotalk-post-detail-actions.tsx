@@ -12,6 +12,7 @@ export function SosoTalkPostDetailActions({
   viewCount,
   likeCount = 0,
   commentCount = 0,
+  canLike = true,
   isLiked = false,
   isLikePending = false,
   onLikeClick,
@@ -47,9 +48,9 @@ export function SosoTalkPostDetailActions({
           aria-pressed={isLiked}
           aria-label={`좋아요 ${likeCount}개`}
           onClick={onLikeClick}
-          whileHover={{ y: -2, scale: 1.04 }}
-          whileTap={{ scale: isLikePending ? 1 : 0.92 }}
-          className={`inline-flex items-center gap-2 transition-colors duration-150 ${
+          whileHover={canLike ? { scale: 1.03 } : undefined}
+          whileTap={canLike ? { scale: isLikePending ? 1 : 0.92 } : undefined}
+          className={`inline-flex items-center gap-2 rounded-full px-1 py-1 transition-colors duration-150 ${
             isLiked
               ? 'text-sosoeat-orange-600'
               : 'text-sosoeat-gray-900 hover:text-sosoeat-orange-600'
@@ -73,14 +74,14 @@ export function SosoTalkPostDetailActions({
           type="button"
           aria-label={`댓글 ${commentCount}개`}
           onClick={onCommentClick}
-          className="text-sosoeat-gray-900 hover:text-sosoeat-orange-600 inline-flex items-center gap-2 transition-[transform,color] duration-150 hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+          className="text-sosoeat-gray-900 hover:text-sosoeat-orange-600 inline-flex items-center gap-2 rounded-full px-1 py-1 transition-[color,transform] duration-150 active:scale-95"
         >
           <MessageCircle className="h-6 w-6 shrink-0" />
           <span>{commentCount}</span>
         </button>
 
         <ActionIcon
-          className="text-sosoeat-gray-900 hover:text-sosoeat-orange-600 inline-flex"
+          className="text-sosoeat-gray-900 hover:text-sosoeat-orange-600"
           label="공유"
           onClick={onShareClick}
         >
@@ -100,7 +101,7 @@ interface ActionIconProps {
 
 function ActionIcon({ children, className, label, onClick }: ActionIconProps) {
   const baseClassName =
-    'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-[transform,color,background-color] duration-150 hover:-translate-y-0.5 active:translate-y-0 active:scale-95';
+    'inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-[color,background-color,transform] duration-150 active:scale-95';
 
   if (!onClick) {
     return (

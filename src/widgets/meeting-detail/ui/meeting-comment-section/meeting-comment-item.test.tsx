@@ -19,10 +19,10 @@ jest.mock('./format-date', () => ({
 const mockComment: MeetingComment = {
   id: 1,
   parentId: null,
-  author: { nickname: '마민준', profileUrl: null },
-  content: '안녕하세요! 혼자 참여하는데 괜찮을까요?',
+  author: { nickname: '\uB9C8\uB8E8', profileUrl: null },
+  content: '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?',
   isDeleted: false,
-  createdAt: '03월 12일',
+  createdAt: '03/12',
   likeCount: 3,
   isLiked: false,
   isHostComment: false,
@@ -33,100 +33,91 @@ const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
+
   return ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 };
 
 describe('MeetingCommentItem', () => {
-  it('닉네임, 본문, 날짜, 좋아요 수가 렌더링된다', () => {
+  it('renders author, content, date, and like count', () => {
     render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
       wrapper: createWrapper(),
     });
 
-    expect(screen.getByText('마민준')).toBeInTheDocument();
-    expect(screen.getByText('안녕하세요! 혼자 참여하는데 괜찮을까요?')).toBeInTheDocument();
-    expect(screen.getByText('03월 12일')).toBeInTheDocument();
+    expect(screen.getByText('\uB9C8\uB8E8')).toBeInTheDocument();
+    expect(
+      screen.getByText('\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?')
+    ).toBeInTheDocument();
+    expect(screen.getByText('03/12')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
   });
 
-  describe('작성자 뱃지', () => {
-    it('isHostComment가 true이면 "작성자" 뱃지가 표시된다', () => {
-      render(
-        <MeetingCommentItem comment={{ ...mockComment, isHostComment: true }} meetingId={1} />,
-        { wrapper: createWrapper() }
-      );
+  describe('host badge', () => {
+    it('shows the host badge for host comments', () => {
+      render(<MeetingCommentItem comment={{ ...mockComment, isHostComment: true }} meetingId={1} />, {
+        wrapper: createWrapper(),
+      });
 
-      expect(screen.getByText('작성자')).toBeInTheDocument();
+      expect(screen.getByText('\uC791\uC131\uC790')).toBeInTheDocument();
     });
 
-    it('isHostComment가 false이면 "작성자" 뱃지가 표시되지 않는다', () => {
+    it('does not show the host badge for non-host comments', () => {
       render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
-      expect(screen.queryByText('작성자')).not.toBeInTheDocument();
+      expect(screen.queryByText('\uC791\uC131\uC790')).not.toBeInTheDocument();
     });
   });
 
-  describe('수정/삭제 드롭다운', () => {
-    it('isMine이 true이면 더보기 버튼이 표시된다', () => {
+  describe('ellipsis menu', () => {
+    it('shows the menu button for my comment', () => {
       render(<MeetingCommentItem comment={{ ...mockComment, isMine: true }} meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
-      expect(screen.getByRole('button', { name: '더보기' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '\uB354\uBCF4\uAE30' })).toBeInTheDocument();
     });
 
-    it('isMine이 false이면 더보기 버튼이 표시되지 않는다', () => {
+    it('hides the menu button for other users comments', () => {
       render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
-      expect(screen.queryByRole('button', { name: '더보기' })).not.toBeInTheDocument();
-    });
-
-    it('더보기 클릭 시 수정하기/삭제하기가 표시된다', async () => {
-      const user = userEvent.setup();
-      render(<MeetingCommentItem comment={{ ...mockComment, isMine: true }} meetingId={1} />, {
-        wrapper: createWrapper(),
-      });
-
-      await user.click(screen.getByRole('button', { name: '더보기' }));
-
-      expect(screen.getByText('수정하기')).toBeInTheDocument();
-      expect(screen.getByText('삭제하기')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: '\uB354\uBCF4\uAE30' })).not.toBeInTheDocument();
     });
   });
 
-  describe('삭제된 댓글', () => {
-    it('isDeleted가 true이면 "삭제된 댓글입니다."가 표시된다', () => {
+  describe('deleted comments', () => {
+    it('shows the deleted message', () => {
       render(<MeetingCommentItem comment={{ ...mockComment, isDeleted: true }} meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
-      expect(screen.getByText('삭제된 댓글입니다.')).toBeInTheDocument();
+      expect(
+        screen.getByText('\uC0AD\uC81C\uB41C \uB313\uAE00\uC785\uB2C8\uB2E4.')
+      ).toBeInTheDocument();
     });
 
-    it('isDeleted가 true이면 좋아요/답글 버튼이 표시되지 않는다', () => {
+    it('hides like and reply actions', () => {
       render(
-        <MeetingCommentItem
-          comment={{ ...mockComment, isDeleted: true, isMine: true }}
-          meetingId={1}
-        />,
-        { wrapper: createWrapper() }
+        <MeetingCommentItem comment={{ ...mockComment, isDeleted: true, isMine: true }} meetingId={1} />,
+        {
+          wrapper: createWrapper(),
+        }
       );
 
-      expect(screen.queryByRole('button', { name: '좋아요' })).not.toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: '답글' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: '\uC88B\uC544\uC694' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: '\uB2F5\uAE00' })).not.toBeInTheDocument();
     });
   });
 
-  describe('좋아요', () => {
+  describe('like action', () => {
     beforeEach(() => jest.useFakeTimers());
     afterEach(() => jest.useRealTimers());
 
-    it('좋아요 버튼 클릭 시 300ms 후 useLikeComment mutate가 호출된다', async () => {
+    it('calls the like mutation after 300ms', async () => {
       const mockMutate = jest.fn();
       const commentsModule = jest.mocked(
         jest.requireMock('@/features/meeting-comment') as { useLikeComment: jest.Mock }
@@ -138,7 +129,7 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      await user.click(screen.getByRole('button', { name: '좋아요' }));
+      await user.click(screen.getByRole('button', { name: '\uC88B\uC544\uC694' }));
       jest.advanceTimersByTime(300);
 
       expect(mockMutate).toHaveBeenCalledWith(
@@ -147,7 +138,7 @@ describe('MeetingCommentItem', () => {
       );
     });
 
-    it('연속 클릭 시 마지막 상태로 1번만 호출된다', async () => {
+    it('debounces rapid clicks into one mutation', async () => {
       const mockMutate = jest.fn();
       const commentsModule = jest.mocked(
         jest.requireMock('@/features/meeting-comment') as { useLikeComment: jest.Mock }
@@ -159,17 +150,17 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      await user.click(screen.getByRole('button', { name: '좋아요' }));
-      await user.click(screen.getByRole('button', { name: '좋아요' }));
-      await user.click(screen.getByRole('button', { name: '좋아요' }));
+      await user.click(screen.getByRole('button', { name: '\uC88B\uC544\uC694' }));
+      await user.click(screen.getByRole('button', { name: '\uC88B\uC544\uC694' }));
+      await user.click(screen.getByRole('button', { name: '\uC88B\uC544\uC694' }));
       jest.advanceTimersByTime(300);
 
       expect(mockMutate).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('대댓글', () => {
-    it('isReply가 true이면 배경색 클래스가 적용된다', () => {
+  describe('replies', () => {
+    it('applies the reply background style for nested replies', () => {
       const { container } = render(
         <MeetingCommentItem comment={{ ...mockComment, parentId: 1 }} isReply meetingId={1} />,
         { wrapper: createWrapper() }
@@ -178,11 +169,16 @@ describe('MeetingCommentItem', () => {
       expect(container.firstChild?.firstChild).toHaveClass('bg-sosoeat-orange-100');
     });
 
-    it('replies가 있으면 대댓글이 렌더링된다', () => {
+    it('renders nested replies', () => {
       const commentWithReplies: MeetingComment = {
         ...mockComment,
         replies: [
-          { ...mockComment, id: 2, parentId: 1, author: { nickname: '이소소', profileUrl: null } },
+          {
+            ...mockComment,
+            id: 2,
+            parentId: 1,
+            author: { nickname: '\uC774\uC18C\uB77C', profileUrl: null },
+          },
         ],
       };
 
@@ -190,24 +186,45 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(screen.getByText('이소소')).toBeInTheDocument();
+      expect(screen.getByText('\uC774\uC18C\uB77C')).toBeInTheDocument();
     });
 
-    it('isReply가 false이면 답글 버튼이 표시된다', () => {
+    it('shows the reply button only for top-level comments', () => {
+      const { rerender } = render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
+        wrapper: createWrapper(),
+      });
+
+      expect(screen.getByRole('button', { name: '\uB2F5\uAE00' })).toBeInTheDocument();
+
+      rerender(
+        <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+          <MeetingCommentItem comment={{ ...mockComment, parentId: 1 }} isReply meetingId={1} />
+        </QueryClientProvider>
+      );
+
+      expect(screen.queryByRole('button', { name: '\uB2F5\uAE00' })).not.toBeInTheDocument();
+    });
+
+    it('clears reply textarea after closing and reopening', async () => {
+      const user = userEvent.setup();
+
       render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
-      expect(screen.getByRole('button', { name: '답글' })).toBeInTheDocument();
-    });
+      await user.click(screen.getByRole('button', { name: '\uB2F5\uAE00' }));
 
-    it('isReply가 true이면 답글 버튼이 표시되지 않는다', () => {
-      render(
-        <MeetingCommentItem comment={{ ...mockComment, parentId: 1 }} isReply meetingId={1} />,
-        { wrapper: createWrapper() }
+      const textarea = screen.getByPlaceholderText(
+        '\uB2F5\uAE00\uC744 \uC785\uB825\uD558\uC138\uC694.'
       );
+      await user.type(textarea, 'reply draft');
+      await user.click(screen.getByRole('button', { name: '\uCDE8\uC18C' }));
 
-      expect(screen.queryByRole('button', { name: '답글' })).not.toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: '\uB2F5\uAE00' }));
+
+      expect(
+        screen.getByPlaceholderText('\uB2F5\uAE00\uC744 \uC785\uB825\uD558\uC138\uC694.')
+      ).toHaveValue('');
     });
   });
 });

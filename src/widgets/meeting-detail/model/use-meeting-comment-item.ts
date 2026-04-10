@@ -96,6 +96,21 @@ export function useMeetingCommentItem({
     });
   };
 
+  const handleToggleReplying = () => {
+    setIsReplying((prev) => {
+      if (prev) {
+        setReplyText('');
+      }
+
+      return !prev;
+    });
+  };
+
+  const handleCancelReply = () => {
+    setIsReplying(false);
+    setReplyText('');
+  };
+
   const handleReplySubmit = () => {
     if (!replyText.trim()) return;
     const savedText = replyText;
@@ -129,6 +144,8 @@ export function useMeetingCommentItem({
     handleLike,
     handleEditSubmit,
     handleDelete,
+    handleToggleReplying,
+    handleCancelReply,
     handleReplySubmit,
   };
 }
