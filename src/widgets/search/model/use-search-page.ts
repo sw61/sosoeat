@@ -24,30 +24,7 @@ type DateChangeParams = {
 
 const MEETINGS_PAGE_SIZE = 10;
 
-const useSearchPage = (): {
-  meetingData: typeof meetingData;
-  handleRegionChange: (value: RegionSelection) => void;
-  regionCommitted: RegionSelection | null;
-  dateStart: Date | null;
-  dateEnd: Date | null;
-  handleDateChange: (params: DateChangeParams) => void;
-  handleTypeFilterChange: (value: 'all' | 'groupEat' | 'groupBuy') => void;
-  typeFilter: 'all' | 'groupEat' | 'groupBuy';
-  handleSortChange: (
-    sortBy: 'participantCount' | 'dateTime' | 'registrationEnd',
-    sortOrder: 'asc' | 'desc'
-  ) => void;
-  sortBy: 'participantCount' | 'dateTime' | 'registrationEnd';
-  sortOrder: 'asc' | 'desc';
-  isLoading: boolean;
-  isError: boolean;
-  hasNextPage: boolean | undefined;
-  fetchNextPage: () => void;
-  isFetching: boolean;
-  isFetchingNextPage: boolean;
-  inputValue: string;
-  handleSearchQueryChange: (e: string) => void;
-} => {
+const useSearchPage = () => {
   const [regionCommitted, setRegionCommitted] = useQueryState<RegionSelection>(
     'regionCommitted',
     parseAsJson<RegionSelection>((value) => {
@@ -161,8 +138,10 @@ const useSearchPage = (): {
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      setSearchQuery(inputValue);
-    }, 1000);
+      if (inputValue !== searchQuery) {
+        setSearchQuery(inputValue);
+      }
+    }, 500);
 
     return () => clearTimeout(delayDebounce);
   }, [inputValue, setSearchQuery]);

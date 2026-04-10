@@ -1,8 +1,5 @@
 'use client';
 
-import type { ChangeEvent } from 'react';
-import { useState } from 'react';
-
 import { Search } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
