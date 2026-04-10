@@ -83,7 +83,7 @@ export const ACTION_BUTTON_CONFIGS: ActionButtonConfig[] = [
   {
     type: 'closed',
     match: ({ status, role, isJoined }) =>
-      status === 'closed' || (status === 'full' && !(role === 'participant' && isJoined)),
+      status === 'closed' || (status === 'full' && role !== 'host' && !isJoined),
     label: '모집 마감',
     variant: 'disabled',
   },
