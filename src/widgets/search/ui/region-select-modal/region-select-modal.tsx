@@ -31,9 +31,9 @@ import type { RegionSelectModalProps } from './region-select-modal.types';
  * shadow 0 0 50px rgba(0,0,0,0.08), 콘텐츠 폭 448 (= 544 − 48×2)
  */
 const dialogContentClass =
-  'flex h-[min(724px,90vh)] w-full max-w-[min(544px,calc(100%-2rem))] flex-col items-start gap-12 ' +
-  'overflow-hidden bg-[#FFFFFF] p-12 isolate rounded-[40px] border-0 ' +
-  'shadow-[0_0_50px_rgba(0,0,0,0.08)] ring-0 sm:h-[724px] sm:max-w-[544px]';
+  'flex h-[min(724px,90vh)] w-full max-w-[min(544px,calc(100%-2rem))] flex-col items-start gap-6 ' +
+  'overflow-hidden bg-[#FFFFFF] p-6 isolate rounded-[24px] border-0 ' +
+  'shadow-[0_0_50px_rgba(0,0,0,0.08)] ring-0 sm:gap-12 sm:p-12 sm:rounded-[40px] sm:h-[724px] sm:max-w-[544px]';
 
 /** pretendard/text-2xl/semibold — gray/900 #111827 */
 const titleClass =
@@ -55,11 +55,11 @@ const footerClass =
 
 /** slate/200 border #DDDDDD, padding 16×30, text slate/600 */
 const cancelButtonClass =
-  'h-[60px] min-w-0 flex-1 rounded-2xl border border-[#DDDDDD] bg-white px-[30px] py-4 text-xl font-semibold ' +
+  'h-12 sm:h-[60px] min-w-0 flex-1 rounded-2xl border border-[#DDDDDD] bg-white px-[30px] py-4 text-base sm:text-xl font-semibold ' +
   'tracking-[-0.02em] text-[#737373] shadow-none hover:bg-neutral-50';
 
 const confirmButtonClass =
-  'h-[60px] min-w-0 flex-1 rounded-2xl border-0 bg-[#FF6600] px-[30px] py-4 text-xl font-semibold ' +
+  'h-12 sm:h-[60px] min-w-0 flex-1 rounded-2xl border-0 bg-[#FF6600] px-[30px] py-4 text-base sm:text-xl font-semibold ' +
   'tracking-[-0.02em] text-white shadow-none hover:bg-[#e65c00]';
 
 export const RegionSelectModal = ({
