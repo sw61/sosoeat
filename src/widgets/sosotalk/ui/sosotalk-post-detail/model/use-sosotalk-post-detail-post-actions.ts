@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation';
 
 import { toast } from 'sonner';
 
+import type { GetSosoTalkPostDetailResponse } from '@/entities/post';
 import {
   useCreateSosoTalkPostLike,
   useDeleteSosoTalkPost,
   useDeleteSosoTalkPostLike,
 } from '@/entities/post';
-import type { GetSosoTalkPostDetailResponse } from '@/entities/post';
 
 import { getSosoTalkLikeState } from './sosotalk-post-detail-page.utils';
 

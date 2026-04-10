@@ -3,6 +3,7 @@ import { ko } from 'date-fns/locale';
 
 import type { GetSosoTalkPostDetailResponse } from '@/entities/post';
 import type { Comment } from '@/shared/types/generated-client/models/Comment';
+
 import type { SosoTalkCommentItemData } from '../../sosotalk-comment-section/sosotalk-comment-section.types';
 
 const SOSOTALK_AUTHOR_IMAGE_FALLBACK =

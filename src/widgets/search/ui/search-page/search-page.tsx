@@ -5,8 +5,7 @@ import { useInView } from 'react-intersection-observer';
 
 import { MainPageCard } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
-import { MeetingCreateModal, useCreateMeeting , useMeetingCreateTrigger } from '@/features/meeting-create';
-import { useModal } from '@/shared/lib/use-modal';
+import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
 
 import useSearchPage from '../../model/use-search-page';
 import { EmptyPage } from '../empty-page';

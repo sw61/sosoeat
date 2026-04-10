@@ -1,7 +1,7 @@
 export {
-  SOSOTALK_AUTHOR_IMAGE_FALLBACK,
   formatSosoTalkRelativeTime,
   mapCommentToCommentItemData,
+  SOSOTALK_AUTHOR_IMAGE_FALLBACK,
 } from './sosotalk-post-detail-page.utils';
 export { useSosoTalkPostDetailCommentActions } from './use-sosotalk-post-detail-comment-actions';
 export { useSosoTalkPostDetailPage } from './use-sosotalk-post-detail-page';
