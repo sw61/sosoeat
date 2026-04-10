@@ -25,9 +25,6 @@ export const useLoginMutation = (callbackUrl?: string | null) => {
       toast.success('로그인에 성공했습니다.');
       router.push(getSafeCallbackUrl(callbackUrl, '/home'));
     },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : '로그인에 실패했습니다.');
-    },
   });
 };
 

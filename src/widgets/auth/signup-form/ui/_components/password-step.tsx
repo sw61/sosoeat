@@ -24,17 +24,18 @@ export const PasswordStep = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, touchedFields, isSubmitted },
   } = useForm<PasswordValues>({
     resolver: zodResolver(passwordSchema),
     mode: 'onBlur',
     defaultValues,
   });
 
-  const passwordError = errors.password;
+  const passwordError = touchedFields.password || isSubmitted ? errors.password : undefined;
   const hasPasswordError = !!passwordError?.message?.trim();
 
-  const confirmError = errors.passwordConfirm;
+  const confirmError =
+    touchedFields.passwordConfirm || isSubmitted ? errors.passwordConfirm : undefined;
   const hasConfirmError = !!confirmError?.message?.trim();
 
   const onSubmit = (data: PasswordValues) => {
@@ -119,7 +120,7 @@ export const PasswordStep = ({
           <ChevronLeft className="h-6 w-6" />
           <span>이전</span>
         </Button>
-        <AuthSubmitButton label="다음" isActive={isValid} className="h-[52px] flex-1" />
+        <AuthSubmitButton label="다음" className="h-[52px] flex-1" />
       </div>
     </form>
   );

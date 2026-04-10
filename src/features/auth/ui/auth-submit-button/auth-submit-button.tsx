@@ -1,20 +1,19 @@
 import { type VariantProps } from 'class-variance-authority';
+import { Loader2 } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 import { Button, buttonVariants } from '@/shared/ui/button';
 
 interface AuthSubmitButtonProps
   extends React.ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
-  isActive: boolean;
+  isActive?: boolean;
   isLoading?: boolean;
-  loadingText?: string;
   label: string;
 }
 
 export const AuthSubmitButton = ({
-  isActive,
+  isActive = true,
   isLoading = false,
-  loadingText,
   label,
   className,
   ...props
@@ -32,7 +31,7 @@ export const AuthSubmitButton = ({
       )}
       {...props}
     >
-      {isLoading ? (loadingText ?? `${label} 중...`) : label}
+      {isLoading ? <Loader2 className="size-5 animate-spin" /> : label}
     </Button>
   );
 };
