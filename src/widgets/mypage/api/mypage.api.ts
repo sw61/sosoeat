@@ -23,7 +23,7 @@ export const mypageApi = {
   },
 
   fetchMeetingCount: async (): Promise<number> => {
-    const res = await fetchClient.get(`/users/me/meetings?size=${MAX_FETCH_SIZE}`);
+    const res = await fetchClient.get(`/users/me/meetings?type=joined&size=${MAX_FETCH_SIZE}`);
     if (!res.ok) return 0;
     const data: UserMeetingsResponse = await res.json();
     return data.data.length;
