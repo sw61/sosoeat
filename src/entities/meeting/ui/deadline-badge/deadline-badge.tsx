@@ -68,7 +68,7 @@ export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineB
                 className="size-5 shrink-0"
               />
             )}
-            <div className="w-full overflow-hidden">{isEnded ? '마감 종료' : contentText}</div>
+            <div className="w-full truncate">{isEnded ? '마감 종료' : contentText}</div>
           </motion.span>
         </AnimatePresence>
       </div>

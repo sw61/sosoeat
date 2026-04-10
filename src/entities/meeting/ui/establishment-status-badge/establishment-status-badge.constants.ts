@@ -6,7 +6,7 @@ export const ESTABLISHED_VARIANT_CLASS = {
   groupBuy: 'border border-sosoeat-blue-500 text-sosoeat-blue-500',
 } as const;
 
-export const ESTABLISHED_LABEL_CLASS = 'flex flex-row items-center gap-0.5 w-[75px] h-6';
+export const ESTABLISHED_LABEL_CLASS = 'flex flex-row items-center gap-0.5';
 
 export const ICON_SRC = {
   groupEat: '/icons/check-circle-orange.svg',

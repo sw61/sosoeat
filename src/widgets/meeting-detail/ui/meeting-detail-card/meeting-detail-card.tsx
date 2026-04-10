@@ -42,7 +42,7 @@ function InfoRow({ icon, category, label, children, className }: InfoRowProps) {
         </div>
       </div>
       <div>
-        <p className="text-sosoeat-gray-600 text-xs font-semibold">{label}</p>
+        <p className="text-sosoeat-gray-600 text-xs font-medium">{label}</p>
         {children}
       </div>
     </div>
@@ -73,7 +73,7 @@ function ParticipantsRow({ meetingId, current, max, category, className }: Parti
         <UsersIcon className={cn('h-4 w-4', iconColorVariants({ category }))} />
       </div>
       <div className="flex-1">
-        <p className="text-sosoeat-gray-600 mb-1 text-xs font-semibold">참여 현황</p>
+        <p className="text-sosoeat-gray-600 mb-1 text-xs font-medium">참여 현황</p>
         <MeetingDetailProgress
           id={`meeting-${meetingId}-progress`}
           current={current}
@@ -106,7 +106,7 @@ function HostRow({ name, profileImage, className }: HostRowProps) {
         </AvatarFallback>
       </Avatar>
       <div>
-        <p className="text-sosoeat-gray-600 text-xs font-semibold">호스트</p>
+        <p className="text-sosoeat-gray-600 text-xs font-medium">호스트</p>
         <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{name}</p>
       </div>
     </div>

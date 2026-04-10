@@ -87,7 +87,7 @@ export default function SearchPage() {
           ) : meetingData.length === 0 ? (
             <EmptyPage />
           ) : (
-            <div className="grid grid-cols-1 justify-center justify-items-center gap-1 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6.75">
+            <div className="grid grid-cols-1 justify-center justify-items-center gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3 lg:gap-6.75">
               {meetingData.map((meeting) => (
                 <MainPageCard
                   key={meeting.id}
