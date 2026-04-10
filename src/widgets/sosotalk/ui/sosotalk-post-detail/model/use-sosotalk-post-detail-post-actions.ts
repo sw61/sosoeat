@@ -89,7 +89,7 @@ export function useSosoTalkPostDetailPostActions({
     }
   };
 
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = () => {
     if (!isValidPostId || deletePostMutation.isPending) {
       return;
     }
