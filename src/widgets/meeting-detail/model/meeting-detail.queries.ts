@@ -2,23 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { Meeting } from '@/entities/meeting';
-import { meetingsApi } from '@/entities/meeting';
+import { meetingsApi, meetingsQueryOptions } from '@/entities/meeting';
 
 export const meetingDetailKeys = {
   detail: (id: number) => ['meetings', 'detail', id] as const,
 };
 
-export function useMeetingDetail(meetingId: number, initialData: Meeting) {
-  return useQuery({
-    queryKey: meetingDetailKeys.detail(meetingId),
-    queryFn: () => meetingsApi.getById(meetingId),
-    initialData,
-    staleTime: 60_000,
-  });
+export function useMeetingDetail(meetingId: number) {
+  return useSuspenseQuery(meetingsQueryOptions.meetingDetail(meetingId));
 }
 
 export const useConfirmMeeting = (id: number) => {

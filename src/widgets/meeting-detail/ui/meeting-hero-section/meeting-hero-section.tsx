@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/entities/auth';
-import type { Meeting } from '@/entities/meeting';
 import { toMeetingEditFormData } from '@/features/meeting-edit';
 import { useModal } from '@/shared/lib/use-modal';
 
@@ -28,14 +27,13 @@ const MeetingEditModal = dynamic(() =>
 );
 
 interface MeetingHeroSectionProps {
-  meeting: Meeting;
+  meetingId: number;
 }
 
-export function MeetingHeroSection({ meeting: initialMeeting }: MeetingHeroSectionProps) {
+export function MeetingHeroSection({ meetingId }: MeetingHeroSectionProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: meetingData } = useMeetingDetail(initialMeeting.id, initialMeeting);
-  const meeting = meetingData ?? initialMeeting;
+  const { data: meeting } = useMeetingDetail(meetingId);
   const { isAuthenticated, setLoginRequired } = useAuthStore();
 
   const { role, status } = useMeetingRole(meeting);

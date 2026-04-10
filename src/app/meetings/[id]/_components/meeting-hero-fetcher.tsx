@@ -14,7 +14,7 @@ export async function MeetingHeroFetcher({ meetingId }: Props) {
 
   return (
     <>
-      <MeetingHeroSection key={`${meeting.id}-${meeting.updatedAt}`} meeting={meeting} />
+      <MeetingHeroSection key={`${meeting.id}-${meeting.updatedAt}`} meetingId={meetingId} />
       <MeetingDescriptionSection description={meeting.description} />
       <MeetingLocationSection
         address={meeting.address}

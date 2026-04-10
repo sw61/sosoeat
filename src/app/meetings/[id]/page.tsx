@@ -2,6 +2,10 @@ import { Suspense } from 'react';
 
 import type { Metadata } from 'next';
 
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
+import { meetingsQueryOptions } from '@/entities/meeting';
+import { getQueryClient } from '@/shared/lib/get-query-client';
 import {
   MeetingCommentSkeleton,
   MeetingHeroSkeleton,
@@ -42,19 +46,24 @@ export default async function MeetingDetailPage({ params }: Props) {
   const { id } = await params;
   const meetingId = Number(id);
 
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery(meetingsQueryOptions.meetingDetail(meetingId));
+
   return (
-    <main className="space-y-[30px] py-10">
-      <Suspense fallback={<MeetingHeroSkeleton />}>
-        <MeetingHeroFetcher meetingId={meetingId} />
-      </Suspense>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <main className="space-y-[30px] py-10">
+        <Suspense fallback={<MeetingHeroSkeleton />}>
+          <MeetingHeroFetcher meetingId={meetingId} />
+        </Suspense>
 
-      <Suspense fallback={<MeetingCommentSkeleton />}>
-        <MeetingCommentFetcher meetingId={meetingId} />
-      </Suspense>
+        <Suspense fallback={<MeetingCommentSkeleton />}>
+          <MeetingCommentFetcher meetingId={meetingId} />
+        </Suspense>
 
-      <Suspense fallback={<MeetingRecommendedSkeleton />}>
-        <MeetingRecommendedFetcher meetingId={meetingId} />
-      </Suspense>
-    </main>
+        <Suspense fallback={<MeetingRecommendedSkeleton />}>
+          <MeetingRecommendedFetcher meetingId={meetingId} />
+        </Suspense>
+      </main>
+    </HydrationBoundary>
   );
 }
