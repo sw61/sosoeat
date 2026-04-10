@@ -1,3 +1,5 @@
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
 import { meetingCommentKeys } from '@/entities/meeting-comment';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 import { MeetingCommentSection } from '@/widgets/meeting-detail';
@@ -24,13 +26,15 @@ export async function MeetingCommentFetcher({ meetingId }: Props) {
   queryClient.setQueryData(meetingCommentKeys.count(meetingId), { count: commentCount });
 
   return (
-    <MeetingCommentSection
-      meetingId={meetingId}
-      commentSync={{
-        id: meeting.id,
-        hostId: meeting.hostId,
-        teamId: meeting.teamId,
-      }}
-    />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <MeetingCommentSection
+        meetingId={meetingId}
+        commentSync={{
+          id: meeting.id,
+          hostId: meeting.hostId,
+          teamId: meeting.teamId,
+        }}
+      />
+    </HydrationBoundary>
   );
 }
