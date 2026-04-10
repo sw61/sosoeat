@@ -30,7 +30,7 @@ export const actionButtonVariants = cva(
 
 /** 흰 버튼 (참여 취소하기 / 공유하기) */
 export const outlineButtonVariants = cva(
-  'ring-0 h-full w-full rounded-2xl bg-white text-normal md:text-xl focus-visible:ring-0 focus-visible:border-transparent',
+  'ring-0 h-full w-full rounded-2xl bg-white text-normal md:text-xl shadow-inner focus-visible:ring-0 focus-visible:border-transparent',
   {
     variants: {
       category: {
@@ -82,7 +82,8 @@ export interface ActionButtonConfig {
 export const ACTION_BUTTON_CONFIGS: ActionButtonConfig[] = [
   {
     type: 'closed',
-    match: ({ status }) => status === 'closed' || status === 'full',
+    match: ({ status, role, isJoined }) =>
+      status === 'closed' || (status === 'full' && !(role === 'participant' && isJoined)),
     label: '모집 마감',
     variant: 'disabled',
   },

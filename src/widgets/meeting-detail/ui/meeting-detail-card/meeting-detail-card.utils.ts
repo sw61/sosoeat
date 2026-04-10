@@ -5,16 +5,11 @@ import type { Meeting } from '@/entities/meeting';
 
 import type { MeetingRole, MeetingStatus } from './meeting-detail-card.types';
 
-/**
- * 모임 상태 단일 정의 — 카드 액션 테이블·역할 훅과 동일 규칙을 씁니다.
- * (마감일 경과 또는 정원 만석은 모두 `closed` → 모집 마감 UI)
- */
 export const getMeetingStatus = (meeting: Meeting): MeetingStatus => {
   if (meeting.canceledAt != null) return 'closed';
   const now = new Date();
-  if (new Date(meeting.registrationEnd) < now || meeting.participantCount >= meeting.capacity) {
-    return 'closed';
-  }
+  if (new Date(meeting.registrationEnd) < now) return 'closed';
+  if (meeting.participantCount >= meeting.capacity) return 'full';
   if (meeting.confirmedAt != null) return 'confirmed';
   return 'open';
 };
