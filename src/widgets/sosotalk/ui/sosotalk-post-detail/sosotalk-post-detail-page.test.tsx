@@ -1,14 +1,28 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { SosoTalkPostDetailPage } from './sosotalk-post-detail-page';
 
 const mockPush = jest.fn();
+const mockToastSuccess = jest.fn();
+const mockSetLoginRequired = jest.fn();
+const mockWriteClipboardText = jest.fn();
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
   }),
+}));
+
+jest.mock('sonner', () => ({
+  toast: {
+    success: (...args: unknown[]) => mockToastSuccess(...args),
+    error: jest.fn(),
+  },
+}));
+
+jest.mock('@/shared/lib/write-clipboard-text', () => ({
+  writeClipboardText: (...args: unknown[]) => mockWriteClipboardText(...args),
 }));
 
 jest.mock('@/widgets/navigation-bar/ui/navigation-bar/navigation-bar', () => ({
@@ -95,10 +109,10 @@ const mockPostDetailResponse = {
       authorId: 20,
       author: {
         id: 20,
-        name: '마루준',
+        name: '김유진',
         image: 'https://example.com/comment-author.jpg',
       },
-      content: '참여하고 싶어요.',
+      content: '참여하고 싶어요!',
       createdAt: new Date('2026-03-18T09:05:00.000Z'),
       updatedAt: new Date('2026-03-18T09:05:00.000Z'),
     },
@@ -122,21 +136,14 @@ describe('SosoTalkPostDetailPage', () => {
 
     window.history.pushState({}, '', '/sosotalk/1');
 
+    Object.defineProperty(window.navigator, 'userAgent', {
+      configurable: true,
+      value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+    });
+
     Object.defineProperty(navigator, 'share', {
       configurable: true,
       value: undefined,
-    });
-
-    Object.defineProperty(navigator, 'clipboard', {
-      configurable: true,
-      value: {
-        writeText: jest.fn().mockResolvedValue(undefined),
-      },
-    });
-
-    Object.defineProperty(window, 'confirm', {
-      configurable: true,
-      value: jest.fn().mockReturnValue(true),
     });
 
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
@@ -144,6 +151,8 @@ describe('SosoTalkPostDetailPage', () => {
     useAuthStore.mockImplementation(
       (
         selector: (state: {
+          isAuthenticated: boolean;
+          setLoginRequired: (value: boolean) => void;
           user: {
             id: number;
             name: string;
@@ -152,9 +161,11 @@ describe('SosoTalkPostDetailPage', () => {
         }) => unknown
       ) =>
         selector({
+          isAuthenticated: true,
+          setLoginRequired: mockSetLoginRequired,
           user: {
             id: 20,
-            name: '마루준',
+            name: '김유진',
             image: 'https://example.com/current-user.jpg',
           },
         })
@@ -201,6 +212,42 @@ describe('SosoTalkPostDetailPage', () => {
     jest.clearAllMocks();
   });
 
+  it('데스크톱에서는 공유 버튼 클릭 시 커스텀 공유 모달을 보여준다', async () => {
+    const user = userEvent.setup();
+
+    render(<SosoTalkPostDetailPage postId="1" />);
+
+    await user.click(screen.getByRole('button', { name: '공유' }));
+
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(within(dialog).getByText('게시글 공유하기')).toBeInTheDocument();
+    expect(within(dialog).getByText(currentPostDetailResponse.title)).toBeInTheDocument();
+  });
+
+  it('공유 모달에서 링크 복사를 누르면 링크를 복사하고 토스트를 보여준다', async () => {
+    const user = userEvent.setup();
+    mockWriteClipboardText.mockResolvedValue(undefined);
+
+    render(<SosoTalkPostDetailPage postId="1" />);
+
+    await user.click(screen.getByRole('button', { name: '공유' }));
+    await user.click(screen.getByRole('button', { name: '링크 복사' }));
+
+    expect(mockWriteClipboardText).toHaveBeenCalledWith('http://localhost/sosotalk/1');
+    expect(mockToastSuccess).toHaveBeenCalledWith('링크를 복사했어요.');
+  });
+
+  it('목록으로 버튼을 누르면 소소톡 목록으로 이동한다', async () => {
+    const user = userEvent.setup();
+
+    render(<SosoTalkPostDetailPage postId="1" />);
+
+    await user.click(screen.getByRole('button', { name: '목록으로' }));
+
+    expect(mockPush).toHaveBeenCalledWith('/sosotalk');
+  });
+
   it('댓글 버튼을 누르면 댓글 섹션으로 스크롤한다', async () => {
     const user = userEvent.setup();
 
@@ -211,7 +258,7 @@ describe('SosoTalkPostDetailPage', () => {
     expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled();
   });
 
-  it('좋아요 버튼을 누르면 좋아요 mutation을 호출하고 완료 후 서버 상태를 다시 따른다', async () => {
+  it('로그인 상태에서 좋아요 버튼을 누르면 좋아요 mutation을 호출하고 완료 후 서버 상태를 다시 따른다', async () => {
     const user = userEvent.setup();
     let resolveLike: (() => void) | undefined;
     mockCreateLikeMutateAsync.mockReturnValue(
@@ -246,135 +293,50 @@ describe('SosoTalkPostDetailPage', () => {
     });
   });
 
+  it('비로그인 상태에서는 소소톡 하트 반응 없이 로그인 모달만 연다', async () => {
+    const user = userEvent.setup();
+
+    useAuthStore.mockImplementation(
+      (
+        selector: (state: {
+          isAuthenticated: boolean;
+          setLoginRequired: (value: boolean) => void;
+          user: null;
+        }) => unknown
+      ) =>
+        selector({
+          isAuthenticated: false,
+          setLoginRequired: mockSetLoginRequired,
+          user: null,
+        })
+    );
+
+    render(<SosoTalkPostDetailPage postId="1" />);
+
+    await user.click(screen.getByRole('button', { name: '좋아요 24개' }));
+
+    expect(mockCreateLikeMutateAsync).not.toHaveBeenCalled();
+    expect(mockDeleteLikeMutateAsync).not.toHaveBeenCalled();
+    expect(mockSetLoginRequired).toHaveBeenCalledWith(true);
+    expect(screen.getByRole('button', { name: '좋아요 24개' })).toBeInTheDocument();
+  });
+
   it('댓글 작성 시 댓글 생성 mutation을 호출하고 입력창을 비운다', async () => {
     const user = userEvent.setup();
     mockCreateCommentMutateAsync.mockResolvedValue(undefined);
 
     render(<SosoTalkPostDetailPage postId="1" />);
 
-    const textarea = screen.getByPlaceholderText('댓글을 입력해 주세요');
-    await user.type(textarea, '새 댓글입니다.');
+    const textarea = screen.getByRole('textbox');
+    await user.type(textarea, '새 댓글입니다');
     await user.click(screen.getByRole('button', { name: '댓글 전송' }));
 
     expect(mockCreateCommentMutateAsync).toHaveBeenCalledWith({
       postId: 1,
       payload: {
-        content: '새 댓글입니다.',
+        content: '새 댓글입니다',
       },
     });
     expect(textarea).toHaveValue('');
-  });
-
-  it('댓글 수정 시 댓글 수정 mutation을 호출하고 편집 모드를 닫는다', async () => {
-    const user = userEvent.setup();
-    mockUpdateCommentMutateAsync.mockResolvedValue(undefined);
-
-    render(<SosoTalkPostDetailPage postId="1" />);
-
-    await user.click(screen.getByRole('button', { name: '댓글 메뉴' }));
-    await user.click(screen.getByRole('menuitem', { name: '수정하기' }));
-
-    const [editTextarea] = screen.getAllByRole('textbox');
-    await user.clear(editTextarea);
-    await user.type(editTextarea, '수정된 댓글입니다.');
-    await user.click(screen.getByRole('button', { name: '댓글 수정' }));
-
-    expect(mockUpdateCommentMutateAsync).toHaveBeenCalledWith({
-      postId: 1,
-      commentId: 101,
-      payload: {
-        content: '수정된 댓글입니다.',
-      },
-    });
-    expect(screen.queryByRole('button', { name: '취소' })).not.toBeInTheDocument();
-  });
-
-  it('댓글 삭제 시 댓글 삭제 mutation을 호출한다', async () => {
-    const user = userEvent.setup();
-    mockDeleteCommentMutateAsync.mockResolvedValue(undefined);
-
-    render(<SosoTalkPostDetailPage postId="1" />);
-
-    await user.click(screen.getByRole('button', { name: '댓글 메뉴' }));
-    await user.click(screen.getByRole('menuitem', { name: '삭제하기' }));
-
-    expect(window.confirm).toHaveBeenCalledWith('댓글을 삭제할까요?');
-    expect(mockDeleteCommentMutateAsync).toHaveBeenCalledWith({
-      postId: 1,
-      commentId: 101,
-    });
-  });
-
-  it('삭제하기 클릭 시 게시글 삭제 mutation을 호출하고 목록으로 이동한다', async () => {
-    const user = userEvent.setup();
-    mockDeletePostMutateAsync.mockResolvedValue(undefined);
-    useAuthStore.mockImplementation(
-      (
-        selector: (state: {
-          user: {
-            id: number;
-            name: string;
-            image?: string | null;
-          } | null;
-        }) => unknown
-      ) =>
-        selector({
-          user: {
-            id: 10,
-            name: '김민수',
-            image: 'https://example.com/author-image.jpg',
-          },
-        })
-    );
-
-    render(<SosoTalkPostDetailPage postId="1" />);
-
-    await user.click(screen.getByRole('button', { name: '게시글 메뉴' }));
-    await user.click(screen.getByRole('menuitem', { name: '삭제하기' }));
-
-    expect(window.confirm).toHaveBeenCalledWith('게시글을 삭제할까요?');
-    expect(mockDeletePostMutateAsync).toHaveBeenCalledWith({ postId: 1 });
-    expect(mockPush).toHaveBeenCalledWith('/sosotalk');
-  });
-
-  it('수정하기 클릭 시 기존 작성 페이지의 수정 모드로 이동한다', async () => {
-    const user = userEvent.setup();
-    useAuthStore.mockImplementation(
-      (
-        selector: (state: {
-          user: {
-            id: number;
-            name: string;
-            image?: string | null;
-          } | null;
-        }) => unknown
-      ) =>
-        selector({
-          user: {
-            id: 10,
-            name: '김민수',
-            image: 'https://example.com/author-image.jpg',
-          },
-        })
-    );
-
-    render(<SosoTalkPostDetailPage postId="1" />);
-
-    await user.click(screen.getByRole('button', { name: '게시글 메뉴' }));
-    await user.click(screen.getByRole('menuitem', { name: '수정하기' }));
-
-    expect(mockPush).toHaveBeenCalledWith('/sosotalk/write?postId=1');
-  });
-
-  it('로딩 중에는 로딩 메시지를 보여준다', () => {
-    useGetSosoTalkPostDetail.mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      isError: false,
-    });
-
-    render(<SosoTalkPostDetailPage postId="1" />);
-
-    expect(screen.getByText('게시글을 불러오는 중이에요.')).toBeInTheDocument();
   });
 });

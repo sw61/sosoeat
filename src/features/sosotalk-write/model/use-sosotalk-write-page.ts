@@ -19,6 +19,9 @@ interface UseSosoTalkWritePageParams {
   editPostId?: number;
 }
 
+const hasRequiredImage = (payload: SosoTalkPostSubmitPayload) =>
+  payload.imageFile != null || payload.displayImageUrl.trim().length > 0;
+
 const resolveCreateImageUrl = async (
   payload: SosoTalkPostSubmitPayload
 ): Promise<string | undefined> => {
@@ -50,6 +53,11 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
       return;
     }
 
+    if (!hasRequiredImage(payload)) {
+      toast.error('이미지는 필수입니다.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -62,7 +70,7 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
         },
       });
 
-      router.push(`/sosotalk/${createdPost.id}`);
+      router.replace(`/sosotalk/${createdPost.id}`);
     } catch {
       toast.error('게시글 등록에 실패했어요. 다시 시도해 주세요.');
     } finally {
@@ -72,6 +80,11 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
 
   const handleEditSubmit = async (payload: SosoTalkPostSubmitPayload) => {
     if (editPostId == null || editPostId <= 0 || isSubmitting || updatePostMutation.isPending) {
+      return;
+    }
+
+    if (!hasRequiredImage(payload)) {
+      toast.error('이미지는 필수입니다.');
       return;
     }
 
@@ -89,7 +102,7 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
         },
       });
 
-      router.push(`/sosotalk/${editPostId}`);
+      router.replace(`/sosotalk/${editPostId}`);
     } catch {
       toast.error('게시글 수정에 실패했어요. 다시 시도해 주세요.');
     } finally {

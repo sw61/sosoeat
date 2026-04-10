@@ -2,10 +2,15 @@
 
 import { type ReactNode } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
+import { AlertModal } from '@/shared/ui/alert-modal/alert-modal';
+
 import { SosoTalkPostDetail } from './sosotalk-post-detail/sosotalk-post-detail';
+import { SosoTalkShareModal } from './sosotalk-post-detail/sosotalk-share-modal';
 import {
   formatSosoTalkRelativeTime,
   mapCommentToCommentItemData,
@@ -18,6 +23,7 @@ interface SosoTalkPostDetailPageProps {
 }
 
 export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) {
+  const router = useRouter();
   const {
     commentSectionRef,
     currentUser,
@@ -28,16 +34,28 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
     editingCommentId,
     editingCommentInput,
     isEditPending,
+    isDeleteModalOpen,
     displayedLikeCount,
     isError,
     isLikePending,
     isLiked,
+    canLike,
     isLoading,
+    isShareModalOpen,
     isValidPostId,
+    pendingDeleteCommentId,
     setCommentInput,
     setEditingCommentInput,
+    shareTitle,
+    shareUrl,
+    handleCancelDelete,
+    handleCancelDeleteComment,
     handleCancelEditComment,
+    handleCancelShare,
     handleCommentClick,
+    handleConfirmDelete,
+    handleConfirmDeleteComment,
+    handleCopyShareLink,
     handleDeleteClick,
     handleDeleteComment,
     handleEditClick,
@@ -88,13 +106,15 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           createdDateLabel={format(data.createdAt, 'MM월 dd일', { locale: ko })}
           viewCount={data.viewCount}
           isAuthor={currentUser?.id === data.author.id}
+          canLike={canLike}
           isLiked={isLiked}
           isLikePending={isLikePending}
+          onBackClick={() => router.push('/sosotalk')}
           onEditClick={handleEditClick}
-          onDeleteClick={() => void handleDeleteClick()}
+          onDeleteClick={handleDeleteClick}
           onLikeClick={() => void handleLikeClick()}
           onCommentClick={handleCommentClick}
-          onShareClick={handleShareClick}
+          onShareClick={() => void handleShareClick()}
           comments={comments.map((comment) =>
             mapCommentToCommentItemData(comment, {
               currentUserId: currentUser?.id,
@@ -109,7 +129,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
             })
           )}
           inputValue={commentInput}
-          inputPlaceholder="댓글을 입력해 주세요"
+          inputPlaceholder="댓글을 입력해 주세요."
           onChangeInput={setCommentInput}
           onSubmitComment={() => void handleSubmitComment()}
           currentUserName={currentUser?.name}
@@ -118,6 +138,35 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
 
         <div ref={commentSectionRef} className="h-0" aria-hidden />
       </div>
+
+      <SosoTalkShareModal
+        open={isShareModalOpen}
+        title={shareTitle}
+        url={shareUrl}
+        imageUrl={data.image || undefined}
+        onClose={handleCancelShare}
+        onCopy={handleCopyShareLink}
+      />
+
+      <AlertModal
+        open={isDeleteModalOpen}
+        title="게시글을 삭제할까요?"
+        description="삭제 후에는 게시글을 다시 복구할 수 없어요."
+        cancelText="취소"
+        confirmText="삭제하기"
+        onCancel={handleCancelDelete}
+        onConfirm={() => void handleConfirmDelete()}
+      />
+
+      <AlertModal
+        open={pendingDeleteCommentId != null}
+        title="댓글을 삭제할까요?"
+        description="삭제 후에는 댓글을 다시 복구할 수 없어요."
+        cancelText="취소"
+        confirmText="삭제하기"
+        onCancel={handleCancelDeleteComment}
+        onConfirm={() => void handleConfirmDeleteComment()}
+      />
     </SosoTalkPostDetailPageLayout>
   );
 }

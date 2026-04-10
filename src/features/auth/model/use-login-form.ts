@@ -42,7 +42,8 @@ export const useLoginForm = ({ defaultValues }: LoginFormProps) => {
   const {
     register,
     handleSubmit,
-    formState: { isValid, errors, touchedFields },
+    setError,
+    formState: { errors, touchedFields, isSubmitted },
   } = useForm<LoginRequest>({
     resolver: zodResolver(loginSchema),
     mode: 'onSubmit',
@@ -50,23 +51,30 @@ export const useLoginForm = ({ defaultValues }: LoginFormProps) => {
   });
 
   const handleFormSubmit = handleSubmit((data: LoginRequest) => {
-    login(data);
+    login(data, {
+      onError: (error) => {
+        setError('root', {
+          message: error instanceof Error ? error.message : '로그인에 실패했습니다.',
+        });
+      },
+    });
   });
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
-  const emailError = touchedFields.email ? errors.email : undefined;
-  const passwordError = touchedFields.password ? errors.password : undefined;
+  const emailError = touchedFields.email || isSubmitted ? errors.email : undefined;
+  const passwordError = touchedFields.password || isSubmitted ? errors.password : undefined;
 
   return {
     register,
     handleFormSubmit,
     emailError,
     passwordError,
+    rootError: errors.root,
     showPassword,
     toggleShowPassword,
     isPending,
-    isButtonActive: isValid,
+
     hasEmailError: !!emailError?.message?.trim(),
     hasPasswordError: !!passwordError?.message?.trim(),
   };

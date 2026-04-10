@@ -2,6 +2,7 @@
 
 import { Heart, MessageCircle, UserRound } from 'lucide-react';
 
+import { useAuthStore } from '@/entities/auth';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 
@@ -42,7 +43,6 @@ export function MeetingCommentItem({
     editText,
     setEditText,
     isReplying,
-    setIsReplying,
     replyText,
     setReplyText,
     localIsLiked,
@@ -53,10 +53,13 @@ export function MeetingCommentItem({
     handleLike,
     handleEditSubmit,
     handleDelete,
+    handleToggleReplying,
+    handleCancelReply,
     handleReplySubmit,
   } = useMeetingCommentItem({ commentId: id, meetingId, content, isLiked, likeCount });
 
   const isPending = id < 0;
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <div>
@@ -98,6 +101,12 @@ export function MeetingCommentItem({
                   rows={2}
                   value={editText}
                   onChange={(e) => setEditText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+                      e.preventDefault();
+                      handleEditSubmit();
+                    }
+                  }}
                   autoFocus
                 />
                 <div className="flex justify-end gap-1">
@@ -149,7 +158,7 @@ export function MeetingCommentItem({
                   <button
                     type="button"
                     aria-label="답글"
-                    onClick={() => setIsReplying((prev) => !prev)}
+                    onClick={handleToggleReplying}
                     disabled={isPending}
                     className="text-sosoeat-gray-500 hover:text-sosoeat-orange-600 flex cursor-pointer items-center gap-1 text-sm transition-colors disabled:opacity-40"
                   >
@@ -164,16 +173,25 @@ export function MeetingCommentItem({
             {isReplying && (
               <div className="mt-2 flex gap-2">
                 <textarea
-                  className="flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none"
+                  className="flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   rows={1}
-                  placeholder="답글을 입력하세요."
+                  placeholder={
+                    isAuthenticated ? '답글을 입력하세요.' : '로그인 후 댓글을 작성할 수 있습니다.'
+                  }
                   value={replyText}
+                  disabled={!isAuthenticated}
                   onChange={(e) => setReplyText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+                      e.preventDefault();
+                      handleReplySubmit();
+                    }
+                  }}
                 />
                 <div className="flex gap-1">
                   <button
                     type="button"
-                    onClick={() => setIsReplying(false)}
+                    onClick={handleCancelReply}
                     className="cursor-pointer rounded-lg px-3 py-1 text-sm text-gray-500 hover:bg-gray-100"
                   >
                     취소
@@ -181,7 +199,8 @@ export function MeetingCommentItem({
                   <button
                     type="button"
                     onClick={handleReplySubmit}
-                    className="bg-sosoeat-orange-600 cursor-pointer rounded-lg px-3 py-1 text-sm text-white"
+                    disabled={!isAuthenticated}
+                    className="bg-sosoeat-orange-600 cursor-pointer rounded-lg px-3 py-1 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     저장
                   </button>

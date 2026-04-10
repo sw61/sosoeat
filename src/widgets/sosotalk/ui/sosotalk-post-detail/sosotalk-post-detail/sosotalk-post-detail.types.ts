@@ -8,6 +8,7 @@ export interface SosoTalkPostDetailProps {
   authorImageUrl?: string;
   likeCount?: number;
   commentCount?: number;
+  canLike?: boolean;
   createdAt: string;
   createdAtDateTime?: string;
   createdDateLabel?: string;
@@ -15,6 +16,7 @@ export interface SosoTalkPostDetailProps {
   isAuthor?: boolean;
   isLiked?: boolean;
   isLikePending?: boolean;
+  onBackClick?: () => void;
   onMoreClick?: () => void;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
@@ -37,6 +39,7 @@ export interface SosoTalkPostHeaderProps {
   createdAt: string;
   createdAtDateTime?: string;
   isAuthor?: boolean;
+  onBackClick?: () => void;
   onMoreClick?: () => void;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
@@ -53,6 +56,7 @@ export interface SosoTalkPostActionsProps {
   viewCount?: number;
   likeCount?: number;
   commentCount?: number;
+  canLike?: boolean;
   isLiked?: boolean;
   isLikePending?: boolean;
   onLikeClick?: () => void;

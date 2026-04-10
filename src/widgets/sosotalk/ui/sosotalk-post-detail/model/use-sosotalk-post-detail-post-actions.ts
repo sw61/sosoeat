@@ -6,12 +6,14 @@ import { useRouter } from 'next/navigation';
 
 import { toast } from 'sonner';
 
+import { useAuthStore } from '@/entities/auth';
 import type { GetSosoTalkPostDetailResponse } from '@/entities/post';
 import {
   useCreateSosoTalkPostLike,
   useDeleteSosoTalkPost,
   useDeleteSosoTalkPostLike,
 } from '@/entities/post';
+import { writeClipboardText } from '@/shared/lib/write-clipboard-text';
 
 import { getSosoTalkLikeState } from './sosotalk-post-detail-page.utils';
 
@@ -21,12 +23,18 @@ interface UseSosoTalkPostDetailPostActionsParams {
   postId: number;
 }
 
+const MOBILE_SHARE_USER_AGENT = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+
 export function useSosoTalkPostDetailPostActions({
   data,
   isValidPostId,
   postId,
 }: UseSosoTalkPostDetailPostActionsParams) {
   const router = useRouter();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const setLoginRequired = useAuthStore((state) => state.setLoginRequired);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [optimisticIsLiked, setOptimisticIsLiked] = useState<boolean | null>(null);
   const createLikeMutation = useCreateSosoTalkPostLike();
   const deletePostMutation = useDeleteSosoTalkPost();
@@ -38,8 +46,16 @@ export function useSosoTalkPostDetailPostActions({
     isLikePending
   );
 
+  const shareUrl = typeof window === 'undefined' ? '' : window.location.href;
+  const shareTitle = data?.title ?? '';
+
   const handleLikeClick = async () => {
     if (!isValidPostId || isLikePending || !data) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      setLoginRequired(true);
       return;
     }
 
@@ -63,22 +79,24 @@ export function useSosoTalkPostDetailPostActions({
       return;
     }
 
+    const shareData = {
+      title: data.title,
+      text: `${data.author.name}님의 소소톡 게시글`,
+      url: window.location.href,
+    };
+
+    const canUseNativeShare =
+      typeof navigator.share === 'function' &&
+      MOBILE_SHARE_USER_AGENT.test(window.navigator.userAgent);
+
+    if (!canUseNativeShare) {
+      setIsShareModalOpen(true);
+      return;
+    }
+
     try {
-      const shareData = {
-        title: data.title,
-        text: `${data.author.name}님의 소소톡 게시글`,
-        url: window.location.href,
-      };
-
-      if (navigator.share) {
-        await navigator.share(shareData);
-        return;
-      }
-
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(window.location.href);
-        toast.success('링크를 복사했어요.');
-      }
+      await navigator.share(shareData);
+      toast.success('공유를 완료했어요.');
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') {
         return;
@@ -88,18 +106,44 @@ export function useSosoTalkPostDetailPostActions({
     }
   };
 
-  const handleDeleteClick = async () => {
-    if (!isValidPostId || deletePostMutation.isPending || typeof window === 'undefined') {
+  const handleCancelShare = () => {
+    setIsShareModalOpen(false);
+  };
+
+  const handleCopyShareLink = async () => {
+    if (!shareUrl) {
       return;
     }
 
-    const shouldDelete = window.confirm('게시글을 삭제할까요?');
-    if (!shouldDelete) {
+    try {
+      await writeClipboardText(shareUrl);
+      toast.success('링크를 복사했어요.');
+      setIsShareModalOpen(false);
+    } catch {
+      toast.error('링크 복사에 실패했어요. 다시 시도해 주세요.');
+    }
+  };
+
+  const handleDeleteClick = () => {
+    if (!isValidPostId || deletePostMutation.isPending) {
+      return;
+    }
+
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!isValidPostId || deletePostMutation.isPending) {
       return;
     }
 
     try {
       await deletePostMutation.mutateAsync({ postId });
+      setIsDeleteModalOpen(false);
       router.push('/sosotalk');
     } catch {
       toast.error('게시글 삭제에 실패했어요. 다시 시도해 주세요.');
@@ -115,9 +159,18 @@ export function useSosoTalkPostDetailPostActions({
   };
 
   return {
+    canLike: isAuthenticated,
     displayedLikeCount,
+    handleCancelDelete,
+    handleCancelShare,
+    handleConfirmDelete,
+    handleCopyShareLink,
+    isDeleteModalOpen,
     isLikePending,
     isLiked,
+    isShareModalOpen,
+    shareTitle,
+    shareUrl,
     handleDeleteClick,
     handleEditClick,
     handleLikeClick,

@@ -1,14 +1,15 @@
 import { act, renderHook } from '@testing-library/react';
+import { toast } from 'sonner';
 
 import { useSosoTalkWritePage } from './use-sosotalk-write-page';
 
-const mockPush = jest.fn();
+const mockReplace = jest.fn();
 const mockUploadSosoTalkPostImage = jest.fn();
 const mockCreateMutateAsync = jest.fn();
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: mockPush,
+    replace: mockReplace,
   }),
 }));
 
@@ -37,7 +38,7 @@ jest.mock('@/entities/post', () => ({
 
 describe('useSosoTalkWritePage edge cases', () => {
   beforeEach(() => {
-    mockPush.mockReset();
+    mockReplace.mockReset();
     mockUploadSosoTalkPostImage.mockReset();
     mockCreateMutateAsync.mockReset();
   });
@@ -58,13 +59,8 @@ describe('useSosoTalkWritePage edge cases', () => {
     });
 
     expect(mockUploadSosoTalkPostImage).not.toHaveBeenCalled();
-    expect(mockCreateMutateAsync).toHaveBeenCalledWith({
-      payload: {
-        title: '이미지 없이 작성',
-        content: '<p>본문</p>',
-        image: undefined,
-      },
-    });
-    expect(mockPush).toHaveBeenCalledWith('/sosotalk/456');
+    expect(mockCreateMutateAsync).not.toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalledWith('이미지는 필수입니다.');
+    expect(mockReplace).not.toHaveBeenCalled();
   });
 });

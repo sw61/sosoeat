@@ -4,6 +4,6 @@ export {
   fetchMeServer,
   fetchPostCountServer,
 } from './api/mypage.api.server';
-export { CountCard } from './ui/count-card';
+export { CountCard, FavoriteCountCard, MeetingCountCard } from './ui/count-card';
 export { MeetingTabs } from './ui/meeting-tabs';
 export { UserCard } from './ui/user-card';

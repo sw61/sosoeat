@@ -2,7 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 
 import { useSosoTalkWritePage } from './use-sosotalk-write-page';
 
-const mockPush = jest.fn();
+const mockReplace = jest.fn();
 const mockToastError = jest.fn();
 const mockUploadSosoTalkPostImage = jest.fn();
 const mockCreateMutateAsync = jest.fn();
@@ -13,7 +13,7 @@ const mockUseUpdateSosoTalkPost = jest.fn();
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: mockPush,
+    replace: mockReplace,
   }),
 }));
 
@@ -32,7 +32,7 @@ jest.mock('@/entities/post', () => ({
 
 describe('useSosoTalkWritePage', () => {
   beforeEach(() => {
-    mockPush.mockReset();
+    mockReplace.mockReset();
     mockToastError.mockReset();
     mockUploadSosoTalkPostImage.mockReset();
     mockCreateMutateAsync.mockReset();
@@ -83,7 +83,7 @@ describe('useSosoTalkWritePage', () => {
         image: 'https://example.com/uploaded.png',
       },
     });
-    expect(mockPush).toHaveBeenCalledWith('/sosotalk/123');
+    expect(mockReplace).toHaveBeenCalledWith('/sosotalk/123');
     expect(result.current.isSubmitting).toBe(false);
   });
 
@@ -98,12 +98,12 @@ describe('useSosoTalkWritePage', () => {
         contentHtml: '<p>저녁 같이 드실 분</p>',
         contentText: '저녁 같이 드실 분',
         imageFile: null,
-        displayImageUrl: '',
+        displayImageUrl: 'https://example.com/fallback.png',
       });
     });
 
     expect(mockToastError).toHaveBeenCalledWith('게시글 등록에 실패했어요. 다시 시도해 주세요.');
-    expect(mockPush).not.toHaveBeenCalled();
+    expect(mockReplace).not.toHaveBeenCalled();
     expect(result.current.isSubmitting).toBe(false);
   });
 
@@ -140,7 +140,7 @@ describe('useSosoTalkWritePage', () => {
         image: 'https://example.com/original.png',
       },
     });
-    expect(mockPush).toHaveBeenCalledWith('/sosotalk/7');
+    expect(mockReplace).toHaveBeenCalledWith('/sosotalk/7');
   });
 
   it('수정 실패 시 에러 토스트를 보여준다', async () => {
@@ -164,12 +164,12 @@ describe('useSosoTalkWritePage', () => {
         contentHtml: '<p>수정 본문</p>',
         contentText: '수정 본문',
         imageFile: null,
-        displayImageUrl: '',
+        displayImageUrl: 'https://example.com/original.png',
       });
     });
 
     expect(mockToastError).toHaveBeenCalledWith('게시글 수정에 실패했어요. 다시 시도해 주세요.');
-    expect(mockPush).not.toHaveBeenCalledWith('/sosotalk/9');
+    expect(mockReplace).not.toHaveBeenCalledWith('/sosotalk/9');
     expect(result.current.isSubmitting).toBe(false);
   });
 

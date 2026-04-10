@@ -31,14 +31,14 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
-      <body className="min-w-[375px] overscroll-none">
+      <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
         <NuqsAdapter>
           <Providers initialUser={initialUser}>
             <NavigationBar
               initialUser={initialUser}
               initialFavoritesCount={initialFavoritesCount}
             />
-            <main>{children}</main>
+            <main className="flex flex-1 flex-col">{children}</main>
             <Footer />
           </Providers>
         </NuqsAdapter>
