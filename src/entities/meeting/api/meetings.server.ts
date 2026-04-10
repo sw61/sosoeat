@@ -10,6 +10,7 @@ export interface GetMeetingsParams {
   sortOrder?: 'asc' | 'desc';
   cursor?: string;
   size?: number;
+  keyword?: string;
 }
 
 /**

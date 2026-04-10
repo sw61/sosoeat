@@ -8,10 +8,18 @@ type PageProps = {
 };
 
 export default async function Page({ searchParams }: PageProps) {
-  const { dateStart } = searchParamsCache.parse(await searchParams);
+  const { dateStart, sortBy, sortOrder, queryKeyword } = searchParamsCache.parse(
+    await searchParams
+  );
   const finalDateStart = dateStart ?? new Date();
+  const toApiKeyword = (keyword: typeof queryKeyword) => {
+    return keyword === 'all' ? undefined : keyword;
+  };
   const initialData = await getMeetings({
     dateStart: finalDateStart.toISOString(),
+    sortBy,
+    sortOrder,
+    keyword: toApiKeyword(queryKeyword),
   }).catch(() => null);
 
   return (
