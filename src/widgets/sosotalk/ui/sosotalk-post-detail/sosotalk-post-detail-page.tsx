@@ -2,8 +2,12 @@
 
 import { type ReactNode } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+
+import { AlertModal } from '@/shared/ui/alert-modal/alert-modal';
 
 import { SosoTalkPostDetail } from './sosotalk-post-detail/sosotalk-post-detail';
 import {
@@ -18,6 +22,7 @@ interface SosoTalkPostDetailPageProps {
 }
 
 export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) {
+  const router = useRouter();
   const {
     commentSectionRef,
     currentUser,
@@ -28,6 +33,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
     editingCommentId,
     editingCommentInput,
     isEditPending,
+    isDeleteModalOpen,
     displayedLikeCount,
     isError,
     isLikePending,
@@ -37,7 +43,11 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
     setCommentInput,
     setEditingCommentInput,
     handleCancelEditComment,
+    handleCancelDelete,
+    handleCancelDeleteComment,
     handleCommentClick,
+    handleConfirmDelete,
+    handleConfirmDeleteComment,
     handleDeleteClick,
     handleDeleteComment,
     handleEditClick,
@@ -46,6 +56,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
     handleStartEditComment,
     handleSubmitComment,
     handleSubmitEditComment,
+    pendingDeleteCommentId,
   } = useSosoTalkPostDetailPage(postId);
 
   if (!isValidPostId) {
@@ -90,6 +101,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           isAuthor={currentUser?.id === data.author.id}
           isLiked={isLiked}
           isLikePending={isLikePending}
+          onBackClick={() => router.back()}
           onEditClick={handleEditClick}
           onDeleteClick={() => void handleDeleteClick()}
           onLikeClick={() => void handleLikeClick()}
@@ -118,6 +130,26 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
 
         <div ref={commentSectionRef} className="h-0" aria-hidden />
       </div>
+
+      <AlertModal
+        open={isDeleteModalOpen}
+        title="게시글을 삭제할까요?"
+        description="삭제 후에는 게시글을 다시 복구할 수 없어요."
+        cancelText="취소"
+        confirmText="삭제하기"
+        onCancel={handleCancelDelete}
+        onConfirm={() => void handleConfirmDelete()}
+      />
+
+      <AlertModal
+        open={pendingDeleteCommentId != null}
+        title="댓글을 삭제할까요?"
+        description="삭제 후에는 댓글을 다시 복구할 수 없어요."
+        cancelText="취소"
+        confirmText="삭제하기"
+        onCancel={handleCancelDeleteComment}
+        onConfirm={() => void handleConfirmDeleteComment()}
+      />
     </SosoTalkPostDetailPageLayout>
   );
 }

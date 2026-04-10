@@ -27,6 +27,7 @@ export function useSosoTalkPostDetailPostActions({
   postId,
 }: UseSosoTalkPostDetailPostActionsParams) {
   const router = useRouter();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [optimisticIsLiked, setOptimisticIsLiked] = useState<boolean | null>(null);
   const createLikeMutation = useCreateSosoTalkPostLike();
   const deletePostMutation = useDeleteSosoTalkPost();
@@ -89,17 +90,25 @@ export function useSosoTalkPostDetailPostActions({
   };
 
   const handleDeleteClick = async () => {
-    if (!isValidPostId || deletePostMutation.isPending || typeof window === 'undefined') {
+    if (!isValidPostId || deletePostMutation.isPending) {
       return;
     }
 
-    const shouldDelete = window.confirm('게시글을 삭제할까요?');
-    if (!shouldDelete) {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!isValidPostId || deletePostMutation.isPending) {
       return;
     }
 
     try {
       await deletePostMutation.mutateAsync({ postId });
+      setIsDeleteModalOpen(false);
       router.push('/sosotalk');
     } catch {
       toast.error('게시글 삭제에 실패했어요. 다시 시도해 주세요.');
@@ -116,8 +125,11 @@ export function useSosoTalkPostDetailPostActions({
 
   return {
     displayedLikeCount,
+    handleCancelDelete,
+    handleConfirmDelete,
     isLikePending,
     isLiked,
+    isDeleteModalOpen,
     handleDeleteClick,
     handleEditClick,
     handleLikeClick,

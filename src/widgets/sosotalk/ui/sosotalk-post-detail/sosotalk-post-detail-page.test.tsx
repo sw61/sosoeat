@@ -4,10 +4,12 @@ import userEvent from '@testing-library/user-event';
 import { SosoTalkPostDetailPage } from './sosotalk-post-detail-page';
 
 const mockPush = jest.fn();
+const mockBack = jest.fn();
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
+    back: mockBack,
   }),
 }));
 
@@ -134,11 +136,6 @@ describe('SosoTalkPostDetailPage', () => {
       },
     });
 
-    Object.defineProperty(window, 'confirm', {
-      configurable: true,
-      value: jest.fn().mockReturnValue(true),
-    });
-
     window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
     useAuthStore.mockImplementation(
@@ -199,6 +196,16 @@ describe('SosoTalkPostDetailPage', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('목록으로 버튼을 누르면 이전 페이지로 돌아간다', async () => {
+    const user = userEvent.setup();
+
+    render(<SosoTalkPostDetailPage postId="1" />);
+
+    await user.click(screen.getByRole('button', { name: '목록으로' }));
+
+    expect(mockBack).toHaveBeenCalledTimes(1);
   });
 
   it('댓글 버튼을 누르면 댓글 섹션으로 스크롤한다', async () => {
@@ -289,7 +296,7 @@ describe('SosoTalkPostDetailPage', () => {
     expect(screen.queryByRole('button', { name: '취소' })).not.toBeInTheDocument();
   });
 
-  it('댓글 삭제 시 댓글 삭제 mutation을 호출한다', async () => {
+  it('댓글 삭제 시 커스텀 모달을 거쳐 댓글 삭제 mutation을 호출한다', async () => {
     const user = userEvent.setup();
     mockDeleteCommentMutateAsync.mockResolvedValue(undefined);
 
@@ -297,15 +304,16 @@ describe('SosoTalkPostDetailPage', () => {
 
     await user.click(screen.getByRole('button', { name: '댓글 메뉴' }));
     await user.click(screen.getByRole('menuitem', { name: '삭제하기' }));
+    expect(screen.getByText('댓글을 삭제할까요?')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: '삭제하기' }));
 
-    expect(window.confirm).toHaveBeenCalledWith('댓글을 삭제할까요?');
     expect(mockDeleteCommentMutateAsync).toHaveBeenCalledWith({
       postId: 1,
       commentId: 101,
     });
   });
 
-  it('삭제하기 클릭 시 게시글 삭제 mutation을 호출하고 목록으로 이동한다', async () => {
+  it('게시글 삭제 시 커스텀 모달을 거쳐 게시글 삭제 mutation을 호출하고 목록으로 이동한다', async () => {
     const user = userEvent.setup();
     mockDeletePostMutateAsync.mockResolvedValue(undefined);
     useAuthStore.mockImplementation(
@@ -331,8 +339,9 @@ describe('SosoTalkPostDetailPage', () => {
 
     await user.click(screen.getByRole('button', { name: '게시글 메뉴' }));
     await user.click(screen.getByRole('menuitem', { name: '삭제하기' }));
+    expect(screen.getByText('게시글을 삭제할까요?')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: '삭제하기' }));
 
-    expect(window.confirm).toHaveBeenCalledWith('게시글을 삭제할까요?');
     expect(mockDeletePostMutateAsync).toHaveBeenCalledWith({ postId: 1 });
     expect(mockPush).toHaveBeenCalledWith('/sosotalk');
   });

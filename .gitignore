@@ -61,4 +61,10 @@ docs/issue-drafts/
 .gstack/
 
 # Claude Code local settings
-.claude/settings.local.json/
+.claude/settings.local.json
+
+# Codex local settings
+.codex/
+
+# Graphify cache
+src/graphify-out/cache/

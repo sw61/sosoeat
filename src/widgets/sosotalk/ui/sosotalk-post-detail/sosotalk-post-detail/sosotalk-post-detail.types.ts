@@ -15,6 +15,7 @@ export interface SosoTalkPostDetailProps {
   isAuthor?: boolean;
   isLiked?: boolean;
   isLikePending?: boolean;
+  onBackClick?: () => void;
   onMoreClick?: () => void;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
@@ -37,6 +38,7 @@ export interface SosoTalkPostHeaderProps {
   createdAt: string;
   createdAtDateTime?: string;
   isAuthor?: boolean;
+  onBackClick?: () => void;
   onMoreClick?: () => void;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
