@@ -1,7 +1,7 @@
 import { fetchClient } from '@/shared/api/fetch-client';
 import { LoginRequest, SignupRequest } from '@/shared/types/generated-client/models';
 
-import { AuthUser } from './auth.types';
+import { AuthUser } from '../model/auth.types';
 
 export type AuthResponse = { user: AuthUser };
 
@@ -26,6 +26,21 @@ export const authApi = {
     }
 
     return response.json();
+  },
+
+  /**
+   * 이메일 중복 확인 (proxy 경유 → 백엔드 직접 호출)
+   * 응답: { available: boolean }
+   */
+  async checkEmailDuplicate(email: string): Promise<{ available: boolean }> {
+    const response = await fetchClient.post('/auth/email-check', { email });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || '올바른 이메일 형식이 아닙니다.');
+    }
+
+    return response.json() as Promise<{ available: boolean }>;
   },
 
   /**
