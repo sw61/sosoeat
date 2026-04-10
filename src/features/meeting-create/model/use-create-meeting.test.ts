@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { toast } from 'sonner';
 
-import { meetingsApi } from '@/entities/meeting';
+import { meetingsApi, mypageMeetingCountKey } from '@/entities/meeting';
 import { meetingCommentApi } from '@/entities/meeting-comment';
 import type { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 
@@ -14,6 +14,7 @@ jest.mock('@/entities/meeting', () => ({
   meetingsApi: {
     create: jest.fn(),
   },
+  mypageMeetingCountKey: ['users', 'me', 'meeting-count'],
 }));
 
 jest.mock('sonner', () => ({
@@ -32,11 +33,13 @@ jest.mock('@/entities/meeting-comment', () => ({
 const mockCreate = meetingsApi.create as jest.Mock;
 const mockSyncCreateMeeting = meetingCommentApi.syncCreateMeeting as jest.Mock;
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
+const createWrapper = (queryClient: QueryClient) => {
   return ({ children }: { children: React.ReactNode }) =>
     React.createElement(QueryClientProvider, { client: queryClient }, children);
 };
+
+const createQueryClient = () =>
+  new QueryClient({ defaultOptions: { mutations: { retry: false } } });
 
 /** 모달의 handleSubmit과 동일한 변환 로직 */
 const MOCK_PAYLOAD: CreateMeeting = {
@@ -62,7 +65,7 @@ describe('useCreateMeeting', () => {
     mockSyncCreateMeeting.mockResolvedValue(undefined);
 
     const { result } = renderHook(() => useCreateMeeting(), {
-      wrapper: createWrapper(),
+      wrapper: createWrapper(createQueryClient()),
     });
 
     result.current.mutate(MOCK_PAYLOAD);
@@ -77,11 +80,29 @@ describe('useCreateMeeting', () => {
     expect(toast.success).toHaveBeenCalled();
   });
 
+  it('모임 생성 성공 시 mypageMeetingCountKey를 invalidate한다', async () => {
+    const mockMeeting = { id: 1, hostId: 42, teamId: 'team-abc' };
+    mockCreate.mockResolvedValue(mockMeeting);
+    mockSyncCreateMeeting.mockResolvedValue(undefined);
+
+    const queryClient = createQueryClient();
+    const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
+
+    const { result } = renderHook(() => useCreateMeeting(), {
+      wrapper: createWrapper(queryClient),
+    });
+
+    result.current.mutate(MOCK_PAYLOAD);
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: mypageMeetingCountKey });
+  });
+
   it('모임 생성 실패 시 isError 상태가 되고 error toast를 띄운다', async () => {
     mockCreate.mockRejectedValue(new Error('모임 생성에 실패했습니다.'));
 
     const { result } = renderHook(() => useCreateMeeting(), {
-      wrapper: createWrapper(),
+      wrapper: createWrapper(createQueryClient()),
     });
 
     result.current.mutate(MOCK_PAYLOAD);
