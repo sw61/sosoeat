@@ -1,0 +1,97 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_detail_card_utils",
+      "label": "meeting-detail-card.utils.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_detail_card_utils_getmeetingstatus",
+      "label": "getMeetingStatus()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L12"
+    },
+    {
+      "id": "meeting_detail_card_utils_getmeetingrole",
+      "label": "getMeetingRole()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "meeting_detail_card_utils_formatmeetingdatetime",
+      "label": "formatMeetingDateTime()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L31"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_detail_card_utils",
+      "target": "date_fns",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_utils",
+      "target": "locale",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_utils",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_utils",
+      "target": "meeting_detail_card_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_utils",
+      "target": "meeting_detail_card_utils_getmeetingstatus",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_utils",
+      "target": "meeting_detail_card_utils_getmeetingrole",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_utils",
+      "target": "meeting_detail_card_utils_formatmeetingdatetime",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.utils.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    }
+  ]
+}

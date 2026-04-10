@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_detail_progress_stories",
+      "label": "meeting-detail-progress.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\meeting-detail-progress.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_detail_progress_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\meeting-detail-progress.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_progress_stories",
+      "target": "meeting_detail_progress",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\meeting-detail-progress.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

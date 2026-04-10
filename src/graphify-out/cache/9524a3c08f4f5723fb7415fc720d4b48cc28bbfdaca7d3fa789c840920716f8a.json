@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "id": "sosotalk_post_detail_types",
+      "label": "sosotalk-post-detail.types.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\sosotalk-post-detail\\sosotalk-post-detail.types.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "sosotalk_post_detail_types",
+      "target": "comment",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\sosotalk-post-detail\\sosotalk-post-detail.types.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ]
+}

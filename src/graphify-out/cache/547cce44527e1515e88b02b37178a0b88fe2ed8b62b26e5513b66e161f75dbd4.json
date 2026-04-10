@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "footer_test",
+      "label": "footer.test.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\footer\\ui\\footer\\footer.test.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "footer_test",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\footer\\ui\\footer\\footer.test.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "footer_test",
+      "target": "footer",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\footer\\ui\\footer\\footer.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

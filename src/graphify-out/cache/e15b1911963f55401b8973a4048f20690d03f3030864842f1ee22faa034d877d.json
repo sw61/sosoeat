@@ -1,0 +1,122 @@
+{
+  "nodes": [
+    {
+      "id": "notification_view_utils",
+      "label": "notification-view.utils.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "notification_view_utils_getnotificationdescription",
+      "label": "getNotificationDescription()",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L16"
+    },
+    {
+      "id": "notification_view_utils_notificationtitlefortype",
+      "label": "notificationTitleForType()",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L29"
+    },
+    {
+      "id": "notification_view_utils_notificationthumbnailkeyfortype",
+      "label": "notificationThumbnailKeyForType()",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L44"
+    },
+    {
+      "id": "notification_view_utils_getnotificationviewmodel",
+      "label": "getNotificationViewModel()",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L60"
+    }
+  ],
+  "edges": [
+    {
+      "source": "notification_view_utils",
+      "target": "generated_client",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_view_utils",
+      "target": "format_notification_meta_time",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_view_utils",
+      "target": "notification_view_utils_getnotificationdescription",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_view_utils",
+      "target": "notification_view_utils_notificationtitlefortype",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_view_utils",
+      "target": "notification_view_utils_notificationthumbnailkeyfortype",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_view_utils",
+      "target": "notification_view_utils_getnotificationviewmodel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_view_utils_getnotificationviewmodel",
+      "target": "notification_view_utils_getnotificationdescription",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_view_utils_getnotificationviewmodel",
+      "target": "notification_view_utils_notificationtitlefortype",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_view_utils_getnotificationviewmodel",
+      "target": "notification_view_utils_notificationthumbnailkeyfortype",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\lib\\notification-view.utils.ts",
+      "source_location": "L67",
+      "weight": 1.0
+    }
+  ]
+}

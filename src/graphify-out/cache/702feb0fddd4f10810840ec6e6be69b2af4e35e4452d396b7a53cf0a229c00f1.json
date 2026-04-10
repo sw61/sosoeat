@@ -1,0 +1,81 @@
+{
+  "nodes": [
+    {
+      "id": "ellipsis_menu",
+      "label": "ellipsis-menu.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "ellipsis_menu_subscribe",
+      "label": "subscribe()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L21"
+    },
+    {
+      "id": "ellipsis_menu_ellipsismenu",
+      "label": "EllipsisMenu()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L23"
+    }
+  ],
+  "edges": [
+    {
+      "source": "ellipsis_menu",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "ellipsis_menu",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "ellipsis_menu",
+      "target": "button",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "ellipsis_menu",
+      "target": "dropdown",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "ellipsis_menu",
+      "target": "ellipsis_menu_subscribe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "ellipsis_menu",
+      "target": "ellipsis_menu_ellipsismenu",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\_components\\ellipsis-menu.tsx",
+      "source_location": "L23",
+      "weight": 1.0
+    }
+  ]
+}

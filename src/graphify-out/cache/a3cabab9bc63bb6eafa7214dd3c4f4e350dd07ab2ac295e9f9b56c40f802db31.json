@@ -1,0 +1,117 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_create_modal",
+      "label": "meeting-create-modal.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_create_modal_stepindicator",
+      "label": "StepIndicator()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L17"
+    },
+    {
+      "id": "meeting_create_modal_meetingcreateform",
+      "label": "MeetingCreateForm()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L29"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_create_modal",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "button",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "dialog",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "funnel",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "meeting_create_constants",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "meeting_create_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "use_meeting_form",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "components",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "meeting_create_modal_stepindicator",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_modal",
+      "target": "meeting_create_modal_meetingcreateform",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\meeting-create-modal.tsx",
+      "source_location": "L29",
+      "weight": 1.0
+    }
+  ]
+}

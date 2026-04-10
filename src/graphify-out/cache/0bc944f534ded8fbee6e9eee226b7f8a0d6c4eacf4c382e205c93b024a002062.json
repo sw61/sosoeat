@@ -1,0 +1,74 @@
+{
+  "nodes": [
+    {
+      "id": "notification_tab_body",
+      "label": "notification-tab-body.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "notification_tab_body_notificationtabbody",
+      "label": "NotificationTabBody()",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.tsx",
+      "source_location": "L14"
+    }
+  ],
+  "edges": [
+    {
+      "source": "notification_tab_body",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_tab_body",
+      "target": "meta_dot",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_tab_body",
+      "target": "read_check_icon",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_tab_body",
+      "target": "notification_tab_body_constants",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_tab_body",
+      "target": "notification_tab_body_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.tsx",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_tab_body",
+      "target": "notification_tab_body_notificationtabbody",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    }
+  ]
+}

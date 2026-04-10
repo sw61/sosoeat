@@ -1,0 +1,12 @@
+{
+  "nodes": [
+    {
+      "id": "notification_panel_body_types",
+      "label": "notification-panel-body.types.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-panel-body\\notification-panel-body.types.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": []
+}

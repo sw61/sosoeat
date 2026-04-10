@@ -1,0 +1,74 @@
+{
+  "nodes": [
+    {
+      "id": "use_search_page_test",
+      "label": "use-search-page.test.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\model\\use-search-page.test.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "use_search_page_test_renderhookwithclient",
+      "label": "renderHookWithClient()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\model\\use-search-page.test.tsx",
+      "source_location": "L16"
+    }
+  ],
+  "edges": [
+    {
+      "source": "use_search_page_test",
+      "target": "react_query",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\model\\use-search-page.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "use_search_page_test",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\model\\use-search-page.test.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "use_search_page_test",
+      "target": "date_fns",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\model\\use-search-page.test.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "use_search_page_test",
+      "target": "testing",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\model\\use-search-page.test.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "use_search_page_test",
+      "target": "use_search_page",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\model\\use-search-page.test.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "use_search_page_test",
+      "target": "use_search_page_test_renderhookwithclient",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\model\\use-search-page.test.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "user_card_stories",
+      "label": "user-card.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\ui\\user-card\\user-card.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "user_card_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\user-card\\user-card.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "user_card_stories",
+      "target": "user_card",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\user-card\\user-card.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

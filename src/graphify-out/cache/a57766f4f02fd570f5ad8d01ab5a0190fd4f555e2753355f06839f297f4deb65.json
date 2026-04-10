@@ -1,0 +1,47 @@
+{
+  "nodes": [
+    {
+      "id": "step_header",
+      "label": "step-header.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\_components\\step-header.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "step_header_signupstepheader",
+      "label": "SignupStepHeader()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\_components\\step-header.tsx",
+      "source_location": "L8"
+    }
+  ],
+  "edges": [
+    {
+      "source": "step_header",
+      "target": "model",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\_components\\step-header.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "step_header",
+      "target": "model",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\_components\\step-header.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "step_header",
+      "target": "step_header_signupstepheader",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\_components\\step-header.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    }
+  ]
+}

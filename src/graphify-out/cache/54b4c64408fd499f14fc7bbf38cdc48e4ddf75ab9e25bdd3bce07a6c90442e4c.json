@@ -1,0 +1,47 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_detail_server",
+      "label": "meeting-detail.server.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.server.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_detail_server_getmeetingbyid",
+      "label": "getMeetingById()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.server.ts",
+      "source_location": "L8"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_detail_server",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.server.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_server",
+      "target": "api_server",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.server.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_server",
+      "target": "meeting_detail_server_getmeetingbyid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.server.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    }
+  ]
+}

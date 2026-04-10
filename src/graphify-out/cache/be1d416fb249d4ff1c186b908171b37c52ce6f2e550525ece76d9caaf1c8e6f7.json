@@ -1,0 +1,49 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_recommended_card_test",
+      "label": "meeting-recommended-card.test.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-recommended-card\\meeting-recommended-card.test.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_recommended_card_test",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-recommended-card\\meeting-recommended-card.test.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_recommended_card_test",
+      "target": "user_event",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-recommended-card\\meeting-recommended-card.test.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_recommended_card_test",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-recommended-card\\meeting-recommended-card.test.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_recommended_card_test",
+      "target": "meeting_recommended_card",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-recommended-card\\meeting-recommended-card.test.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    }
+  ]
+}

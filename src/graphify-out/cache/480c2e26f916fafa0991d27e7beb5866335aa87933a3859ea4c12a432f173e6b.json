@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    {
+      "id": "comment_delete_modal",
+      "label": "comment-delete-modal.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-comment-section\\comment-delete-modal.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "comment_delete_modal_commentdeletemodal",
+      "label": "CommentDeleteModal()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-comment-section\\comment-delete-modal.tsx",
+      "source_location": "L10"
+    }
+  ],
+  "edges": [
+    {
+      "source": "comment_delete_modal",
+      "target": "alert_modal",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-comment-section\\comment-delete-modal.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "comment_delete_modal",
+      "target": "comment_delete_modal_commentdeletemodal",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-comment-section\\comment-delete-modal.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    }
+  ]
+}

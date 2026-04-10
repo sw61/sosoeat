@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    {
+      "id": "auth_utils",
+      "label": "auth.utils.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\auth\\model\\auth.utils.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "auth_utils_geterroranimationclasses",
+      "label": "getErrorAnimationClasses()",
+      "file_type": "code",
+      "source_file": "src\\features\\auth\\model\\auth.utils.ts",
+      "source_location": "L10"
+    },
+    {
+      "id": "auth_utils_getinputclasses",
+      "label": "getInputClasses()",
+      "file_type": "code",
+      "source_file": "src\\features\\auth\\model\\auth.utils.ts",
+      "source_location": "L26"
+    }
+  ],
+  "edges": [
+    {
+      "source": "auth_utils",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\auth.utils.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "auth_utils",
+      "target": "auth_utils_geterroranimationclasses",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\auth.utils.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "auth_utils",
+      "target": "auth_utils_getinputclasses",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\auth.utils.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    }
+  ]
+}

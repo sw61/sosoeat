@@ -33,3 +33,13 @@ npm run validate     # 타입 + 포맷 + Lint + 테스트 자동 실행
 - 🏗️ **[프로젝트 구조 & FSD](./docs/architecture.md)** — 폴더 구조, 레이어 규칙, 슬라이스 구조
 - 🔌 **[API 패턴 & BFF](./docs/api-patterns.md)** — HTTP 클라이언트, 인증, 프록시
 - 📝 **[Git 워크플로우](./docs/git-workflow.md)** — 커밋 메시지, Pre-commit 훅, 브랜치 전략
+
+## graphify
+
+This project has a graphify knowledge graph at graphify-out/.
+
+Rules:
+
+- Before answering architecture or codebase questions, read graphify-out/GRAPH_REPORT.md for god nodes and community structure
+- If graphify-out/wiki/index.md exists, navigate it instead of reading raw files
+- After modifying code files in this session, run `python3 -c "from graphify.watch import _rebuild_code; from pathlib import Path; _rebuild_code(Path('.'))"` to keep the graph current

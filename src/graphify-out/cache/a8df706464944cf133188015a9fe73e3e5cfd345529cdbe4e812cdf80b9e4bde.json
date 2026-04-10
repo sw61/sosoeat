@@ -1,0 +1,49 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_detail_card_stories",
+      "label": "meeting-detail-card.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_detail_card_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_stories",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_stories",
+      "target": "meeting_detail_card",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.stories.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_stories",
+      "target": "meeting_detail_card_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.stories.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    }
+  ]
+}

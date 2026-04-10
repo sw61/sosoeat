@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_type_section",
+      "label": "meeting-type-section.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\home\\ui\\meeting-type-section\\meeting-type-section.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_type_section",
+      "target": "link",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\home\\ui\\meeting-type-section\\meeting-type-section.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_type_section",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\home\\ui\\meeting-type-section\\meeting-type-section.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

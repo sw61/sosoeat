@@ -1,0 +1,65 @@
+{
+  "nodes": [
+    {
+      "id": "use_meeting_tabs",
+      "label": "use-meeting-tabs.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\model\\use-meeting-tabs.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "use_meeting_tabs_usemeetingtabs",
+      "label": "useMeetingTabs()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\model\\use-meeting-tabs.ts",
+      "source_location": "L10"
+    }
+  ],
+  "edges": [
+    {
+      "source": "use_meeting_tabs",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\use-meeting-tabs.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "use_meeting_tabs",
+      "target": "meeting_tabs_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\use-meeting-tabs.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "use_meeting_tabs",
+      "target": "mypage_queries",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\use-meeting-tabs.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "use_meeting_tabs",
+      "target": "mypage_service",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\use-meeting-tabs.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "use_meeting_tabs",
+      "target": "use_meeting_tabs_usemeetingtabs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\use-meeting-tabs.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    }
+  ]
+}
