@@ -63,6 +63,7 @@ const mockPostDetailResponse = {
     id: 10,
     name: '김민수',
     image: 'https://example.com/author-image.jpg',
+    email: 'test@example.com',
   },
   count: {
     comments: 6,

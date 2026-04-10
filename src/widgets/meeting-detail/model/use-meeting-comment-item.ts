@@ -97,13 +97,10 @@ export function useMeetingCommentItem({
   };
 
   const handleToggleReplying = () => {
-    setIsReplying((prev) => {
-      if (prev) {
-        setReplyText('');
-      }
-
-      return !prev;
-    });
+    if (isReplying) {
+      setReplyText('');
+    }
+    setIsReplying((prev) => !prev);
   };
 
   const handleCancelReply = () => {

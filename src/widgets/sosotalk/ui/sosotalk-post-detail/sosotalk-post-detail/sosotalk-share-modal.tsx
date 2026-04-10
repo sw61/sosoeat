@@ -69,7 +69,7 @@ const toAbsoluteImageUrl = (imageUrl?: string) => {
     return imageUrl;
   }
 
-  return `${window.location.origin}${imageUrl ?? '/images/logo.svg'}`;
+  return window.location.origin + (imageUrl || '/images/logo.svg');
 };
 
 export function SosoTalkShareModal({
@@ -130,7 +130,7 @@ export function SosoTalkShareModal({
       ) : null}
 
       <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
-        <DialogContent className="[&_[data-slot='dialog-close']]:top-4 [&_[data-slot='dialog-close']]:right-4 max-w-[calc(100%-2rem)] rounded-[24px] px-6 py-6 sm:max-w-md sm:px-7">
+        <DialogContent className="max-w-[calc(100%-2rem)] rounded-[24px] px-6 py-6 sm:max-w-md sm:px-7 [&_[data-slot='dialog-close']]:top-4 [&_[data-slot='dialog-close']]:right-4">
           <DialogHeader className="gap-3">
             <div className="bg-sosoeat-orange-100 text-sosoeat-orange-700 inline-flex h-11 w-11 items-center justify-center rounded-full">
               <Share2 className="h-5 w-5" />
