@@ -2,6 +2,12 @@ import { render, screen } from '@testing-library/react';
 
 import { SosoTalkPostDetailPage } from './sosotalk-post-detail-page';
 
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    back: jest.fn(),
+  }),
+}));
+
 jest.mock('./model', () => ({
   SOSOTALK_AUTHOR_IMAGE_FALLBACK: '/fallback-profile.png',
   formatSosoTalkRelativeTime: jest.fn(),
@@ -26,7 +32,9 @@ const createBaseState = () => ({
   commentInput: '',
   editingCommentId: null,
   editingCommentInput: '',
+  pendingDeleteCommentId: null,
   isEditPending: false,
+  isDeleteModalOpen: false,
   displayedLikeCount: 0,
   isError: false,
   isLikePending: false,
@@ -36,7 +44,11 @@ const createBaseState = () => ({
   setCommentInput: jest.fn(),
   setEditingCommentInput: jest.fn(),
   handleCancelEditComment: jest.fn(),
+  handleCancelDelete: jest.fn(),
+  handleCancelDeleteComment: jest.fn(),
   handleCommentClick: jest.fn(),
+  handleConfirmDelete: jest.fn(),
+  handleConfirmDeleteComment: jest.fn(),
   handleDeleteClick: jest.fn(),
   handleDeleteComment: jest.fn(),
   handleEditClick: jest.fn(),

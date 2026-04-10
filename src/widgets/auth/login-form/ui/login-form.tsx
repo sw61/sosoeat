@@ -21,9 +21,9 @@ const LoginFormContent = (props: LoginFormProps) => {
     showPassword,
     toggleShowPassword,
     isPending,
-    isButtonActive,
     emailError,
     passwordError,
+    rootError,
     hasEmailError,
     hasPasswordError,
   } = useLoginForm(props);
@@ -38,7 +38,7 @@ const LoginFormContent = (props: LoginFormProps) => {
           <FieldContent>
             <Input
               id="email"
-              type="text"
+              type="email"
               placeholder="이메일을 입력해주세요"
               disabled={isPending}
               className={getInputClasses(hasEmailError)}
@@ -83,12 +83,13 @@ const LoginFormContent = (props: LoginFormProps) => {
           </div>
         </Field>
 
-        <AuthSubmitButton
-          isActive={isButtonActive}
-          isLoading={isPending}
-          loadingText="로그인 중..."
-          label="로그인"
-        />
+        <div className={getErrorAnimationClasses(!!rootError?.message?.trim())}>
+          <div className="overflow-hidden">
+            <FieldError errors={[rootError]} className="pl-1 duration-200" />
+          </div>
+        </div>
+
+        <AuthSubmitButton isLoading={isPending} label="로그인" />
       </FieldGroup>
     </form>
   );

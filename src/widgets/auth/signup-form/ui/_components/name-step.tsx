@@ -21,14 +21,14 @@ export const NameStep = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, touchedFields, isSubmitted },
   } = useForm<NameValues>({
     resolver: zodResolver(nameSchema),
     mode: 'onBlur',
     defaultValues,
   });
 
-  const nameError = errors.name;
+  const nameError = touchedFields.name || isSubmitted ? errors.name : undefined;
   const hasError = !!nameError?.message?.trim();
 
   const onSubmit = (data: NameValues) => {
@@ -70,12 +70,7 @@ export const NameStep = ({
           <ChevronLeft className="h-6 w-6" />
           <span>이전</span>
         </Button>
-        <AuthSubmitButton
-          label="회원가입"
-          isActive={isValid}
-          isLoading={isLoading}
-          className="h-[52px] flex-1"
-        />
+        <AuthSubmitButton label="회원가입" isLoading={isLoading} className="h-[52px] flex-1" />
       </div>
     </form>
   );

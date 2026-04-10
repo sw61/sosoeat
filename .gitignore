@@ -73,3 +73,11 @@ src/graphify-out/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Codex local settings
+.codex/
+AGENTS.md
+
+# Graphify cache
+src/graphify-out/cache/
+.claude/settings.local.json/
