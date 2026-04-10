@@ -12,6 +12,11 @@ const searchKeys = {
 } as const;
 
 export const meetingsQueryOptions = {
+  meetingDetail: (id: number) => ({
+    queryKey: ['meetings', 'detail', id] as const,
+    queryFn: () => meetingsApi.getById(id),
+    staleTime: 60_000,
+  }),
   all: () => ({
     queryKey: searchKeys.all(),
     queryFn: () => meetingsApi.getList(),
