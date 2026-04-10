@@ -11,11 +11,13 @@ import {
   useQueryState,
 } from 'nuqs';
 
-import { useSearchInfiniteOption, useSearchInfiniteOptions } from '@/entities/meeting';
+import { getMeetings, useSearchInfiniteOption } from '@/entities/meeting';
 import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 
 import type { MeetingFilterBarProps } from '../ui/meeting-filter-bar';
 import type { RegionSelection } from '../ui/region-select-modal';
+
+import { useSearchInfiniteOptions } from './use-search-infinite-options';
 
 type DateChangeParams = {
   valueStart: Date | null;
@@ -24,7 +26,7 @@ type DateChangeParams = {
 
 const MEETINGS_PAGE_SIZE = 10;
 
-const useSearchPage = () => {
+const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | null) => {
   const [regionCommitted, setRegionCommitted] = useQueryState<RegionSelection>(
     'regionCommitted',
     parseAsJson<RegionSelection>((value) => {
@@ -106,7 +108,7 @@ const useSearchPage = () => {
         ? undefined
         : (typeFilter as 'groupEat' | 'groupBuy'),
     region,
-    dateStart: dateStart ?? undefined,
+    dateStart: dateStart ?? new Date(),
     dateEnd: dateEndExclusiveIso == null ? undefined : new Date(dateEndExclusiveIso),
     sortBy:
       sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
@@ -116,7 +118,10 @@ const useSearchPage = () => {
 
   const isMulti = Array.isArray(options.region) && options.region.length > 1;
 
-  const singleResult = useSearchInfiniteOption(options as Omit<TeamIdMeetingsGetRequest, 'teamId'>);
+  const singleResult = useSearchInfiniteOption(
+    options as Omit<TeamIdMeetingsGetRequest, 'teamId'>,
+    initialData ?? undefined
+  );
   const multiResult = useSearchInfiniteOptions(options);
 
   const {
@@ -144,6 +149,9 @@ const useSearchPage = () => {
     }, 500);
 
     return () => clearTimeout(delayDebounce);
+
+    // debounce 효과를 위해 searchQuery 의존성에서 제외 (불필요한 재실행 방지)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue, setSearchQuery]);
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {

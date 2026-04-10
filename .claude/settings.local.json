@@ -29,7 +29,8 @@
       "Bash(echo \"EXIT: $?\")",
       "Bash(ov find:*)",
       "Bash(ov abstract:*)",
-      "Bash(ov read:*)"
+      "Bash(ov read:*)",
+      "Bash(npm run:*)"
     ]
   }
 }

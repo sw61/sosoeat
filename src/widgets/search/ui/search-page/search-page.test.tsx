@@ -153,7 +153,7 @@ describe('SearchPage', () => {
       data: undefined,
       isLoading: true,
     });
-    const { result } = renderHookWithNuqs(() => useSearchPage());
+    const { result } = renderHookWithNuqs(() => useSearchPage(null));
     expect(result.current.isLoading).toBe(true);
   });
 
@@ -162,7 +162,7 @@ describe('SearchPage', () => {
       ...defaultInfiniteReturn,
       isError: true,
     });
-    const { result } = renderHookWithNuqs(() => useSearchPage());
+    const { result } = renderHookWithNuqs(() => useSearchPage(null));
     expect(result.current.isError).toBe(true);
   });
 
@@ -171,12 +171,12 @@ describe('SearchPage', () => {
       ...defaultInfiniteReturn,
       data: mockInfiniteData(mockEmptyMeetingList),
     });
-    renderWithNuqs(<SearchPage />);
+    renderWithNuqs(<SearchPage initialData={null} />);
     expect(screen.getAllByAltText('Empty Page')).toHaveLength(2);
   });
 
   it('meetingData가 있을 때 검색 결과를 렌더링해야 한다', () => {
-    const { result } = renderHookWithNuqs(() => useSearchPage());
+    const { result } = renderHookWithNuqs(() => useSearchPage(null));
     expect(result.current.meetingData).toEqual(mockMeetingList.data);
   });
 
@@ -192,7 +192,7 @@ describe('SearchPage', () => {
       inView: true,
     });
 
-    renderWithNuqs(<SearchPage />);
+    renderWithNuqs(<SearchPage initialData={null} />);
     const skeletons = document.querySelectorAll('.animate-pulse');
     expect(skeletons.length).toBeGreaterThan(0);
   });
@@ -203,7 +203,7 @@ describe('SearchPage', () => {
       hasNextPage: false,
       isFetching: false,
     });
-    renderWithNuqs(<SearchPage />);
+    renderWithNuqs(<SearchPage initialData={null} />);
     expect(screen.getByText('더 이상 모임이 없습니다.')).toBeInTheDocument();
   });
 
@@ -214,7 +214,7 @@ describe('SearchPage', () => {
       isFetching: false,
     });
 
-    renderWithNuqs(<SearchPage />);
+    renderWithNuqs(<SearchPage initialData={null} />);
     expect(screen.queryByText('더 이상 모임이 없습니다.')).not.toBeInTheDocument();
   });
 
@@ -224,7 +224,7 @@ describe('SearchPage', () => {
       data: mockInfiniteData(mockEmptyMeetingList),
     });
 
-    renderWithNuqs(<SearchPage />);
+    renderWithNuqs(<SearchPage initialData={null} />);
 
     const createMeetingButton = screen.getByRole('button', { name: /모임 만들기/i });
     fireEvent.click(createMeetingButton);
@@ -248,7 +248,7 @@ describe('SearchPage', () => {
       },
     });
 
-    renderWithNuqs(<SearchPage />);
+    renderWithNuqs(<SearchPage initialData={null} />);
 
     const createMeetingButton = screen.getByRole('button', { name: /모임 만들기/i });
     fireEvent.click(createMeetingButton);
