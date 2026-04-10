@@ -109,7 +109,7 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
         ? undefined
         : (typeFilter as 'groupEat' | 'groupBuy'),
     region,
-    dateStart: dateStart ?? new Date(),
+    dateStart: dateStart ?? startOfDay(new Date()),
     dateEnd: dateEndExclusiveIso == null ? undefined : new Date(dateEndExclusiveIso),
     sortBy:
       sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
