@@ -132,7 +132,9 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
             variant={variant}
             className="mt-0 min-w-0 flex-1"
           />
-          <EstablishmentStatusBadge confirmedAt={meeting.confirmedAt} variant={variant} />
+          <div className="hidden md:block">
+            <EstablishmentStatusBadge confirmedAt={meeting.confirmedAt} variant={variant} />
+          </div>
         </div>
 
         <div className={MAIN_PAGE_CARD_PROGRESS_SECTION_CLASS}>

@@ -33,7 +33,7 @@ export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineB
       variant="outline"
       className={cn(DEADLINE_BADGE_CLASS, variantBadgeClassName[variant], className)}
     >
-      <div className={'min-h-[1.25em] overflow-hidden'}>
+      <div className={'h-5 overflow-hidden'}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={isEnded ? 'ended' : contentText}

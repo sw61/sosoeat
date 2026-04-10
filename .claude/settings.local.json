@@ -18,7 +18,18 @@
       "Skill(plan-eng-review)",
       "Bash(python:*)",
       "Bash(gh issue:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(ov system:*)",
+      "Bash(python3 -c \"import openviking; print\\(openviking.__file__\\)\")",
+      "Bash(python3 -c ':*)",
+      "Bash(python3:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(powershell:*)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(ov find:*)",
+      "Bash(ov abstract:*)",
+      "Bash(ov read:*)"
     ]
   }
 }
