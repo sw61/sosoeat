@@ -1,3 +1,7 @@
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
+import { meetingsQueryOptions } from '@/entities/meeting';
+import { getQueryClient } from '@/shared/lib/get-query-client';
 import {
   MeetingDescriptionSection,
   MeetingHeroSection,
@@ -10,10 +14,13 @@ interface Props {
 }
 
 export async function MeetingHeroFetcher({ meetingId }: Props) {
+  const queryClient = getQueryClient();
   const meeting = await getMeetingById(meetingId);
 
+  queryClient.setQueryData(meetingsQueryOptions.meetingDetail(meetingId).queryKey, meeting);
+
   return (
-    <>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <MeetingHeroSection key={`${meeting.id}-${meeting.updatedAt}`} meetingId={meetingId} />
       <MeetingDescriptionSection description={meeting.description} />
       <MeetingLocationSection
@@ -21,6 +28,6 @@ export async function MeetingHeroFetcher({ meetingId }: Props) {
         latitude={meeting.latitude}
         longitude={meeting.longitude}
       />
-    </>
+    </HydrationBoundary>
   );
 }
