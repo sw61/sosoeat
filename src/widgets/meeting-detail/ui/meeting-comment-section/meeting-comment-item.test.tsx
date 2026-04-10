@@ -109,7 +109,9 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(screen.queryByRole('button', { name: '\uB354\uBCF4\uAE30' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: '\uB354\uBCF4\uAE30', hidden: true })
+      ).not.toBeInTheDocument();
     });
   });
 
