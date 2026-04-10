@@ -1,5 +1,7 @@
 'use client';
 
+import { useSyncExternalStore } from 'react';
+
 import { ChevronDown } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
@@ -37,6 +39,15 @@ export const SosoTalkFilterBar = ({
   onTabChange = () => {},
   onSortChange = () => {},
 }: SosoTalkFilterBarProps) => {
+  // 하이드레이션 오류를 방지하기 위해 클라이언트 마운트 여부를 확인합니다.
+  // 특정 ESLint 룰(set-state-in-effect)이 있다면, 이 부분은 dynamic import(ssr: false)로
+  // 대체하는 것이 프로젝트 컨벤션에 더 부합할 수 있습니다.
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
+
   const selectedSortOption =
     sortOptions.find((option) => option.value === activeSort) ?? DEFAULT_SORT_OPTIONS[0];
 
@@ -96,34 +107,36 @@ export const SosoTalkFilterBar = ({
           })}
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              type="button"
-              className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium md:hidden"
-              aria-label="정렬 옵션"
-            >
-              <span>{selectedSortOption.label}</span>
-              <ChevronDown className="size-4" aria-hidden />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="md:hidden">
-            <DropdownMenuRadioGroup
-              value={activeSort}
-              onValueChange={(value) => onSortChange(value as typeof activeSort)}
-            >
-              {sortOptions.map((option) => (
-                <DropdownMenuRadioItem
-                  key={option.value}
-                  value={option.value}
-                  className="text-sosoeat-gray-900 py-2"
-                >
-                  {option.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {isMounted && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium md:hidden"
+                aria-label="정렬 옵션"
+              >
+                <span>{selectedSortOption.label}</span>
+                <ChevronDown className="size-4" aria-hidden />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="md:hidden">
+              <DropdownMenuRadioGroup
+                value={activeSort}
+                onValueChange={(value) => onSortChange(value as typeof activeSort)}
+              >
+                {sortOptions.map((option) => (
+                  <DropdownMenuRadioItem
+                    key={option.value}
+                    value={option.value}
+                    className="text-sosoeat-gray-900 py-2"
+                  >
+                    {option.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </section>
   );

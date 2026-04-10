@@ -5,6 +5,10 @@ import userEvent from '@testing-library/user-event';
 import { MeetingCommentItem } from './meeting-comment-item';
 import type { MeetingComment } from './meeting-comment-section.types';
 
+jest.mock('@/entities/auth', () => ({
+  useAuthStore: jest.fn(),
+}));
+
 jest.mock('@/features/meeting-comment', () => ({
   useLikeComment: jest.fn(() => ({ mutate: jest.fn() })),
   useUpdateComment: jest.fn(() => ({ mutate: jest.fn() })),
@@ -16,11 +20,16 @@ jest.mock('./format-date', () => ({
   formatCommentDate: jest.fn((date: string) => date),
 }));
 
+const { useAuthStore } = jest.requireMock('@/entities/auth') as {
+  useAuthStore: jest.Mock;
+};
+
 const mockComment: MeetingComment = {
   id: 1,
   parentId: null,
   author: { nickname: '\uB9C8\uB8E8', profileUrl: null },
-  content: '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?',
+  content:
+    '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?',
   isDeleted: false,
   createdAt: '03/12',
   likeCount: 3,
@@ -40,6 +49,16 @@ const createWrapper = () => {
 };
 
 describe('MeetingCommentItem', () => {
+  beforeEach(() => {
+    useAuthStore.mockReturnValue({
+      isAuthenticated: true,
+      user: {
+        name: '\uB9C8\uB8E8',
+        image: null,
+      },
+    });
+  });
+
   it('renders author, content, date, and like count', () => {
     render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
       wrapper: createWrapper(),
@@ -47,7 +66,9 @@ describe('MeetingCommentItem', () => {
 
     expect(screen.getByText('\uB9C8\uB8E8')).toBeInTheDocument();
     expect(
-      screen.getByText('\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?')
+      screen.getByText(
+        '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?'
+      )
     ).toBeInTheDocument();
     expect(screen.getByText('03/12')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
@@ -55,9 +76,12 @@ describe('MeetingCommentItem', () => {
 
   describe('host badge', () => {
     it('shows the host badge for host comments', () => {
-      render(<MeetingCommentItem comment={{ ...mockComment, isHostComment: true }} meetingId={1} />, {
-        wrapper: createWrapper(),
-      });
+      render(
+        <MeetingCommentItem comment={{ ...mockComment, isHostComment: true }} meetingId={1} />,
+        {
+          wrapper: createWrapper(),
+        }
+      );
 
       expect(screen.getByText('\uC791\uC131\uC790')).toBeInTheDocument();
     });
@@ -85,7 +109,9 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(screen.queryByRole('button', { name: '\uB354\uBCF4\uAE30' })).not.toBeInTheDocument();
+      const button = screen.getByRole('button', { name: '\uB354\uBCF4\uAE30' });
+
+      expect(button.closest('div.invisible')).toBeTruthy();
     });
   });
 
@@ -102,7 +128,10 @@ describe('MeetingCommentItem', () => {
 
     it('hides like and reply actions', () => {
       render(
-        <MeetingCommentItem comment={{ ...mockComment, isDeleted: true, isMine: true }} meetingId={1} />,
+        <MeetingCommentItem
+          comment={{ ...mockComment, isDeleted: true, isMine: true }}
+          meetingId={1}
+        />,
         {
           wrapper: createWrapper(),
         }
@@ -197,7 +226,9 @@ describe('MeetingCommentItem', () => {
       expect(screen.getByRole('button', { name: '\uB2F5\uAE00' })).toBeInTheDocument();
 
       rerender(
-        <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+        <QueryClientProvider
+          client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+        >
           <MeetingCommentItem comment={{ ...mockComment, parentId: 1 }} isReply meetingId={1} />
         </QueryClientProvider>
       );
