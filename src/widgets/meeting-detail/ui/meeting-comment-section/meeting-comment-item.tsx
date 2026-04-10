@@ -2,6 +2,7 @@
 
 import { Heart, MessageCircle, UserRound } from 'lucide-react';
 
+import { useAuthStore } from '@/entities/auth';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 
@@ -57,6 +58,7 @@ export function MeetingCommentItem({
   } = useMeetingCommentItem({ commentId: id, meetingId, content, isLiked, likeCount });
 
   const isPending = id < 0;
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <div>
@@ -84,9 +86,9 @@ export function MeetingCommentItem({
                 <span className="text-sosoeat-gray-600 text-xs">
                   {formatCommentDate(createdAt)}
                 </span>
-                {isMine && !isDeleted && (
+                <div className={cn((!isMine || isDeleted) && 'pointer-events-none invisible')}>
                   <EllipsisMenu onEdit={() => setIsEditing(true)} onDelete={openDeleteModal} />
-                )}
+                </div>
               </div>
             </div>
 
@@ -164,10 +166,13 @@ export function MeetingCommentItem({
             {isReplying && (
               <div className="mt-2 flex gap-2">
                 <textarea
-                  className="flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none"
+                  className="flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   rows={1}
-                  placeholder="답글을 입력하세요."
+                  placeholder={
+                    isAuthenticated ? '답글을 입력하세요.' : '로그인 후 댓글을 작성할 수 있습니다.'
+                  }
                   value={replyText}
+                  disabled={!isAuthenticated}
                   onChange={(e) => setReplyText(e.target.value)}
                 />
                 <div className="flex gap-1">
@@ -181,7 +186,8 @@ export function MeetingCommentItem({
                   <button
                     type="button"
                     onClick={handleReplySubmit}
-                    className="bg-sosoeat-orange-600 cursor-pointer rounded-lg px-3 py-1 text-sm text-white"
+                    disabled={!isAuthenticated}
+                    className="bg-sosoeat-orange-600 cursor-pointer rounded-lg px-3 py-1 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     저장
                   </button>

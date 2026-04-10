@@ -78,12 +78,14 @@ describe('MeetingCommentItem', () => {
       expect(screen.getByRole('button', { name: '더보기' })).toBeInTheDocument();
     });
 
-    it('isMine이 false이면 더보기 버튼이 표시되지 않는다', () => {
+    it('isMine이 false이면 더보기 버튼이 invisible 처리된다', () => {
       render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
-      expect(screen.queryByRole('button', { name: '더보기' })).not.toBeInTheDocument();
+      const button = screen.queryByRole('button', { name: '더보기' });
+      expect(button).toBeInTheDocument();
+      expect(button?.closest('.invisible')).toBeTruthy();
     });
 
     it('더보기 클릭 시 수정하기/삭제하기가 표시된다', async () => {
