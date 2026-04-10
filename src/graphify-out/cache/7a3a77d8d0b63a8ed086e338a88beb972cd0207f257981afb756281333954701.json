@@ -1,0 +1,47 @@
+{
+  "nodes": [
+    {
+      "id": "use_sosotalk_post_editor_image",
+      "label": "use-sosotalk-post-editor-image.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\model\\use-sosotalk-post-editor-image.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "use_sosotalk_post_editor_image_usesosotalkposteditorimage",
+      "label": "useSosoTalkPostEditorImage()",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\model\\use-sosotalk-post-editor-image.ts",
+      "source_location": "L11"
+    }
+  ],
+  "edges": [
+    {
+      "source": "use_sosotalk_post_editor_image",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\model\\use-sosotalk-post-editor-image.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "use_sosotalk_post_editor_image",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\model\\use-sosotalk-post-editor-image.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "use_sosotalk_post_editor_image",
+      "target": "use_sosotalk_post_editor_image_usesosotalkposteditorimage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\model\\use-sosotalk-post-editor-image.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    }
+  ]
+}

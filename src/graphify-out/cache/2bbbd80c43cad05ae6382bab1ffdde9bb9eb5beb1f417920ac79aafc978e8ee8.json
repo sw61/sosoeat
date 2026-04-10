@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "count_card_stories",
+      "label": "count-card.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\ui\\count-card\\count-card.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "count_card_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\count-card\\count-card.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "count_card_stories",
+      "target": "count_card",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\count-card\\count-card.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

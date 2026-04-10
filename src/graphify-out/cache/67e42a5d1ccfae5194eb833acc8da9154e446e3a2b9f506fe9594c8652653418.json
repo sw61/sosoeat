@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "sosotalk_post_editor_stories",
+      "label": "sosotalk-post-editor.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\ui\\sosotalk-post-editor\\sosotalk-post-editor.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "sosotalk_post_editor_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\ui\\sosotalk-post-editor\\sosotalk-post-editor.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_editor_stories",
+      "target": "sosotalk_post_editor",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\ui\\sosotalk-post-editor\\sosotalk-post-editor.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

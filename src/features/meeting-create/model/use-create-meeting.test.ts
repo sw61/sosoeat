@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { toast } from 'sonner';
 
-import { commentApi } from '@/entities/comment';
 import { meetingsApi } from '@/entities/meeting';
+import { meetingCommentApi } from '@/entities/meeting-comment';
 import type { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 
 import { useCreateMeeting } from './use-create-meeting';
@@ -23,14 +23,14 @@ jest.mock('sonner', () => ({
   },
 }));
 
-jest.mock('@/entities/comment', () => ({
-  commentApi: {
+jest.mock('@/entities/meeting-comment', () => ({
+  meetingCommentApi: {
     syncCreateMeeting: jest.fn(),
   },
 }));
 
 const mockCreate = meetingsApi.create as jest.Mock;
-const mockSyncCreateMeeting = commentApi.syncCreateMeeting as jest.Mock;
+const mockSyncCreateMeeting = meetingCommentApi.syncCreateMeeting as jest.Mock;
 
 const createWrapper = () => {
   const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });

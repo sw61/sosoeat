@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    {
+      "id": "comment_tree",
+      "label": "comment-tree.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-comment-section\\comment-tree.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "comment_tree_buildcommenttree",
+      "label": "buildCommentTree()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-comment-section\\comment-tree.ts",
+      "source_location": "L4"
+    }
+  ],
+  "edges": [
+    {
+      "source": "comment_tree",
+      "target": "meeting_comment_section_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-comment-section\\comment-tree.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "comment_tree",
+      "target": "comment_tree_buildcommenttree",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-comment-section\\comment-tree.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    }
+  ]
+}

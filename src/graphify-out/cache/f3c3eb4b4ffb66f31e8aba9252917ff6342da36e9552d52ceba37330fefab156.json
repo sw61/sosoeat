@@ -1,0 +1,138 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_detail_queries",
+      "label": "meeting-detail.queries.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_detail_queries_usemeetingdetail",
+      "label": "useMeetingDetail()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "meeting_detail_queries_useconfirmmeeting",
+      "label": "useConfirmMeeting()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L24"
+    },
+    {
+      "id": "meeting_detail_queries_usedeletemeeting",
+      "label": "useDeleteMeeting()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L60"
+    },
+    {
+      "id": "meeting_detail_queries_usejoinmeeting",
+      "label": "useJoinMeeting()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L75"
+    },
+    {
+      "id": "meeting_detail_queries_useleavemeeting",
+      "label": "useLeaveMeeting()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L112"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_detail_queries",
+      "target": "navigation",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "react_query",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "sonner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "meeting_detail_queries_usemeetingdetail",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "meeting_detail_queries_useconfirmmeeting",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "meeting_detail_queries_usedeletemeeting",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "meeting_detail_queries_usejoinmeeting",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L75",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_queries",
+      "target": "meeting_detail_queries_useleavemeeting",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\model\\meeting-detail.queries.ts",
+      "source_location": "L112",
+      "weight": 1.0
+    }
+  ]
+}

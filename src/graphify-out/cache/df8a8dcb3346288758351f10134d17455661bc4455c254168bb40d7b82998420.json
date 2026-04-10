@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_icon",
+      "label": "meeting-icon.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\meeting-icon\\meeting-icon.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_icon_meetingicon",
+      "label": "MeetingIcon()",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\meeting-icon\\meeting-icon.tsx",
+      "source_location": "L7"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_icon",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\meeting-icon\\meeting-icon.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_icon",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\meeting-icon\\meeting-icon.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_icon",
+      "target": "notification_tab_constants",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\meeting-icon\\meeting-icon.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_icon",
+      "target": "meeting_icon_meetingicon",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\meeting-icon\\meeting-icon.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "edit_profile_modal_stories",
+      "label": "edit-profile-modal.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\edit-profile-modal.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "edit_profile_modal_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\edit-profile-modal.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "edit_profile_modal_stories",
+      "target": "edit_profile_modal",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\edit-profile-modal.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

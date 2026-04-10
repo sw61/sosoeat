@@ -1,0 +1,12 @@
+{
+  "nodes": [
+    {
+      "id": "mypage_card_types",
+      "label": "mypage-card.types.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.types.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": []
+}

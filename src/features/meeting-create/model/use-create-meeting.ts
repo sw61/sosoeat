@@ -1,15 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { commentApi } from '@/entities/comment';
 import { meetingsApi } from '@/entities/meeting';
+import { meetingCommentApi } from '@/entities/meeting-comment';
 import { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 
 export const useCreateMeeting = () =>
   useMutation({
     mutationFn: (payload: CreateMeeting) => meetingsApi.create(payload),
     onSuccess: (meeting) => {
-      commentApi
+      meetingCommentApi
         .syncCreateMeeting({
           id: meeting.id,
           hostId: meeting.hostId,

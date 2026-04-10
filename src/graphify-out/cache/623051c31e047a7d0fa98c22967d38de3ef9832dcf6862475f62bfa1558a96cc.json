@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_search_banner",
+      "label": "meeting-search-banner.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_search_banner_meetingsearchbanner",
+      "label": "MeetingSearchBanner()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.tsx",
+      "source_location": "L16"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_search_banner",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_search_banner",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_search_banner",
+      "target": "meeting_search_banner_type",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_search_banner",
+      "target": "meeting_search_banner_meetingsearchbanner",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    }
+  ]
+}

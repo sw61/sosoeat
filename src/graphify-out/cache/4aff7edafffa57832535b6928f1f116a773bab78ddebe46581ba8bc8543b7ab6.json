@@ -1,0 +1,74 @@
+{
+  "nodes": [
+    {
+      "id": "signup_form",
+      "label": "signup-form.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\signup-form.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "signup_form_signupform",
+      "label": "SignupForm()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\signup-form.tsx",
+      "source_location": "L22"
+    }
+  ],
+  "edges": [
+    {
+      "source": "signup_form",
+      "target": "link",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\signup-form.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "signup_form",
+      "target": "model",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\signup-form.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "signup_form",
+      "target": "model",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\signup-form.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "signup_form",
+      "target": "funnel",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\signup-form.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "signup_form",
+      "target": "components",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\signup-form.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "signup_form",
+      "target": "signup_form_signupform",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\auth\\signup-form\\ui\\signup-form.tsx",
+      "source_location": "L22",
+      "weight": 1.0
+    }
+  ]
+}

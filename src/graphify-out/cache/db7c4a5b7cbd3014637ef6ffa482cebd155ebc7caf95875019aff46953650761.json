@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "sosotalk_banner_stories",
+      "label": "sosotalk-banner.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-banner\\sosotalk-banner.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "sosotalk_banner_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-banner\\sosotalk-banner.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_banner_stories",
+      "target": "sosotalk_banner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-banner\\sosotalk-banner.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

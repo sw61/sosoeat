@@ -2,18 +2,17 @@
 
 import { MoreHorizontal } from 'lucide-react';
 
-import { CommentInput } from '@/entities/comment';
+import type { SosoTalkCommentItemProps } from '@/entities/sosotalk-comment';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
+import { CommentInput } from '@/shared/ui/comment-input';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown';
-
-import type { SosoTalkCommentItemProps } from './sosotalk-comment-section.types';
 
 export function SosoTalkCommentItem({
   authorName,

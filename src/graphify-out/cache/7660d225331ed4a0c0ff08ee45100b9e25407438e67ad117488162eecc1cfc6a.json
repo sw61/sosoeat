@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "region_select_modal_types",
+      "label": "region-select-modal.types.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\region-select-modal\\region-select-modal.types.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "region_select_modal_types",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\region-select-modal\\region-select-modal.types.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "region_select_modal_types",
+      "target": "dropdown_sub_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\region-select-modal\\region-select-modal.types.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

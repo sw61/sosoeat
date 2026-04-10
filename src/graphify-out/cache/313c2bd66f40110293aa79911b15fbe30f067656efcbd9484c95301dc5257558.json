@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "use_sosotalk_write_page_test",
+      "label": "use-sosotalk-write-page.test.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\model\\use-sosotalk-write-page.test.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "use_sosotalk_write_page_test",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\model\\use-sosotalk-write-page.test.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "use_sosotalk_write_page_test",
+      "target": "use_sosotalk_write_page",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\model\\use-sosotalk-write-page.test.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

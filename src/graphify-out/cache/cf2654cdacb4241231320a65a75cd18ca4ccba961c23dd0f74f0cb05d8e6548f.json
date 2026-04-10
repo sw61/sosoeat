@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "post_editor_toolbar_constants",
+      "label": "post-editor-toolbar.constants.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\model\\post-editor-toolbar.constants.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "post_editor_toolbar_constants",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\model\\post-editor-toolbar.constants.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "post_editor_toolbar_constants",
+      "target": "post_editor_toolbar_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\model\\post-editor-toolbar.constants.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "nodes": [
+    {
+      "id": "notification_tab_body_constants",
+      "label": "notification-tab-body.constants.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab-body\\notification-tab-body.constants.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": []
+}

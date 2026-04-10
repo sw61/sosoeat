@@ -1,0 +1,85 @@
+{
+  "nodes": [
+    {
+      "id": "notification_dialog",
+      "label": "notification-dialog.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "notification_dialog",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_dialog",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_dialog",
+      "target": "dialog",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_dialog",
+      "target": "notification_panel_body",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_dialog",
+      "target": "notification_scroll_area",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_dialog",
+      "target": "notification_trigger",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_dialog",
+      "target": "notification_dialog_constants",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_dialog",
+      "target": "notification_dialog_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-dialog\\notification-dialog.tsx",
+      "source_location": "L19",
+      "weight": 1.0
+    }
+  ]
+}

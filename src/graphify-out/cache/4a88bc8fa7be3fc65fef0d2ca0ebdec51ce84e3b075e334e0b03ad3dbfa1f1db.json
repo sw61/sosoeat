@@ -1,0 +1,79 @@
+{
+  "nodes": [
+    {
+      "id": "mypage_queries",
+      "label": "mypage.queries.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "mypage_queries_usejoinedmeetings",
+      "label": "useJoinedMeetings()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L11"
+    },
+    {
+      "id": "mypage_queries_usecreatedmeetings",
+      "label": "useCreatedMeetings()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "mypage_queries_usefavoritemeetings",
+      "label": "useFavoriteMeetings()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L25"
+    }
+  ],
+  "edges": [
+    {
+      "source": "mypage_queries",
+      "target": "react_query",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_queries",
+      "target": "mypage_api",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_queries",
+      "target": "mypage_queries_usejoinedmeetings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_queries",
+      "target": "mypage_queries_usecreatedmeetings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_queries",
+      "target": "mypage_queries_usefavoritemeetings",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\model\\mypage.queries.ts",
+      "source_location": "L25",
+      "weight": 1.0
+    }
+  ]
+}

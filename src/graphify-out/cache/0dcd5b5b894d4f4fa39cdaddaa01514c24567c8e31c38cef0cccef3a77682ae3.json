@@ -1,0 +1,47 @@
+{
+  "nodes": [
+    {
+      "id": "step3_description",
+      "label": "step3-description.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step3-description.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "step3_description_stepdescription",
+      "label": "StepDescription()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step3-description.tsx",
+      "source_location": "L10"
+    }
+  ],
+  "edges": [
+    {
+      "source": "step3_description",
+      "target": "textarea",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step3-description.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "step3_description",
+      "target": "meeting_create_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step3-description.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "step3_description",
+      "target": "step3_description_stepdescription",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step3-description.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    }
+  ]
+}

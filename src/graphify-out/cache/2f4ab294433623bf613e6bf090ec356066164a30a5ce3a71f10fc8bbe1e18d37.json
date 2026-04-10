@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_filter_bar_types",
+      "label": "meeting-filter-bar.types.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.types.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_filter_bar_types",
+      "target": "region_select_modal_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.types.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ]
+}
