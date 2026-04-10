@@ -11,11 +11,11 @@ import type { MeetingRole, MeetingStatus } from './meeting-detail-card.types';
  */
 export const getMeetingStatus = (meeting: Meeting): MeetingStatus => {
   if (meeting.canceledAt != null) return 'closed';
-  if (meeting.confirmedAt != null) return 'confirmed';
   const now = new Date();
   if (new Date(meeting.registrationEnd) < now || meeting.participantCount >= meeting.capacity) {
     return 'closed';
   }
+  if (meeting.confirmedAt != null) return 'confirmed';
   return 'open';
 };
 
