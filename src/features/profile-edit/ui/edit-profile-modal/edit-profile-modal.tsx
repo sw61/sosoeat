@@ -27,14 +27,12 @@ const actionButtonClassName =
 
 export function EditProfileModal({
   initialName = '',
-  initialEmail = '',
   initialImageUrl = '',
   onSuccess,
   open: externalOpen,
   onOpenChange: externalOnOpenChange,
 }: EditProfileModalProps) {
   const [name, setName] = useState(initialName);
-  const [email, setEmail] = useState(initialEmail);
   const [imageUrl, setImageUrl] = useState(initialImageUrl);
   const [internalOpen, setInternalOpen] = useState(false);
 
@@ -44,13 +42,13 @@ export function EditProfileModal({
   const { mutate, isPending } = useUpdateProfile(onSuccess);
 
   const handleSubmit = () => {
-    mutate({ name, email, image: imageUrl || undefined }, { onSuccess: () => setOpen(false) });
+    mutate({ name, image: imageUrl || undefined }, { onSuccess: () => setOpen(false) });
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="bg-sosoeat-gray-200 text-sosoeat-gray-700 ring-sosoeat-gray-300 hidden h-[34.45px] w-[104.04px] cursor-pointer flex-row items-center justify-center gap-1 rounded-xl text-xs font-bold ring-1 md:flex">
+        <button className="bg-sosoeat-gray-200 text-sosoeat-gray-700 ring-sosoeat-gray-500 hidden h-[34.45px] w-[104.04px] cursor-pointer flex-row items-center justify-center gap-1 rounded-xl text-xs font-bold ring-1 md:flex">
           <PencilLine className="h-[12.99px] w-[12.99px]" />
           프로필 수정
         </button>
@@ -82,13 +80,6 @@ export function EditProfileModal({
             label="이름"
             value={name}
             onChange={(e) => setName(e.target.value)}
-          />
-          <ProfileField
-            id="email"
-            label="이메일"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
           />
         </FieldGroup>
 

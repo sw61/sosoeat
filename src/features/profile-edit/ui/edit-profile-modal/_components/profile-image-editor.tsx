@@ -34,7 +34,7 @@ export function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorPro
 
   return (
     <div className="flex justify-center">
-      <div className="relative h-[116px] w-[116px]">
+      <div className="relative h-32.5 w-32.5 md:h-50 md:w-50">
         <Image
           src={imageUrl || '/images/basic-profile.svg'}
           alt="프로필 이미지"
@@ -53,7 +53,7 @@ export function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorPro
           size="icon"
           disabled={isPending}
           onClick={openFileDialog}
-          className="border-sosoeat-gray-300 absolute right-1 bottom-1 cursor-pointer rounded-full border bg-white text-gray-600 md:right-1 md:bottom-0"
+          className="border-sosoeat-gray-300 absolute right-2 bottom-0 cursor-pointer rounded-full border bg-white text-gray-600 md:right-5 md:bottom-0"
         >
           {isPending ? (
             <Loader2 className="h-4 w-4 animate-spin" />
