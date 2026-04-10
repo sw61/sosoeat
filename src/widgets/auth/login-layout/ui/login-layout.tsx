@@ -34,7 +34,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
   };
 
   return (
-    <div className="bg-sosoeat-gray-100 flex min-h-screen items-center justify-center px-4 py-10">
+    <div className="bg-sosoeat-gray-100 flex flex-1 items-center justify-center px-4 py-10">
       <div className="flex w-full max-w-[568px] flex-col rounded-[24px] bg-white px-4 py-6 shadow-sm md:rounded-[40px] md:px-14 md:pt-12 md:pb-11">
         <h1 className="text-sosoeat-gray-900 mb-10 text-center text-2xl font-bold">로그인</h1>
 
@@ -72,7 +72,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
         <div className="flex justify-center pt-10">
           <Link
             href="/signup"
-            className="group text-sm font-medium text-gray-400 transition-colors hover:text-gray-500 md:text-base"
+            className="group text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 md:text-base"
           >
             <span className="duration-200">소소잇이 처음이신가요?</span>{' '}
             <span className="text-sosoeat-orange-600 font-bold duration-200 group-hover:underline">
