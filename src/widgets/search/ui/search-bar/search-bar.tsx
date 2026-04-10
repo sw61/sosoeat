@@ -30,21 +30,6 @@ export const SearchBar = ({
   placeholder = '모임 검색 (제목, 태그, 지역 등)',
   className,
 }: SearchBarProps) => {
-  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const next = e.target.value;
-    onChange(next);
-    if (timer) {
-      clearTimeout(timer);
-    }
-    setTimer(
-      setTimeout(() => {
-        onChange(next);
-      }, 1000)
-    );
-  };
-
   return (
     <div className={cn('w-full max-w-[1140px]', className)}>
       <div className="relative w-full min-w-0">
@@ -58,7 +43,7 @@ export const SearchBar = ({
           placeholder={placeholder}
           className={searchInputClassName}
           value={value}
-          onChange={handleChange}
+          onChange={(e) => onChange(e.target.value)}
           autoComplete="off"
           aria-label={placeholder}
         />

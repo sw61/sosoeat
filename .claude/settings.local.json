@@ -16,7 +16,9 @@
       "Bash(gh pr:*)",
       "Bash(git push:*)",
       "Skill(plan-eng-review)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(gh issue:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }
