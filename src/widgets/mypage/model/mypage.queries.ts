@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { favoriteKeys } from '@/entities/favorites';
 import { mypageMeetingCountKey } from '@/entities/meeting';
 
 import { mypageApi } from '../api/mypage.api';
@@ -9,7 +10,6 @@ import { FIVE_MINUTES_IN_MS } from './mypage.constants';
 export const mypageKeys = {
   joinedMeetings: () => ['users', 'me', 'joined-meetings'] as const,
   createdMeetings: () => ['users', 'me', 'created-meetings'] as const,
-  favoriteMeetings: () => ['users', 'me', 'favorite-meetings'] as const,
   meetingCount: () => mypageMeetingCountKey,
 } as const;
 
@@ -29,7 +29,7 @@ export const useCreatedMeetings = () =>
 
 export const useFavoriteMeetings = () =>
   useQuery({
-    queryKey: mypageKeys.favoriteMeetings(),
+    queryKey: favoriteKeys.list(),
     queryFn: mypageApi.fetchFavoriteMeetings,
     staleTime: FIVE_MINUTES_IN_MS,
   });
