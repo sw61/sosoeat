@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import Image from 'next/image';
@@ -12,6 +13,9 @@ import { Input } from '@/shared/ui/input/input';
 
 import type { StepProps } from '../../model/meeting-create.types';
 
+import { LocationSearchModal } from './location-search/location-search-modal';
+import type { LocationSearchResult } from './location-search/model/location-search.types';
+
 const ACCEPTED_IMAGE_TYPES = Object.keys(MIME_TO_EXT).join(',');
 
 /**
@@ -20,6 +24,17 @@ const ACCEPTED_IMAGE_TYPES = Object.keys(MIME_TO_EXT).join(',');
 export const StepBasicInfo = ({ form }: StepProps) => {
   const { register } = form;
   const { mutateAsync, isPending, error: uploadError } = useUploadImage('meetings');
+  const [locationModalOpen, setLocationModalOpen] = useState(false);
+
+  const handleLocationSelect = (result: LocationSearchResult) => {
+    const region = [result.region1, result.region2].filter(Boolean).join(' ');
+    form.setValue('region', region, { shouldValidate: true });
+    form.setValue('addressBase', result.addressName);
+    form.setValue('address', result.placeName, { shouldValidate: true });
+    form.setValue('latitude', result.latitude);
+    form.setValue('longitude', result.longitude);
+    setLocationModalOpen(false);
+  };
 
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -60,23 +75,38 @@ export const StepBasicInfo = ({ form }: StepProps) => {
           장소{requiredIndicator}
         </label>
         <div className="flex flex-col gap-2">
-          <div className="relative">
-            <Input
-              placeholder="건물, 지번 또는 도로명 검색"
-              className={cn(inputClassName, 'pr-10')}
-              {...register('region')}
-            />
-            <Image
-              src="/icons/location.svg"
-              alt="위치 아이콘"
-              width={24}
-              height={24}
-              className="absolute top-1/2 right-3 -translate-y-1/2"
-            />
-          </div>
+          <Controller
+            control={form.control}
+            name="addressBase"
+            render={({ field }) => (
+              <div className="relative">
+                <Input
+                  placeholder="건물, 지번 또는 도로명 검색"
+                  className={cn(inputClassName, 'cursor-pointer pr-10')}
+                  readOnly
+                  onClick={() => setLocationModalOpen(true)}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+                <Image
+                  src="/icons/location.svg"
+                  alt="위치 아이콘"
+                  width={24}
+                  height={24}
+                  className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
+                />
+              </div>
+            )}
+          />
           <Input placeholder="상세주소" className={inputClassName} {...register('address')} />
         </div>
       </div>
+
+      <LocationSearchModal
+        open={locationModalOpen}
+        onClose={() => setLocationModalOpen(false)}
+        onSelect={handleLocationSelect}
+      />
 
       {/* 이미지 업로드 */}
       <Controller
