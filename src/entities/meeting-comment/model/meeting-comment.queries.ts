@@ -1,29 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { MeetingComment, meetingCommentApi, SyncMeetingRequest } from '../api/meeting-comment.api';
+import { type SyncMeetingRequest } from '../api/meeting-comment.api';
 
-import { meetingCommentKeys } from './meeting-comment-keys';
+import { meetingCommentQueryOptions } from './meeting-comment.options';
 
-const COMMENT_LIST_STALE_MS = 30_000;
-
-export const useComments = (
-  meetingId: number,
-  initialData?: MeetingComment[],
-  syncMeeting?: SyncMeetingRequest
-) => {
-  return useQuery({
-    queryKey: meetingCommentKeys.list(meetingId),
-    queryFn: () => meetingCommentApi.getComments(meetingId, syncMeeting),
-    initialData,
-    staleTime: COMMENT_LIST_STALE_MS,
-    retry: false,
-  });
+export const useComments = (meetingId: number, syncMeeting?: SyncMeetingRequest) => {
+  return useSuspenseQuery(meetingCommentQueryOptions.list(meetingId, syncMeeting));
 };
 
-export const useCommentCount = (meetingId: number, initialCount?: number) => {
-  return useQuery({
-    queryKey: meetingCommentKeys.count(meetingId),
-    queryFn: () => meetingCommentApi.getCommentCount(meetingId),
-    initialData: initialCount !== undefined ? { count: initialCount } : undefined,
-  });
+export const useCommentCount = (meetingId: number) => {
+  return useSuspenseQuery(meetingCommentQueryOptions.count(meetingId));
 };
