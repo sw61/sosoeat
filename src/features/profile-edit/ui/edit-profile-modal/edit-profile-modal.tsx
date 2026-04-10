@@ -48,7 +48,7 @@ export function EditProfileModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="bg-sosoeat-gray-200 text-sosoeat-gray-700 ring-sosoeat-gray-500 hidden h-[34.45px] w-[104.04px] cursor-pointer flex-row items-center justify-center gap-1 rounded-xl text-xs font-bold ring-1 md:flex">
+        <button className="bg-sosoeat-gray-200 text-sosoeat-gray-700 ring-sosoeat-gray-500 hidden h-[34.45px] w-[104.04px] cursor-pointer items-center justify-center gap-1 rounded-xl text-xs font-bold ring-1 md:flex">
           <PencilLine className="h-[12.99px] w-[12.99px]" />
           프로필 수정
         </button>

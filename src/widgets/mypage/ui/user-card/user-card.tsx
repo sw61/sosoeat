@@ -83,6 +83,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
 
       <div className="absolute top-4 right-0 p-5">
         <EditProfileModal
+          key={String(isOpen)}
           open={isOpen}
           onOpenChange={(val) => (val ? open() : close())}
           initialName={localName}

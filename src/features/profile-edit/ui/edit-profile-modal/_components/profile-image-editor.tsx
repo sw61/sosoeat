@@ -53,7 +53,7 @@ export function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorPro
           size="icon"
           disabled={isPending}
           onClick={openFileDialog}
-          className="border-sosoeat-gray-300 absolute right-2 bottom-0 cursor-pointer rounded-full border bg-white text-gray-600 md:right-5 md:bottom-0"
+          className="border-sosoeat-gray-300 absolute right-2 bottom-0 cursor-pointer rounded-full border bg-white text-gray-600 md:right-5"
         >
           {isPending ? (
             <Loader2 className="h-4 w-4 animate-spin" />
