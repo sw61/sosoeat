@@ -62,13 +62,13 @@ docs/issue-drafts/
 
 # graphify - AI 추론용 파일만 유지 (GRAPH_REPORT.md, manifest.json은 커밋)
 graphify-out/cache/
-graphify-out/graph.html
 graphify-out/graph.json
 graphify-out/graph.svg
 graphify-out/graph.graphml
 graphify-out/cypher.txt
 graphify-out/cost.json
 graphify-out/obsidian/
+src/graphify-out/
 
 # Claude Code local settings
 .claude/settings.local.json/
