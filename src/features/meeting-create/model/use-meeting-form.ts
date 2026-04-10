@@ -1,11 +1,48 @@
 import { useState } from 'react';
-import { type Resolver, useForm, useWatch } from 'react-hook-form';
+import { type Control, type Resolver, useForm, useWatch } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { DEFAULT_FORM_VALUES, STEPS, TOTAL_STEPS } from './meeting-create.constants';
-import { meetingFormSchema, STEP_REQUIRED_FIELDS } from './meeting-create.schema';
+import { meetingFormSchema } from './meeting-create.schema';
 import type { MeetingFormData, MeetingStep } from './meeting-create.types';
+
+function isNonEmpty(value: unknown): boolean {
+  if (typeof value === 'string') return value.trim().length > 0;
+  if (typeof value === 'number') return Number.isFinite(value);
+  return value !== undefined && value !== null;
+}
+
+function useStepValid(control: Control<MeetingFormData>, step: MeetingStep): boolean {
+  const category = useWatch({ control, name: 'type' });
+  const name = useWatch({ control, name: 'name' });
+  const region = useWatch({ control, name: 'region' });
+  const address = useWatch({ control, name: 'address' });
+  const image = useWatch({ control, name: 'image' });
+  const description = useWatch({ control, name: 'description' });
+  const meetingDate = useWatch({ control, name: 'meetingDate' });
+  const meetingTime = useWatch({ control, name: 'meetingTime' });
+  const registrationEndDate = useWatch({ control, name: 'registrationEndDate' });
+  const registrationEndTime = useWatch({ control, name: 'registrationEndTime' });
+  const capacity = useWatch({ control, name: 'capacity' });
+
+  switch (step) {
+    case 'category':
+      return isNonEmpty(category);
+    case 'basicInfo':
+      return isNonEmpty(name) && isNonEmpty(region) && isNonEmpty(address) && isNonEmpty(image);
+    case 'description':
+      return isNonEmpty(description);
+    case 'schedule':
+      return (
+        isNonEmpty(meetingDate) &&
+        isNonEmpty(meetingTime) &&
+        isNonEmpty(registrationEndDate) &&
+        isNonEmpty(registrationEndTime) &&
+        isNonEmpty(capacity)
+      );
+  }
+}
 
 /**
  * MeetingCreateModal 전용 폼 상태 관리 훅.
@@ -17,7 +54,7 @@ export const useMeetingForm = () => {
   const form = useForm<MeetingFormData>({
     resolver: zodResolver(meetingFormSchema) as unknown as Resolver<MeetingFormData>,
     defaultValues: { ...DEFAULT_FORM_VALUES },
-    mode: 'onTouched',
+    mode: 'onSubmit',
   });
 
   const currentStep: MeetingStep = STEPS[currentStepIndex];
@@ -25,26 +62,7 @@ export const useMeetingForm = () => {
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === TOTAL_STEPS - 1;
 
-  /** 현재 단계의 필수 필드가 모두 채워졌는지 확인 */
-  const watchedValues = useWatch({
-    control: form.control,
-  });
-
-  const isCurrentStepValid = (() => {
-    const requiredFields = STEP_REQUIRED_FIELDS[currentStep];
-
-    return requiredFields.every((field) => {
-      const value = watchedValues[field as keyof MeetingFormData];
-
-      if (typeof value === 'string') {
-        return value.trim().length > 0;
-      }
-      if (typeof value === 'number') {
-        return value > 0;
-      }
-      return !!value;
-    });
-  })();
+  const isCurrentStepValid = useStepValid(form.control, currentStep);
 
   const goNext = () => {
     if (currentStepIndex < TOTAL_STEPS - 1) {

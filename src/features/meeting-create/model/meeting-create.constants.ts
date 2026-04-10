@@ -30,6 +30,7 @@ export const DEFAULT_FORM_VALUES = {
   type: '',
   name: '',
   region: '',
+  addressBase: '',
   address: '',
   image: '',
   description: '',
@@ -37,5 +38,5 @@ export const DEFAULT_FORM_VALUES = {
   meetingTime: '',
   registrationEndDate: '',
   registrationEndTime: '',
-  capacity: 1,
+  capacity: undefined,
 } as const;
