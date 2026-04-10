@@ -18,3 +18,10 @@ export const useFavoritesCount = (initialCount: number, options?: { enabled?: bo
     ...options,
   });
 };
+
+export const useFavoriteList = () =>
+  useQuery({
+    queryKey: favoriteKeys.list(),
+    queryFn: favoritesApi.fetchList,
+    staleTime: 1000 * 60 * 5,
+  });
