@@ -35,7 +35,6 @@ export const EmailStep = ({ onNext, defaultValues }: EmailStepProps) => {
 
   const displayError =
     (touchedFields.email || isSubmitted) && errors.email ? errors.email : undefined;
-  const isDisabled = !!displayError?.message?.trim() || isCheckingEmail;
 
   const checkEmailDuplicate = async (email: string): Promise<boolean> => {
     try {
@@ -77,7 +76,7 @@ export const EmailStep = ({ onNext, defaultValues }: EmailStepProps) => {
           <FieldContent className="gap-1.5">
             <Input
               id="email"
-              type="text"
+              type="email"
               placeholder="example@email.com"
               className={getInputClasses(!!displayError?.message?.trim())}
               {...register('email')}
@@ -94,7 +93,7 @@ export const EmailStep = ({ onNext, defaultValues }: EmailStepProps) => {
 
       <AuthSubmitButton
         label="다음"
-        isActive={!isDisabled}
+        isActive={true}
         isLoading={isCheckingEmail}
         className="mt-4 h-13"
       />

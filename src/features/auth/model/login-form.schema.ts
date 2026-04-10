@@ -3,10 +3,10 @@ import { z } from 'zod';
 export const loginSchema = z.object({
   email: z
     .string()
-    .min(1, ' ')
+    .min(1, '이메일을 입력해주세요.')
     .superRefine((val, ctx) => {
       if (!val.trim()) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: ' ' });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: '이메일을 입력해주세요.' });
         return;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
@@ -15,7 +15,7 @@ export const loginSchema = z.object({
     }),
   password: z
     .string()
-    .min(1, ' ')
+    .min(1, '비밀번호를 입력해주세요.')
     .superRefine((val, ctx) => {
       if (val && val.length < 8) {
         ctx.addIssue({

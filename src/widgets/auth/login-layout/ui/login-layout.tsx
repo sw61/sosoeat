@@ -72,7 +72,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
         <div className="flex justify-center pt-10">
           <Link
             href="/signup"
-            className="group text-sm font-medium text-gray-400 transition-colors hover:text-gray-500 md:text-base"
+            className="group text-sm font-medium text-gray-700 transition-colors hover:text-gray-900 md:text-base"
           >
             <span className="duration-200">소소잇이 처음이신가요?</span>{' '}
             <span className="text-sosoeat-orange-600 font-bold duration-200 group-hover:underline">
