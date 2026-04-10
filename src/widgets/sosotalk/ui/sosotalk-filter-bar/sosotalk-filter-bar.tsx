@@ -1,7 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { ChevronDown } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
@@ -39,10 +37,8 @@ export const SosoTalkFilterBar = ({
   onTabChange = () => {},
   onSortChange = () => {},
 }: SosoTalkFilterBarProps) => {
-  const selectedSortOption = useMemo(
-    () => sortOptions.find((option) => option.value === activeSort) ?? DEFAULT_SORT_OPTIONS[0],
-    [sortOptions, activeSort]
-  );
+  const selectedSortOption =
+    sortOptions.find((option) => option.value === activeSort) ?? DEFAULT_SORT_OPTIONS[0];
 
   return (
     <section className={cn('w-full', className)}>
