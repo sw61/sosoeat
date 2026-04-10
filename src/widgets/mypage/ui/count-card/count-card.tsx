@@ -1,3 +1,6 @@
+'use client';
+
+import { useFavoritesCount } from '@/entities/favorites';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 
@@ -23,4 +26,9 @@ export function CountCard({ count, variant = 'meeting', className }: CountCardPr
       </CardContent>
     </Card>
   );
+}
+
+export function FavoriteCountCard({ initialCount }: { initialCount: number }) {
+  const { data: count } = useFavoritesCount(initialCount);
+  return <CountCard variant="favorite" count={count} />;
 }
