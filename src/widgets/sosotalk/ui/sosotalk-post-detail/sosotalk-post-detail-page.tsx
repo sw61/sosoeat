@@ -101,7 +101,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           isAuthor={currentUser?.id === data.author.id}
           isLiked={isLiked}
           isLikePending={isLikePending}
-          onBackClick={() => router.back()}
+          onBackClick={() => router.push('/sosotalk')}
           onEditClick={handleEditClick}
           onDeleteClick={() => void handleDeleteClick()}
           onLikeClick={() => void handleLikeClick()}

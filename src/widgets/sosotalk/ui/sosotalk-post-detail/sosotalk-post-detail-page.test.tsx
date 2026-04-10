@@ -4,12 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { SosoTalkPostDetailPage } from './sosotalk-post-detail-page';
 
 const mockPush = jest.fn();
-const mockBack = jest.fn();
-
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
-    back: mockBack,
   }),
 }));
 
@@ -198,14 +195,14 @@ describe('SosoTalkPostDetailPage', () => {
     jest.clearAllMocks();
   });
 
-  it('목록으로 버튼을 누르면 이전 페이지로 돌아간다', async () => {
+  it('목록으로 버튼을 누르면 소소톡 목록으로 이동한다', async () => {
     const user = userEvent.setup();
 
     render(<SosoTalkPostDetailPage postId="1" />);
 
     await user.click(screen.getByRole('button', { name: '목록으로' }));
 
-    expect(mockBack).toHaveBeenCalledTimes(1);
+    expect(mockPush).toHaveBeenCalledWith('/sosotalk');
   });
 
   it('댓글 버튼을 누르면 댓글 섹션으로 스크롤한다', async () => {

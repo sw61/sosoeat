@@ -65,6 +65,7 @@ docs/issue-drafts/
 
 # Codex local settings
 .codex/
+AGENTS.md
 
 # Graphify cache
 src/graphify-out/cache/

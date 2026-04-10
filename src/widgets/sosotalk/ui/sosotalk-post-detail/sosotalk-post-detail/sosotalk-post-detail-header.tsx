@@ -30,7 +30,7 @@ export function SosoTalkPostDetailHeader({
           type="button"
           variant="ghost"
           size="sm"
-          className="text-sosoeat-gray-700 hover:text-sosoeat-gray-900 -ml-2 text-[14px]"
+          className="text-sosoeat-gray-700 hover:text-sosoeat-gray-900 -ml-2 text-sm"
           onClick={onBackClick}
         >
           <ChevronLeft className="h-4 w-4" />

@@ -98,7 +98,7 @@ export function useSosoTalkPostDetailCommentActions({
     }
   };
 
-  const handleDeleteComment = async (commentId: number) => {
+  const handleDeleteComment = (commentId: number) => {
     if (!isValidPostId || deleteCommentMutation.isPending) {
       return;
     }
