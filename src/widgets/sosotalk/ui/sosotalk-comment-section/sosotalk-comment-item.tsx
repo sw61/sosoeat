@@ -4,15 +4,16 @@ import { MoreHorizontal } from 'lucide-react';
 
 import type { SosoTalkCommentItemProps } from '@/entities/sosotalk-comment';
 import { cn } from '@/shared/lib/utils';
+import {
+  ActionMenu,
+  ActionMenuContent,
+  ActionMenuItem,
+  ActionMenuSeparator,
+  ActionMenuTrigger,
+} from '@/shared/ui/action-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import { CommentInput } from '@/shared/ui/comment-input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/shared/ui/dropdown';
 
 export function SosoTalkCommentItem({
   authorName,
@@ -64,8 +65,8 @@ export function SosoTalkCommentItem({
           </div>
 
           {isAuthorComment && !isEditing ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            <ActionMenu>
+              <ActionMenuTrigger asChild>
                 <button
                   type="button"
                   className="text-sosoeat-gray-500 hover:text-sosoeat-gray-700 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
@@ -73,14 +74,15 @@ export function SosoTalkCommentItem({
                 >
                   <MoreHorizontal className="h-5 w-5" />
                 </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-[120px]">
-                <DropdownMenuItem onClick={onEditClick}>수정하기</DropdownMenuItem>
-                <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
+              </ActionMenuTrigger>
+              <ActionMenuContent>
+                <ActionMenuItem onClick={onEditClick}>수정하기</ActionMenuItem>
+                <ActionMenuSeparator />
+                <ActionMenuItem variant="destructive" onClick={onDeleteClick}>
                   삭제하기
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </ActionMenuItem>
+              </ActionMenuContent>
+            </ActionMenu>
           ) : null}
         </div>
 
