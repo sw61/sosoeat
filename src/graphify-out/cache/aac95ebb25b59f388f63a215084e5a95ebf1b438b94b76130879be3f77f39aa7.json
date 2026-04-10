@@ -1,0 +1,47 @@
+{
+  "nodes": [
+    {
+      "id": "sosotalk_write_page_client",
+      "label": "sosotalk-write-page-client.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\ui\\sosotalk-write-page-client.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "sosotalk_write_page_client_sosotalkwritepageclient",
+      "label": "SosoTalkWritePageClient()",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\ui\\sosotalk-write-page-client.tsx",
+      "source_location": "L12"
+    }
+  ],
+  "edges": [
+    {
+      "source": "sosotalk_write_page_client",
+      "target": "model",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\ui\\sosotalk-write-page-client.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_write_page_client",
+      "target": "sosotalk_post_editor",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\ui\\sosotalk-write-page-client.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_write_page_client",
+      "target": "sosotalk_write_page_client_sosotalkwritepageclient",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\ui\\sosotalk-write-page-client.tsx",
+      "source_location": "L12",
+      "weight": 1.0
+    }
+  ]
+}

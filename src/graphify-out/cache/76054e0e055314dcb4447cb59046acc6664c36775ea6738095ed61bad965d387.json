@@ -1,0 +1,12 @@
+{
+  "nodes": [
+    {
+      "id": "image_upload_field_types",
+      "label": "image-upload-field.types.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\model\\image-upload-field.types.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": []
+}

@@ -1,0 +1,128 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_filter_bar",
+      "label": "meeting-filter-bar.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_filter_bar_handlesortitemchecked",
+      "label": "handleSortItemChecked()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L46"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_filter_bar",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "korea_regions_districts_json",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "meeting_filter_pill",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "detail_date_picker",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "dropdown",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "region_select_modal",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "meeting_filter_bar_button",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "options",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "meeting_filter_bar_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar",
+      "target": "meeting_filter_bar_handlesortitemchecked",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.tsx",
+      "source_location": "L46",
+      "weight": 1.0
+    }
+  ]
+}

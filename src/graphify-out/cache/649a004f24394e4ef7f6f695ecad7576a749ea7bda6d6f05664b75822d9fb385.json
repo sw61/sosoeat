@@ -1,0 +1,12 @@
+{
+  "nodes": [
+    {
+      "id": "user_card_types",
+      "label": "user-card.types.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\ui\\user-card\\user-card.types.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": []
+}

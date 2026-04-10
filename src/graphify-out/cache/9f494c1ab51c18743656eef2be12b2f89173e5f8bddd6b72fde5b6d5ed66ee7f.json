@@ -1,0 +1,49 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_filter_bar_stories",
+      "label": "meeting-filter-bar.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_filter_bar_stories",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar_stories",
+      "target": "meeting_filter_bar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.stories.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_filter_bar_stories",
+      "target": "meeting_filter_bar_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-filter-bar\\meeting-filter-bar.stories.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    }
+  ]
+}

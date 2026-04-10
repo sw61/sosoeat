@@ -1,0 +1,117 @@
+{
+  "nodes": [
+    {
+      "id": "mypage_card",
+      "label": "mypage-card.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "mypage_card_formatdate",
+      "label": "formatDate()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L33"
+    },
+    {
+      "id": "mypage_card_formattime",
+      "label": "formatTime()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L34"
+    }
+  ],
+  "edges": [
+    {
+      "source": "mypage_card",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "favorites",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "card",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "use_state_badge",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "mypage_card_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "mypage_card_formatdate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "mypage_card",
+      "target": "mypage_card_formattime",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\mypage\\ui\\mypage-card\\mypage-card.tsx",
+      "source_location": "L34",
+      "weight": 1.0
+    }
+  ]
+}

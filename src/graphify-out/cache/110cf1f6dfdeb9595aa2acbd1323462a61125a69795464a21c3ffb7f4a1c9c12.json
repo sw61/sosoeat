@@ -1,0 +1,12 @@
+{
+  "nodes": [
+    {
+      "id": "sosotalk_post_editor_constants",
+      "label": "sosotalk-post-editor.constants.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\model\\sosotalk-post-editor.constants.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": []
+}

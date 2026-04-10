@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_create_schema",
+      "label": "meeting-create.schema.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\model\\meeting-create.schema.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_create_schema",
+      "target": "date_fns",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\meeting-create.schema.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_create_schema",
+      "target": "zod",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\meeting-create.schema.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "nodes": [
+    {
+      "id": "search_page",
+      "label": "search-page.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "search_page",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "react_intersection_observer",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "favorites",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "meeting_create",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "use_modal",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "use_search_page",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "empty_page",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "meeting_filter_bar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "meeting_make_button",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "meeting_search_banner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page",
+      "target": "search_skeleton",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.tsx",
+      "source_location": "L17",
+      "weight": 1.0
+    }
+  ]
+}

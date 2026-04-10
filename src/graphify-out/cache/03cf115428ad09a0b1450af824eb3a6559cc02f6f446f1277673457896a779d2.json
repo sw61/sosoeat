@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "post_editor_toolbar",
+      "label": "post-editor-toolbar.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\sosotalk-write\\ui\\post-editor-toolbar\\post-editor-toolbar.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "post_editor_toolbar",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\ui\\post-editor-toolbar\\post-editor-toolbar.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "post_editor_toolbar",
+      "target": "model",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\sosotalk-write\\ui\\post-editor-toolbar\\post-editor-toolbar.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    }
+  ]
+}

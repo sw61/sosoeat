@@ -1,0 +1,58 @@
+{
+  "nodes": [
+    {
+      "id": "step1_category",
+      "label": "step1-category.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step1-category.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "step1_category",
+      "target": "react_hook_form",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step1-category.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "step1_category",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step1-category.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "step1_category",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step1-category.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "step1_category",
+      "target": "meeting_create_constants",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step1-category.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "step1_category",
+      "target": "meeting_create_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step1-category.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "nodes": [
+    {
+      "id": "use_create_meeting_test",
+      "label": "use-create-meeting.test.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "use_create_meeting_test_createwrapper",
+      "label": "createWrapper()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L35"
+    }
+  ],
+  "edges": [
+    {
+      "source": "use_create_meeting_test",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "use_create_meeting_test",
+      "target": "react_query",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "use_create_meeting_test",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "use_create_meeting_test",
+      "target": "sonner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "use_create_meeting_test",
+      "target": "comment",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "use_create_meeting_test",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "use_create_meeting_test",
+      "target": "createmeeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "use_create_meeting_test",
+      "target": "use_create_meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "use_create_meeting_test",
+      "target": "use_create_meeting_test_createwrapper",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\model\\use-create-meeting.test.ts",
+      "source_location": "L35",
+      "weight": 1.0
+    }
+  ]
+}

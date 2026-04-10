@@ -1,0 +1,92 @@
+{
+  "nodes": [
+    {
+      "id": "step2_basic_info",
+      "label": "step2-basic-info.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "step2_basic_info_handlefilechange",
+      "label": "handleFileChange()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L24"
+    }
+  ],
+  "edges": [
+    {
+      "source": "step2_basic_info",
+      "target": "react_hook_form",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "step2_basic_info",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "step2_basic_info",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "step2_basic_info",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "step2_basic_info",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "step2_basic_info",
+      "target": "input",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "step2_basic_info",
+      "target": "meeting_create_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "step2_basic_info",
+      "target": "step2_basic_info_handlefilechange",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-create\\ui\\_components\\step2-basic-info.tsx",
+      "source_location": "L24",
+      "weight": 1.0
+    }
+  ]
+}

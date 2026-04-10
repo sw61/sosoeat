@@ -1,0 +1,83 @@
+{
+  "nodes": [
+    {
+      "id": "notification_thumbnail",
+      "label": "notification-thumbnail.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "notification_thumbnail_getnotificationthumbnail",
+      "label": "getNotificationThumbnail()",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L9"
+    }
+  ],
+  "edges": [
+    {
+      "source": "notification_thumbnail",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_thumbnail",
+      "target": "notification_view_utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_thumbnail",
+      "target": "approved_icon",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_thumbnail",
+      "target": "comment_icon",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_thumbnail",
+      "target": "meeting_icon",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_thumbnail",
+      "target": "user_icon",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "notification_thumbnail",
+      "target": "notification_thumbnail_getnotificationthumbnail",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\notification-tab\\notification-thumbnail.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    }
+  ]
+}

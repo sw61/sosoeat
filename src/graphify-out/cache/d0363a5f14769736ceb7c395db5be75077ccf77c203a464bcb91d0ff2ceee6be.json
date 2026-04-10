@@ -1,0 +1,149 @@
+{
+  "nodes": [
+    {
+      "id": "search_page_test",
+      "label": "search-page.test.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "search_page_test_renderwithnuqs",
+      "label": "renderWithNuqs()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L16"
+    },
+    {
+      "id": "search_page_test_renderhookwithnuqs",
+      "label": "renderHookWithNuqs()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L27"
+    },
+    {
+      "id": "search_page_test_createmockmeeting",
+      "label": "createMockMeeting()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L42"
+    },
+    {
+      "id": "search_page_test_mockinfinitedata",
+      "label": "mockInfiniteData()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L107"
+    }
+  ],
+  "edges": [
+    {
+      "source": "search_page_test",
+      "target": "react_intersection_observer",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "react_query",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "testing",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "auth",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "generated_client",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "meetinglist",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "search_page",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "search_page_test_renderwithnuqs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "search_page_test_renderhookwithnuqs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "search_page_test_createmockmeeting",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "search_page_test",
+      "target": "search_page_test_mockinfinitedata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\search-page\\search-page.test.tsx",
+      "source_location": "L107",
+      "weight": 1.0
+    }
+  ]
+}

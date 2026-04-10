@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_detail_card_types",
+      "label": "meeting-detail-card.types.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.types.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_detail_card_types",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.types.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ]
+}

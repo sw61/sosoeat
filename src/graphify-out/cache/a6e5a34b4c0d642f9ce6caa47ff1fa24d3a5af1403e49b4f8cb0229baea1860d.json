@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "best_soeat_card_stories",
+      "label": "best-soeat-card.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\home\\ui\\best-soeat-card\\best-soeat-card.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "best_soeat_card_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\home\\ui\\best-soeat-card\\best-soeat-card.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "best_soeat_card_stories",
+      "target": "best_soeat_card",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\home\\ui\\best-soeat-card\\best-soeat-card.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

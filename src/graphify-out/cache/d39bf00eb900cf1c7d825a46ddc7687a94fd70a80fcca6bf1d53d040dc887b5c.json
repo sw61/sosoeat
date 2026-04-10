@@ -1,0 +1,40 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_detail_card_constants",
+      "label": "meeting-detail-card.constants.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.constants.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_detail_card_constants",
+      "target": "class_variance_authority",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.constants.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_constants",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.constants.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_detail_card_constants",
+      "target": "meeting_detail_card_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-detail-card\\meeting-detail-card.constants.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    }
+  ]
+}
