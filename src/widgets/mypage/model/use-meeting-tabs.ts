@@ -2,10 +2,9 @@
 
 import { useMemo } from 'react';
 
-import { TabValue } from '../ui/meeting-tabs/meeting-tabs.types';
-
 import { useCreatedMeetings, useFavoriteMeetings, useJoinedMeetings } from './mypage.queries';
 import { toFavoriteMeetingCards, toUserMeetingCards } from './mypage.service';
+import { TabValue } from './mypage.types';
 
 export function useMeetingTabs(activeTab: TabValue) {
   const joinedQuery = useJoinedMeetings();

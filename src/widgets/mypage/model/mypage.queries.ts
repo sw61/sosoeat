@@ -2,31 +2,31 @@ import { useQuery } from '@tanstack/react-query';
 
 import { mypageApi } from '../api/mypage.api';
 
-export const mypageQueryKeys = {
-  joinedMeetings: ['mypage-joined-meetings'] as const,
-  createdMeetings: ['mypage-created-meetings'] as const,
-  favoriteMeetings: ['mypage-favorite-meetings'] as const,
-};
+import { FIVE_MINUTES_IN_MS } from './mypage.constants';
 
-const FIVE_MINUTES_IN_MS = 1000 * 60 * 5;
+export const mypageKeys = {
+  joinedMeetings: () => ['users', 'me', 'joined-meetings'] as const,
+  createdMeetings: () => ['users', 'me', 'created-meetings'] as const,
+  favoriteMeetings: () => ['users', 'me', 'favorite-meetings'] as const,
+} as const;
 
 export const useJoinedMeetings = () =>
   useQuery({
-    queryKey: mypageQueryKeys.joinedMeetings,
+    queryKey: mypageKeys.joinedMeetings(),
     queryFn: mypageApi.fetchJoinedMeetings,
     staleTime: FIVE_MINUTES_IN_MS,
   });
 
 export const useCreatedMeetings = () =>
   useQuery({
-    queryKey: mypageQueryKeys.createdMeetings,
+    queryKey: mypageKeys.createdMeetings(),
     queryFn: mypageApi.fetchCreatedMeetings,
     staleTime: FIVE_MINUTES_IN_MS,
   });
 
 export const useFavoriteMeetings = () =>
   useQuery({
-    queryKey: mypageQueryKeys.favoriteMeetings,
+    queryKey: mypageKeys.favoriteMeetings(),
     queryFn: mypageApi.fetchFavoriteMeetings,
     staleTime: FIVE_MINUTES_IN_MS,
   });
