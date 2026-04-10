@@ -8,18 +8,18 @@ import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
-import { LoginRequest } from '@/shared/types/generated-client/models';
+import type { LoginRequest } from '@/shared/types/generated-client/models';
 
+import { useLoginMutation } from './auth.mutations';
 import { loginSchema } from './login-form.schema';
-import { useLogin } from './use-login';
 
 interface LoginFormProps {
   defaultValues?: Partial<LoginRequest>;
 }
 
 export const useLoginForm = ({ defaultValues }: LoginFormProps) => {
-  const { mutateAsync: login, isPending: isLoginPending } = useLogin();
   const searchParams = useSearchParams();
+  const { mutate: login, isPending } = useLoginMutation(searchParams?.get('callbackUrl'));
   const [showPassword, setShowPassword] = useState(false);
   // 동일한 에러 토스트 중복 실행 방지
   const isErrorToastShown = useRef(false);
@@ -42,17 +42,15 @@ export const useLoginForm = ({ defaultValues }: LoginFormProps) => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, isValid, errors, touchedFields },
+    formState: { isValid, errors, touchedFields },
   } = useForm<LoginRequest>({
     resolver: zodResolver(loginSchema),
-    mode: 'all',
+    mode: 'onSubmit',
     defaultValues,
   });
 
-  const isPending = isLoginPending || isSubmitting;
-
-  const handleFormSubmit = handleSubmit(async (data: LoginRequest) => {
-    await login(data);
+  const handleFormSubmit = handleSubmit((data: LoginRequest) => {
+    login(data);
   });
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
