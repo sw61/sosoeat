@@ -17,12 +17,12 @@ export const CATEGORY_LABEL: Record<MeetingCategory, string> = {
 
 /** 기본 액션 버튼 (참여하기 / 모임 확정하기) */
 export const actionButtonVariants = cva(
-  'h-full w-full rounded-2xl text-sm md:text-base lg:text-xl',
+  'h-full w-full rounded-2xl text-sm md:text-xl focus-visible:ring-0 focus-visible:border-transparent',
   {
     variants: {
       category: {
-        groupEat: 'bg-sosoeat-orange-600 text-white hover:bg-sosoeat-orange-700',
-        groupBuy: 'bg-sosoeat-blue-600 text-white hover:bg-sosoeat-blue-700',
+        groupEat: 'bg-sosoeat-orange-600 text-white hover:bg-sosoeat-orange-700 hover:text-white',
+        groupBuy: 'bg-sosoeat-blue-600 text-white hover:bg-sosoeat-blue-700 hover:text-white',
       },
     },
   }
@@ -30,12 +30,14 @@ export const actionButtonVariants = cva(
 
 /** 흰 버튼 (참여 취소하기 / 공유하기) */
 export const outlineButtonVariants = cva(
-  'ring-0 h-full w-full rounded-2xl bg-white text-normal md:text-sm lg:text-xl',
+  'ring-0 h-full w-full rounded-2xl bg-white text-normal md:text-xl focus-visible:ring-0 focus-visible:border-transparent',
   {
     variants: {
       category: {
-        groupEat: 'ring-1 text-sosoeat-orange-700 hover:bg-white',
-        groupBuy: 'ring-1 text-sosoeat-blue-700 hover:bg-white',
+        groupEat:
+          'ring-1 text-sosoeat-orange-700 hover:bg-sosoeat-orange-100 hover:text-sosoeat-orange-700',
+        groupBuy:
+          'ring-1 text-sosoeat-blue-700 hover:bg-sosoeat-blue-50 hover:text-sosoeat-blue-700',
       },
     },
   }
