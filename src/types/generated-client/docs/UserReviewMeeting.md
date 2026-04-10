@@ -1,0 +1,38 @@
+# UserReviewMeeting
+
+## Properties
+
+| Name       | Type   |
+| ---------- | ------ |
+| `id`       | number |
+| `type`     | string |
+| `name`     | string |
+| `image`    | string |
+| `dateTime` | Date   |
+
+## Example
+
+```typescript
+import type { UserReviewMeeting } from ''
+
+// TODO: Update the object below with actual values
+const example = {
+  "id": 123,
+  "type": DALLAEMFIT,
+  "name": 달램핏 모임,
+  "image": https://example.com/image.jpg,
+  "dateTime": 2026-02-01T14:00:00Z,
+} satisfies UserReviewMeeting
+
+console.log(example)
+
+// Convert the instance to a JSON string
+const exampleJSON: string = JSON.stringify(example)
+console.log(exampleJSON)
+
+// Parse the JSON string back to an object
+const exampleParsed = JSON.parse(exampleJSON) as UserReviewMeeting
+console.log(exampleParsed)
+```
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
