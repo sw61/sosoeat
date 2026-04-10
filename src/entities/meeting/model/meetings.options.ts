@@ -1,29 +1,42 @@
-import { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
+import type { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 
 import { meetingsApi } from '../api/meetings.api';
 
+const searchKeys = {
+  all: () => ['search'] as const,
+  detail: (id: number) => ['search', 'detail', id] as const,
+  options: (options: Omit<TeamIdMeetingsGetRequest, 'teamId'>) =>
+    ['search', 'list', options] as const,
+  infiniteOptions: (options: Omit<TeamIdMeetingsGetRequest, 'teamId'>) =>
+    ['search', 'infinite-list', options] as const,
+} as const;
+
 export const meetingsQueryOptions = {
   all: () => ({
-    queryKey: ['meetings'],
+    queryKey: searchKeys.all(),
     queryFn: () => meetingsApi.getList(),
     staleTime: 1000 * 60 * 5, // 5분
     gcTime: 1000 * 60 * 10, // 10분
   }),
   detail: (id: number) => ({
-    queryKey: ['meetings', 'detail', id],
+    queryKey: searchKeys.detail(id),
     queryFn: async () => meetingsApi.getById(id),
     staleTime: 1000 * 60 * 5, // 5분
     gcTime: 1000 * 60 * 10, // 10분
   }),
   options: (options: Omit<TeamIdMeetingsGetRequest, 'teamId'>) => ({
-    queryKey: [
-      'meetings',
-      {
-        ...options,
-      },
-    ],
+    queryKey: searchKeys.options(options),
     queryFn: () => meetingsApi.getByFilter(options),
     staleTime: 1000 * 60 * 5, // 5분
     gcTime: 1000 * 60 * 10, // 10분
+  }),
+  infiniteOptions: (options: Omit<TeamIdMeetingsGetRequest, 'teamId'>) => ({
+    queryKey: searchKeys.infiniteOptions(options),
+    queryFn: ({ pageParam }: { pageParam?: string }) =>
+      meetingsApi.getByFilter({ ...options, cursor: pageParam }),
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage: MeetingList) => {
+      return lastPage.hasMore ? lastPage.nextCursor : undefined;
+    },
   }),
 };

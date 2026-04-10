@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {
+      "id": "profile_field",
+      "label": "profile-field.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\_components\\profile-field.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "profile_field_profilefield",
+      "label": "ProfileField()",
+      "file_type": "code",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\_components\\profile-field.tsx",
+      "source_location": "L12"
+    }
+  ],
+  "edges": [
+    {
+      "source": "profile_field",
+      "target": "field",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\_components\\profile-field.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "profile_field",
+      "target": "input",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\_components\\profile-field.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "profile_field",
+      "target": "edit_profile_modal_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\_components\\profile-field.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "profile_field",
+      "target": "profile_field_profilefield",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\profile-edit\\ui\\edit-profile-modal\\_components\\profile-field.tsx",
+      "source_location": "L12",
+      "weight": 1.0
+    }
+  ]
+}

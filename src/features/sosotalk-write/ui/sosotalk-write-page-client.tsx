@@ -1,103 +1,35 @@
 'use client';
 
-import { useState } from 'react';
-
-import { useRouter } from 'next/navigation';
-
-import {
-  uploadSosoTalkPostImage,
-  useCreateSosoTalkPost,
-  useGetSosoTalkPostDetail,
-  useUpdateSosoTalkPost,
-} from '@/entities/post';
-
-import type { SosoTalkPostSubmitPayload } from '../model';
+import { useSosoTalkWritePage } from '../model';
 
 import { SosoTalkPostEditor } from './sosotalk-post-editor';
 
 interface SosoTalkWritePageClientProps {
   editPostId?: number;
+  isInvalidEditPostId?: boolean;
 }
 
-export function SosoTalkWritePageClient({ editPostId }: SosoTalkWritePageClientProps) {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const isEditMode = editPostId != null;
-  const { data, isLoading, isError } = useGetSosoTalkPostDetail(editPostId);
-  const createPostMutation = useCreateSosoTalkPost();
-  const updatePostMutation = useUpdateSosoTalkPost();
+export function SosoTalkWritePageClient({
+  editPostId,
+  isInvalidEditPostId = false,
+}: SosoTalkWritePageClientProps) {
+  const {
+    data,
+    isEditMode,
+    isError,
+    isLoading,
+    isSubmitting,
+    handleCreateSubmit,
+    handleEditSubmit,
+  } = useSosoTalkWritePage({
+    editPostId,
+  });
 
-  const resolveCreateImageUrl = async (
-    payload: SosoTalkPostSubmitPayload
-  ): Promise<string | undefined> => {
-    if (payload.imageFile) {
-      return uploadSosoTalkPostImage(payload.imageFile);
-    }
-
-    return payload.displayImageUrl || undefined;
-  };
-
-  const resolveUpdateImageValue = async (payload: SosoTalkPostSubmitPayload): Promise<string> => {
-    if (payload.imageFile) {
-      return uploadSosoTalkPostImage(payload.imageFile);
-    }
-
-    // Keep the explicit empty string so the server can distinguish
-    // "remove image" from "field omitted".
-    return payload.displayImageUrl;
-  };
-
-  const handleCreateSubmit = async (payload: SosoTalkPostSubmitPayload) => {
-    if (isSubmitting || createPostMutation.isPending) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const image = await resolveCreateImageUrl(payload);
-      const createdPost = await createPostMutation.mutateAsync({
-        payload: {
-          title: payload.title,
-          content: payload.contentHtml,
-          image,
-        },
-      });
-
-      router.push(`/sosotalk/${createdPost.id}`);
-    } catch {
-      // 작성 실패 시 입력한 값을 유지한 채 다시 시도할 수 있도록 둡니다.
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleEditSubmit = async (payload: SosoTalkPostSubmitPayload) => {
-    if (editPostId == null || editPostId <= 0 || isSubmitting || updatePostMutation.isPending) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const image = await resolveUpdateImageValue(payload);
-
-      await updatePostMutation.mutateAsync({
-        postId: editPostId,
-        payload: {
-          title: payload.title,
-          content: payload.contentHtml,
-          image,
-        },
-      });
-
-      router.push(`/sosotalk/${editPostId}`);
-    } catch {
-      // 수정 실패 시 입력한 값을 유지한 채 다시 시도할 수 있도록 둡니다.
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  if (isInvalidEditPostId) {
+    return (
+      <div className="py-20 text-center text-sm text-gray-500">올바르지 않은 게시글입니다.</div>
+    );
+  }
 
   if (!isEditMode) {
     return (

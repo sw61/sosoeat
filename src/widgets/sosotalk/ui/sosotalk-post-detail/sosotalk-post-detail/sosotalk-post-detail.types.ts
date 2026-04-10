@@ -1,4 +1,4 @@
-import type { CommentItemData } from '@/entities/comment';
+import type { SosoTalkCommentItemData } from '@/entities/sosotalk-comment';
 
 export interface SosoTalkPostDetailProps {
   title: string;
@@ -21,7 +21,7 @@ export interface SosoTalkPostDetailProps {
   onLikeClick?: () => void;
   onCommentClick?: () => void;
   onShareClick?: () => void | Promise<void>;
-  comments?: CommentItemData[];
+  comments?: SosoTalkCommentItemData[];
   inputValue?: string;
   inputPlaceholder?: string;
   onChangeInput?: (value: string) => void;

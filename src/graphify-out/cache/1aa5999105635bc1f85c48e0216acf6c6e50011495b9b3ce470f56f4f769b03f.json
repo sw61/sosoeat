@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "id": "sosotalk_main_page_utils_test",
+      "label": "sosotalk-main-page.utils.test.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-main-page\\model\\sosotalk-main-page.utils.test.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "sosotalk_main_page_utils_test",
+      "target": "sosotalk_main_page_utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-main-page\\model\\sosotalk-main-page.utils.test.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ]
+}

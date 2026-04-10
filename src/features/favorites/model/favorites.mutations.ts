@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { useAuthStore } from '@/entities/auth';
 import { favoriteKeys, favoritesApi } from '@/entities/favorites';
 
 const DEBOUNCE_MS = 700;
@@ -47,12 +48,18 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
 
   const { mutate: toggleMutate } = useToggleFavorite();
   const queryClient = useQueryClient();
+  const { isAuthenticated, setLoginRequired } = useAuthStore();
 
   // 서버에 마지막으로 커밋된 상태
   const committedRef = useRef(initialIsFavorited);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const toggleFavorite = () => {
+    if (!isAuthenticated) {
+      setLoginRequired(true);
+      return;
+    }
+
     // 로컬 UI만 즉시 토글
     const nextLocalState = !queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId));
     queryClient.setQueryData(favoriteKeys.status(meetingId), nextLocalState);
@@ -65,8 +72,17 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
       const finalState =
         queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId)) ?? committedRef.current;
       if (finalState !== committedRef.current) {
-        committedRef.current = finalState;
-        toggleMutate({ meetingId, isFavorited: finalState });
+        toggleMutate(
+          { meetingId, isFavorited: finalState },
+          {
+            onSuccess: () => {
+              committedRef.current = finalState;
+            },
+            onError: () => {
+              queryClient.setQueryData(favoriteKeys.status(meetingId), committedRef.current);
+            },
+          }
+        );
       }
     }, DEBOUNCE_MS);
   };

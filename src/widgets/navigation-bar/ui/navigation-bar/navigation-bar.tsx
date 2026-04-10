@@ -6,9 +6,8 @@ import { usePathname, useSearchParams } from 'next/navigation';
 
 import { AuthUser, useAuthStore } from '@/entities/auth';
 import { useFavoritesCount } from '@/entities/favorites';
-import { useLogout } from '@/features/auth';
-import { MeetingCreateModal, useCreateMeeting } from '@/features/meeting-create';
-import { useModal } from '@/shared/lib/use-modal';
+import { useLogoutMutation } from '@/features/auth';
+import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
 import { cn } from '@/shared/lib/utils';
 
 import { DesktopNav } from '../desktop-nav/desktop-nav';
@@ -26,24 +25,14 @@ export function NavigationBar({
   const searchParams = useSearchParams();
   const storeUser = useAuthStore((state) => state.user);
   const isInitialized = useAuthStore((state) => state.isInitialized);
-  const { mutate: performLogout } = useLogout();
-  const { isOpen, open, close } = useModal();
+  const { mutate: performLogout } = useLogoutMutation();
+  const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
 
   const { setLoginRequired } = useAuthStore();
   const user = isInitialized ? storeUser : initialUser;
   const { data: favoritesCount } = useFavoritesCount(initialFavoritesCount, {
     enabled: !!user,
   });
-
-  const { mutateAsync: createMeeting } = useCreateMeeting();
-
-  const handleOpenCreateModal = () => {
-    if (!user) {
-      setLoginRequired(true);
-      return;
-    }
-    open();
-  };
 
   return (
     <>
@@ -68,11 +57,7 @@ export function NavigationBar({
           />
 
           <div className="flex items-center gap-2">
-            <NavActions
-              user={user}
-              onOpenCreateModal={handleOpenCreateModal}
-              onLogout={performLogout}
-            />
+            <NavActions user={user} onOpenCreateModal={handleOpen} onLogout={performLogout} />
             <MobileSheet
               user={user}
               pathname={pathname}

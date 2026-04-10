@@ -69,3 +69,6 @@ graphify-out/graph.graphml
 graphify-out/cypher.txt
 graphify-out/cost.json
 graphify-out/obsidian/
+
+# Claude Code local settings
+.claude/settings.local.json/

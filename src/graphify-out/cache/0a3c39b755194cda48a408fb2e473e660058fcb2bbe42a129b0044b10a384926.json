@@ -1,0 +1,147 @@
+{
+  "nodes": [
+    {
+      "id": "sosotalk_post_detail_page_utils",
+      "label": "sosotalk-post-detail-page.utils.ts",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "sosotalk_post_detail_page_utils_mapcommenttocommentitemdata",
+      "label": "mapCommentToCommentItemData()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L23"
+    },
+    {
+      "id": "sosotalk_post_detail_page_utils_formatsosotalkrelativetime",
+      "label": "formatSosoTalkRelativeTime()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L56"
+    },
+    {
+      "id": "sosotalk_post_detail_page_utils_getsosotalkcommentcount",
+      "label": "getSosoTalkCommentCount()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L77"
+    },
+    {
+      "id": "sosotalk_post_detail_page_utils_getsosotalkcomments",
+      "label": "getSosoTalkComments()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L81"
+    },
+    {
+      "id": "sosotalk_post_detail_page_utils_getsosotalklikestate",
+      "label": "getSosoTalkLikeState()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L85"
+    }
+  ],
+  "edges": [
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "date_fns",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "locale",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "comment",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "post",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "comment",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "sosotalk_post_detail_page_utils_mapcommenttocommentitemdata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "sosotalk_post_detail_page_utils_formatsosotalkrelativetime",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L56",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "sosotalk_post_detail_page_utils_getsosotalkcommentcount",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L77",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "sosotalk_post_detail_page_utils_getsosotalkcomments",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils",
+      "target": "sosotalk_post_detail_page_utils_getsosotalklikestate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L85",
+      "weight": 1.0
+    },
+    {
+      "source": "sosotalk_post_detail_page_utils_mapcommenttocommentitemdata",
+      "target": "sosotalk_post_detail_page_utils_formatsosotalkrelativetime",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\sosotalk\\ui\\sosotalk-post-detail\\model\\sosotalk-post-detail-page.utils.ts",
+      "source_location": "L42",
+      "weight": 1.0
+    }
+  ]
+}

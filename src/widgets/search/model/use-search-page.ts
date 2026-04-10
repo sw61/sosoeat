@@ -1,11 +1,10 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { startOfDay } from 'date-fns';
 import { parseAsIsoDate, parseAsJson, parseAsStringLiteral, useQueryState } from 'nuqs';
 
-import { meetingsQueryOptions } from '@/entities/meeting';
-import type { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
+import { useSearchInfiniteOption, useSearchInfiniteOptions } from '@/entities/meeting';
+import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 
 import type { MeetingFilterBarProps } from '../ui/meeting-filter-bar';
 import type { RegionSelection } from '../ui/region-select-modal';
@@ -21,13 +20,24 @@ const useSearchPage = () => {
   const [regionCommitted, setRegionCommitted] = useQueryState<RegionSelection>(
     'regionCommitted',
     parseAsJson<RegionSelection>((value) => {
+      if (Array.isArray(value)) {
+        if (
+          value.every(
+            (item) =>
+              item !== null && typeof item === 'object' && 'province' in item && 'district' in item
+          )
+        ) {
+          return value as RegionSelection;
+        }
+        return null;
+      }
       if (
         value !== null &&
         typeof value === 'object' &&
         'province' in value &&
         'district' in value
       ) {
-        return value as RegionSelection;
+        return [value] as RegionSelection;
       }
       return null;
     }).withOptions({ history: 'push' })
@@ -64,13 +74,19 @@ const useSearchPage = () => {
   );
 
   const region =
-    regionCommitted == null ? undefined : `${regionCommitted.district} ${regionCommitted.province}`;
+    regionCommitted == null || regionCommitted.length === 0
+      ? undefined
+      : regionCommitted.length === 1
+        ? `${regionCommitted[0].province} ${regionCommitted[0].district}`
+        : regionCommitted.map((r) => `${r.province} ${r.district}`);
   const dateEndExclusiveIso =
     dateEnd == null
       ? undefined
       : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1).toISOString();
 
-  const options: Omit<TeamIdMeetingsGetRequest, 'teamId'> = {
+  const options: Omit<TeamIdMeetingsGetRequest, 'teamId' | 'region'> & {
+    region?: string | string[];
+  } = {
     size: MEETINGS_PAGE_SIZE,
     type:
       typeFilter === 'all' || typeFilter == null
@@ -83,12 +99,23 @@ const useSearchPage = () => {
       sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
     sortOrder: sortOrder === null ? undefined : (sortOrder as 'asc' | 'desc'),
   };
+
+  const isMulti = Array.isArray(options.region) && options.region.length > 1;
+
+  const singleResult = useSearchInfiniteOption(options as Omit<TeamIdMeetingsGetRequest, 'teamId'>);
+  const multiResult = useSearchInfiniteOptions(options);
+
   const {
     data: meetingList,
     isLoading,
     isError,
-  } = useQuery<MeetingList>(meetingsQueryOptions.options(options));
-  const meetingData = meetingList?.data ?? [];
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = isMulti ? multiResult : singleResult;
+
+  const meetingData = meetingList?.pages.flatMap((page) => page.data) ?? [];
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
     setTypeFilter(value);
@@ -137,6 +164,10 @@ const useSearchPage = () => {
     sortOrder,
     isLoading,
     isError,
+    hasNextPage,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage,
   };
 };
 

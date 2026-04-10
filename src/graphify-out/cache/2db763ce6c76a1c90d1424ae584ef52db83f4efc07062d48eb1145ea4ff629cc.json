@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {
+      "id": "comment_icon",
+      "label": "comment-icon.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\comment-icon\\comment-icon.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "comment_icon_commenticon",
+      "label": "CommentIcon()",
+      "file_type": "code",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\comment-icon\\comment-icon.tsx",
+      "source_location": "L7"
+    }
+  ],
+  "edges": [
+    {
+      "source": "comment_icon",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\comment-icon\\comment-icon.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "comment_icon",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\comment-icon\\comment-icon.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "comment_icon",
+      "target": "notification_tab_constants",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\comment-icon\\comment-icon.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "comment_icon",
+      "target": "comment_icon_commenticon",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\notifications\\ui\\notification\\icons\\comment-icon\\comment-icon.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    }
+  ]
+}

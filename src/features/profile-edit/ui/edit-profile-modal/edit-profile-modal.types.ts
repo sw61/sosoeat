@@ -1,12 +1,14 @@
 import type { ChangeEvent } from 'react';
 
+import type { User } from '@/shared/types/generated-client';
+
 export interface EditProfileModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   initialName?: string;
-  initialEmail?: string;
+
   initialImageUrl?: string;
-  onSubmit?: (data: { name: string; email: string; imageUrl?: string }) => void;
+  onSuccess?: (user: User) => void;
 }
 
 export interface ProfileFieldProps {
@@ -15,11 +17,6 @@ export interface ProfileFieldProps {
   type?: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
-
-export interface ModalActionButtonsProps {
-  onCancel: () => void;
-  onSubmit: () => void;
 }
 
 export interface ProfileImageEditorProps {

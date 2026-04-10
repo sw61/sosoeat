@@ -1,0 +1,103 @@
+{
+  "nodes": [
+    {
+      "id": "tab_basic_info",
+      "label": "tab-basic-info.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "tab_basic_info",
+      "target": "react_hook_form",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "dropdown",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "input",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "textarea",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "meeting_edit_constants",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "tab_basic_info",
+      "target": "meeting_edit_schema",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\_components\\tab-basic-info.tsx",
+      "source_location": "L21",
+      "weight": 1.0
+    }
+  ]
+}

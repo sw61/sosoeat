@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_search_banner_stories",
+      "label": "meeting-search-banner.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_search_banner_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_search_banner_stories",
+      "target": "meeting_search_banner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\search\\ui\\meeting-search-banner\\meeting-search-banner.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_location_section",
+      "label": "meeting-location-section.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-location-section\\meeting-location-section.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_location_section_hasvalidmapcoords",
+      "label": "hasValidMapCoords()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-location-section\\meeting-location-section.tsx",
+      "source_location": "L4"
+    },
+    {
+      "id": "meeting_location_section_meetinglocationsection",
+      "label": "MeetingLocationSection()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-location-section\\meeting-location-section.tsx",
+      "source_location": "L16"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_location_section",
+      "target": "kakao_map_loader",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-location-section\\meeting-location-section.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_location_section",
+      "target": "meeting_location_address_row",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-location-section\\meeting-location-section.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_location_section",
+      "target": "meeting_location_section_hasvalidmapcoords",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-location-section\\meeting-location-section.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_location_section",
+      "target": "meeting_location_section_meetinglocationsection",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-location-section\\meeting-location-section.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_location_section_meetinglocationsection",
+      "target": "meeting_location_section_hasvalidmapcoords",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-location-section\\meeting-location-section.tsx",
+      "source_location": "L25",
+      "weight": 1.0
+    }
+  ]
+}

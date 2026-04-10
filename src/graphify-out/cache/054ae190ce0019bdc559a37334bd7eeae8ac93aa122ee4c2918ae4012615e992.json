@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "id": "login_form_schema",
+      "label": "login-form.schema.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\auth\\model\\login-form.schema.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "login_form_schema",
+      "target": "zod",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\login-form.schema.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ]
+}

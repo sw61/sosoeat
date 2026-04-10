@@ -10,13 +10,15 @@ export interface KoreaRegionRegion {
   districts: string[];
 }
 
-/** 시·도 1곳 + 구·군 1곳만. 미선택은 null */
-export type RegionSelection = {
-  province: string;
-  district: string;
-} | null;
+/** 시·도+구·군 조합 배열. 미선택은 null */
+export type RegionSelection =
+  | {
+      province: string;
+      district: string;
+    }[]
+  | null;
 
-/** RegionSelectModal 전용 — 확정·드래프트는 단일 지역만 */
+/** RegionSelectModal 전용 — 확정·드래프트는 지역 배열 */
 export type RegionModalDropdownSub = Omit<DropdownSubProp, 'value' | 'onChange'> & {
   value: RegionSelection;
   onChange: (value: RegionSelection) => void;
@@ -36,7 +38,7 @@ export interface RegionSelectModalProps {
     regions: KoreaRegionRegion[];
   };
   /**
-   * 드롭다운 임시 선택값. `onDraftChange`와 함께 넘기면 모달 내부 state 대신 외부에서 제어합니다.
+   * 드래프트 임시 선택값. `onDraftChange`와 함께 넘기면 모달 내부 state 대신 외부에서 제어합니다.
    * 열릴 때마다 모달이 `onDraftChange(dropdownSub.value)`로 확정값 기준으로 초기화합니다.
    */
   draftValue?: RegionSelection;

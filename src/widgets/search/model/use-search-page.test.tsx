@@ -1,4 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+'use client';
+
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { startOfDay } from 'date-fns';
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing';
@@ -7,7 +9,8 @@ import useSearchPage from './use-search-page';
 
 jest.mock('@tanstack/react-query', () => ({
   ...jest.requireActual('@tanstack/react-query'),
-  useQuery: jest.fn(),
+  useInfiniteQuery: jest.fn(),
+  useQueries: jest.fn(() => []),
 }));
 
 const renderHookWithClient = (hook: () => ReturnType<typeof useSearchPage>) => {
@@ -18,10 +21,13 @@ const renderHookWithClient = (hook: () => ReturnType<typeof useSearchPage>) => {
 
 describe('useSearchPage', () => {
   beforeEach(() => {
-    (useQuery as jest.Mock).mockReturnValue({
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
       data: undefined,
       isLoading: false,
       isError: false,
+      hasNextPage: false,
+      isFetching: false,
+      fetchNextPage: jest.fn(),
     });
   });
 
@@ -29,10 +35,10 @@ describe('useSearchPage', () => {
     const { result } = renderHookWithClient(() => useSearchPage());
 
     act(() => {
-      result.current.handleRegionChange({ province: '서울', district: '강남구' });
+      result.current.handleRegionChange([{ province: '서울', district: '강남구' }]);
     });
 
-    expect(result.current.regionCommitted).toEqual({ province: '서울', district: '강남구' });
+    expect(result.current.regionCommitted).toEqual([{ province: '서울', district: '강남구' }]);
   });
 
   it('handleDateChange에서 값이 모두 없으면 날짜 상태를 초기화해야 한다', () => {
@@ -95,5 +101,24 @@ describe('useSearchPage', () => {
 
     expect(result.current.sortBy).toBe('dateTime');
     expect(result.current.sortOrder).toBe('desc');
+  });
+
+  it('pages 데이터를 flatMap하여 meetingData를 반환해야 한다', () => {
+    const page1 = { data: [{ id: 1 }, { id: 2 }], nextCursor: 'c1', hasMore: true };
+    const page2 = { data: [{ id: 3 }], nextCursor: '', hasMore: false };
+
+    (useInfiniteQuery as jest.Mock).mockReturnValue({
+      data: { pages: [page1, page2], pageParams: [undefined, 'c1'] },
+      isLoading: false,
+      isError: false,
+      hasNextPage: false,
+      isFetching: false,
+      fetchNextPage: jest.fn(),
+    });
+
+    const { result } = renderHookWithClient(() => useSearchPage());
+
+    expect(result.current.meetingData).toHaveLength(3);
+    expect(result.current.meetingData.map((m) => m.id)).toEqual([1, 2, 3]);
   });
 });

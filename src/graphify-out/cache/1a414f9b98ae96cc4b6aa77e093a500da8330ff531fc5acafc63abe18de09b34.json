@@ -1,0 +1,92 @@
+{
+  "nodes": [
+    {
+      "id": "use_login",
+      "label": "use-login.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "use_login_uselogin",
+      "label": "useLogin()",
+      "file_type": "code",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L13"
+    }
+  ],
+  "edges": [
+    {
+      "source": "use_login",
+      "target": "navigation",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "use_login",
+      "target": "react_query",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "use_login",
+      "target": "sonner",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "use_login",
+      "target": "auth",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "use_login",
+      "target": "favorites",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "use_login",
+      "target": "models",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "use_login",
+      "target": "url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "use_login",
+      "target": "use_login_uselogin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\use-login.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    }
+  ]
+}

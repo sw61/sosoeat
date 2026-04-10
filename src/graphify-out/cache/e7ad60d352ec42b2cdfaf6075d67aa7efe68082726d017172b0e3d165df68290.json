@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "footer_stories",
+      "label": "footer.stories.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\footer\\ui\\footer\\footer.stories.tsx",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "footer_stories",
+      "target": "nextjs_vite",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\footer\\ui\\footer\\footer.stories.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "footer_stories",
+      "target": "footer",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\footer\\ui\\footer\\footer.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    }
+  ]
+}

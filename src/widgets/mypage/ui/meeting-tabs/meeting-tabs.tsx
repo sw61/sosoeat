@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -22,50 +22,26 @@ const TAB_PARAM_MAP: Record<string, TabValue> = {
 export function MeetingTabs() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const tabParam = searchParams?.get('tab') ?? 'all';
-  const activeTab: TabValue = TAB_PARAM_MAP[tabParam] ?? 'all';
+  const urlTab: TabValue = TAB_PARAM_MAP[tabParam] ?? 'all';
+  const [optimisticTab, setOptimisticTab] = useState<TabValue>(urlTab);
+  const activeTab = isPending ? optimisticTab : urlTab;
 
-  const setActiveTab = useCallback(
-    (value: TabValue) => {
-      router.push(`/mypage?tab=${value}`);
-    },
-    [router]
-  );
+  useEffect(() => {
+    setOptimisticTab(urlTab);
+  }, [urlTab]);
+
+  const setActiveTab = (value: TabValue) => {
+    setOptimisticTab(value);
+    startTransition(() => {
+      router.replace(`/mypage?tab=${value}`);
+    });
+  };
 
   const { cards: fetchedCards, isLoading } = useMeetingTabs(activeTab);
 
-  const MOCK_CARDS = [
-    {
-      meetingId: 1,
-      title: '힐링 오피스 스트레칭',
-      currentCount: 5,
-      maxCount: 10,
-      location: '강남구',
-      month: 4,
-      day: 30,
-      hour: 18,
-      minute: 0,
-      variant: 'groupEat' as const,
-      confirmedAt: new Date(),
-      isCompleted: false,
-    },
-    {
-      meetingId: 2,
-      title: '점심 같이 먹어요',
-      currentCount: 3,
-      maxCount: 5,
-      location: '마포구',
-      month: 3,
-      day: 15,
-      hour: 12,
-      minute: 30,
-      variant: 'groupBuy' as const,
-      confirmedAt: null,
-      isCompleted: true,
-    },
-  ];
-
-  const cards = fetchedCards.length > 0 ? fetchedCards : MOCK_CARDS;
+  const cards = fetchedCards ?? [];
 
   return (
     <Tabs
@@ -86,7 +62,7 @@ export function MeetingTabs() {
           ) : cards.length === 0 ? (
             <MeetingTabsEmpty />
           ) : (
-            <div className="flex flex-col items-center gap-4 py-4 lg:flex-row lg:flex-wrap lg:justify-center">
+            <div className="grid grid-cols-1 justify-items-center gap-4 py-4 lg:grid-cols-2 lg:justify-items-start">
               {cards.map((card) => (
                 <MyPageCard key={card.meetingId} {...card} />
               ))}

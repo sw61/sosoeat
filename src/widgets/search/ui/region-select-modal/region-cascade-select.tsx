@@ -44,14 +44,19 @@ export function RegionCascadeSelect({
       aria-label="시·도 목록"
     >
       {regions.map((r) => {
-        const hasSelection = value != null && value.province === r.name;
+        const selectedDistricts = (value ?? [])
+          .filter((s) => s.province === r.name)
+          .map((s) => s.district);
+        const hasSelection = selectedDistricts.length > 0;
         return (
           <li key={r.id}>
             <DropdownMenu>
               <DropdownMenuTrigger
                 className={cn(triggerClass, hasSelection && triggerSelectedClass)}
               >
-                <span className="min-w-0 flex-1 truncate">{r.name}</span>
+                <span className="min-w-0 flex-1 truncate">
+                  {hasSelection ? `${r.name} · ${selectedDistricts.join(', ')}` : r.name}
+                </span>
                 {hasSelection ? (
                   <Check
                     className="text-sosoeat-orange-600 pointer-events-none size-6 shrink-0"
@@ -78,18 +83,15 @@ export function RegionCascadeSelect({
                   {r.districts.map((district) => (
                     <DropdownMenuCheckboxItem
                       key={district}
-                      checked={
-                        value != null && value.province === r.name && value.district === district
-                      }
+                      checked={selectedDistricts.includes(district)}
                       onCheckedChange={(checked) => {
+                        const next = (value ?? []).filter(
+                          (s) => !(s.province === r.name && s.district === district)
+                        );
                         if (checked) {
-                          onChange({ province: r.name, district });
-                        } else if (
-                          value != null &&
-                          value.province === r.name &&
-                          value.district === district
-                        ) {
-                          onChange(null);
+                          onChange([...next, { province: r.name, district }]);
+                        } else {
+                          onChange(next.length > 0 ? next : null);
                         }
                       }}
                     >

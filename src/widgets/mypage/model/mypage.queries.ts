@@ -1,8 +1,6 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-import { UpdateUserRequest } from '@/shared/types/generated-client';
-
-import { mypageRepository } from './mypage.repository';
+import { mypageApi } from '../api/mypage.api';
 
 export const mypageQueryKeys = {
   joinedMeetings: ['mypage-joined-meetings'] as const,
@@ -10,29 +8,25 @@ export const mypageQueryKeys = {
   favoriteMeetings: ['mypage-favorite-meetings'] as const,
 };
 
-export const useJoinedMeetings = (enabled = true) =>
+const FIVE_MINUTES_IN_MS = 1000 * 60 * 5;
+
+export const useJoinedMeetings = () =>
   useQuery({
     queryKey: mypageQueryKeys.joinedMeetings,
-    queryFn: mypageRepository.fetchJoinedMeetings,
-    enabled,
+    queryFn: mypageApi.fetchJoinedMeetings,
+    staleTime: FIVE_MINUTES_IN_MS,
   });
 
-export const useCreatedMeetings = (enabled = true) =>
+export const useCreatedMeetings = () =>
   useQuery({
     queryKey: mypageQueryKeys.createdMeetings,
-    queryFn: mypageRepository.fetchCreatedMeetings,
-    enabled,
+    queryFn: mypageApi.fetchCreatedMeetings,
+    staleTime: FIVE_MINUTES_IN_MS,
   });
 
-export const useFavoriteMeetings = (enabled = true) =>
+export const useFavoriteMeetings = () =>
   useQuery({
     queryKey: mypageQueryKeys.favoriteMeetings,
-    queryFn: mypageRepository.fetchFavoriteMeetings,
-    enabled,
-    refetchOnMount: 'always',
-  });
-
-export const usePatchMe = () =>
-  useMutation({
-    mutationFn: (body: UpdateUserRequest) => mypageRepository.patchMe(body),
+    queryFn: mypageApi.fetchFavoriteMeetings,
+    staleTime: FIVE_MINUTES_IN_MS,
   });

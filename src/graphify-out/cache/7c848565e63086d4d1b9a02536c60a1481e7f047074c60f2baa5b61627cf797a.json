@@ -1,0 +1,185 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_edit_modal",
+      "label": "meeting-edit-modal.tsx",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_edit_modal_handlefilechange",
+      "label": "handleFileChange()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L40"
+    },
+    {
+      "id": "meeting_edit_modal_handlesubmit",
+      "label": "handleSubmit()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L51"
+    },
+    {
+      "id": "meeting_edit_modal_handleinvalid",
+      "label": "handleInvalid()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L78"
+    },
+    {
+      "id": "meeting_edit_modal_handleopenchange",
+      "label": "handleOpenChange()",
+      "file_type": "code",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L176"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_edit_modal",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "react_hook_form",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "zod",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "utils",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "button",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "dialog",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "meeting_edit_constants",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "meeting_edit_schema",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "meeting_edit_types",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "use_update_meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "components",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "meeting_edit_modal_handlefilechange",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "meeting_edit_modal_handlesubmit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L51",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "meeting_edit_modal_handleinvalid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_edit_modal",
+      "target": "meeting_edit_modal_handleopenchange",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\meeting-edit\\ui\\meeting-edit-modal.tsx",
+      "source_location": "L176",
+      "weight": 1.0
+    }
+  ]
+}

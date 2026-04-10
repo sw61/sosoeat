@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "id": "signup_form_schema",
+      "label": "signup-form.schema.ts",
+      "file_type": "code",
+      "source_file": "src\\features\\auth\\model\\signup-form.schema.ts",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "signup_form_schema",
+      "target": "zod",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\auth\\model\\signup-form.schema.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "nodes": [
+    {
+      "id": "meeting_hero_section",
+      "label": "meeting-hero-section.tsx",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "meeting_hero_section_meetingherosection",
+      "label": "MeetingHeroSection()",
+      "file_type": "code",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L28"
+    }
+  ],
+  "edges": [
+    {
+      "source": "meeting_hero_section",
+      "target": "image",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "navigation",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "react_query",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "meeting",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "meeting_edit",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "use_modal",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "meeting_detail_queries",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "meeting_detail_card",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "use_meeting_role",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "meeting_hero_section",
+      "target": "meeting_hero_section_meetingherosection",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\widgets\\meeting-detail\\ui\\meeting-hero-section\\meeting-hero-section.tsx",
+      "source_location": "L28",
+      "weight": 1.0
+    }
+  ]
+}
