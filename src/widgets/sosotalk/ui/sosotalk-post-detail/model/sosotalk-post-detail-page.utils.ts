@@ -4,7 +4,6 @@ import { ko } from 'date-fns/locale';
 import type { GetSosoTalkPostDetailResponse } from '@/entities/post';
 import type { SosoTalkCommentItemData } from '@/entities/sosotalk-comment';
 import type { Comment } from '@/shared/types/generated-client/models/Comment';
-import type { SosoTalkCommentItemData } from '../../sosotalk-comment-section/sosotalk-comment-section.types';
 
 const SOSOTALK_AUTHOR_IMAGE_FALLBACK =
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop';
