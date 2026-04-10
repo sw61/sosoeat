@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
+import { cn } from '../../lib/utils';
+
 import type { KakaoMapProps } from './kakao-map.types';
 
 const MARKER_ACCENT = '#FF6600';
@@ -21,7 +23,7 @@ const MEETING_PLACE_OVERLAY_CONTENT = `
     </div>
   `;
 
-export function KakaoMap({ latitude, longitude }: KakaoMapProps) {
+export function KakaoMap({ latitude, longitude, className }: KakaoMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,6 +52,12 @@ export function KakaoMap({ latitude, longitude }: KakaoMapProps) {
       });
       customOverlay.setMap(map);
       overlay = customOverlay;
+
+      // 콜백 실행 전에 이미 cleanup이 끝난 경우
+      if (cancelled) {
+        overlay.setMap(null);
+        node.innerHTML = '';
+      }
     });
 
     return () => {
@@ -62,7 +70,10 @@ export function KakaoMap({ latitude, longitude }: KakaoMapProps) {
   return (
     <div
       ref={containerRef}
-      className="h-[240px] w-full cursor-grab outline-none select-none **:outline-none **:select-none active:cursor-grabbing md:h-[320px] lg:h-[352px]"
+      className={cn(
+        'h-[240px] w-full cursor-grab outline-none select-none **:outline-none **:select-none active:cursor-grabbing md:h-[320px] lg:h-[352px]',
+        className
+      )}
     />
   );
 }
