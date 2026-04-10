@@ -100,6 +100,12 @@ export function MeetingCommentItem({
                   rows={2}
                   value={editText}
                   onChange={(e) => setEditText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+                      e.preventDefault();
+                      handleEditSubmit();
+                    }
+                  }}
                   autoFocus
                 />
                 <div className="flex justify-end gap-1">
@@ -174,6 +180,12 @@ export function MeetingCommentItem({
                   value={replyText}
                   disabled={!isAuthenticated}
                   onChange={(e) => setReplyText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
+                      e.preventDefault();
+                      handleReplySubmit();
+                    }
+                  }}
                 />
                 <div className="flex gap-1">
                   <button
