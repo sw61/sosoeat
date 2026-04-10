@@ -9,6 +9,7 @@ import {
   fetchMeetingCountServer,
   fetchMeServer,
   fetchPostCountServer,
+  MeetingCountCard,
   MeetingTabs,
   UserCard,
 } from '@/widgets/mypage';
@@ -34,7 +35,7 @@ export default async function MyPage() {
       </div>
 
       <div className="flex flex-row justify-center gap-5 md:p-5">
-        <CountCard variant="meeting" count={meetingCount} />
+        <MeetingCountCard initialCount={meetingCount} />
         <FavoriteCountCard initialCount={favoriteCount} />
         <CountCard variant="post" count={postCount} />
       </div>

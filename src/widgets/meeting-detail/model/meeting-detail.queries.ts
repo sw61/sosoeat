@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { Meeting } from '@/entities/meeting';
-import { meetingsApi } from '@/entities/meeting';
+import { meetingsApi, mypageMeetingCountKey } from '@/entities/meeting';
 
 export const meetingDetailKeys = {
   detail: (id: number) => ['meetings', 'detail', id] as const,
@@ -59,10 +59,12 @@ export const useConfirmMeeting = (id: number) => {
 
 export const useDeleteMeeting = (id: number) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => meetingsApi.deleteMeeting(id),
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       toast.success('모임이 삭제되었습니다.');
       router.push('/meetings');
     },
@@ -104,6 +106,7 @@ export const useJoinMeeting = (id: number) => {
     onSettled: (_data, error) => {
       if (error == null) {
         void queryClient.invalidateQueries({ queryKey: meetingDetailKeys.detail(id) });
+        void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       }
     },
   });
@@ -141,6 +144,7 @@ export const useLeaveMeeting = (id: number) => {
     onSettled: (_data, error) => {
       if (error == null) {
         void queryClient.invalidateQueries({ queryKey: meetingDetailKeys.detail(id) });
+        void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       }
     },
   });
