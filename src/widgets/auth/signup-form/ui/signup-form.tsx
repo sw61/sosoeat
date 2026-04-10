@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 
+import { useSignUpMutation } from '@/features/auth';
 import type { SignupStep } from '@/features/auth/model';
-import { STEP_TO_NUMBER, useSignUp, useSignupForm } from '@/features/auth/model';
+import { STEP_TO_NUMBER, useSignupForm } from '@/features/auth/model';
 import { Funnel, Step } from '@/shared/ui/funnel/funnel';
 
 import {
@@ -20,19 +21,13 @@ interface SignupFormProps {
 }
 
 export const SignupForm = ({ defaultStep = 'email' }: SignupFormProps) => {
-  const { mutateAsync: signUp, isPending } = useSignUp();
-  const {
-    step,
-    formData,
-    emailServerError,
-    handleEmailNext,
-    handlePasswordNext,
-    handleNameNext,
-    handlePrev,
-  } = useSignupForm({
-    onSubmit: signUp,
-    defaultStep,
-  });
+  const { mutateAsync: handleSignUp, isPending } = useSignUpMutation();
+
+  const { step, formData, handleEmailNext, handlePasswordNext, handleNameNext, handlePrev } =
+    useSignupForm({
+      onSubmit: handleSignUp,
+      defaultStep,
+    });
 
   const currentStepNumber = STEP_TO_NUMBER[step];
 
@@ -50,18 +45,21 @@ export const SignupForm = ({ defaultStep = 'email' }: SignupFormProps) => {
             <Step name="email">
               <EmailStep
                 onNext={handleEmailNext}
-                defaultValues={{ email: formData.email }}
-                serverError={emailServerError}
+                defaultValues={formData.email ? { email: formData.email } : undefined}
               />
             </Step>
             <Step name="password">
               <PasswordStep
                 onNext={handlePasswordNext}
                 onPrev={handlePrev}
-                defaultValues={{
-                  password: formData.password,
-                  passwordConfirm: formData.passwordConfirm,
-                }}
+                defaultValues={
+                  formData.password
+                    ? {
+                        password: formData.password,
+                        passwordConfirm: formData.passwordConfirm,
+                      }
+                    : undefined
+                }
               />
             </Step>
             <Step name="name">
@@ -69,7 +67,7 @@ export const SignupForm = ({ defaultStep = 'email' }: SignupFormProps) => {
                 onNext={handleNameNext}
                 onPrev={handlePrev}
                 isLoading={isPending}
-                defaultValues={{ name: formData.name }}
+                defaultValues={formData.name ? { name: formData.name } : undefined}
               />
             </Step>
           </Funnel>

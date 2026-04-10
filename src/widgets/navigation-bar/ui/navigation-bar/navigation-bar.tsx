@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 
 import { AuthUser, useAuthStore } from '@/entities/auth';
 import { useFavoritesCount } from '@/entities/favorites';
-import { useLogout } from '@/features/auth';
+import { useLogoutMutation } from '@/features/auth';
 import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
 import { cn } from '@/shared/lib/utils';
 
@@ -25,7 +25,7 @@ export function NavigationBar({
   const searchParams = useSearchParams();
   const storeUser = useAuthStore((state) => state.user);
   const isInitialized = useAuthStore((state) => state.isInitialized);
-  const { mutate: performLogout } = useLogout();
+  const { mutate: performLogout } = useLogoutMutation();
   const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
 
   const { setLoginRequired } = useAuthStore();
