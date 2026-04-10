@@ -1,7 +1,15 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { startOfDay } from 'date-fns';
-import { parseAsIsoDate, parseAsJson, parseAsStringLiteral, useQueryState } from 'nuqs';
+import {
+  parseAsIsoDate,
+  parseAsJson,
+  parseAsString,
+  parseAsStringLiteral,
+  useQueryState,
+} from 'nuqs';
 
 import { useSearchInfiniteOption, useSearchInfiniteOptions } from '@/entities/meeting';
 import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
@@ -73,6 +81,11 @@ const useSearchPage = () => {
       })
   );
 
+  const [searchQuery, setSearchQuery] = useQueryState<string>(
+    'search',
+    parseAsString.withDefault('').withOptions({ history: 'push' })
+  );
+
   const region =
     regionCommitted == null || regionCommitted.length === 0
       ? undefined
@@ -98,6 +111,7 @@ const useSearchPage = () => {
     sortBy:
       sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
     sortOrder: sortOrder === null ? undefined : (sortOrder as 'asc' | 'desc'),
+    keyword: searchQuery === '' ? undefined : searchQuery,
   };
 
   const isMulti = Array.isArray(options.region) && options.region.length > 1;
@@ -116,6 +130,21 @@ const useSearchPage = () => {
   } = isMulti ? multiResult : singleResult;
 
   const meetingData = meetingList?.pages.flatMap((page) => page.data) ?? [];
+  const [inputValue, setInputValue] = useState(searchQuery);
+
+  const handleSearchQueryChange = (e: string) => {
+    setInputValue(e);
+  };
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (inputValue !== searchQuery) {
+        setSearchQuery(inputValue);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [inputValue, setSearchQuery]);
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
     setTypeFilter(value);
@@ -168,6 +197,8 @@ const useSearchPage = () => {
     fetchNextPage,
     isFetching,
     isFetchingNextPage,
+    inputValue,
+    handleSearchQueryChange,
   };
 };
 

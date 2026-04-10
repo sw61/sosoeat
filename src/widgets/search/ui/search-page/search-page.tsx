@@ -12,6 +12,7 @@ import { EmptyPage } from '../empty-page';
 import { MeetingFilterBar } from '../meeting-filter-bar';
 import { MeetingMakeButton } from '../meeting-make-button';
 import { MeetingSearchBanner } from '../meeting-search-banner';
+import { SearchBar } from '../search-bar';
 
 import SearchSkeleton from './search-skeleton';
 
@@ -41,6 +42,8 @@ export default function SearchPage() {
     isFetching,
     isFetchingNextPage,
     fetchNextPage,
+    inputValue,
+    handleSearchQueryChange,
   } = useSearchPage();
 
   useEffect(() => {
@@ -54,6 +57,7 @@ export default function SearchPage() {
       <div className="mx-auto flex max-w-[1140px] flex-col items-center justify-center gap-4 md:px-4 md:pt-4">
         <MeetingSearchBanner />
         <div className="flex w-full flex-col gap-4 px-4 md:px-0">
+          <SearchBar onChange={handleSearchQueryChange} value={inputValue} />
           <MeetingFilterBar
             sortBy={sortBy}
             sortOrder={sortOrder}

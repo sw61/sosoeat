@@ -79,7 +79,7 @@ export function CommentInput({
             event.preventDefault();
             handleSubmit();
           }}
-          className="text-sosoeat-gray-900 placeholder:text-sosoeat-gray-700 max-h-40 min-h-[23px] flex-1 resize-none border-0 bg-transparent px-0 pt-0 pb-1.5 text-base font-normal shadow-none focus-visible:ring-0 md:text-base"
+          className="text-sosoeat-gray-900 placeholder:text-sosoeat-gray-700 max-h-40 min-h-[23px] flex-1 resize-none border-0 bg-transparent px-0 py-1.5 text-base font-normal shadow-none focus-visible:ring-0 md:text-base"
         />
 
         <Button
@@ -89,9 +89,9 @@ export function CommentInput({
           aria-label={submitLabel}
           disabled={isSubmitDisabled}
           onClick={handleSubmit}
-          className="text-sosoeat-gray-700 hover:text-sosoeat-gray-800 disabled:text-sosoeat-gray-500 mb-0.5 size-9 shrink-0 self-end rounded-full bg-transparent p-0 shadow-none transition-[transform,color,background-color,box-shadow] duration-150 ease-out hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-[0_4px_12px_rgba(30,30,30,0.08)] active:translate-y-0 active:scale-95 active:bg-white/85 disabled:rounded-none disabled:bg-transparent disabled:shadow-none"
+          className="text-sosoeat-orange-500 hover:text-sosoeat-orange-600 disabled:text-sosoeat-gray-400 mb-0.5 size-9 shrink-0 self-end rounded-full bg-white p-0 shadow-sm transition-[transform,color,background-color,box-shadow] duration-150 ease-out hover:-translate-y-0.5 hover:bg-white hover:shadow-md active:translate-y-0 active:scale-95 disabled:rounded-none disabled:bg-transparent disabled:shadow-none"
         >
-          <Send className="mt-0.5 size-5 fill-current" />
+          <Send className="size-5 -translate-x-px fill-current" />
         </Button>
       </div>
     </div>

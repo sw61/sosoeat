@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { Meeting } from '@/entities/meeting';
-import { meetingsApi } from '@/entities/meeting';
+import { meetingsApi, mypageMeetingCountKey } from '@/entities/meeting';
 
 export const meetingDetailKeys = {
   detail: (id: number) => ['meetings', 'detail', id] as const,
@@ -59,10 +59,12 @@ export const useConfirmMeeting = (id: number) => {
 
 export const useDeleteMeeting = (id: number) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => meetingsApi.deleteMeeting(id),
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       toast.success('모임이 삭제되었습니다.');
       router.push('/meetings');
     },
@@ -99,6 +101,7 @@ export const useJoinMeeting = (id: number) => {
       toast.error(error.message || '모임 참여 중 오류가 발생했습니다.');
     },
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       toast.success('모임에 참여했습니다.');
     },
     onSettled: (_data, error) => {
@@ -136,6 +139,7 @@ export const useLeaveMeeting = (id: number) => {
       toast.error(error.message || '모임 참여 취소 중 오류가 발생했습니다.');
     },
     onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       toast.success('모임 참여를 취소했습니다.');
     },
     onSettled: (_data, error) => {
