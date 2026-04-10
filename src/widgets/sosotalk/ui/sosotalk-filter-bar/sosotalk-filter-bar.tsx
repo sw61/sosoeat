@@ -20,14 +20,14 @@ import type {
 } from './sosotalk-filter-bar.types';
 
 const DEFAULT_TABS: SosoTalkFilterTab[] = [
-  { label: '전체 TALK', value: 'all' },
-  { label: '인기 TALK', value: 'popular' },
+  { label: '?꾩껜 TALK', value: 'all' },
+  { label: '?멸린 TALK', value: 'popular' },
 ];
 
 const DEFAULT_SORT_OPTIONS: SosoTalkSortOption[] = [
-  { label: '댓글순', value: 'comments' },
-  { label: '좋아요순', value: 'likes' },
-  { label: '최신순', value: 'latest' },
+  { label: '?볤???', value: 'comments' },
+  { label: '醫뗭븘?붿닚', value: 'likes' },
+  { label: '理쒖떊??', value: 'latest' },
 ];
 
 export const SosoTalkFilterBar = ({
@@ -39,9 +39,6 @@ export const SosoTalkFilterBar = ({
   onTabChange = () => {},
   onSortChange = () => {},
 }: SosoTalkFilterBarProps) => {
-  // 하이드레이션 오류를 방지하기 위해 클라이언트 마운트 여부를 확인합니다.
-  // 특정 ESLint 룰(set-state-in-effect)이 있다면, 이 부분은 dynamic import(ssr: false)로
-  // 대체하는 것이 프로젝트 컨벤션에 더 부합할 수 있습니다.
   const isMounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -49,7 +46,9 @@ export const SosoTalkFilterBar = ({
   );
 
   const selectedSortOption =
-    sortOptions.find((option) => option.value === activeSort) ?? DEFAULT_SORT_OPTIONS[0];
+    sortOptions.find((option) => option.value === activeSort) ??
+    sortOptions[0] ??
+    DEFAULT_SORT_OPTIONS[0];
 
   return (
     <section className={cn('w-full', className)}>
@@ -107,18 +106,19 @@ export const SosoTalkFilterBar = ({
           })}
         </div>
 
-        {isMounted && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                type="button"
-                className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium md:hidden"
-                aria-label="정렬 옵션"
-              >
-                <span>{selectedSortOption.label}</span>
-                <ChevronDown className="size-4" aria-hidden />
-              </button>
-            </DropdownMenuTrigger>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium disabled:pointer-events-none md:hidden"
+              aria-label="?뺣젹 ?듭뀡"
+              disabled={!isMounted}
+            >
+              <span>{selectedSortOption.label}</span>
+              <ChevronDown className="size-4" aria-hidden />
+            </button>
+          </DropdownMenuTrigger>
+          {isMounted ? (
             <DropdownMenuContent align="end" className="md:hidden">
               <DropdownMenuRadioGroup
                 value={activeSort}
@@ -135,8 +135,8 @@ export const SosoTalkFilterBar = ({
                 ))}
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+          ) : null}
+        </DropdownMenu>
       </div>
     </section>
   );
