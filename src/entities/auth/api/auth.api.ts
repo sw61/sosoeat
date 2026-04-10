@@ -40,7 +40,7 @@ export const authApi = {
       throw new Error(errorData.message || '올바른 이메일 형식이 아닙니다.');
     }
 
-    return response.json() as Promise<{ available: boolean }>;
+    return response.json();
   },
 
   /**
