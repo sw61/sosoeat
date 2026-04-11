@@ -29,8 +29,8 @@ export const StepBasicInfo = ({ form }: StepProps) => {
   const handleLocationSelect = (result: LocationSearchResult) => {
     const region = [result.region1, result.region2].filter(Boolean).join(' ');
     form.setValue('region', region, { shouldValidate: true });
-    form.setValue('addressBase', result.addressName);
-    form.setValue('address', result.placeName, { shouldValidate: true });
+    form.setValue('addressBase', result.addressName, { shouldValidate: true });
+    form.setValue('address', result.placeName);
     form.setValue('latitude', result.latitude);
     form.setValue('longitude', result.longitude);
     setLocationModalOpen(false);
@@ -44,8 +44,10 @@ export const StepBasicInfo = ({ form }: StepProps) => {
     if (!file) return;
 
     try {
-      const url = await mutateAsync(file).catch(() => null);
-      if (url) onChange(url);
+      const url = await mutateAsync(file);
+      onChange(url);
+    } catch {
+      // 업로드 실패 시 uploadError로 표시
     } finally {
       e.target.value = ''; // 성공이나 실패 모두 초기화하여 재시도 가능하도록 처리
     }

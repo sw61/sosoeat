@@ -90,13 +90,8 @@ function DateTimeField({ dateValue, timeValue, onDateChange, onTimeChange }: Dat
  * 4단계: 모임 일정/정원 설정
  */
 export const StepSchedule = ({ form }: StepProps) => {
-  const { register, control, watch } = form;
+  const { register, control } = form;
   const { errors } = useFormState({ control });
-
-  const meetingDate = watch('meetingDate');
-  const meetingTime = watch('meetingTime');
-  const registrationEndDate = watch('registrationEndDate');
-  const registrationEndTime = watch('registrationEndTime');
 
   const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
 
@@ -116,8 +111,8 @@ export const StepSchedule = ({ form }: StepProps) => {
               control={control}
               render={({ field: timeField }) => (
                 <DateTimeField
-                  dateValue={meetingDate}
-                  timeValue={meetingTime}
+                  dateValue={dateField.value}
+                  timeValue={timeField.value}
                   onDateChange={dateField.onChange}
                   onTimeChange={timeField.onChange}
                 />
@@ -141,8 +136,8 @@ export const StepSchedule = ({ form }: StepProps) => {
               control={control}
               render={({ field: timeField }) => (
                 <DateTimeField
-                  dateValue={registrationEndDate}
-                  timeValue={registrationEndTime}
+                  dateValue={dateField.value}
+                  timeValue={timeField.value}
                   onDateChange={dateField.onChange}
                   onTimeChange={timeField.onChange}
                 />
@@ -166,6 +161,7 @@ export const StepSchedule = ({ form }: StepProps) => {
           placeholder="최소 2명 이상 입력해 주세요."
           className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 h-10 border-transparent text-sm font-normal md:h-12 md:text-base"
           onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.ctrlKey || e.metaKey) return;
             if (
               !/^\d$/.test(e.key) &&
               !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)

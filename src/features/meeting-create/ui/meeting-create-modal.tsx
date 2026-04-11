@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/shared/lib/utils';
+import type { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 import { Button } from '@/shared/ui/button';
 import { Funnel, Step } from '@/shared/ui/funnel/funnel';
 import { ResponsiveModal } from '@/shared/ui/responsive-modal/responsive-modal';
@@ -10,6 +11,22 @@ import type { MeetingCreateModalProps, MeetingFormData } from '../model/meeting-
 import { useMeetingForm } from '../model/use-meeting-form';
 
 import { StepBasicInfo, StepCategory, StepDescription, StepSchedule } from './_components';
+
+function toCreateMeetingPayload(data: MeetingFormData): CreateMeeting {
+  return {
+    type: data.type,
+    name: data.name,
+    region: data.region,
+    address: [data.addressBase, data.address].filter(Boolean).join(', ') || undefined,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    image: data.image,
+    description: data.description,
+    dateTime: new Date(`${data.meetingDate}T${data.meetingTime}`),
+    registrationEnd: new Date(`${data.registrationEndDate}T${data.registrationEndTime}`),
+    capacity: data.capacity,
+  };
+}
 
 const CTA_BASE_CLASS =
   'h-[48px] flex-1 rounded-[12px] text-sm md:text-base font-semibold transition-all md:h-[60px] md:rounded-[16px]';
@@ -26,36 +43,24 @@ const StepIndicator = ({ label }: { label: string }) => {
   );
 };
 
-export const MeetingCreateForm = ({ onClose, onSubmit }: Omit<MeetingCreateModalProps, 'open'>) => {
-  const {
-    form,
-    currentStep,
-    stepLabel,
-    isFirstStep,
-    isLastStep,
-    isCurrentStepValid,
-    goNext,
-    goPrev,
-    reset,
-  } = useMeetingForm();
+type MeetingCreateFormProps = Omit<MeetingCreateModalProps, 'open'> &
+  ReturnType<typeof useMeetingForm>;
 
+export const MeetingCreateForm = ({
+  onClose,
+  onSubmit,
+  form,
+  currentStep,
+  stepLabel,
+  isFirstStep,
+  isLastStep,
+  isCurrentStepValid,
+  goNext,
+  goPrev,
+}: MeetingCreateFormProps) => {
   const handleSubmit = async (data: MeetingFormData) => {
-    const payload = {
-      name: data.name,
-      type: data.type,
-      region: data.region,
-      address: [data.addressBase, data.address].filter(Boolean).join(' '),
-      latitude: data.latitude,
-      longitude: data.longitude,
-      dateTime: new Date(`${data.meetingDate}T${data.meetingTime}`),
-      registrationEnd: new Date(`${data.registrationEndDate}T${data.registrationEndTime}`),
-      capacity: data.capacity,
-      image: data.image,
-      description: data.description,
-    };
     try {
-      await onSubmit(payload);
-      reset();
+      await onSubmit(toCreateMeetingPayload(data));
     } catch {
       // useCreateMeeting.onError에서 toast 처리 — 모달만 유지
     }
@@ -151,14 +156,21 @@ export const MeetingCreateForm = ({ onClose, onSubmit }: Omit<MeetingCreateModal
  * />
  */
 export const MeetingCreateModal = ({ open, onClose, onSubmit }: MeetingCreateModalProps) => {
+  const meetingForm = useMeetingForm();
+
+  const handleClose = () => {
+    meetingForm.reset();
+    onClose();
+  };
+
   return (
     <ResponsiveModal
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       ariaLabel="모임 생성"
       className="md:w-136 md:max-w-none md:rounded-[40px]"
     >
-      <MeetingCreateForm onClose={onClose} onSubmit={onSubmit} />
+      <MeetingCreateForm {...meetingForm} onClose={handleClose} onSubmit={onSubmit} />
     </ResponsiveModal>
   );
 };

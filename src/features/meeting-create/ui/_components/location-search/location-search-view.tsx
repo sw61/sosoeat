@@ -81,13 +81,13 @@ export function LocationSearchView({ onClose, onSelect }: LocationSearchViewProp
 
         {hasResults && (
           <ul className="flex flex-col gap-1 py-1">
-            {results.map((result, idx) => (
-              <li key={`${result.placeName}-${idx}`}>
+            {results.map((result) => (
+              <li key={`${result.addressName}-${result.latitude}-${result.longitude}`}>
                 <LocationResultItem
                   result={result}
                   isSelected={
-                    selected?.placeName === result.placeName &&
-                    selected?.addressName === result.addressName
+                    selected?.latitude === result.latitude &&
+                    selected?.longitude === result.longitude
                   }
                   onClick={handleResultClick}
                 />
