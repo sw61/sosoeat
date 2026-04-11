@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useUploadImage } from '@/entities/image';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
-import { Dialog, DialogContent, DialogTitle } from '@/shared/ui/dialog';
+import { ResponsiveModal } from '@/shared/ui/responsive-modal/responsive-modal';
 
 import { BASIC_INFO_KEYS, EDIT_TABS } from '../model/meeting-edit.constants';
 import { type MeetingEditFormData, meetingEditFormSchema } from '../model/meeting-edit.schema';
@@ -54,7 +54,7 @@ const MeetingEditForm = ({
         name: data.name,
         type: data.type,
         region: data.region,
-        address: data.address,
+        address: [data.addressBase, data.address].filter(Boolean).join(', ') || undefined,
         ...(data.latitude !== undefined && { latitude: data.latitude }),
         ...(data.longitude !== undefined && { longitude: data.longitude }),
         dateTime: new Date(`${data.meetingDate}T${data.meetingTime}`),
@@ -88,10 +88,7 @@ const MeetingEditForm = ({
   };
 
   return (
-    <div className="flex max-h-[90dvh] w-full flex-col gap-0 px-4 pt-8 pb-6 md:p-12">
-      {/* 헤더 */}
-      <h2 className="text-sosoeat-gray-900 text-xl font-semibold md:text-2xl">모임 수정하기</h2>
-
+    <div className="flex min-h-0 flex-1 flex-col gap-0 px-4 pb-6 md:px-6 md:pb-8">
       {/* 탭 */}
       <div className="border-sosoeat-gray-200 mt-5 flex border-b">
         {EDIT_TABS.map((tab: (typeof EDIT_TABS)[number]) => (
@@ -173,32 +170,14 @@ export const MeetingEditModal = ({
   defaultValues,
   onSuccess,
 }: MeetingEditModalProps) => {
-  const handleOpenChange = (isOpen: boolean) => {
-    if (!isOpen) onClose();
-  };
-
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent
-        showCloseButton
-        aria-modal="true"
-        className={cn(
-          'flex h-auto max-h-[90dvh] w-[343px] min-w-[343px] flex-col gap-0 overflow-hidden rounded-[24px] p-0 md:w-[544px] md:max-w-none md:rounded-[40px]',
-          '[&_button[data-slot=dialog-close]]:text-sosoeat-gray-700',
-          '[&_button[data-slot=dialog-close]]:top-8 [&_button[data-slot=dialog-close]]:right-8',
-          '[&_button[data-slot=dialog-close]]:h-6 [&_button[data-slot=dialog-close]]:w-6',
-          '[&_button[data-slot=dialog-close]_svg]:h-6 [&_button[data-slot=dialog-close]_svg]:w-6',
-          '[&_button[data-slot=dialog-close]]:p-0'
-        )}
-      >
-        <DialogTitle className="sr-only">모임 수정</DialogTitle>
-        <MeetingEditForm
-          onClose={onClose}
-          meetingId={meetingId}
-          defaultValues={defaultValues}
-          onSuccess={onSuccess}
-        />
-      </DialogContent>
-    </Dialog>
+    <ResponsiveModal open={open} onClose={onClose} title="모임 수정하기" className="md:h-[600px]">
+      <MeetingEditForm
+        onClose={onClose}
+        meetingId={meetingId}
+        defaultValues={defaultValues}
+        onSuccess={onSuccess}
+      />
+    </ResponsiveModal>
   );
 };

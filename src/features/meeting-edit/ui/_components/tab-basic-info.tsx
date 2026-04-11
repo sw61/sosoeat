@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
 
 import Image from 'next/image';
@@ -7,6 +8,8 @@ import Image from 'next/image';
 import { ImagePlus, Loader2 } from 'lucide-react';
 
 import { MIME_TO_EXT } from '@/entities/image';
+import type { LocationSearchResult } from '@/entities/location';
+import { LocationSearchModal } from '@/entities/location';
 import { cn } from '@/shared/lib/utils';
 import {
   DropdownMenu,
@@ -43,6 +46,18 @@ export const TabBasicInfo = ({ form, isUploadPending, uploadError, onFileChange 
     control,
     formState: { errors },
   } = form;
+  const [locationModalOpen, setLocationModalOpen] = useState(false);
+
+  const handleLocationSelect = (result: LocationSearchResult) => {
+    const region = [result.region1, result.region2].filter(Boolean).join(' ');
+    form.setValue('region', region, { shouldValidate: true });
+    form.setValue('addressBase', result.addressName, { shouldValidate: true });
+    form.setValue('address', result.placeName, { shouldValidate: true });
+    form.setValue('latitude', result.latitude);
+    form.setValue('longitude', result.longitude);
+    setLocationModalOpen(false);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* 모임 종류 */}
@@ -114,40 +129,56 @@ export const TabBasicInfo = ({ form, isUploadPending, uploadError, onFileChange 
       {/* 장소 */}
       <div className="flex flex-col gap-1.5">
         <label
-          htmlFor="edit-region"
+          htmlFor="edit-addressBase"
           className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base"
         >
           장소{requiredIndicator}
         </label>
         <div className="flex flex-col gap-2">
-          <div className="relative">
-            <Input
-              id="edit-region"
-              placeholder="모임 장소를 입력해주세요"
-              className={cn(inputClassName, 'pr-10')}
-              {...register('region')}
-            />
-            <Image
-              src="/icons/location.svg"
-              alt=""
-              width={20}
-              height={20}
-              className="absolute top-1/2 right-3 -translate-y-1/2"
-            />
-          </div>
+          <Controller
+            control={control}
+            name="addressBase"
+            render={({ field }) => (
+              <div className="relative">
+                <Input
+                  id="edit-addressBase"
+                  placeholder="건물, 지번 또는 도로명 검색"
+                  className={cn(inputClassName, 'cursor-pointer pr-10')}
+                  readOnly
+                  onClick={() => setLocationModalOpen(true)}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+                <Image
+                  src="/icons/location.svg"
+                  alt="위치 아이콘"
+                  width={24}
+                  height={24}
+                  className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
+                />
+              </div>
+            )}
+          />
           <Input
             id="edit-address"
             placeholder="상세주소"
             className={inputClassName}
             {...register('address')}
           />
-          {(errors.region || errors.address) && (
+          {(errors.region || errors.addressBase) && (
             <p className="text-destructive ml-1 text-xs">
-              {errors.region?.message || errors.address?.message}
+              {errors.region?.message || errors.addressBase?.message}
             </p>
           )}
         </div>
       </div>
+
+      <LocationSearchModal
+        open={locationModalOpen}
+        onClose={() => setLocationModalOpen(false)}
+        onSelect={handleLocationSelect}
+        mapClassName="h-24 md:h-32"
+      />
 
       {/* 모임 설명 */}
       <div className="flex flex-col gap-1.5">

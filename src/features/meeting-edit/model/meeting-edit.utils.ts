@@ -11,11 +11,14 @@ export const toMeetingEditFormData = (meeting: Meeting): MeetingEditFormData => 
   const dateTime = new Date(meeting.dateTime);
   const registrationEnd = new Date(meeting.registrationEnd);
 
+  const [addressBase = '', address = ''] = (meeting.address ?? '').split(', ');
+
   return {
     type: meeting.type,
     name: meeting.name,
     region: meeting.region,
-    address: meeting.address,
+    addressBase,
+    address,
     latitude: meeting.latitude ?? undefined,
     longitude: meeting.longitude ?? undefined,
     image: meeting.image,
