@@ -3,13 +3,13 @@ import { toast } from 'sonner';
 
 import { useSosoTalkWritePage } from './use-sosotalk-write-page';
 
-const mockPush = jest.fn();
+const mockReplace = jest.fn();
 const mockUploadSosoTalkPostImage = jest.fn();
 const mockCreateMutateAsync = jest.fn();
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: mockPush,
+    replace: mockReplace,
   }),
 }));
 
@@ -38,7 +38,7 @@ jest.mock('@/entities/post', () => ({
 
 describe('useSosoTalkWritePage edge cases', () => {
   beforeEach(() => {
-    mockPush.mockReset();
+    mockReplace.mockReset();
     mockUploadSosoTalkPostImage.mockReset();
     mockCreateMutateAsync.mockReset();
   });
@@ -61,6 +61,6 @@ describe('useSosoTalkWritePage edge cases', () => {
     expect(mockUploadSosoTalkPostImage).not.toHaveBeenCalled();
     expect(mockCreateMutateAsync).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalledWith('이미지는 필수입니다.');
-    expect(mockPush).not.toHaveBeenCalled();
+    expect(mockReplace).not.toHaveBeenCalled();
   });
 });

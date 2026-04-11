@@ -1,5 +1,10 @@
+'use client';
+
+import { useFavoritesCount } from '@/entities/favorites';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+
+import { useMeetingCount } from '../../model/mypage.queries';
 
 import { CountCardProps } from './count-card.types';
 import { cardVariants, countVariants } from './count-card.variants';
@@ -23,4 +28,14 @@ export function CountCard({ count, variant = 'meeting', className }: CountCardPr
       </CardContent>
     </Card>
   );
+}
+
+export function FavoriteCountCard({ initialCount }: { initialCount: number }) {
+  const { data: count } = useFavoritesCount(initialCount);
+  return <CountCard variant="favorite" count={count} />;
+}
+
+export function MeetingCountCard({ initialCount }: { initialCount: number }) {
+  const { data: count } = useMeetingCount(initialCount);
+  return <CountCard variant="meeting" count={count} />;
 }

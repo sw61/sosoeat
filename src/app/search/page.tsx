@@ -1,5 +1,32 @@
-import { SearchPage } from '@/widgets/search';
+import { startOfDay } from 'date-fns';
+import { SearchParams } from 'nuqs';
 
-export default function Page() {
-  return <SearchPage />;
+import { getMeetings } from '@/entities/meeting/index.server';
+import { MeetingSearchBanner, SearchPage, searchParamsCache } from '@/widgets/search';
+
+type PageProps = {
+  searchParams: Promise<SearchParams>; // Next.js 15+: async searchParams prop
+};
+
+export default async function Page({ searchParams }: PageProps) {
+  const { dateStart, sortBy, sortOrder, queryKeyword } = searchParamsCache.parse(
+    await searchParams
+  );
+  const finalDateStart = dateStart ?? startOfDay(new Date());
+  const toApiKeyword = (keyword: typeof queryKeyword) => {
+    return keyword === 'all' ? undefined : keyword;
+  };
+  const initialData = await getMeetings({
+    dateStart: finalDateStart.toISOString(),
+    sortBy,
+    sortOrder,
+    keyword: toApiKeyword(queryKeyword),
+  }).catch(() => null);
+
+  return (
+    <div className="bg-sosoeat-gray-100 min-h-[calc(100vh-156px)] pb-8">
+      <MeetingSearchBanner />
+      <SearchPage initialData={initialData} />
+    </div>
+  );
 }

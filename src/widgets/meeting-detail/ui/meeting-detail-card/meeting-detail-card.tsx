@@ -42,7 +42,7 @@ function InfoRow({ icon, category, label, children, className }: InfoRowProps) {
         </div>
       </div>
       <div>
-        <p className="text-sosoeat-gray-600 text-xs font-semibold">{label}</p>
+        <p className="text-sosoeat-gray-600 text-xs font-medium">{label}</p>
         {children}
       </div>
     </div>
@@ -73,7 +73,7 @@ function ParticipantsRow({ meetingId, current, max, category, className }: Parti
         <UsersIcon className={cn('h-4 w-4', iconColorVariants({ category }))} />
       </div>
       <div className="flex-1">
-        <p className="text-sosoeat-gray-600 mb-1 text-xs font-semibold">참여 현황</p>
+        <p className="text-sosoeat-gray-600 mb-1 text-xs font-medium">참여 현황</p>
         <MeetingDetailProgress
           id={`meeting-${meetingId}-progress`}
           current={current}
@@ -106,7 +106,7 @@ function HostRow({ name, profileImage, className }: HostRowProps) {
         </AvatarFallback>
       </Avatar>
       <div>
-        <p className="text-sosoeat-gray-600 text-xs font-semibold">호스트</p>
+        <p className="text-sosoeat-gray-600 text-xs font-medium">호스트</p>
         <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{name}</p>
       </div>
     </div>
@@ -126,8 +126,7 @@ interface InfoSectionProps {
 
 function InfoSection({ meeting, category, fullDateLabel, className }: InfoSectionProps) {
   return (
-    // sm: gap-1 (4px) / md: gap-1.5 (6px) / lg: gap-2 (8px)
-    <div className={cn('flex flex-col gap-1 md:gap-1.5 lg:gap-2', className)}>
+    <div className={cn('flex flex-col gap-1 md:gap-2', className)}>
       <InfoRow icon={<CalendarIcon />} category={category} label="날짜 및 시간">
         <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{fullDateLabel}</p>
       </InfoRow>
@@ -162,7 +161,7 @@ interface ActionRowProps {
 function ActionRow({ actionButton, meetingId, isFavorited }: ActionRowProps) {
   return (
     <div className="flex items-center gap-2">
-      <div className="h-10 w-full lg:h-[62px]">{actionButton}</div>
+      <div className="h-10 w-full md:h-[62px]">{actionButton}</div>
       {/* sm·md: 40×40 */}
       <HeartButton
         meetingId={meetingId}
@@ -215,15 +214,7 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
   );
 
   return (
-    <div
-      className={cn(
-        'flex flex-col rounded-[20px] bg-white lg:rounded-[32px]',
-        // sm: p-4(16px) / md·lg: p-6(24px)
-        'p-4 md:p-6',
-        // sm: gap-3(12px) / md: gap-[14px] / lg: gap-4(16px)
-        'gap-3 md:gap-[14px] lg:gap-4'
-      )}
-    >
+    <div className={cn('flex flex-col rounded-[32px] bg-white', 'p-4 md:p-6', 'gap-3 md:gap-4')}>
       {/* ════════════════════════════════════════
           sm 뱃지 섹션
           - hasSafetyBadge O: 상태 뱃지(첫 줄) + deadline(둘째 줄)
@@ -245,7 +236,11 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
           </div>
         )}
         <div className={cn('flex items-center', !hasSafetyBadge && 'justify-between')}>
-          <DeadlineBadge registrationEnd={new Date(meeting.registrationEnd)} variant={category} />
+          <DeadlineBadge
+            registrationEnd={new Date(meeting.registrationEnd)}
+            variant={category}
+            className="min-w-0 flex-1"
+          />
           {!hasSafetyBadge && ellipsisMenu}
         </div>
       </div>
@@ -255,8 +250,12 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
           - deadline + 상태 뱃지 한 줄
           ════════════════════════════════════════ */}
       <div className="hidden md:flex md:items-center md:justify-between">
-        <div className="flex items-center gap-1">
-          <DeadlineBadge registrationEnd={new Date(meeting.registrationEnd)} variant={category} />
+        <div className="flex min-w-0 items-center gap-1 overflow-hidden">
+          <DeadlineBadge
+            registrationEnd={new Date(meeting.registrationEnd)}
+            variant={category}
+            className="min-w-0 flex-1"
+          />
           {isConfirmed && (
             <EstablishmentStatusBadge
               confirmedAt={new Date(meeting.confirmedAt!)}
@@ -274,7 +273,7 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
           md: text-2xl/bold
           lg: text-3xl/bold
           ════════════════════════════════════════ */}
-      <h2 className="line-clamp-2 text-xl leading-snug font-semibold md:text-2xl md:font-bold lg:line-clamp-none lg:text-3xl">
+      <h2 className="line-clamp-2 text-xl leading-snug font-semibold md:line-clamp-none md:text-2xl md:font-bold">
         {meeting.name}
       </h2>
 

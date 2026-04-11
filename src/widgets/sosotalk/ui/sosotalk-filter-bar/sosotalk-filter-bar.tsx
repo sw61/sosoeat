@@ -1,5 +1,7 @@
 'use client';
 
+import { useSyncExternalStore } from 'react';
+
 import { ChevronDown } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
@@ -18,14 +20,14 @@ import type {
 } from './sosotalk-filter-bar.types';
 
 const DEFAULT_TABS: SosoTalkFilterTab[] = [
-  { label: '전체 TALK', value: 'all' },
-  { label: '인기 TALK', value: 'popular' },
+  { label: '?꾩껜 TALK', value: 'all' },
+  { label: '?멸린 TALK', value: 'popular' },
 ];
 
 const DEFAULT_SORT_OPTIONS: SosoTalkSortOption[] = [
-  { label: '댓글순', value: 'comments' },
-  { label: '좋아요순', value: 'likes' },
-  { label: '최신순', value: 'latest' },
+  { label: '?볤???', value: 'comments' },
+  { label: '醫뗭븘?붿닚', value: 'likes' },
+  { label: '理쒖떊??', value: 'latest' },
 ];
 
 export const SosoTalkFilterBar = ({
@@ -37,8 +39,16 @@ export const SosoTalkFilterBar = ({
   onTabChange = () => {},
   onSortChange = () => {},
 }: SosoTalkFilterBarProps) => {
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
+
   const selectedSortOption =
-    sortOptions.find((option) => option.value === activeSort) ?? DEFAULT_SORT_OPTIONS[0];
+    sortOptions.find((option) => option.value === activeSort) ??
+    sortOptions[0] ??
+    DEFAULT_SORT_OPTIONS[0];
 
   return (
     <section className={cn('w-full', className)}>
@@ -100,29 +110,32 @@ export const SosoTalkFilterBar = ({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium md:hidden"
-              aria-label="정렬 옵션"
+              className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium disabled:pointer-events-none md:hidden"
+              aria-label="?뺣젹 ?듭뀡"
+              disabled={!isMounted}
             >
               <span>{selectedSortOption.label}</span>
               <ChevronDown className="size-4" aria-hidden />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="md:hidden">
-            <DropdownMenuRadioGroup
-              value={activeSort}
-              onValueChange={(value) => onSortChange(value as typeof activeSort)}
-            >
-              {sortOptions.map((option) => (
-                <DropdownMenuRadioItem
-                  key={option.value}
-                  value={option.value}
-                  className="text-sosoeat-gray-900 py-2"
-                >
-                  {option.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
+          {isMounted ? (
+            <DropdownMenuContent align="end" className="md:hidden">
+              <DropdownMenuRadioGroup
+                value={activeSort}
+                onValueChange={(value) => onSortChange(value as typeof activeSort)}
+              >
+                {sortOptions.map((option) => (
+                  <DropdownMenuRadioItem
+                    key={option.value}
+                    value={option.value}
+                    className="text-sosoeat-gray-900 py-2"
+                  >
+                    {option.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          ) : null}
         </DropdownMenu>
       </div>
     </section>
