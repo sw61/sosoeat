@@ -58,9 +58,14 @@ export async function GET(request: NextRequest) {
 
   const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}&size=10`;
 
-  const response = await fetch(url, {
-    headers: { Authorization: `KakaoAK ${apiKey}` },
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: { Authorization: `KakaoAK ${apiKey}` },
+    });
+  } catch {
+    return NextResponse.json({ error: '카카오 API에 연결할 수 없습니다.' }, { status: 503 });
+  }
 
   if (!response.ok) {
     return NextResponse.json({ error: '장소 검색에 실패했습니다.' }, { status: response.status });
@@ -69,16 +74,18 @@ export async function GET(request: NextRequest) {
   const data: KakaoLocalResponse = await response.json();
 
   const results = data.documents.map((doc) => {
+    const baseAddress = doc.road_address_name || doc.address_name;
+    const addressParts = baseAddress.split(' ');
     const region1Full =
       doc.address?.region_1depth_name ??
       doc.road_address?.region_1depth_name ??
-      (doc.road_address_name || doc.address_name).split(' ')[0] ??
+      addressParts[0] ??
       '';
     const region1 = REGION1_ABBR[region1Full] ?? region1Full;
     const region2 =
       doc.address?.region_2depth_name ??
       doc.road_address?.region_2depth_name ??
-      (doc.road_address_name || doc.address_name).split(' ')[1] ??
+      addressParts[1] ??
       '';
 
     return {

@@ -169,6 +169,11 @@ export const StepSchedule = ({ form }: StepProps) => {
               e.preventDefault();
             }
           }}
+          onPaste={(e) => {
+            const text = e.clipboardData.getData('text');
+            if (!/^\d+$/.test(text)) e.preventDefault();
+          }}
+          onCompositionStart={(e) => e.preventDefault()}
           {...register('capacity')}
         />
         {errors.capacity && (

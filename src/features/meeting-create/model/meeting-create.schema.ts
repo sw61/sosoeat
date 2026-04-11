@@ -33,9 +33,12 @@ const scheduleSchema = z.object({
   registrationEndTime: z.string().min(1, '마감 시간을 선택해 주세요.'),
   capacity: z
     .string()
+    .trim()
     .min(1, '정원을 입력해 주세요.')
-    .transform((v) => Number(v))
-    .pipe(z.number().min(2, '최소 2명 이상 입력해 주세요.').max(100, '최대 100명까지 가능합니다.')),
+    .transform(Number)
+    .pipe(
+      z.number().int().min(2, '최소 2명 이상 입력해 주세요.').max(100, '최대 100명까지 가능합니다.')
+    ),
 });
 
 /** 전체 폼 스키마 (모든 단계 합침) */
