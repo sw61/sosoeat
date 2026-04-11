@@ -7,11 +7,11 @@ import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/entities/auth';
+import { meetingsQueryOptions } from '@/entities/meeting';
 import { toMeetingEditFormData } from '@/features/meeting-edit';
 import { useModal } from '@/shared/lib/use-modal';
 
 import {
-  meetingDetailKeys,
   useConfirmMeeting,
   useDeleteMeeting,
   useJoinMeeting,
@@ -40,7 +40,9 @@ export function MeetingHeroSection({ meetingId }: MeetingHeroSectionProps) {
   const { isOpen: isEditOpen, open: openEdit, close: closeEdit } = useModal();
 
   const refreshPageAndMeetingCache = () => {
-    void queryClient.invalidateQueries({ queryKey: meetingDetailKeys.detail(meeting.id) });
+    void queryClient.invalidateQueries({
+      queryKey: meetingsQueryOptions.meetingDetail(meeting.id).queryKey,
+    });
     router.refresh();
   };
 

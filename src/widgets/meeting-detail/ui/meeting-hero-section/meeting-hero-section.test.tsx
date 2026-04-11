@@ -25,9 +25,6 @@ jest.mock('@/features/meeting-edit', () => ({
 }));
 
 jest.mock('../../model/meeting-detail.queries', () => ({
-  meetingDetailKeys: {
-    detail: (id: number) => ['meetings', 'detail', id],
-  },
   useMeetingDetail: jest.fn(),
   useJoinMeeting: jest.fn(() => ({
     mutate: mockJoinMutate,
@@ -118,7 +115,7 @@ describe('MeetingHeroSection', () => {
     mockConfirmMutate.mockClear();
     mockDeleteMutate.mockClear();
     mockRefresh.mockClear();
-     
+
     const { useMeetingDetail } = jest.requireMock('../../model/meeting-detail.queries');
     (useMeetingDetail as jest.Mock).mockReturnValue({ data: MOCK_MEETING });
     useAuthStore.setState({
