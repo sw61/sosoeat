@@ -10,7 +10,7 @@ const categorySchema = z.object({
 const basicInfoSchema = z.object({
   name: z.string().min(1, '모임 이름을 입력해 주세요.').max(30, '30자 이내로 입력해 주세요.'),
   region: z.string().min(1, '지역을 입력해 주세요.'),
-  addressBase: z.string(),
+  addressBase: z.string().min(1, '장소를 검색해 주세요.'),
   address: z.string().min(1, '상세주소를 입력해 주세요.'),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
@@ -65,7 +65,7 @@ export const meetingFormSchema = categorySchema
 /** 각 단계별 필수 필드 목록 — 다음 버튼 활성화 판단에 사용 */
 export const STEP_REQUIRED_FIELDS = {
   category: ['type'],
-  basicInfo: ['name', 'region', 'address', 'image'],
+  basicInfo: ['name', 'region', 'addressBase', 'address', 'image'],
   description: ['description'],
   schedule: [
     'meetingDate',

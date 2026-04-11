@@ -4,7 +4,7 @@ import { type Control, type Resolver, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { DEFAULT_FORM_VALUES, STEPS, TOTAL_STEPS } from './meeting-create.constants';
-import { meetingFormSchema } from './meeting-create.schema';
+import { meetingFormSchema,STEP_REQUIRED_FIELDS } from './meeting-create.schema';
 import type { MeetingFormData, MeetingStep } from './meeting-create.types';
 
 function isNonEmpty(value: unknown): boolean {
@@ -14,23 +14,32 @@ function isNonEmpty(value: unknown): boolean {
 }
 
 function useStepValid(control: Control<MeetingFormData>, step: MeetingStep): boolean {
-  const category = useWatch({ control, name: 'type' });
-  const name = useWatch({ control, name: 'name' });
-  const region = useWatch({ control, name: 'region' });
-  const address = useWatch({ control, name: 'address' });
-  const image = useWatch({ control, name: 'image' });
-  const description = useWatch({ control, name: 'description' });
-  const meetingDate = useWatch({ control, name: 'meetingDate' });
-  const meetingTime = useWatch({ control, name: 'meetingTime' });
-  const registrationEndDate = useWatch({ control, name: 'registrationEndDate' });
-  const registrationEndTime = useWatch({ control, name: 'registrationEndTime' });
-  const capacity = useWatch({ control, name: 'capacity' });
+  const {
+    type,
+    name,
+    region,
+    addressBase,
+    address,
+    image,
+    description,
+    meetingDate,
+    meetingTime,
+    registrationEndDate,
+    registrationEndTime,
+    capacity,
+  } = useWatch({ control });
 
   switch (step) {
     case 'category':
-      return isNonEmpty(category);
+      return isNonEmpty(type);
     case 'basicInfo':
-      return isNonEmpty(name) && isNonEmpty(region) && isNonEmpty(address) && isNonEmpty(image);
+      return (
+        isNonEmpty(name) &&
+        isNonEmpty(region) &&
+        isNonEmpty(addressBase) &&
+        isNonEmpty(address) &&
+        isNonEmpty(image)
+      );
     case 'description':
       return isNonEmpty(description);
     case 'schedule':
@@ -64,8 +73,10 @@ export const useMeetingForm = () => {
 
   const isCurrentStepValid = useStepValid(form.control, currentStep);
 
-  const goNext = () => {
-    if (currentStepIndex < TOTAL_STEPS - 1) {
+  const goNext = async () => {
+    const fields = STEP_REQUIRED_FIELDS[currentStep] as unknown as (keyof MeetingFormData)[];
+    const isValid = await form.trigger(fields);
+    if (isValid && currentStepIndex < TOTAL_STEPS - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     }
   };
