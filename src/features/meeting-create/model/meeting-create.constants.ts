@@ -6,10 +6,9 @@ export const CATEGORY_OPTIONS = [
 ] as const;
 
 /** 카테고리 기재 문구 */
-export const MEETING_CATEGORY_LABELS: Record<string, string> = {
-  groupEat: '함께먹기',
-  groupBuy: '공동구매',
-};
+export const MEETING_CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
+  CATEGORY_OPTIONS.map(({ value, label }) => [value, label])
+);
 
 /** 퍼널 단계 순서 */
 export const STEPS: MeetingStep[] = ['category', 'basicInfo', 'description', 'schedule'];
@@ -30,6 +29,7 @@ export const DEFAULT_FORM_VALUES = {
   type: '',
   name: '',
   region: '',
+  addressBase: '',
   address: '',
   image: '',
   description: '',
@@ -37,5 +37,5 @@ export const DEFAULT_FORM_VALUES = {
   meetingTime: '',
   registrationEndDate: '',
   registrationEndTime: '',
-  capacity: 1,
+  capacity: undefined,
 } as const;

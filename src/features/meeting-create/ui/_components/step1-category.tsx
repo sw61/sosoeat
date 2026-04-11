@@ -14,19 +14,9 @@ const CATEGORY_ICONS: Record<string, string> = {
   groupBuy: '/images/group-buy-modal.png',
 };
 
-const CATEGORY_BG_COLORS: Record<string, string> = {
-  groupEat: 'bg-sosoeat-orange-100',
-  groupBuy: 'bg-sosoeat-blue-100',
-};
-
-const CATEGORY_SELECTED_BORDERS: Record<string, string> = {
-  groupEat: 'border-sosoeat-orange-600',
-  groupBuy: 'border-sosoeat-blue-600',
-};
-
-const CATEGORY_SELECTED_TEXTS: Record<string, string> = {
-  groupEat: 'text-sosoeat-orange-600',
-  groupBuy: 'text-sosoeat-blue-600',
+const CATEGORY_SELECTED_STYLES: Record<string, string> = {
+  groupEat: 'bg-sosoeat-orange-100 border-sosoeat-orange-600 text-sosoeat-orange-600',
+  groupBuy: 'bg-sosoeat-blue-50 border-sosoeat-blue-600 text-sosoeat-blue-600',
 };
 
 /**
@@ -51,10 +41,9 @@ export const StepCategory = ({ form }: StepProps<MeetingFormData>) => {
                     'flex cursor-pointer flex-col items-center justify-center gap-3 transition-all',
                     'rounded-[24px] border-2 text-sm font-medium',
                     'h-[136px] w-full md:max-w-[209px]',
-                    CATEGORY_BG_COLORS[value],
                     field.value === value
-                      ? [CATEGORY_SELECTED_BORDERS[value], CATEGORY_SELECTED_TEXTS[value]]
-                      : 'text-sosoeat-gray-700 border-transparent'
+                      ? CATEGORY_SELECTED_STYLES[value]
+                      : 'bg-sosoeat-gray-100 text-sosoeat-gray-700 border-sosoeat-gray-200'
                   )}
                 >
                   <input
@@ -69,6 +58,7 @@ export const StepCategory = ({ form }: StepProps<MeetingFormData>) => {
                       src={CATEGORY_ICONS[value]}
                       alt={label as string}
                       fill
+                      sizes="80px"
                       className="object-contain"
                     />
                   </div>

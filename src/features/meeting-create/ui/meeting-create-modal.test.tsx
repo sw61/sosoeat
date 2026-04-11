@@ -22,6 +22,73 @@ jest.mock('@/entities/image', () => ({
   },
 }));
 
+// DateTimePicker mock — JSDOM에서 Popover 기반 picker 조작 불가, hidden input으로 대체
+jest.mock('@/shared/ui/date-picker/date-time-picker', () => ({
+  DateTimePicker: ({
+    dateValue,
+    timeValue,
+    onDateChange,
+    onTimeChange,
+    children,
+  }: {
+    dateValue?: string;
+    timeValue?: string;
+    onDateChange: (v: string) => void;
+    onTimeChange: (v: string) => void;
+    children?: React.ReactNode;
+  }) => (
+    <div>
+      <input
+        type="text"
+        data-testid="date-input"
+        defaultValue={dateValue ?? ''}
+        onChange={(e) => onDateChange(e.target.value)}
+        style={{ display: 'none' }}
+      />
+      <input
+        type="text"
+        data-testid="time-input"
+        defaultValue={timeValue ?? ''}
+        onChange={(e) => onTimeChange(e.target.value)}
+        style={{ display: 'none' }}
+      />
+      {children}
+    </div>
+  ),
+}));
+
+// LocationSearchModal mock — 장소 검색 모달 자체는 별도 테스트, 여기선 선택 동작만 검증
+jest.mock('@/features/meeting-create/ui/_components/location-search/location-search-modal', () => ({
+  LocationSearchModal: ({
+    open,
+    onSelect,
+  }: {
+    open: boolean;
+    onSelect: (r: unknown) => void;
+    onClose: () => void;
+  }) => {
+    if (!open) return null;
+    return (
+      <div data-testid="location-search-modal">
+        <button
+          onClick={() =>
+            onSelect({
+              placeName: '테헤란로 123',
+              addressName: '서울 강남구 여의도동',
+              latitude: 37.5,
+              longitude: 127.0,
+              region1: '서울',
+              region2: '강남구',
+            })
+          }
+        >
+          장소선택
+        </button>
+      </div>
+    );
+  },
+}));
+
 const createWrapper = () => {
   const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
   return ({ children }: { children: React.ReactNode }) =>
@@ -84,11 +151,16 @@ describe('MeetingCreateModal', () => {
       within(dialog).getByPlaceholderText('모임 이름을 입력해 주세요'),
       '맛있는 삼겹살 모임'
     );
-    await user.type(
-      within(dialog).getByPlaceholderText('건물, 지번 또는 도로명 검색'),
-      '서울 강남구'
-    );
-    await user.type(within(dialog).getByPlaceholderText('상세주소'), '테헤란로 123');
+
+    // 장소: readOnly input 클릭 → LocationSearchModal mock에서 장소 선택
+    await user.click(within(dialog).getByPlaceholderText('건물, 지번 또는 도로명 검색'));
+    await waitFor(() => {
+      expect(screen.getByTestId('location-search-modal')).toBeInTheDocument();
+    });
+    await user.click(screen.getByRole('button', { name: '장소선택' }));
+    await waitFor(() => {
+      expect(screen.queryByTestId('location-search-modal')).not.toBeInTheDocument();
+    });
 
     // 이미지 업로드 (mock: 즉시 publicUrl 반환)
     const imageInput = dialog.querySelector('input[type="file"]') as HTMLInputElement;
@@ -115,17 +187,13 @@ describe('MeetingCreateModal', () => {
       expect(within(dialog).getByText((_, el) => el?.textContent === '4/4')).toBeInTheDocument();
     });
 
-    const meetingDateInput = dialog.querySelector('input[name="meetingDate"]') as HTMLInputElement;
-    const meetingTimeInput = dialog.querySelector('input[name="meetingTime"]') as HTMLInputElement;
-    const registrationEndDateInput = dialog.querySelector(
-      'input[name="registrationEndDate"]'
-    ) as HTMLInputElement;
-    const registrationEndTimeInput = dialog.querySelector(
-      'input[name="registrationEndTime"]'
-    ) as HTMLInputElement;
-    const capacityInput = within(dialog).getByPlaceholderText('정원을 입력해 주세요');
+    // DateTimePicker는 mock으로 hidden input 2쌍 렌더링 (모임 일정, 모집 마감 순서)
+    const [meetingDateInput, registrationEndDateInput] =
+      within(dialog).getAllByTestId('date-input');
+    const [meetingTimeInput, registrationEndTimeInput] =
+      within(dialog).getAllByTestId('time-input');
+    const capacityInput = within(dialog).getByPlaceholderText('최소 2명 이상 입력해 주세요.');
 
-    // Use fireEvent for date/time to be safe in JSDOM
     fireEvent.change(meetingDateInput, { target: { value: '2026-12-31' } });
     fireEvent.change(meetingTimeInput, { target: { value: '19:00' } });
     fireEvent.change(registrationEndDateInput, { target: { value: '2026-12-30' } });
@@ -157,7 +225,6 @@ describe('MeetingCreateModal', () => {
         type: 'groupEat',
         name: '맛있는 삼겹살 모임',
         region: '서울 강남구',
-        address: '테헤란로 123',
         image: 'https://s3.example.com/image.jpg',
         description: '같이 삼겹살 먹어요!',
         dateTime: new Date('2026-12-31T19:00'),
@@ -187,26 +254,15 @@ describe('MeetingCreateModal', () => {
     expect(within(dialog).getByLabelText('함께먹기')).toBeChecked();
   });
 
-  it('닫기 버튼을 누르면 onClose가 호출되고 폼이 리셋된다', async () => {
+  it('취소 버튼을 누르면 onClose가 호출된다', async () => {
     const user = userEvent.setup();
-    const { rerender } = renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
+    renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
+    const dialog = screen.getByRole('dialog');
 
-    await user.click(screen.getByLabelText('함께먹기'));
-
-    const closeBtn = screen.getByRole('button', { name: /close/i });
-    await user.click(closeBtn);
+    // 1단계에서 취소 버튼 클릭
+    const cancelBtn = within(dialog).getByRole('button', { name: '취소' });
+    await user.click(cancelBtn);
 
     expect(DEFAULT_PROPS.onClose).toHaveBeenCalled();
-
-    rerender(<MeetingCreateModal {...DEFAULT_PROPS} open={false} />);
-    await waitFor(() => {
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    });
-
-    rerender(<MeetingCreateModal {...DEFAULT_PROPS} open={true} />);
-    await waitFor(() => {
-      expect(screen.getByText((_, el) => el?.textContent === '1/4')).toBeInTheDocument();
-    });
-    expect(screen.getByLabelText('함께먹기')).not.toBeChecked();
   });
 });

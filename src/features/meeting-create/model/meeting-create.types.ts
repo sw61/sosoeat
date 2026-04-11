@@ -13,7 +13,8 @@ export interface MeetingFormData {
   // Step 2: 기본 정보
   name: string;
   region: string;
-  address: string;
+  addressBase: string; // readonly 표시용 (예: "서울 영등포구 여의도동 85")
+  address: string; // 사용자 입력 상세주소 (예: "여의도한강공원")
   latitude?: number;
   longitude?: number;
   image: string;

@@ -10,7 +10,10 @@ const categorySchema = z.object({
 const basicInfoSchema = z.object({
   name: z.string().min(1, '모임 이름을 입력해 주세요.').max(30, '30자 이내로 입력해 주세요.'),
   region: z.string().min(1, '지역을 입력해 주세요.'),
-  address: z.string().min(1, '주소를 입력해 주세요.'),
+  addressBase: z.string().min(1, '장소를 검색해 주세요.'),
+  address: z.string().min(1, '상세주소를 입력해 주세요.'),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
   image: z.string().min(1, '이미지를 업로드해 주세요.'),
 });
 
@@ -28,10 +31,14 @@ const scheduleSchema = z.object({
   meetingTime: z.string().min(1, '모임 시간을 선택해 주세요.'),
   registrationEndDate: z.string().min(1, '마감 날짜를 선택해 주세요.'),
   registrationEndTime: z.string().min(1, '마감 시간을 선택해 주세요.'),
-  capacity: z.coerce
-    .number()
-    .min(1, '최소 1명 이상이어야 합니다.')
-    .max(100, '최대 100명까지 가능합니다.'),
+  capacity: z
+    .string()
+    .trim()
+    .min(1, '정원을 입력해 주세요.')
+    .transform(Number)
+    .pipe(
+      z.number().int().min(2, '최소 2명 이상 입력해 주세요.').max(100, '최대 100명까지 가능합니다.')
+    ),
 });
 
 /** 전체 폼 스키마 (모든 단계 합침) */
@@ -61,7 +68,7 @@ export const meetingFormSchema = categorySchema
 /** 각 단계별 필수 필드 목록 — 다음 버튼 활성화 판단에 사용 */
 export const STEP_REQUIRED_FIELDS = {
   category: ['type'],
-  basicInfo: ['name', 'region', 'address', 'image'],
+  basicInfo: ['name', 'region', 'addressBase', 'address', 'image'],
   description: ['description'],
   schedule: [
     'meetingDate',
