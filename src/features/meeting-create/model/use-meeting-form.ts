@@ -4,7 +4,7 @@ import { type Control, type Resolver, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { DEFAULT_FORM_VALUES, STEPS, TOTAL_STEPS } from './meeting-create.constants';
-import { meetingFormSchema,STEP_REQUIRED_FIELDS } from './meeting-create.schema';
+import { meetingFormSchema, STEP_REQUIRED_FIELDS } from './meeting-create.schema';
 import type { MeetingFormData, MeetingStep } from './meeting-create.types';
 
 function isNonEmpty(value: unknown): boolean {
