@@ -60,13 +60,13 @@ export function SosoTalkCard({
               <span>{authorName}</span>
             </div>
 
-            <div className="flex items-center gap-[10px]">
-              <span className="flex items-center gap-[4px]">
-                <Heart className="h-3.5 w-3.5 shrink-0" />
+            <div className="text-sosoeat-gray-700 flex items-center gap-[12px] text-[13px] font-medium">
+              <span className="inline-flex items-center gap-[6px]">
+                <Heart className="fill-sosoeat-gray-600 h-4 w-4 shrink-0 stroke-0" />
                 <span>{likeCount}</span>
               </span>
-              <span className="flex items-center gap-[4px]">
-                <MessageCircle className="h-3.5 w-3.5 shrink-0" />
+              <span className="inline-flex items-center gap-[6px]">
+                <MessageCircle className="fill-sosoeat-gray-600 h-4 w-4 shrink-0 stroke-0" />
                 <span>{commentCount}</span>
               </span>
             </div>

@@ -62,7 +62,7 @@ export const MeetingFilterBar = ({
       )}
     >
       {/* Frame 2610400 — w 283, 탭 간 space-between (피그마 gap 60 대응) */}
-      <div className="flex h-10 w-full max-w-xs items-center gap-[24.5px]">
+      <div className="flex h-10 w-full max-w-xs items-center gap-3 md:gap-[24.5px]">
         <MeetingFilterBarButton
           filterType="all"
           label="전체"
@@ -84,7 +84,7 @@ export const MeetingFilterBar = ({
       </div>
 
       {/* Frame 2610402 — h 32 필터 행 */}
-      <div className="flex h-8 w-full items-center justify-start gap-2 md:w-auto">
+      <div className="flex w-full items-center justify-start gap-2 md:w-auto">
         <DetailDatePicker
           valueStart={dateStart}
           valueEnd={dateEnd}

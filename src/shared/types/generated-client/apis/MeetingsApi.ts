@@ -55,6 +55,7 @@ export interface TeamIdMeetingsGetRequest {
   createdBy?: number;
   sortBy?: TeamIdMeetingsGetSortByEnum;
   sortOrder?: TeamIdMeetingsGetSortOrderEnum;
+  keyword?: string;
   cursor?: string;
   size?: number;
 }

@@ -26,7 +26,14 @@ export function EstablishmentStatusBadge({
         className={cn(ESTABLISHED_BADGE_BASE_CLASS, ESTABLISHED_VARIANT_CLASS[variant], className)}
       >
         <span className={ESTABLISHED_LABEL_CLASS}>
-          <Image src={ICON_SRC[variant]} alt="" width={24} height={24} aria-hidden />
+          <Image
+            src={ICON_SRC[variant]}
+            alt=""
+            width={20}
+            height={20}
+            className="size-5 shrink-0"
+            aria-hidden
+          />
           개설확정
         </span>
       </Badge>

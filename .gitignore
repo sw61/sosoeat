@@ -74,6 +74,7 @@ src/graphify-out/
 # Claude Code local settings
 .claude/settings.local.json
 
+/docs/issues/
 # Codex local settings
 .codex/
 AGENTS.md

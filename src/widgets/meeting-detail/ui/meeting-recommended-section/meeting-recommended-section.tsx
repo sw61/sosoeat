@@ -14,6 +14,8 @@ export function MeetingRecommendedSection({
 }: MeetingRecommendedSectionProps) {
   const recommendedMeetings = meetings.filter((m) => m.id !== currentMeetingId);
 
+  if (recommendedMeetings.length === 0) return null;
+
   return (
     <section>
       <h2 className="text-sosoeat-gray-900 mb-4 text-2xl font-semibold">이런 모임은 어때요?</h2>

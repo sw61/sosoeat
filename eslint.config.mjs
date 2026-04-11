@@ -19,6 +19,7 @@ const eslintConfig = [
       '.next/**',
       'node_modules/**',
       'dist/**',
+      'storybook-static/**',
       'public/**',
       'coverage/**',
       'src/types/generated-client/**',

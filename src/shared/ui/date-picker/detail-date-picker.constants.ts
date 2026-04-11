@@ -1,9 +1,9 @@
 import type { DetailDatePickerProps } from './detail-date-picker.type';
 
-export const DETAIL_DATE_PICKER_TRIGGER_CLASS = 'min-w-42.5';
+export const DETAIL_DATE_PICKER_TRIGGER_CLASS = 'min-w-0 max-w-full';
 
 export const DETAIL_DATE_PICKER_TRIGGER_CONTENT_CLASS =
-  'flex min-w-23.25 items-center justify-end gap-1 text-base font-medium';
+  'flex min-w-0 items-center justify-end gap-1 text-base font-medium overflow-hidden';
 
 export const DETAIL_DATE_PICKER_POPOVER_CONTENT_CLASS = 'w-74.5 p-4';
 

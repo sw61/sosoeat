@@ -20,7 +20,7 @@ export function ActionButton({ config, category, onClick, pending }: ActionButto
   if (config.variant === 'disabled') {
     return (
       <Button
-        className="text-sosoeat-gray-700 border-sosoeat-gray-300 bg-sosoeat-gray-200 h-full w-full cursor-not-allowed rounded-2xl border-2 text-sm md:text-base lg:text-xl"
+        className="text-sosoeat-gray-700 border-sosoeat-gray-300 bg-sosoeat-gray-200 h-full w-full cursor-not-allowed rounded-2xl border-2 text-sm md:text-xl"
         disabled
       >
         {config.label}
