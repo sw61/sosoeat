@@ -20,14 +20,17 @@ export async function MeetingHeroFetcher({ meetingId }: Props) {
   queryClient.setQueryData(meetingsQueryOptions.meetingDetail(meetingId).queryKey, meeting);
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <MeetingHeroSection key={`${meeting.id}-${meeting.updatedAt}`} meetingId={meetingId} />
-      <MeetingDescriptionSection description={meeting.description} />
-      <MeetingLocationSection
-        address={meeting.address}
-        latitude={meeting.latitude}
-        longitude={meeting.longitude}
-      />
-    </HydrationBoundary>
+    <>
+      <link rel="preload" as="image" href={meeting.image} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <MeetingHeroSection key={`${meeting.id}-${meeting.updatedAt}`} meetingId={meetingId} />
+        <MeetingDescriptionSection description={meeting.description} />
+        <MeetingLocationSection
+          address={meeting.address}
+          latitude={meeting.latitude}
+          longitude={meeting.longitude}
+        />
+      </HydrationBoundary>
+    </>
   );
 }
