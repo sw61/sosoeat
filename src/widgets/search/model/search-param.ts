@@ -1,4 +1,4 @@
-import { createSearchParamsCache,parseAsIsoDate, parseAsStringEnum  } from 'nuqs/server';
+import { createSearchParamsCache, parseAsIsoDate, parseAsStringEnum } from 'nuqs/server';
 
 export const searchParamsCache = createSearchParamsCache({
   dateStart: parseAsIsoDate,
