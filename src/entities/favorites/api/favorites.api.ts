@@ -1,6 +1,12 @@
 import { fetchClient } from '@/shared/api/fetch-client';
+import { FavoriteList } from '@/shared/types/generated-client';
 
 export const favoritesApi = {
+  async fetchList(): Promise<FavoriteList> {
+    const res = await fetchClient.get('/favorites');
+    if (!res.ok) return { data: [], nextCursor: '', hasMore: false };
+    return res.json();
+  },
   async favoritePost(meetingId: number): Promise<void> {
     const response = await fetchClient.post(`/meetings/${meetingId}/favorites`);
     if (!response.ok) {

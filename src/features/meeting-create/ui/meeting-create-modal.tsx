@@ -1,15 +1,32 @@
 'use client';
 
 import { cn } from '@/shared/lib/utils';
+import type { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 import { Button } from '@/shared/ui/button';
-import { Dialog, DialogContent, DialogTitle } from '@/shared/ui/dialog';
 import { Funnel, Step } from '@/shared/ui/funnel/funnel';
+import { ResponsiveModal } from '@/shared/ui/responsive-modal/responsive-modal';
 
 import { STEP_TITLES } from '../model/meeting-create.constants';
 import type { MeetingCreateModalProps, MeetingFormData } from '../model/meeting-create.types';
 import { useMeetingForm } from '../model/use-meeting-form';
 
 import { StepBasicInfo, StepCategory, StepDescription, StepSchedule } from './_components';
+
+function toCreateMeetingPayload(data: MeetingFormData): CreateMeeting {
+  return {
+    type: data.type,
+    name: data.name,
+    region: data.region,
+    address: [data.addressBase, data.address].filter(Boolean).join(', ') || undefined,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    image: data.image,
+    description: data.description,
+    dateTime: new Date(`${data.meetingDate}T${data.meetingTime}`),
+    registrationEnd: new Date(`${data.registrationEndDate}T${data.registrationEndTime}`),
+    capacity: data.capacity,
+  };
+}
 
 const CTA_BASE_CLASS =
   'h-[48px] flex-1 rounded-[12px] text-sm md:text-base font-semibold transition-all md:h-[60px] md:rounded-[16px]';
@@ -26,37 +43,24 @@ const StepIndicator = ({ label }: { label: string }) => {
   );
 };
 
-export const MeetingCreateForm = ({ onClose, onSubmit }: Omit<MeetingCreateModalProps, 'open'>) => {
-  const {
-    form,
-    currentStep,
-    stepLabel,
-    isFirstStep,
-    isLastStep,
-    isCurrentStepValid,
-    goNext,
-    goPrev,
-    reset,
-  } = useMeetingForm();
+type MeetingCreateFormProps = Omit<MeetingCreateModalProps, 'open'> &
+  ReturnType<typeof useMeetingForm>;
 
+export const MeetingCreateForm = ({
+  onClose,
+  onSubmit,
+  form,
+  currentStep,
+  stepLabel,
+  isFirstStep,
+  isLastStep,
+  isCurrentStepValid,
+  goNext,
+  goPrev,
+}: MeetingCreateFormProps) => {
   const handleSubmit = async (data: MeetingFormData) => {
-    const payload = {
-      name: data.name,
-      type: data.type,
-      region: data.region,
-      address: data.address,
-      latitude: data.latitude,
-      longitude: data.longitude,
-      dateTime: new Date(`${data.meetingDate}T${data.meetingTime}`),
-      registrationEnd: new Date(`${data.registrationEndDate}T${data.registrationEndTime}`),
-      capacity: data.capacity,
-      image: data.image,
-      description: data.description,
-    };
     try {
-      await onSubmit(payload);
-      reset();
-      onClose();
+      await onSubmit(toCreateMeetingPayload(data));
     } catch {
       // useCreateMeeting.onError에서 toast 처리 — 모달만 유지
     }
@@ -152,29 +156,21 @@ export const MeetingCreateForm = ({ onClose, onSubmit }: Omit<MeetingCreateModal
  * />
  */
 export const MeetingCreateModal = ({ open, onClose, onSubmit }: MeetingCreateModalProps) => {
-  const handleOpenChange = (isOpen: boolean) => {
-    if (!isOpen) {
-      onClose();
-    }
+  const meetingForm = useMeetingForm();
+
+  const handleClose = () => {
+    meetingForm.reset();
+    onClose();
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent
-        showCloseButton
-        aria-modal="true"
-        className={cn(
-          'flex h-auto max-h-[90dvh] w-[343px] flex-col gap-0 overflow-hidden rounded-[24px] p-0 md:w-[544px] md:max-w-none md:rounded-[40px]',
-          '[&_button[data-slot=dialog-close]]:text-sosoeat-gray-700',
-          '[&_button[data-slot=dialog-close]]:top-8 [&_button[data-slot=dialog-close]]:right-8',
-          '[&_button[data-slot=dialog-close]]:h-6 [&_button[data-slot=dialog-close]]:w-6',
-          '[&_button[data-slot=dialog-close]_svg]:h-6 [&_button[data-slot=dialog-close]_svg]:w-6',
-          '[&_button[data-slot=dialog-close]]:p-0'
-        )}
-      >
-        <DialogTitle className="sr-only">모임 생성</DialogTitle>
-        <MeetingCreateForm onClose={onClose} onSubmit={onSubmit} />
-      </DialogContent>
-    </Dialog>
+    <ResponsiveModal
+      open={open}
+      onClose={handleClose}
+      ariaLabel="모임 생성"
+      className="md:w-136 md:max-w-none md:rounded-[40px]"
+    >
+      <MeetingCreateForm {...meetingForm} onClose={handleClose} onSubmit={onSubmit} />
+    </ResponsiveModal>
   );
 };
