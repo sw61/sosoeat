@@ -93,14 +93,14 @@ export function MeetingHeroSection({ meetingId }: MeetingHeroSectionProps) {
 
   return (
     <>
-      <div className="flex flex-col gap-6 md:flex-row">
-        <div className="relative h-[241px] w-full overflow-hidden rounded-[24px] md:h-auto md:min-w-0 md:flex-1">
+      <div className="flex flex-col gap-4 md:flex-row md:gap-6">
+        <div className="relative w-full overflow-hidden rounded-[24px] max-md:aspect-[3/2] md:min-w-0 md:flex-1">
           <Image
             src={meeting.image}
             alt={meeting.name}
             fill
             priority
-            sizes="(max-width: 768px) 670px, 654px"
+            sizes="(max-width: 767px) calc(100vw - 32px), calc(50vw - 40px)"
             draggable={false}
             className="object-cover"
           />
