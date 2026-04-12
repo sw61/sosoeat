@@ -79,7 +79,7 @@ export function CommentInput({
             event.preventDefault();
             handleSubmit();
           }}
-          className="text-sosoeat-gray-900 placeholder:text-sosoeat-gray-700 max-h-40 min-h-[23px] flex-1 resize-none border-0 bg-transparent px-0 py-1.5 text-base font-normal shadow-none focus-visible:ring-0 md:text-base"
+          className="text-sosoeat-gray-900 placeholder:text-sosoeat-gray-700 max-h-40 min-h-[23px] flex-1 resize-none overflow-hidden border-0 bg-transparent px-0 py-1.5 text-base font-normal shadow-none focus-visible:ring-0 md:text-base"
         />
 
         <Button
