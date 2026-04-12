@@ -95,7 +95,6 @@ export const useLogoutMutation = () => {
     onSuccess: (redirectUrl) => {
       logout();
       queryClient.clear();
-      toast.success('로그아웃 되었습니다.');
       router.push(redirectUrl);
     },
   });
