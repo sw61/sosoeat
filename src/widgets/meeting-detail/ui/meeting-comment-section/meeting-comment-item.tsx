@@ -213,7 +213,7 @@ export function MeetingCommentItem({
 
       {/* ── 대댓글 목록 ── */}
       {replies && replies.filter((r) => !r.isDeleted).length > 0 && (
-        <div className="mt-3 ml-14 space-y-3 md:ml-[78px]">
+        <div className="mt-3 ml-16 space-y-3 md:ml-[78px]">
           {replies
             .filter((r) => !r.isDeleted)
             .map((reply) => (
