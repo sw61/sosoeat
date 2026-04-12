@@ -18,6 +18,11 @@ jest.mock('@/entities/meeting', () => ({
     leave: jest.fn(),
     deleteMeeting: jest.fn(),
   },
+  meetingsQueryOptions: {
+    meetingDetail: (id: number) => ({
+      queryKey: ['meetings', 'detail', id],
+    }),
+  },
   mypageMeetingCountKey: ['users', 'me', 'meeting-count'],
 }));
 

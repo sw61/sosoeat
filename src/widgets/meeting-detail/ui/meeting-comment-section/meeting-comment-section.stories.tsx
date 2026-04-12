@@ -1,6 +1,10 @@
+import { Suspense } from 'react';
+
 import type { Decorator, Meta, StoryObj } from '@storybook/nextjs-vite';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/entities/auth';
+import { meetingCommentKeys } from '@/entities/meeting-comment';
 
 import { MeetingCommentSection } from './meeting-comment-section';
 import type { MeetingComment } from './meeting-comment-section.types';
@@ -93,6 +97,21 @@ const withAuthState =
     return <Story />;
   };
 
+const withSeededQueryClient =
+  (comments: MeetingComment[], count = 0): Decorator =>
+  (Story) => {
+    const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    queryClient.setQueryData(meetingCommentKeys.list(1), comments);
+    queryClient.setQueryData(meetingCommentKeys.count(1), { count });
+    return (
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={null}>
+          <Story />
+        </Suspense>
+      </QueryClientProvider>
+    );
+  };
+
 const MOCK_USER = { id: 1, name: '홍길동', email: 'test@example.com' };
 
 const meta = {
@@ -110,7 +129,6 @@ const meta = {
   ],
   args: {
     meetingId: 1,
-    initialComments: mockComments,
   },
 } satisfies Meta<typeof MeetingCommentSection>;
 
@@ -119,29 +137,24 @@ type Story = StoryObj<typeof meta>;
 
 export const NotLoggedIn: Story = {
   name: '비로그인 (입력창 비활성화)',
-  args: {
-    meetingId: 1,
-    initialComments: mockComments,
-  },
-  decorators: [withAuthState({ user: null, isAuthenticated: false })],
+  decorators: [
+    withSeededQueryClient(mockComments, 2),
+    withAuthState({ user: null, isAuthenticated: false }),
+  ],
 };
 
 export const LoggedIn: Story = {
   name: '로그인 (입력창 활성화)',
-  args: {
-    meetingId: 1,
-    initialComments: mockComments,
-  },
-  decorators: [withAuthState({ user: MOCK_USER, isAuthenticated: true })],
+  decorators: [
+    withSeededQueryClient(mockComments, 2),
+    withAuthState({ user: MOCK_USER, isAuthenticated: true }),
+  ],
 };
 
 export const LoggedInWithProfileImage: Story = {
   name: '로그인 / 프로필 이미지',
-  args: {
-    meetingId: 1,
-    initialComments: mockComments,
-  },
   decorators: [
+    withSeededQueryClient(mockComments, 2),
     withAuthState({
       user: {
         ...MOCK_USER,
@@ -154,18 +167,16 @@ export const LoggedInWithProfileImage: Story = {
 
 export const WithScroll: Story = {
   name: '스크롤 (댓글 6개 이상)',
-  args: {
-    meetingId: 1,
-    initialComments: manyMockComments,
-  },
-  decorators: [withAuthState({ user: MOCK_USER, isAuthenticated: true })],
+  decorators: [
+    withSeededQueryClient(manyMockComments, 6),
+    withAuthState({ user: MOCK_USER, isAuthenticated: true }),
+  ],
 };
 
 export const Empty: Story = {
   name: '댓글 없음',
-  args: {
-    meetingId: 1,
-    initialComments: [],
-  },
-  decorators: [withAuthState({ user: MOCK_USER, isAuthenticated: true })],
+  decorators: [
+    withSeededQueryClient([], 0),
+    withAuthState({ user: MOCK_USER, isAuthenticated: true }),
+  ],
 };
