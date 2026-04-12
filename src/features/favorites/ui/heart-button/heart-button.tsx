@@ -31,6 +31,7 @@ const ringSizeClass = {
 
 export function HeartButton({
   className,
+  sizeClass,
   size = 'lg',
   isFavorited = false,
   meetingId,
@@ -58,7 +59,7 @@ export function HeartButton({
       <Button
         variant="ghost"
         size="icon"
-        className={cn(HEART_BUTTON_CLASS, ringSizeClass[size])}
+        className={cn(HEART_BUTTON_CLASS, sizeClass ?? ringSizeClass[size])}
         onClick={handleClick}
       >
         <motion.div
