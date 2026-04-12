@@ -43,7 +43,7 @@ export default async function MeetingDetailPage({ params }: Props) {
   const meetingId = Number(id);
 
   return (
-    <main className="space-y-[30px] py-10">
+    <main className="space-y-[30px] py-6 md:py-8 lg:py-10">
       <Suspense fallback={<MeetingHeroSkeleton />}>
         <MeetingHeroFetcher meetingId={meetingId} />
       </Suspense>
