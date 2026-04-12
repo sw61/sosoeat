@@ -8,13 +8,12 @@ import Image from 'next/image';
 import { ImagePlus, Loader2 } from 'lucide-react';
 
 import { MIME_TO_EXT, useUploadImage } from '@/entities/image';
+import type { LocationSearchResult } from '@/entities/location';
+import { LocationSearchModal } from '@/entities/location';
 import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/ui/input/input';
 
 import type { StepProps } from '../../model/meeting-create.types';
-
-import { LocationSearchModal } from './location-search/location-search-modal';
-import type { LocationSearchResult } from './location-search/model/location-search.types';
 
 const ACCEPTED_IMAGE_TYPES = Object.keys(MIME_TO_EXT).join(',');
 

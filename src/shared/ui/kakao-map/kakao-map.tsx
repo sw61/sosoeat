@@ -71,8 +71,8 @@ export function KakaoMap({ latitude, longitude, className }: KakaoMapProps) {
     <div
       ref={containerRef}
       className={cn(
-        'h-[240px] w-full cursor-grab outline-none select-none **:outline-none **:select-none active:cursor-grabbing md:h-[320px] lg:h-[352px]',
-        className
+        'w-full cursor-grab outline-none select-none **:outline-none **:select-none active:cursor-grabbing',
+        className ?? 'h-[240px] md:h-[320px] lg:h-[352px]'
       )}
     />
   );

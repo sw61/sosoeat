@@ -7,14 +7,18 @@ import { Loader2, Search } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input/input';
 
-import { useSearchLocation } from './api/use-search-location';
-import type { LocationSearchModalProps, LocationSearchResult } from './model/location-search.types';
+import { useSearchLocation } from '../api/location.queries';
+import type { LocationSearchResult } from '../model/location.types';
+import type { LocationSearchModalProps } from '../model/location-search.types';
+
 import { LocationMapPreview } from './location-map-preview';
 import { LocationResultItem } from './location-result-item';
 
-type LocationSearchViewProps = Omit<LocationSearchModalProps, 'open'>;
+type LocationSearchViewProps = Omit<LocationSearchModalProps, 'open'> & {
+  mapClassName?: string;
+};
 
-export function LocationSearchView({ onClose, onSelect }: LocationSearchViewProps) {
+export function LocationSearchView({ onClose, onSelect, mapClassName }: LocationSearchViewProps) {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<LocationSearchResult | null>(null);
 
@@ -60,7 +64,7 @@ export function LocationSearchView({ onClose, onSelect }: LocationSearchViewProp
           <LocationMapPreview
             latitude={selected.latitude}
             longitude={selected.longitude}
-            className="h-32 md:h-40"
+            className={mapClassName ?? 'h-24 md:h-32'}
           />
         </div>
       )}

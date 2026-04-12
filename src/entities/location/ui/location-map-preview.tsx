@@ -9,7 +9,7 @@ import { cn } from '@/shared/lib/utils';
 
 const KakaoMap = dynamic(() => import('@/shared/ui/kakao-map/kakao-map').then((m) => m.KakaoMap), {
   ssr: false,
-  loading: () => <div className="bg-sosoeat-gray-100 h-45 w-full rounded-xl" />,
+  loading: () => <div className="bg-sosoeat-gray-100 h-24 w-full rounded-xl md:h-32" />,
 });
 
 interface LocationMapPreviewProps {
@@ -37,7 +37,9 @@ export function LocationMapPreview({ latitude, longitude, className }: LocationM
         {sdkReady ? (
           <KakaoMap latitude={latitude} longitude={longitude} className={className} />
         ) : (
-          <div className={cn('bg-sosoeat-gray-100 w-full rounded-xl', className ?? 'h-45')} />
+          <div
+            className={cn('bg-sosoeat-gray-100 w-full rounded-xl', className ?? 'h-24 md:h-32')}
+          />
         )}
       </div>
     </>

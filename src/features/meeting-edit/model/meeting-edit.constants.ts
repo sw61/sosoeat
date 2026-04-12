@@ -1,9 +1,8 @@
+import { CATEGORY_OPTIONS } from '@/shared/constants/meeting.constants';
+
 import type { MeetingEditTab } from './meeting-edit.types';
 
-export const CATEGORY_OPTIONS = [
-  { value: 'groupEat', label: '함께먹기' },
-  { value: 'groupBuy', label: '공동구매' },
-] as const;
+export { CATEGORY_OPTIONS };
 
 export const EDIT_TABS: { value: MeetingEditTab; label: string }[] = [
   { value: 'basicInfo', label: '기본정보' },
@@ -14,6 +13,7 @@ export const BASIC_INFO_KEYS = [
   'name',
   'type',
   'region',
+  'addressBase',
   'address',
   'image',
   'description',

@@ -2,7 +2,7 @@ import { MapPin } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 
-import type { LocationSearchResult } from './model/location-search.types';
+import type { LocationSearchResult } from '../model/location.types';
 
 interface LocationResultItemProps {
   result: LocationSearchResult;
