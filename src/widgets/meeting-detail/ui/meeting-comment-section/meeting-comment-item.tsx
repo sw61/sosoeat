@@ -66,7 +66,7 @@ export function MeetingCommentItem({
       <div className={cn('px-4 py-3', isReply && 'bg-sosoeat-orange-100 rounded-[24px]')}>
         <div className="flex gap-2">
           {/* ── 아바타 ── */}
-          <Avatar className="size-[54px] shrink-0">
+          <Avatar className="size-10 shrink-0 md:size-[54px]">
             <AvatarImage src={author.profileUrl ?? undefined} alt={author.nickname} />
             <AvatarFallback className="text-sosoeat-orange-600">
               <UserRound className="size-6" />
@@ -213,7 +213,7 @@ export function MeetingCommentItem({
 
       {/* ── 대댓글 목록 ── */}
       {replies && replies.filter((r) => !r.isDeleted).length > 0 && (
-        <div className="mt-3 ml-[78px] space-y-3">
+        <div className="mt-3 ml-14 space-y-3 md:ml-[78px]">
           {replies
             .filter((r) => !r.isDeleted)
             .map((reply) => (
