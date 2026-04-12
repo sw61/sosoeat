@@ -113,7 +113,7 @@ const MeetingEditForm = ({
         onSubmit={form.handleSubmit(handleSubmit, handleInvalid)}
         className="flex min-h-0 flex-1 flex-col overflow-hidden"
       >
-        <div className="min-h-0 flex-1 overflow-y-auto pt-12 pb-6 [scrollbar-width:thin]">
+        <div className="min-h-0 flex-1 overflow-y-auto py-4 [scrollbar-width:thin]">
           {activeTab === 'basicInfo' ? (
             <TabBasicInfo
               form={form}

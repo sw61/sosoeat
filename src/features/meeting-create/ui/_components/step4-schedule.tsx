@@ -7,14 +7,14 @@ import { Input } from '@/shared/ui/input/input';
 
 import type { StepProps } from '../../model/meeting-create.types';
 
+const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
+
 /**
  * 4단계: 모임 일정/정원 설정
  */
 export const StepSchedule = ({ form }: StepProps) => {
   const { register, control } = form;
   const { errors } = useFormState({ control });
-
-  const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
 
   return (
     <div className="flex flex-col gap-5">
@@ -71,8 +71,10 @@ export const StepSchedule = ({ form }: StepProps) => {
             />
           )}
         />
-        {errors.registrationEndDate && (
-          <p className="text-destructive ml-1 text-xs">{errors.registrationEndDate.message}</p>
+        {(errors.registrationEndDate || errors.registrationEndTime) && (
+          <p className="text-destructive ml-1 text-xs">
+            {errors.registrationEndDate?.message || errors.registrationEndTime?.message}
+          </p>
         )}
       </div>
 
@@ -87,11 +89,8 @@ export const StepSchedule = ({ form }: StepProps) => {
           placeholder="최소 2명 이상 입력해 주세요."
           className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 h-10 border-transparent text-sm font-normal md:h-12 md:text-base"
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.ctrlKey || e.metaKey) return;
-            if (
-              !/^\d$/.test(e.key) &&
-              !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
-            ) {
+            if (e.key.length > 1 || e.ctrlKey || e.metaKey) return;
+            if (!/^\d$/.test(e.key)) {
               e.preventDefault();
             }
           }}

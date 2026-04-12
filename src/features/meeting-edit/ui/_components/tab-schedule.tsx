@@ -100,11 +100,8 @@ export const TabSchedule = ({ form }: TabProps) => {
           placeholder="최소 2명 이상 입력해 주세요."
           className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 h-10 border-transparent text-sm font-normal md:h-12 md:text-base"
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.ctrlKey || e.metaKey) return;
-            if (
-              !/^\d$/.test(e.key) &&
-              !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
-            ) {
+            if (e.key.length > 1 || e.ctrlKey || e.metaKey) return;
+            if (!/^\d$/.test(e.key)) {
               e.preventDefault();
             }
           }}

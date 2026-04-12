@@ -57,14 +57,18 @@ export function NavigationBar({
           />
 
           <div className="flex items-center gap-2">
-            <NavActions user={user} onOpenCreateModal={handleOpen} onLogout={performLogout} />
+            <NavActions
+              user={user}
+              onOpenCreateModal={handleOpen}
+              onLogout={() => performLogout(undefined)}
+            />
             <MobileSheet
               user={user}
               pathname={pathname}
               searchParams={searchParams}
               favoritesCount={favoritesCount ?? initialFavoritesCount}
               onLoginRequired={() => setLoginRequired(true)}
-              onLogout={performLogout}
+              onLogout={() => performLogout(undefined)}
             />
           </div>
         </div>

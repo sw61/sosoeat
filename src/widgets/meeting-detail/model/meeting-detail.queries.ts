@@ -66,7 +66,7 @@ export const useDeleteMeeting = (id: number) => {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       toast.success('모임이 삭제되었습니다.');
-      router.push('/meetings');
+      router.back();
     },
     onError: (error: Error) => {
       toast.error(error.message || '모임 삭제 중 오류가 발생했습니다.');

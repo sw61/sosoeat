@@ -11,7 +11,8 @@ export const toMeetingEditFormData = (meeting: Meeting): MeetingEditFormData => 
   const dateTime = new Date(meeting.dateTime);
   const registrationEnd = new Date(meeting.registrationEnd);
 
-  const [addressBase = '', address = ''] = (meeting.address ?? '').split(', ');
+  const [addressBase = '', ...addressParts] = (meeting.address ?? '').split(', ');
+  const address = addressParts.join(', ');
 
   return {
     type: meeting.type,

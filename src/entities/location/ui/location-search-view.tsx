@@ -64,7 +64,7 @@ export function LocationSearchView({ onClose, onSelect, mapClassName }: Location
           <LocationMapPreview
             latitude={selected.latitude}
             longitude={selected.longitude}
-            className={mapClassName ?? 'h-32 md:h-40'}
+            className={mapClassName ?? 'h-24 md:h-32'}
           />
         </div>
       )}

@@ -91,12 +91,12 @@ export const useLogoutMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => authApi.logout(),
-    onSuccess: () => {
+    mutationFn: (redirectUrl?: string) => authApi.logout().then(() => redirectUrl ?? '/home'),
+    onSuccess: (redirectUrl) => {
       logout();
       queryClient.clear();
       toast.success('로그아웃 되었습니다.');
-      router.push('/home');
+      router.push(redirectUrl);
     },
   });
 };

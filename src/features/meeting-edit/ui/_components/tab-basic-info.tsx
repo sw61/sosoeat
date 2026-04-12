@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
 
 import Image from 'next/image';
@@ -10,6 +9,7 @@ import { ImagePlus, Loader2 } from 'lucide-react';
 import { MIME_TO_EXT } from '@/entities/image';
 import type { LocationSearchResult } from '@/entities/location';
 import { LocationSearchModal } from '@/entities/location';
+import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
 import {
   DropdownMenu,
@@ -46,16 +46,16 @@ export const TabBasicInfo = ({ form, isUploadPending, uploadError, onFileChange 
     control,
     formState: { errors },
   } = form;
-  const [locationModalOpen, setLocationModalOpen] = useState(false);
+  const locationModal = useModal();
 
   const handleLocationSelect = (result: LocationSearchResult) => {
     const region = [result.region1, result.region2].filter(Boolean).join(' ');
-    form.setValue('region', region, { shouldValidate: true });
-    form.setValue('addressBase', result.addressName, { shouldValidate: true });
-    form.setValue('address', result.placeName, { shouldValidate: true });
-    form.setValue('latitude', result.latitude);
-    form.setValue('longitude', result.longitude);
-    setLocationModalOpen(false);
+    form.setValue('region', region, { shouldDirty: true, shouldValidate: true });
+    form.setValue('addressBase', result.addressName, { shouldDirty: true, shouldValidate: true });
+    form.setValue('address', result.placeName, { shouldDirty: true, shouldValidate: true });
+    form.setValue('latitude', result.latitude, { shouldDirty: true });
+    form.setValue('longitude', result.longitude, { shouldDirty: true });
+    locationModal.close();
   };
 
   return (
@@ -145,7 +145,7 @@ export const TabBasicInfo = ({ form, isUploadPending, uploadError, onFileChange 
                   placeholder="건물, 지번 또는 도로명 검색"
                   className={cn(inputClassName, 'cursor-pointer pr-10')}
                   readOnly
-                  onClick={() => setLocationModalOpen(true)}
+                  onClick={locationModal.open}
                   value={field.value}
                   onChange={field.onChange}
                 />
@@ -174,8 +174,8 @@ export const TabBasicInfo = ({ form, isUploadPending, uploadError, onFileChange 
       </div>
 
       <LocationSearchModal
-        open={locationModalOpen}
-        onClose={() => setLocationModalOpen(false)}
+        open={locationModal.isOpen}
+        onClose={locationModal.close}
         onSelect={handleLocationSelect}
         mapClassName="h-24 md:h-32"
       />
