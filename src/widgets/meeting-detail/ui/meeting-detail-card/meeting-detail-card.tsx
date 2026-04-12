@@ -161,13 +161,20 @@ interface ActionRowProps {
 function ActionRow({ actionButton, meetingId, isFavorited }: ActionRowProps) {
   return (
     <div className="flex items-center gap-2">
-      <div className="h-10 w-full md:h-[62px]">{actionButton}</div>
-      {/* sm·md: 40×40 */}
+      <div className="h-10 w-full md:h-[52px] lg:h-[62px]">{actionButton}</div>
+      {/* sm: 40×40 */}
       <HeartButton
         meetingId={meetingId}
         isFavorited={isFavorited}
         size="sm"
-        className="border-sosoeat-gray-500 relative inset-auto m-0 lg:hidden"
+        className="border-sosoeat-gray-500 relative inset-auto m-0 md:hidden"
+      />
+      {/* md: 50×50 */}
+      <HeartButton
+        meetingId={meetingId}
+        isFavorited={isFavorited}
+        size="md"
+        className="border-sosoeat-gray-500 relative inset-auto m-0 hidden md:block lg:hidden"
       />
       {/* lg: 60×60 */}
       <HeartButton
