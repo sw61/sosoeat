@@ -173,6 +173,7 @@ function ActionRow({ actionButton, meetingId, isFavorited }: ActionRowProps) {
         isFavorited={isFavorited}
         size="lg"
         sizeClass="size-10 md:size-[50px] lg:size-[60px]"
+        iconClass="size-6 md:size-[38px] lg:size-10"
         className="border-sosoeat-gray-500 relative inset-auto m-0"
       />
     </div>
