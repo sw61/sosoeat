@@ -55,7 +55,7 @@ export function MeetingCommentSection({
   return (
     <section
       className={cn(
-        'border-sosoeat-gray-200 w-full rounded-[24px] border bg-white px-6 py-4',
+        'border-sosoeat-gray-200 w-full rounded-[24px] border bg-white px-4 py-4 md:px-6',
         className
       )}
     >
