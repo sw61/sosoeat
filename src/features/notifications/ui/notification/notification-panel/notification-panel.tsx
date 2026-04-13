@@ -259,12 +259,11 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
         <NotificationTrigger className={triggerClassName} unreadCount={unreadCount ?? 0} />
       </DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
-        {/* 외부 클릭 시 닫기 — modal=false이면 Overlay의 pointerDown 이벤트가 없으므로 직접 처리 */}
-        <DialogPrimitive.Overlay
-          className="fixed inset-0 z-40 bg-black/30 md:bg-transparent"
-          onClick={() => setOpen(false)}
-        />
-        <DialogPrimitive.Content aria-describedby={undefined} className={cn(PANEL_CONTENT_CLASS)}>
+        <DialogPrimitive.Content
+          aria-describedby={undefined}
+          className={cn(PANEL_CONTENT_CLASS)}
+          onInteractOutside={() => setOpen(false)}
+        >
           <DialogPrimitive.Title className="sr-only">알림</DialogPrimitive.Title>
           <NotificationPanelContent
             titleId={titleId}

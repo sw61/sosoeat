@@ -17,15 +17,13 @@ export const NotificationItem = (props: Notification) => {
   const { markAsRead, deleteNotification } = useNotificationReadActions(props.id);
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      className="h-auto w-full shrink-0 cursor-pointer"
-      onClick={markAsRead}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') markAsRead();
-      }}
-    >
+    <div className="relative h-auto w-full shrink-0">
+      <button
+        type="button"
+        aria-label={`${title} 알림 읽음 처리`}
+        className="absolute inset-0 cursor-pointer"
+        onClick={markAsRead}
+      />
       <div
         className={cn(
           'flex min-h-[90px] w-[314px] shrink-0 flex-row items-start gap-4 pt-3 pr-3 pb-4 pl-5',
@@ -41,7 +39,7 @@ export const NotificationItem = (props: Notification) => {
               <span className="text-sosoeat-gray-900 text-xs font-semibold">{title}</span>
               {isMeetingConfirmed ? <ReadCheckIcon /> : null}
             </div>
-            <div className="flex shrink-0 flex-row items-center justify-center gap-1">
+            <div className="relative z-10 flex shrink-0 flex-row items-center justify-center gap-1">
               {highlighted ? metaDot : null}
               <span className="text-sosoeat-gray-700 text-xs font-normal" suppressHydrationWarning>
                 {metaRight}
@@ -49,11 +47,8 @@ export const NotificationItem = (props: Notification) => {
               <button
                 type="button"
                 aria-label="알림 삭제"
-                className="text-sosoeat-gray-400 hover:text-sosoeat-gray-900 flex size-4 cursor-pointer items-center justify-center transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteNotification();
-                }}
+                className="text-sosoeat-gray-400 hover:text-sosoeat-gray-900 relative z-10 flex size-4 cursor-pointer items-center justify-center transition-colors"
+                onClick={deleteNotification}
               >
                 <X className="size-3.5" strokeWidth={2} />
               </button>

@@ -60,6 +60,9 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
               width={32}
               height={32}
               className="bg-sosoeat-gray-200 size-8 shrink-0 rounded-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = '/images/basic-profile.svg';
+              }}
             />
           </button>
         </DropdownMenuTrigger>
