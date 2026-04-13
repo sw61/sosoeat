@@ -54,7 +54,7 @@ jest.mock('@/features/notifications/api/notifications.api', () => ({
 
 describe('NotificationTab', () => {
   beforeEach(() => {
-    jest.spyOn(notificationApi, 'markAsRead').mockResolvedValue({ ok: true } as Response);
+    jest.spyOn(notificationApi, 'markAsRead').mockResolvedValue(undefined);
   });
 
   afterEach(() => {
