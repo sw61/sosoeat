@@ -1,4 +1,5 @@
 import { fetchClient } from '@/shared/api/fetch-client';
+import { parseResponse, parseVoidResponse } from '@/shared/api/parse-response';
 import { LoginRequest, SignupRequest } from '@/shared/types/generated-client/models';
 
 import { AuthUser } from '../model/auth.types';
@@ -19,13 +20,7 @@ export const authApi = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '로그인에 실패했습니다.');
-    }
-
-    return response.json();
+    return parseResponse<AuthResponse>(response, '로그인에 실패했습니다.');
   },
 
   /**
@@ -34,13 +29,7 @@ export const authApi = {
    */
   async checkEmailDuplicate(email: string): Promise<{ available: boolean }> {
     const response = await fetchClient.post('/auth/email-check', { email });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '올바른 이메일 형식이 아닙니다.');
-    }
-
-    return response.json();
+    return parseResponse<{ available: boolean }>(response, '올바른 이메일 형식이 아닙니다.');
   },
 
   /**
@@ -49,11 +38,7 @@ export const authApi = {
    */
   async signUp(payload: SignupRequest): Promise<void> {
     const response = await fetchClient.post('/auth/signup', payload);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '회원가입에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '회원가입에 실패했습니다.');
   },
 
   /**
@@ -79,12 +64,6 @@ export const authApi = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '소셜 로그인에 실패했습니다.');
-    }
-
-    return response.json();
+    return parseResponse<AuthResponse>(response, '소셜 로그인에 실패했습니다.');
   },
 };
