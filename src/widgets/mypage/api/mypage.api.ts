@@ -1,5 +1,10 @@
 import { fetchClient } from '@/shared/api/fetch-client';
-import { FavoriteList, UserMeetingsResponse } from '@/shared/types/generated-client';
+import { FavoriteList, UserMeeting, UserMeetingsResponse } from '@/shared/types/generated-client';
+
+export type UserMeetingWithImage = UserMeeting & { image?: string };
+export type UserMeetingsResponseWithImage = Omit<UserMeetingsResponse, 'data'> & {
+  data: UserMeetingWithImage[];
+};
 
 const MAX_FETCH_SIZE = 100;
 
@@ -10,7 +15,7 @@ export const mypageApi = {
     return res.json();
   },
 
-  fetchCreatedMeetings: async (): Promise<UserMeetingsResponse> => {
+  fetchCreatedMeetings: async (): Promise<UserMeetingsResponseWithImage> => {
     const res = await fetchClient.get('/users/me/meetings?type=created');
     if (!res.ok) return { data: [], nextCursor: '', hasMore: false };
     return res.json();

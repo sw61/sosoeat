@@ -1,10 +1,6 @@
-import {
-  FavoriteList,
-  UserMeeting,
-  UserMeetingRoleEnum,
-  UserMeetingsResponse,
-} from '@/shared/types/generated-client';
+import { FavoriteList, UserMeetingRoleEnum } from '@/shared/types/generated-client';
 
+import { UserMeetingsResponseWithImage, UserMeetingWithImage } from '../api/mypage.api';
 import { MyPageCardProps } from '../ui/mypage-card/mypage-card.types';
 
 const parseDateTime = (dateTime: Date | string) => {
@@ -24,7 +20,7 @@ const toVariant = (type?: string): 'groupBuy' | 'groupEat' =>
 
 const toImageUrl = (image?: string) => (image?.startsWith('https://') ? image : undefined);
 
-const toMeetingCard = (m: UserMeeting): MyPageCardProps => ({
+const toMeetingCard = (m: UserMeetingWithImage): MyPageCardProps => ({
   meetingId: m.id,
   href: `/meetings/${m.id}`,
   title: m.name,
@@ -39,7 +35,7 @@ const toMeetingCard = (m: UserMeeting): MyPageCardProps => ({
   isFavorited: false,
 });
 
-export const toUserMeetingCards = (data: UserMeetingsResponse): MyPageCardProps[] =>
+export const toUserMeetingCards = (data: UserMeetingsResponseWithImage): MyPageCardProps[] =>
   data.data.map(toMeetingCard);
 
 export const toFavoriteMeetingCards = (data: FavoriteList): MyPageCardProps[] =>

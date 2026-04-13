@@ -63,12 +63,6 @@ export interface UserMeeting {
   isReviewed?: boolean;
   /**
    *
-   * @type {string}
-   * @memberof UserMeeting
-   */
-  image?: string;
-  /**
-   *
    * @type {UserMeetingRoleEnum}
    * @memberof UserMeeting
    */
@@ -114,7 +108,6 @@ export function UserMeetingFromJSONTyped(json: any, ignoreDiscriminator: boolean
     participantCount: json['participantCount'],
     capacity: json['capacity'],
     isReviewed: json['isReviewed'] == null ? undefined : json['isReviewed'],
-    image: json['image'] == null ? undefined : json['image'],
     role: json['role'],
   };
 }
