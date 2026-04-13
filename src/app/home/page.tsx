@@ -19,9 +19,11 @@ export default async function HomePage() {
     <div>
       <MainBanner />
       <div className="mx-auto max-w-[1136px]">
-        <MeetingTypeSection />
-        <MainPageSection />
-        <BestSoeatSection meetings={bestMeetings} />
+        <div className="mt-8 flex flex-col gap-8">
+          <MeetingTypeSection />
+          <MainPageSection />
+          <BestSoeatSection meetings={bestMeetings} />
+        </div>
         <HowToUseSection />
       </div>
       <CtaSection />

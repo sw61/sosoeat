@@ -21,7 +21,7 @@ const STEPS = [
 
 export function HowToUseSection() {
   return (
-    <section className="px-4 py-10 lg:py-[50px]">
+    <section className="mt-[50px] mb-[72px] px-4 py-10 lg:py-[50px]">
       <div className="flex flex-col items-center gap-8 lg:min-h-[317px] lg:justify-between">
         <div className="flex flex-col items-center gap-2 text-center">
           <h2 className="text-2xl font-bold text-gray-900 lg:text-3xl">

@@ -11,7 +11,7 @@ export function CtaSection() {
   const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
 
   return (
-    <section className="bg-sosoeat-orange-600 relative z-10 mt-16 flex w-full flex-col items-center justify-center gap-8 px-6 py-16 text-white md:mt-[100px] md:py-24">
+    <section className="bg-sosoeat-orange-600 relative z-10 flex w-full flex-col items-center justify-center gap-8 px-6 py-16 text-white md:py-24">
       <div className="flex flex-col items-center gap-3 text-center">
         <h2 className="text-2xl leading-tight font-bold md:text-3xl">지금 바로 시작해볼까요?</h2>
         <p className="max-w-[280px] text-sm font-medium text-white/80 md:max-w-none md:text-base">
