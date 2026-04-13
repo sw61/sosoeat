@@ -1,26 +1,19 @@
 'use client';
 
-import { useIsMaxWidth767 } from '@/shared/lib/use-is-max-width-767';
-import { cn } from '@/shared/lib/utils';
-import { Skeleton } from '@/shared/ui/skeleton';
+import { useUnreadCount } from '../../model/notification.queries';
 
-import {
-  useNotificationInfiniteListRead,
-  useNotificationService,
-} from '../../model/use-notification-service';
+import { NotificationPanel } from './notification-panel/notification-panel';
 
-import { NotificationDialog } from './notification-dialog/notification-dialog';
-import { NotificationPopover } from './notification-popover/notification-popover';
+interface NotificationProps {
+  triggerClassName?: string;
+  initialUnreadCount?: number;
+}
 
-export const Notification = ({ triggerClassName = '' }: { triggerClassName?: string }) => {
-  const { isLoading, isPending } = useNotificationInfiniteListRead();
-  const isNarrow = useIsMaxWidth767();
-  const { unreadCount } = useNotificationService();
-  return isPending ? (
-    <Skeleton className={cn('size-8 rounded-full', triggerClassName)} aria-label="알림 로딩 중" />
-  ) : isNarrow && !isLoading ? (
-    <NotificationDialog triggerClassName={triggerClassName} unreadCount={unreadCount} />
-  ) : !isNarrow && !isLoading ? (
-    <NotificationPopover triggerClassName={triggerClassName} unreadCount={unreadCount} />
-  ) : null;
+export const Notification = ({
+  triggerClassName = '',
+  initialUnreadCount = 0,
+}: NotificationProps) => {
+  const { data: unreadCount = 0 } = useUnreadCount(initialUnreadCount);
+
+  return <NotificationPanel triggerClassName={triggerClassName} unreadCount={unreadCount} />;
 };

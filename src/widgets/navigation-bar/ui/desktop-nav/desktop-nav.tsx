@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { type ReadonlyURLSearchParams } from 'next/navigation';
 
 import { AuthUser } from '@/entities/auth';
 import { cn } from '@/shared/lib/utils';
@@ -12,22 +11,15 @@ import { getIsActive, getNavHref, NAV_ITEMS } from '../../lib/nav.constants';
 interface DesktopNavProps {
   user: AuthUser | null;
   pathname: string | null;
-  searchParams: ReadonlyURLSearchParams | null;
   favoritesCount: number;
   onLoginRequired: () => void;
 }
 
-export function DesktopNav({
-  user,
-  pathname,
-  searchParams,
-  favoritesCount,
-  onLoginRequired,
-}: DesktopNavProps) {
+export function DesktopNav({ user, pathname, favoritesCount, onLoginRequired }: DesktopNavProps) {
   return (
     <nav className="hidden items-center gap-1 md:flex">
       {NAV_ITEMS.map((item) => {
-        const isActive = getIsActive(item, pathname, searchParams);
+        const isActive = getIsActive(item, pathname);
         const href = getNavHref(item, user);
         const className = cn(
           'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors',

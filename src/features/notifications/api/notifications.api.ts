@@ -61,4 +61,18 @@ export const notificationApi = {
       '알림 전체 읽음 처리 중 문제가 생겼어요. 다시 시도해 주세요.'
     );
   },
+  deleteNotification: async (notificationId: number) => {
+    const response = await fetchClient.delete(`/notifications/${notificationId}`);
+    if (!response.ok) {
+      throw new Error(`Failed to delete notification ${notificationId}`);
+    }
+    return response;
+  },
+  deleteAllNotifications: async () => {
+    const response = await fetchClient.delete('/notifications');
+    if (!response.ok) {
+      throw new Error('Failed to delete all notifications');
+    }
+    return response;
+  },
 };
