@@ -38,6 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: meeting.name,
       description: meeting.description,
+      ...(meeting.image && { images: [meeting.image] }),
     },
   };
 }

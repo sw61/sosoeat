@@ -27,6 +27,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: post.content?.slice(0, 150),
       ...(post.image && { images: [{ url: post.image }] }),
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.content?.slice(0, 150),
+      ...(post.image && { images: [post.image] }),
+    },
   };
 }
 
