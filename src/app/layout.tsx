@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import { getFavoritesCount } from '@/entities/favorites/index.server';
+import { getUnreadCountServer } from '@/features/notifications/index.server';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
 import { Toaster } from '@/shared/ui/sonner';
 import { Footer } from '@/widgets/footer';
@@ -27,7 +28,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const initialUser = await CookieStorage.getUser();
-  const initialFavoritesCount = initialUser ? await getFavoritesCount() : 0;
+  const [initialFavoritesCount, initialUnreadCount] = await Promise.all([
+    initialUser ? getFavoritesCount() : Promise.resolve(0),
+    initialUser ? getUnreadCountServer() : Promise.resolve(0),
+  ]);
 
   return (
     <html lang="ko">
@@ -37,6 +41,7 @@ export default async function RootLayout({
             <NavigationBar
               initialUser={initialUser}
               initialFavoritesCount={initialFavoritesCount}
+              initialUnreadCount={initialUnreadCount}
             />
             <main className="flex flex-1 flex-col">{children}</main>
             <Footer />
