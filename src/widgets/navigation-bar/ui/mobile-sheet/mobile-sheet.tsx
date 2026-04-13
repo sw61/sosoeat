@@ -57,7 +57,7 @@ export function MobileSheet({
             <Image src="/icons/icon-hamburger.png" alt="메뉴" width={24} height={24} />
           </button>
         </SheetTrigger>
-        <SheetContent side="right" className="flex w-64 flex-col gap-0 p-0">
+        <SheetContent side="right" className="flex w-64 flex-col gap-0 rounded-l-[24px] p-0">
           <SheetTitle className="sr-only">메뉴</SheetTitle>
           <SheetDescription className="sr-only">모바일 네비게이션 메뉴</SheetDescription>
 
@@ -80,16 +80,33 @@ export function MobileSheet({
               </div>
             </div>
           ) : (
-            <div className="bg-sosoeat-orange-50 flex items-center justify-between px-6 py-5">
-              <p className="text-sm font-medium text-gray-500">로그인이 필요해요</p>
-              <SheetClose asChild>
-                <Link
-                  href="/login"
-                  className="bg-sosoeat-orange-600 rounded-lg px-3 py-1.5 text-xs font-medium text-white"
-                >
-                  로그인
-                </Link>
-              </SheetClose>
+            <div className="bg-sosoeat-orange-50 flex flex-col items-center gap-3 px-6 py-5">
+              <Image
+                src="/images/basic-profile.svg"
+                alt="기본 프로필"
+                width={44}
+                height={44}
+                className="bg-sosoeat-gray-200 size-11 shrink-0 rounded-full"
+              />
+              <p className="text-sm font-medium text-gray-600">소소잇에 오신 걸 환영해요</p>
+              <div className="flex w-full gap-2">
+                <SheetClose asChild>
+                  <Link
+                    href="/login"
+                    className="border-sosoeat-orange-600 text-sosoeat-orange-600 flex flex-1 items-center justify-center rounded-lg border py-1.5 text-xs font-medium"
+                  >
+                    로그인
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    href="/signup"
+                    className="bg-sosoeat-orange-600 flex flex-1 items-center justify-center rounded-lg py-1.5 text-xs font-medium text-white"
+                  >
+                    회원가입
+                  </Link>
+                </SheetClose>
+              </div>
             </div>
           )}
 

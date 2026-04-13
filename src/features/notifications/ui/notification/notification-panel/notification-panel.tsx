@@ -12,13 +12,15 @@ import { cn } from '@/shared/lib/utils';
 import type { Notification } from '@/shared/types/generated-client';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 
-import { getNotificationListServer } from '../../../api/notifications.server';
 import {
   filterNotificationsByTab,
   NOTIFICATION_TABS,
   type NotificationTab,
 } from '../../../lib/notification-view.utils';
-import { notificationKeys, useNotificationInfiniteList } from '../../../model/notification.queries';
+import {
+  prefetchNotificationInfiniteList,
+  useNotificationInfiniteList,
+} from '../../../model/notification.queries';
 import { useNotificationReadActions } from '../../../model/use-notification-read-actions';
 import { NotificationItem } from '../notification-item/notification-item';
 import { NotificationTrigger } from '../notification-trigger/notification-trigger';
@@ -238,40 +240,37 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleOpen = async (nextOpen: boolean) => {
+  const handleOpen = (nextOpen: boolean) => {
     if (nextOpen) {
-      const queryKey = notificationKeys.list({ size: PAGE_SIZE });
-      const existing = queryClient.getQueryData(queryKey);
-      if (!existing) {
-        const firstPage = await getNotificationListServer({ size: PAGE_SIZE });
-        queryClient.setQueryData(queryKey, {
-          pages: [firstPage],
-          pageParams: [undefined],
-        });
-      }
+      void prefetchNotificationInfiniteList(queryClient, { size: PAGE_SIZE });
     }
     setOpen(nextOpen);
   };
 
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
-      <DialogPrimitive.Trigger asChild>
-        <NotificationTrigger className={triggerClassName} unreadCount={unreadCount ?? 0} />
-      </DialogPrimitive.Trigger>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Content
-          aria-describedby={undefined}
-          className={cn(PANEL_CONTENT_CLASS)}
-          onInteractOutside={() => setOpen(false)}
-        >
-          <DialogPrimitive.Title className="sr-only">알림</DialogPrimitive.Title>
-          <NotificationPanelContent
-            titleId={titleId}
-            unreadCount={unreadCount}
-            onClose={() => setOpen(false)}
-          />
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+    <>
+      {open && (
+        <div className="fixed inset-0 z-40 bg-black/40 md:hidden" onClick={() => setOpen(false)} />
+      )}
+      <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
+        <DialogPrimitive.Trigger asChild>
+          <NotificationTrigger className={triggerClassName} unreadCount={unreadCount ?? 0} />
+        </DialogPrimitive.Trigger>
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Content
+            aria-describedby={undefined}
+            className={cn(PANEL_CONTENT_CLASS)}
+            onInteractOutside={() => setOpen(false)}
+          >
+            <DialogPrimitive.Title className="sr-only">알림</DialogPrimitive.Title>
+            <NotificationPanelContent
+              titleId={titleId}
+              unreadCount={unreadCount}
+              onClose={() => setOpen(false)}
+            />
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
+    </>
   );
 };

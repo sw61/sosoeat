@@ -46,6 +46,7 @@ const mockReturn = (overrides: object) => ({
 
 jest.mock('@/features/notifications/model/notification.queries', () => ({
   useNotificationInfiniteList: jest.fn(),
+  prefetchNotificationInfiniteList: jest.fn().mockResolvedValue(undefined),
   notificationKeys: {
     list: jest.fn(() => ['notifications', 'list']),
     unreadCount: jest.fn(() => ['notifications', 'unread-count']),

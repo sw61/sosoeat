@@ -15,6 +15,7 @@ import { Notification as Nt } from './notification';
 jest.mock('@/features/notifications/model/notification.queries', () => ({
   useNotificationInfiniteList: jest.fn(),
   useUnreadCount: jest.fn(),
+  prefetchNotificationInfiniteList: jest.fn().mockResolvedValue(undefined),
   notificationKeys: {
     list: (options?: object) =>
       options ? ['notifications', 'list', options] : ['notifications', 'list'],
