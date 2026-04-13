@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { toast } from 'sonner';
 
-import { meetingsApi, mypageMeetingCountKey } from '@/entities/meeting';
+import { meetingsApi, mypageJoinedMeetingsKey } from '@/entities/meeting';
 
 import { useDeleteMeeting, useJoinMeeting, useLeaveMeeting } from './meeting-detail.queries';
 
@@ -23,7 +23,7 @@ jest.mock('@/entities/meeting', () => ({
       queryKey: ['meetings', 'detail', id],
     }),
   },
-  mypageMeetingCountKey: ['users', 'me', 'meeting-count'],
+  mypageJoinedMeetingsKey: ['users', 'me', 'joined-meetings'],
 }));
 
 jest.mock('sonner', () => ({
@@ -47,7 +47,7 @@ const createWrapper = (queryClient: QueryClient) => {
 describe('useJoinMeeting', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('성공 시 mypageMeetingCountKey를 invalidate한다', async () => {
+  it('성공 시 mypageJoinedMeetingsKey를 invalidate한다', async () => {
     mockJoin.mockResolvedValue(undefined);
     const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
     const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
@@ -59,11 +59,11 @@ describe('useJoinMeeting', () => {
     result.current.mutate();
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: mypageMeetingCountKey });
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: mypageJoinedMeetingsKey });
     expect(toast.success).toHaveBeenCalled();
   });
 
-  it('실패 시 mypageMeetingCountKey를 invalidate하지 않는다', async () => {
+  it('실패 시 mypageJoinedMeetingsKey를 invalidate하지 않는다', async () => {
     mockJoin.mockRejectedValue(new Error('모임 참여에 실패했습니다.'));
     const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
     const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
@@ -75,7 +75,7 @@ describe('useJoinMeeting', () => {
     result.current.mutate();
 
     await waitFor(() => expect(result.current.isError).toBe(true));
-    expect(invalidateSpy).not.toHaveBeenCalledWith({ queryKey: mypageMeetingCountKey });
+    expect(invalidateSpy).not.toHaveBeenCalledWith({ queryKey: mypageJoinedMeetingsKey });
     expect(toast.error).toHaveBeenCalled();
   });
 });
@@ -83,7 +83,7 @@ describe('useJoinMeeting', () => {
 describe('useLeaveMeeting', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('성공 시 mypageMeetingCountKey를 invalidate한다', async () => {
+  it('성공 시 mypageJoinedMeetingsKey를 invalidate한다', async () => {
     mockLeave.mockResolvedValue(undefined);
     const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
     const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
@@ -95,11 +95,11 @@ describe('useLeaveMeeting', () => {
     result.current.mutate();
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: mypageMeetingCountKey });
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: mypageJoinedMeetingsKey });
     expect(toast.success).toHaveBeenCalled();
   });
 
-  it('실패 시 mypageMeetingCountKey를 invalidate하지 않는다', async () => {
+  it('실패 시 mypageJoinedMeetingsKey를 invalidate하지 않는다', async () => {
     mockLeave.mockRejectedValue(new Error('모임 참여 취소에 실패했습니다.'));
     const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
     const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
@@ -111,7 +111,7 @@ describe('useLeaveMeeting', () => {
     result.current.mutate();
 
     await waitFor(() => expect(result.current.isError).toBe(true));
-    expect(invalidateSpy).not.toHaveBeenCalledWith({ queryKey: mypageMeetingCountKey });
+    expect(invalidateSpy).not.toHaveBeenCalledWith({ queryKey: mypageJoinedMeetingsKey });
     expect(toast.error).toHaveBeenCalled();
   });
 });
@@ -119,7 +119,7 @@ describe('useLeaveMeeting', () => {
 describe('useDeleteMeeting', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('성공 시 mypageMeetingCountKey를 invalidate한다', async () => {
+  it('성공 시 mypageJoinedMeetingsKey를 invalidate한다', async () => {
     mockDelete.mockResolvedValue(undefined);
     const queryClient = new QueryClient({ defaultOptions: { mutations: { retry: false } } });
     const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
@@ -131,7 +131,7 @@ describe('useDeleteMeeting', () => {
     result.current.mutate();
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: mypageMeetingCountKey });
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: mypageJoinedMeetingsKey });
     expect(toast.success).toHaveBeenCalled();
   });
 });
