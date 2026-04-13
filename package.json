@@ -22,6 +22,7 @@
     "generate:api": "docker run --rm -v \"%cd%:/local\" openapitools/openapi-generator-cli generate -i https://together-dallaem-api.vercel.app/openapi.json -g typescript-fetch -o /local/src/types/generated-client"
   },
   "dependencies": {
+    "@amplitude/unified": "^1.0.16",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-separator": "^1.1.0",
     "@tanstack/react-query": "^5.90.21",
