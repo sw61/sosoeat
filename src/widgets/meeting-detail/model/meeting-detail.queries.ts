@@ -33,7 +33,7 @@ export const useConfirmMeeting = (id: number) => {
       }
       return { previous };
     },
-    onError: (error: Error, _, context) => {
+    onError: (_error: Error, _, context) => {
       if (context?.previous !== undefined) {
         queryClient.setQueryData(meetingsQueryOptions.meetingDetail(id).queryKey, context.previous);
       } else {
@@ -41,7 +41,7 @@ export const useConfirmMeeting = (id: number) => {
           queryKey: meetingsQueryOptions.meetingDetail(id).queryKey,
         });
       }
-      toast.error(error.message || '모임 확정 중 오류가 발생했습니다.');
+      toast.error('모임 확정 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
     onSuccess: () => {
       toast.success('모임이 확정되었습니다.');
@@ -67,8 +67,8 @@ export const useDeleteMeeting = (id: number) => {
       toast.success('모임이 삭제되었습니다.');
       router.back();
     },
-    onError: (error: Error) => {
-      toast.error(error.message || '모임 삭제 중 오류가 발생했습니다.');
+    onError: () => {
+      toast.error('모임 삭제 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
 };
@@ -95,7 +95,7 @@ export const useJoinMeeting = (id: number) => {
       }
       return { previous };
     },
-    onError: (error: Error, _, context) => {
+    onError: (_error: Error, _, context) => {
       if (context?.previous !== undefined) {
         queryClient.setQueryData(meetingsQueryOptions.meetingDetail(id).queryKey, context.previous);
       } else {
@@ -103,7 +103,7 @@ export const useJoinMeeting = (id: number) => {
           queryKey: meetingsQueryOptions.meetingDetail(id).queryKey,
         });
       }
-      toast.error(error.message || '모임 참여 중 오류가 발생했습니다.');
+      toast.error('모임 참여 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
@@ -141,7 +141,7 @@ export const useLeaveMeeting = (id: number) => {
       }
       return { previous };
     },
-    onError: (error: Error, _, context) => {
+    onError: (_error: Error, _, context) => {
       if (context?.previous !== undefined) {
         queryClient.setQueryData(meetingsQueryOptions.meetingDetail(id).queryKey, context.previous);
       } else {
@@ -149,7 +149,7 @@ export const useLeaveMeeting = (id: number) => {
           queryKey: meetingsQueryOptions.meetingDetail(id).queryKey,
         });
       }
-      toast.error(error.message || '모임 참여 취소 중 오류가 발생했습니다.');
+      toast.error('모임 참여 취소 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
