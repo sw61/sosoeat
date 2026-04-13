@@ -15,7 +15,7 @@ export function MeetingLocationAddressRow({ address }: MeetingLocationAddressRow
       await writeClipboardText(address);
       toast.success('주소가 복사되었습니다.');
     } catch {
-      toast.error('복사에 실패했습니다.');
+      toast.error('주소 복사 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
 
