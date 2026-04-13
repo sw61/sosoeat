@@ -6,7 +6,7 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 import { toast } from 'sonner';
 
 import type { Meeting } from '@/entities/meeting';
-import { meetingsApi, meetingsQueryOptions, mypageMeetingCountKey } from '@/entities/meeting';
+import { meetingsApi, meetingsQueryOptions, mypageJoinedMeetingsKey } from '@/entities/meeting';
 
 export function useMeetingDetail(meetingId: number) {
   return useSuspenseQuery(meetingsQueryOptions.meetingDetail(meetingId));
@@ -63,7 +63,7 @@ export const useDeleteMeeting = (id: number) => {
   return useMutation({
     mutationFn: () => meetingsApi.deleteMeeting(id),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
+      void queryClient.invalidateQueries({ queryKey: mypageJoinedMeetingsKey });
       toast.success('모임이 삭제되었습니다.');
       router.back();
     },
@@ -106,7 +106,7 @@ export const useJoinMeeting = (id: number) => {
       toast.error(error.message || '모임 참여 중 오류가 발생했습니다.');
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
+      void queryClient.invalidateQueries({ queryKey: mypageJoinedMeetingsKey });
       toast.success('모임에 참여했습니다.');
     },
     onSettled: (_data, error) => {
@@ -152,7 +152,7 @@ export const useLeaveMeeting = (id: number) => {
       toast.error(error.message || '모임 참여 취소 중 오류가 발생했습니다.');
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
+      void queryClient.invalidateQueries({ queryKey: mypageJoinedMeetingsKey });
       toast.success('모임 참여를 취소했습니다.');
     },
     onSettled: (_data, error) => {

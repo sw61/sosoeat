@@ -1,1 +1,1 @@
-export const mypageMeetingCountKey = ['users', 'me', 'meeting-count'] as const;
+export const mypageJoinedMeetingsKey = ['users', 'me', 'joined-meetings'] as const;
