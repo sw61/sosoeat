@@ -1,5 +1,11 @@
 import { getMeetings } from '@/entities/meeting/index.server';
-import { BestSoeatSection, CtaSection, MainPageSection, MeetingTypeSection } from '@/widgets/home';
+import {
+  BestSoeatSection,
+  CtaSection,
+  HowToUseSection,
+  MainPageSection,
+  MeetingTypeSection,
+} from '@/widgets/home';
 import { MainBanner } from '@/widgets/main-banner';
 
 export default async function HomePage() {
@@ -16,6 +22,7 @@ export default async function HomePage() {
         <MeetingTypeSection />
         <MainPageSection />
         <BestSoeatSection meetings={bestMeetings} />
+        <HowToUseSection />
       </div>
       <CtaSection />
     </div>
