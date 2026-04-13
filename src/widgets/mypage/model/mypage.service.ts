@@ -26,6 +26,7 @@ const toImageUrl = (image?: string) => (image?.startsWith('https://') ? image : 
 
 const toMeetingCard = (m: UserMeeting): MyPageCardProps => ({
   meetingId: m.id,
+  href: `/meetings/${m.id}`,
   title: m.name,
   currentCount: m.participantCount,
   maxCount: m.capacity,
@@ -43,6 +44,7 @@ export const toUserMeetingCards = (data: UserMeetingsResponse): MyPageCardProps[
 export const toFavoriteMeetingCards = (data: FavoriteList): MyPageCardProps[] =>
   data.data.map((f) => ({
     meetingId: f.meeting.id,
+    href: `/meetings/${f.meeting.id}`,
     title: f.meeting.name,
     currentCount: f.meeting.participantCount,
     maxCount: f.meeting.capacity,
