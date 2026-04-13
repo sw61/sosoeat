@@ -36,6 +36,12 @@ jest.mock('react-intersection-observer', () => ({
   useInView: jest.fn(),
 }));
 
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
 jest.mock('@/features/notifications/api/notifications.server', () => ({
   getNotificationListServer: jest
     .fn()

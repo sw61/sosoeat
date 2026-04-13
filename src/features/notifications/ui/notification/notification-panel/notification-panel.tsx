@@ -62,20 +62,29 @@ const NotificationPanelContent = ({
   const [activeTab, setActiveTab] = useState<NotificationTab>('all');
   const list = filterNotificationsByTab(allList, activeTab);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const labelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
 
-  useEffect(() => {
+  const updateIndicator = () => {
     const activeIndex = NOTIFICATION_TABS.findIndex((t) => t.key === activeTab);
-    const el = tabRefs.current[activeIndex];
-    if (!el) return;
-    const span = el.querySelector('span');
-    if (!span) return;
-    const btnRect = el.getBoundingClientRect();
-    const spanRect = span.getBoundingClientRect();
+    const btn = tabRefs.current[activeIndex];
+    const label = labelRefs.current[activeIndex];
+    if (!btn || !label) return;
     setIndicatorStyle({
-      left: el.offsetLeft + (spanRect.left - btnRect.left),
-      width: spanRect.width,
+      left: btn.offsetLeft + label.offsetLeft,
+      width: label.offsetWidth,
     });
+  };
+
+  useEffect(() => {
+    updateIndicator();
+
+    const observer = new ResizeObserver(updateIndicator);
+    tabRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   const showBadge = unreadCount != null && unreadCount > 0;
@@ -159,7 +168,13 @@ const NotificationPanelContent = ({
                 setConfirmDelete(false);
               }}
             >
-              <span>{label}</span>
+              <span
+                ref={(el) => {
+                  labelRefs.current[index] = el;
+                }}
+              >
+                {label}
+              </span>
             </button>
           ))}
           <span
@@ -254,13 +269,24 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
       )}
       <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
         <DialogPrimitive.Trigger asChild>
-          <NotificationTrigger className={triggerClassName} unreadCount={unreadCount ?? 0} />
+          <NotificationTrigger
+            className={triggerClassName}
+            unreadCount={unreadCount ?? 0}
+            data-notification-trigger
+          />
         </DialogPrimitive.Trigger>
         <DialogPrimitive.Portal>
           <DialogPrimitive.Content
             aria-describedby={undefined}
             className={cn(PANEL_CONTENT_CLASS)}
-            onInteractOutside={() => setOpen(false)}
+            onInteractOutside={(e) => {
+              const target = e.target as HTMLElement;
+              if (target.closest('[data-notification-trigger]')) {
+                e.preventDefault();
+                return;
+              }
+              setOpen(false);
+            }}
           >
             <DialogPrimitive.Title className="sr-only">알림</DialogPrimitive.Title>
             <NotificationPanelContent

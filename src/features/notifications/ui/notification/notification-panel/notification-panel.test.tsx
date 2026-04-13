@@ -67,6 +67,12 @@ jest.mock('react-intersection-observer', () => ({
   useInView: jest.fn(),
 }));
 
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
 const renderWithClient = (ui: React.ReactElement) => {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },

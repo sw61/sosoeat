@@ -18,49 +18,46 @@ export const NotificationItem = (props: Notification) => {
 
   return (
     <div
-      role="button"
-      tabIndex={0}
-      aria-label={`${title} 알림 읽음 처리`}
       className={cn(
-        'flex min-h-[90px] w-[314px] shrink-0 cursor-pointer flex-row items-start gap-4 pt-3 pr-3 pb-4 pl-5 text-left',
+        'flex min-h-[90px] w-[314px] shrink-0 flex-row items-start pt-3 pr-3 pb-4 pl-5 text-left',
         highlighted ? 'bg-sosoeat-orange-100' : 'bg-white'
       )}
-      onClick={markAsRead}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') markAsRead();
-      }}
     >
-      <div className="shrink-0">
-        <NotificationItemThumbnail thumbnailKey={thumbnailKey} image={image} />
-      </div>
-      <div className="flex min-w-0 flex-1 flex-col items-stretch gap-1 self-stretch">
-        <div className="flex min-h-4.5 shrink-0 flex-row items-center justify-between gap-0.5 self-stretch">
-          <div className="flex min-w-0 flex-row items-center gap-0.5">
-            <span className="text-sosoeat-gray-900 text-xs font-semibold">{title}</span>
-            {isMeetingConfirmed ? <ReadCheckIcon /> : null}
-          </div>
-          <div className="flex shrink-0 flex-row items-center justify-center gap-1">
-            {highlighted ? metaDot : null}
-            <span className="text-sosoeat-gray-700 text-xs font-normal" suppressHydrationWarning>
-              {metaRight}
-            </span>
-            <button
-              type="button"
-              aria-label="알림 삭제"
-              className="text-sosoeat-gray-400 hover:text-sosoeat-gray-900 flex size-4 cursor-pointer items-center justify-center transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteNotification();
-              }}
-            >
-              <X className="size-3.5" strokeWidth={2} />
-            </button>
-          </div>
+      <button
+        type="button"
+        aria-label={`${title} 알림 읽음 처리`}
+        className="flex min-w-0 flex-1 cursor-pointer flex-row items-start gap-4 bg-transparent text-left"
+        onClick={markAsRead}
+      >
+        <div className="shrink-0">
+          <NotificationItemThumbnail thumbnailKey={thumbnailKey} image={image} />
         </div>
-        <p className="min-h-0 w-full self-stretch text-sm font-normal tracking-[-0.02em] text-[#737373]">
-          {description}
-        </p>
-      </div>
+        <div className="flex min-w-0 flex-1 flex-col items-stretch gap-1 self-stretch">
+          <div className="flex min-h-4.5 shrink-0 flex-row items-center gap-0.5 self-stretch">
+            <div className="flex min-w-0 flex-1 flex-row items-center gap-0.5">
+              <span className="text-sosoeat-gray-900 text-xs font-semibold">{title}</span>
+              {isMeetingConfirmed ? <ReadCheckIcon /> : null}
+            </div>
+            <div className="flex shrink-0 flex-row items-center justify-center gap-1">
+              {highlighted ? metaDot : null}
+              <span className="text-sosoeat-gray-700 text-xs font-normal" suppressHydrationWarning>
+                {metaRight}
+              </span>
+            </div>
+          </div>
+          <p className="min-h-0 w-full self-stretch text-sm font-normal tracking-[-0.02em] text-[#737373]">
+            {description}
+          </p>
+        </div>
+      </button>
+      <button
+        type="button"
+        aria-label="알림 삭제"
+        className="text-sosoeat-gray-400 hover:text-sosoeat-gray-900 mt-3 flex size-4 shrink-0 cursor-pointer items-center justify-center transition-colors"
+        onClick={deleteNotification}
+      >
+        <X className="size-3.5" strokeWidth={2} />
+      </button>
     </div>
   );
 };
