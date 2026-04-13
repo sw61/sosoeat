@@ -102,7 +102,9 @@ describe('useSosoTalkWritePage', () => {
       });
     });
 
-    expect(mockToastError).toHaveBeenCalledWith('게시글 등록에 실패했어요. 다시 시도해 주세요.');
+    expect(mockToastError).toHaveBeenCalledWith(
+      '게시글 등록 중 문제가 생겼어요. 다시 시도해 주세요.'
+    );
     expect(mockReplace).not.toHaveBeenCalled();
     expect(result.current.isSubmitting).toBe(false);
   });
@@ -168,7 +170,9 @@ describe('useSosoTalkWritePage', () => {
       });
     });
 
-    expect(mockToastError).toHaveBeenCalledWith('게시글 수정에 실패했어요. 다시 시도해 주세요.');
+    expect(mockToastError).toHaveBeenCalledWith(
+      '게시글 수정 중 문제가 생겼어요. 다시 시도해 주세요.'
+    );
     expect(mockReplace).not.toHaveBeenCalledWith('/sosotalk/9');
     expect(result.current.isSubmitting).toBe(false);
   });
