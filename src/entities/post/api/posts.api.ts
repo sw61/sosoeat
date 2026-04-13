@@ -1,4 +1,5 @@
 import { fetchClient } from '@/shared/api/fetch-client';
+import { parseResponse } from '@/shared/api/parse-response';
 import { CommentFromJSON } from '@/shared/types/generated-client/models/Comment';
 import { PostLikeFromJSON } from '@/shared/types/generated-client/models/PostLike';
 import { PostListFromJSON } from '@/shared/types/generated-client/models/PostList';
@@ -79,12 +80,8 @@ export const getSosoTalkPostList = async (
   });
 
   const response = await fetchClient.get(`/posts?${searchParams.toString()}`);
-
-  if (!response.ok) {
-    throw new Error('소소톡 게시글 목록을 불러오지 못했습니다.');
-  }
-
-  return PostListFromJSON(await response.json()) as GetSosoTalkPostListResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 게시글 목록을 불러오지 못했습니다.');
+  return PostListFromJSON(data) as GetSosoTalkPostListResponse;
 };
 
 export const getSosoTalkPostDetail = async (
@@ -92,11 +89,8 @@ export const getSosoTalkPostDetail = async (
 ): Promise<GetSosoTalkPostDetailResponse> => {
   const response = await fetchClient.get(`/posts/${postId}`);
 
-  if (!response.ok) {
-    throw new Error('소소톡 게시글을 불러오지 못했습니다.');
-  }
-
-  return PostWithCommentsFromJSON(await response.json()) as GetSosoTalkPostDetailResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 게시글을 불러오지 못했습니다.');
+  return PostWithCommentsFromJSON(data) as GetSosoTalkPostDetailResponse;
 };
 
 export const createSosoTalkPost = async ({
@@ -104,11 +98,8 @@ export const createSosoTalkPost = async ({
 }: CreateSosoTalkPostParams): Promise<CreateSosoTalkPostResponse> => {
   const response = await fetchClient.post('/posts', payload);
 
-  if (!response.ok) {
-    throw new Error('소소톡 게시글 작성에 실패했습니다.');
-  }
-
-  return PostWithAuthorFromJSON(await response.json()) as CreateSosoTalkPostResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 게시글 작성에 실패했습니다.');
+  return PostWithAuthorFromJSON(data) as CreateSosoTalkPostResponse;
 };
 
 export const requestSosoTalkPostImageUploadUrl = async (
@@ -119,14 +110,11 @@ export const requestSosoTalkPostImageUploadUrl = async (
     contentType: getSosoTalkImageContentType(file),
     folder: PresignedUrlRequestFolderEnum.Posts,
   });
-
-  if (!response.ok) {
-    throw new Error('소소톡 이미지 업로드 URL 발급에 실패했습니다.');
-  }
-
-  return PresignedUrlResponseFromJSON(
-    await response.json()
-  ) as RequestSosoTalkPostImageUploadUrlResponse;
+  const data = await parseResponse<unknown>(
+    response,
+    '소소톡 이미지 업로드 URL 발급에 실패했습니다.'
+  );
+  return PresignedUrlResponseFromJSON(data) as RequestSosoTalkPostImageUploadUrlResponse;
 };
 
 export const uploadSosoTalkPostImage = async (file: File): Promise<string> => {
@@ -152,25 +140,16 @@ export const createSosoTalkPostLike = async (
 ): Promise<CreateSosoTalkPostLikeResponse> => {
   const response = await fetchClient.post(`/posts/${postId}/like`);
 
-  if (!response.ok) {
-    throw new Error('소소톡 게시글 좋아요에 실패했습니다.');
-  }
-
-  return PostLikeFromJSON(await response.json()) as CreateSosoTalkPostLikeResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 게시글 좋아요에 실패했습니다.');
+  return PostLikeFromJSON(data) as CreateSosoTalkPostLikeResponse;
 };
 
 export const deleteSosoTalkPostLike = async (
   postId: number
 ): Promise<DeleteSosoTalkPostLikeResponse> => {
   const response = await fetchClient.delete(`/posts/${postId}/like`);
-
-  if (!response.ok) {
-    throw new Error('소소톡 게시글 좋아요 취소에 실패했습니다.');
-  }
-
-  return TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(
-    await response.json()
-  ) as DeleteSosoTalkPostLikeResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 게시글 좋아요 취소에 실패했습니다.');
+  return TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(data) as DeleteSosoTalkPostLikeResponse;
 };
 
 export const createSosoTalkComment = async ({
@@ -178,12 +157,8 @@ export const createSosoTalkComment = async ({
   payload,
 }: CreateSosoTalkCommentParams): Promise<CreateSosoTalkCommentResponse> => {
   const response = await fetchClient.post(`/posts/${postId}/comments`, payload);
-
-  if (!response.ok) {
-    throw new Error('소소톡 댓글 작성에 실패했습니다.');
-  }
-
-  return CommentFromJSON(await response.json()) as CreateSosoTalkCommentResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 댓글 작성에 실패했습니다.');
+  return CommentFromJSON(data) as CreateSosoTalkCommentResponse;
 };
 
 export const updateSosoTalkComment = async ({
@@ -192,12 +167,8 @@ export const updateSosoTalkComment = async ({
   payload,
 }: UpdateSosoTalkCommentParams): Promise<UpdateSosoTalkCommentResponse> => {
   const response = await fetchClient.patch(`/posts/${postId}/comments/${commentId}`, payload);
-
-  if (!response.ok) {
-    throw new Error('소소톡 댓글 수정에 실패했습니다.');
-  }
-
-  return CommentFromJSON(await response.json()) as UpdateSosoTalkCommentResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 댓글 수정에 실패했습니다.');
+  return CommentFromJSON(data) as UpdateSosoTalkCommentResponse;
 };
 
 export const deleteSosoTalkComment = async ({
@@ -205,14 +176,8 @@ export const deleteSosoTalkComment = async ({
   commentId,
 }: CommentMutationParams): Promise<DeleteSosoTalkCommentResponse> => {
   const response = await fetchClient.delete(`/posts/${postId}/comments/${commentId}`);
-
-  if (!response.ok) {
-    throw new Error('소소톡 댓글 삭제에 실패했습니다.');
-  }
-
-  return TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(
-    await response.json()
-  ) as DeleteSosoTalkCommentResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 댓글 삭제에 실패했습니다.');
+  return TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(data) as DeleteSosoTalkCommentResponse;
 };
 
 export const updateSosoTalkPost = async ({
@@ -220,24 +185,14 @@ export const updateSosoTalkPost = async ({
   payload,
 }: UpdateSosoTalkPostParams): Promise<UpdateSosoTalkPostResponse> => {
   const response = await fetchClient.patch(`/posts/${postId}`, payload);
-
-  if (!response.ok) {
-    throw new Error('소소톡 게시글 수정에 실패했습니다.');
-  }
-
-  return PostWithAuthorFromJSON(await response.json()) as UpdateSosoTalkPostResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 게시글 수정에 실패했습니다.');
+  return PostWithAuthorFromJSON(data) as UpdateSosoTalkPostResponse;
 };
 
 export const deleteSosoTalkPost = async ({
   postId,
 }: SosoTalkPostMutationParams): Promise<DeleteSosoTalkPostResponse> => {
   const response = await fetchClient.delete(`/posts/${postId}`);
-
-  if (!response.ok) {
-    throw new Error('소소톡 게시글 삭제에 실패했습니다.');
-  }
-
-  return TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(
-    await response.json()
-  ) as DeleteSosoTalkPostResponse;
+  const data = await parseResponse<unknown>(response, '소소톡 게시글 삭제에 실패했습니다.');
+  return TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(data) as DeleteSosoTalkPostResponse;
 };

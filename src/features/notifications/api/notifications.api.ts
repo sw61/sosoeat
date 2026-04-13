@@ -1,4 +1,5 @@
 import { fetchClient } from '@/shared/api/fetch-client';
+import { parseResponse, parseVoidResponse } from '@/shared/api/parse-response';
 import {
   Notification,
   NotificationList,
@@ -13,8 +14,10 @@ export const notificationApi = {
     if (options.size) params.append('size', String(options.size));
 
     const response = await fetchClient.get(`/notifications?${params.toString()}`);
-    const data: NotificationList = await response.json();
-
+    const data = await parseResponse<NotificationList>(
+      response,
+      '알림 목록을 불러오는 중 문제가 생겼어요. 다시 시도해 주세요.'
+    );
     const items = data.data.map((item: Notification) => ({
       ...item,
       createdAt: new Date(item.createdAt as unknown as string),
@@ -22,10 +25,13 @@ export const notificationApi = {
 
     return { ...data, data: items };
   },
+
   getNotificationList: async () => {
     const response = await fetchClient.get('/notifications');
-    const data: NotificationList = await response.json();
-
+    const data = await parseResponse<NotificationList>(
+      response,
+      '알림 목록을 불러오는 중 문제가 생겼어요. 다시 시도해 주세요.'
+    );
     const items = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
 
     return items.map((item: Notification) => ({
@@ -33,25 +39,26 @@ export const notificationApi = {
       createdAt: new Date(item.createdAt as unknown as string),
     }));
   },
+
   getUnreadCount: async () => {
     const response = await fetchClient.get('/notifications/unread-count');
-    const data = await response.json();
-
+    const data = await parseResponse<{ count: number }>(
+      response,
+      '알림 개수를 불러오는 중 문제가 생겼어요. 다시 시도해 주세요.'
+    );
     return typeof data?.count === 'number' ? data.count : 0;
   },
+
   markAsRead: async (notificationId: number) => {
     const response = await fetchClient.put(`/notifications/${notificationId}/read`);
-    if (!response.ok) {
-      throw new Error(`Failed to mark notification ${notificationId} as read`);
-    }
-    return response;
+    return parseVoidResponse(response, '알림 읽음 처리 중 문제가 생겼어요. 다시 시도해 주세요.');
   },
+
   markAllAsRead: async () => {
     const response = await fetchClient.put('/notifications/read-all');
-
-    if (!response.ok) {
-      throw new Error('Failed to mark all notifications as read');
-    }
-    return response;
+    return parseVoidResponse(
+      response,
+      '알림 전체 읽음 처리 중 문제가 생겼어요. 다시 시도해 주세요.'
+    );
   },
 };

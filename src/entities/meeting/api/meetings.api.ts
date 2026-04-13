@@ -1,6 +1,7 @@
 import qs from 'qs';
 
 import { fetchClient } from '@/shared/api/fetch-client';
+import { parseResponse, parseVoidResponse } from '@/shared/api/parse-response';
 import { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 import { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 import { MeetingWithHost } from '@/shared/types/generated-client/models/MeetingWithHost';
@@ -24,32 +25,18 @@ const makeQueryString = (params: Omit<TeamIdMeetingsGetRequest, 'teamId'>): stri
 export const meetingsApi = {
   async getById(id: number): Promise<Meeting> {
     const response = await fetchClient.get(`/meetings/${id}`);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 조회에 실패했습니다.');
-    }
-
-    return response.json();
+    return parseResponse<Meeting>(response, '모임 조회에 실패했습니다.');
   },
+
   async getList(): Promise<MeetingList> {
     const response = await fetchClient.get('/meetings');
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 목록 조회에 실패했습니다.');
-    }
-    return response.json();
+    return parseResponse<MeetingList>(response, '모임 목록 조회에 실패했습니다.');
   },
 
   async getByFilter(options: Omit<TeamIdMeetingsGetRequest, 'teamId'>): Promise<MeetingList> {
     const queryString = makeQueryString(options);
     const response = await fetchClient.get(`/meetings${queryString}`);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 목록 조회에 실패했습니다.');
-    }
-    return response.json();
+    return parseResponse<MeetingList>(response, '모임 목록 조회에 실패했습니다.');
   },
 
   /**
@@ -58,13 +45,7 @@ export const meetingsApi = {
    */
   async create(payload: CreateMeeting): Promise<MeetingWithHost> {
     const response = await fetchClient.post('/meetings', payload);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 생성에 실패했습니다.');
-    }
-
-    return response.json();
+    return parseResponse<MeetingWithHost>(response, '모임 생성에 실패했습니다.');
   },
 
   /**
@@ -73,50 +54,26 @@ export const meetingsApi = {
    */
   async update(id: number, payload: UpdateMeeting): Promise<MeetingWithHost> {
     const response = await fetchClient.patch(`/meetings/${id}`, payload);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 수정에 실패했습니다.');
-    }
-
-    return response.json();
+    return parseResponse<MeetingWithHost>(response, '모임 수정에 실패했습니다.');
   },
 
   async updateStatus(id: number, payload: UpdateMeetingStatus): Promise<MeetingWithHost> {
     const response = await fetchClient.patch(`/meetings/${id}/status`, payload);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 상태 변경에 실패했습니다.');
-    }
-
-    return response.json();
+    return parseResponse<MeetingWithHost>(response, '모임 상태 변경에 실패했습니다.');
   },
 
   async deleteMeeting(id: number): Promise<void> {
     const response = await fetchClient.delete(`/meetings/${id}`);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 삭제에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '모임 삭제에 실패했습니다.');
   },
 
   async join(id: number): Promise<void> {
     const response = await fetchClient.post(`/meetings/${id}/join`);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 참여에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '모임 참여에 실패했습니다.');
   },
 
   async leave(id: number): Promise<void> {
     const response = await fetchClient.delete(`/meetings/${id}/join`);
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 참여 취소에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '모임 참여 취소에 실패했습니다.');
   },
 };
