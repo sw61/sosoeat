@@ -23,8 +23,8 @@ export const useCreateMeeting = () => {
       void queryClient.invalidateQueries({ queryKey: mypageMeetingCountKey });
       toast.success('모임이 생성되었습니다.');
     },
-    onError: (error: Error) => {
-      toast.error(error.message || '모임 생성 중 오류가 발생했습니다.');
+    onError: () => {
+      toast.error('모임 생성 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
 };

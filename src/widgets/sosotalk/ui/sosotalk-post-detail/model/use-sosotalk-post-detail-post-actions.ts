@@ -70,7 +70,7 @@ export function useSosoTalkPostDetailPostActions({
       }
     } catch {
       setOptimisticIsLiked(null);
-      toast.error('좋아요 처리에 실패했어요. 다시 시도해 주세요.');
+      toast.error('좋아요 처리 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
 
@@ -102,7 +102,7 @@ export function useSosoTalkPostDetailPostActions({
         return;
       }
 
-      toast.error('공유에 실패했어요. 다시 시도해 주세요.');
+      toast.error('공유 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
 
@@ -120,7 +120,7 @@ export function useSosoTalkPostDetailPostActions({
       toast.success('링크를 복사했어요.');
       setIsShareModalOpen(false);
     } catch {
-      toast.error('링크 복사에 실패했어요. 다시 시도해 주세요.');
+      toast.error('링크 복사 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
 
@@ -146,7 +146,7 @@ export function useSosoTalkPostDetailPostActions({
       setIsDeleteModalOpen(false);
       router.push('/sosotalk');
     } catch {
-      toast.error('게시글 삭제에 실패했어요. 다시 시도해 주세요.');
+      toast.error('게시글 삭제 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
 

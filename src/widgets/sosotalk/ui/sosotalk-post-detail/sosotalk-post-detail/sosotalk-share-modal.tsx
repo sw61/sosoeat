@@ -92,7 +92,7 @@ export function SosoTalkShareModal({
 
   const handleKakaoShare = () => {
     if (!window.Kakao) {
-      toast.error('카카오톡 공유를 준비하지 못했어요. 다시 시도해 주세요.');
+      toast.error('카카오톡 공유 중 문제가 생겼어요. 다시 시도해 주세요.');
       return;
     }
 

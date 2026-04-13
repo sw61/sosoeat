@@ -11,7 +11,7 @@ export const useUpdateMeeting = (id: number, onSuccess?: () => void) =>
       toast.success('모임이 수정되었습니다.');
       onSuccess?.();
     },
-    onError: (error: Error) => {
-      toast.error(error.message || '모임 수정 중 오류가 발생했습니다.');
+    onError: () => {
+      toast.error('모임 수정 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });

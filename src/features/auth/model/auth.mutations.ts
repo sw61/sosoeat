@@ -50,8 +50,8 @@ export const useSignUpMutation = () => {
       toast.success('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
       router.push('/login');
     },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : '회원가입에 실패했습니다.');
+    onError: () => {
+      toast.error('회원가입 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
 };

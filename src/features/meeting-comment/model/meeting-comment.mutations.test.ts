@@ -75,7 +75,7 @@ describe('useCreateComment', () => {
     result.current.mutate({ content: '새 댓글' });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
-    expect(toast.error).toHaveBeenCalledWith('댓글 작성 실패');
+    expect(toast.error).toHaveBeenCalledWith('댓글 작성 중 문제가 생겼어요. 다시 시도해 주세요.');
   });
 });
 
@@ -104,6 +104,6 @@ describe('useDeleteComment', () => {
     result.current.mutate(10);
 
     await waitFor(() => expect(result.current.isError).toBe(true));
-    expect(toast.error).toHaveBeenCalledWith('댓글 삭제 실패');
+    expect(toast.error).toHaveBeenCalledWith('댓글 삭제 중 문제가 생겼어요. 다시 시도해 주세요.');
   });
 });
