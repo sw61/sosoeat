@@ -52,7 +52,7 @@ export const AlertModal = ({
           {description ?? title}
         </DialogDescription>
 
-        <DialogFooter className="mt-8 flex-row gap-3 border-none bg-transparent p-0 md:mt-14 md:gap-4">
+        <DialogFooter className="mt-8 flex-row justify-center gap-3 border-none bg-transparent p-0 md:mt-14 md:gap-4">
           <Button
             variant="outline"
             onClick={() => onCancel()}
