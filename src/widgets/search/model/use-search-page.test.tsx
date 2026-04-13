@@ -135,8 +135,8 @@ describe('useSearchPage', () => {
   });
 
   it('복수 지역 데이터를 합산하여 반환해야 한다', async () => {
-    const meeting1 = { id: 1, region: '부산광역시 북구', dateTime: '2026-01-01' };
-    const meeting2 = { id: 2, region: '서울특별시 강남구', dateTime: '2026-01-02' };
+    const meeting1 = { id: 1, region: '부산 북구', dateTime: '2026-01-01' };
+    const meeting2 = { id: 2, region: '서울 강남구', dateTime: '2026-01-02' };
 
     (useQueries as jest.Mock).mockReturnValue([
       makeQueryResult({ data: [meeting1], hasMore: false, nextCursor: '' }),
@@ -144,7 +144,7 @@ describe('useSearchPage', () => {
     ]);
 
     const { result } = renderHook(() =>
-      useSearchInfiniteOptions({ region: ['부산광역시 북구', '서울특별시 강남구'] })
+      useSearchInfiniteOptions({ region: ['부산 북구', '서울 강남구'] })
     );
 
     await act(async () => {});
@@ -163,7 +163,7 @@ describe('useSearchPage', () => {
     ]);
 
     const { result } = renderHook(() =>
-      useSearchInfiniteOptions({ region: ['부산광역시 북구', '서울특별시 강남구'] })
+      useSearchInfiniteOptions({ region: ['부산 북구', '서울 강남구'] })
     );
 
     await act(async () => {});
@@ -174,7 +174,7 @@ describe('useSearchPage', () => {
   });
 
   it('동일한 dataUpdatedAt으로 재렌더 시 데이터를 중복 append하지 않아야 한다', async () => {
-    const meeting = { id: 1, region: '부산광역시 북구' };
+    const meeting = { id: 1, region: '부산 북구' };
     const ts = Date.now();
 
     (useQueries as jest.Mock).mockReturnValue([
@@ -182,7 +182,7 @@ describe('useSearchPage', () => {
     ]);
 
     const { result, rerender } = renderHook(() =>
-      useSearchInfiniteOptions({ region: ['부산광역시 북구'] })
+      useSearchInfiniteOptions({ region: ['부산 북구'] })
     );
 
     await act(async () => {});
@@ -194,7 +194,7 @@ describe('useSearchPage', () => {
   });
 
   it('region이 바뀌면 이전 지역 데이터를 초기화해야 한다', async () => {
-    const meeting1 = { id: 1, region: '부산광역시 북구' };
+    const meeting1 = { id: 1, region: '부산 북구' };
 
     (useQueries as jest.Mock).mockReturnValue([
       makeQueryResult({ data: [meeting1], hasMore: false, nextCursor: '' }),
@@ -202,18 +202,18 @@ describe('useSearchPage', () => {
 
     const { result, rerender } = renderHook(
       ({ region }: { region: string[] }) => useSearchInfiniteOptions({ region }),
-      { initialProps: { region: ['부산광역시 북구'] } }
+      { initialProps: { region: ['부산 북구'] } }
     );
 
     await act(async () => {});
     expect(result.current.data.pages[0].data).toHaveLength(1);
 
-    const meeting2 = { id: 2, region: '서울특별시 강남구' };
+    const meeting2 = { id: 2, region: '서울 강남구' };
     (useQueries as jest.Mock).mockReturnValue([
       makeQueryResult({ data: [meeting2], hasMore: false, nextCursor: '' }, Date.now() + 100),
     ]);
 
-    rerender({ region: ['서울특별시 강남구'] });
+    rerender({ region: ['서울 강남구'] });
     await act(async () => {});
 
     const ids = result.current.data.pages[0].data.map((m) => (m as { id: number }).id);
@@ -222,8 +222,8 @@ describe('useSearchPage', () => {
   });
 
   it('한 지역만 hasMore: true이면 hasNextPage가 true를 반환해야 한다', async () => {
-    const meeting1 = { id: 1, region: '부산광역시 북구' };
-    const meeting2 = { id: 2, region: '서울특별시 강남구' };
+    const meeting1 = { id: 1, region: '부산 북구' };
+    const meeting2 = { id: 2, region: '서울 강남구' };
 
     (useQueries as jest.Mock).mockReturnValue([
       makeQueryResult({ data: [meeting1], hasMore: true, nextCursor: 'cursor-a' }),
@@ -231,7 +231,7 @@ describe('useSearchPage', () => {
     ]);
 
     const { result } = renderHook(() =>
-      useSearchInfiniteOptions({ region: ['부산광역시 북구', '서울특별시 강남구'] })
+      useSearchInfiniteOptions({ region: ['부산 북구', '서울 강남구'] })
     );
 
     await act(async () => {});

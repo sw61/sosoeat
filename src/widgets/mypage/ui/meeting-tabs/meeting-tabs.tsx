@@ -64,7 +64,7 @@ export function MeetingTabs() {
           ) : (
             <div className="grid grid-cols-1 justify-items-center gap-4 py-4 lg:grid-cols-2 lg:justify-items-start">
               {cards.map((card) => (
-                <MyPageCard key={card.meetingId} {...card} />
+                <MyPageCard key={card.meetingId} {...card} href={`/meetings/${card.meetingId}`} />
               ))}
             </div>
           )}

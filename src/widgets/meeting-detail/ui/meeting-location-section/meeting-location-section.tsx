@@ -34,7 +34,7 @@ export function MeetingLocationSection({
 
   return (
     <section>
-      <h2 className="text-sosoeat-gray-900 mb-3 text-2xl font-semibold">모임 장소</h2>
+      <h2 className="text-sosoeat-gray-900 mb-3 text-xl font-semibold md:text-2xl">모임 장소</h2>
       <div className="border-sosoeat-gray-200 mt-5 overflow-hidden rounded-[16px] border">
         <KakaoMapLoader
           appKey={kakaoMapAppKey}

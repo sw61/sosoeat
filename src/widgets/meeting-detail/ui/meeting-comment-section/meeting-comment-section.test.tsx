@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event';
 import { useAuthStore } from '@/entities/auth';
 
 import { MeetingCommentSection } from './meeting-comment-section';
-import type { MeetingComment } from './meeting-comment-section.types';
 
 const mockMutate = jest.fn();
 
@@ -22,21 +21,6 @@ jest.mock('@/features/meeting-comment', () => ({
 jest.mock('@/shared/ui/comment-input', () => ({
   CommentInput: jest.requireActual('@/shared/ui/comment-input').CommentInput,
 }));
-
-const mockComments: MeetingComment[] = [
-  {
-    id: 1,
-    parentId: null,
-    author: { nickname: '마민준', profileUrl: null },
-    content: '안녕하세요!',
-    isDeleted: false,
-    createdAt: '03월 12일',
-    likeCount: 3,
-    isLiked: false,
-    isHostComment: false,
-    isMine: false,
-  },
-];
 
 const MOCK_USER = { id: 1, name: '홍길동', email: 'test@example.com' };
 
@@ -57,7 +41,7 @@ beforeEach(() => {
 describe('MeetingCommentSection', () => {
   describe('비로그인 상태', () => {
     it('입력창이 비활성화된다', () => {
-      render(<MeetingCommentSection meetingId={1} initialComments={mockComments} />, {
+      render(<MeetingCommentSection meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
@@ -65,7 +49,7 @@ describe('MeetingCommentSection', () => {
     });
 
     it('로그인 안내 placeholder가 표시된다', () => {
-      render(<MeetingCommentSection meetingId={1} initialComments={mockComments} />, {
+      render(<MeetingCommentSection meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
@@ -81,7 +65,7 @@ describe('MeetingCommentSection', () => {
     });
 
     it('입력창이 활성화된다', () => {
-      render(<MeetingCommentSection meetingId={1} initialComments={mockComments} />, {
+      render(<MeetingCommentSection meetingId={1} />, {
         wrapper: createWrapper(),
       });
 
@@ -90,7 +74,7 @@ describe('MeetingCommentSection', () => {
 
     it('텍스트 입력 후 제출하면 입력창이 초기화된다', async () => {
       const user = userEvent.setup();
-      render(<MeetingCommentSection meetingId={1} initialComments={mockComments} />, {
+      render(<MeetingCommentSection meetingId={1} />, {
         wrapper: createWrapper(),
       });
 

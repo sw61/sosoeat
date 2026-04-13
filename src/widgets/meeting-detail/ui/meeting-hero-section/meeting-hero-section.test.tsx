@@ -25,12 +25,7 @@ jest.mock('@/features/meeting-edit', () => ({
 }));
 
 jest.mock('../../model/meeting-detail.queries', () => ({
-  meetingDetailKeys: {
-    detail: (id: number) => ['meetings', 'detail', id],
-  },
-  useMeetingDetail: jest.fn((_id: number, initialMeeting: Meeting) => ({
-    data: initialMeeting,
-  })),
+  useMeetingDetail: jest.fn(),
   useJoinMeeting: jest.fn(() => ({
     mutate: mockJoinMutate,
     isPending: false,
@@ -120,6 +115,9 @@ describe('MeetingHeroSection', () => {
     mockConfirmMutate.mockClear();
     mockDeleteMutate.mockClear();
     mockRefresh.mockClear();
+
+    const { useMeetingDetail } = jest.requireMock('../../model/meeting-detail.queries');
+    (useMeetingDetail as jest.Mock).mockReturnValue({ data: MOCK_MEETING });
     useAuthStore.setState({
       isAuthenticated: false,
       user: null,
@@ -132,7 +130,7 @@ describe('MeetingHeroSection', () => {
   it('비로그인 상태에서 참여하기를 누르면 로그인 필요 모달 상태만 연다', async () => {
     const user = userEvent.setup();
 
-    render(<MeetingHeroSection meeting={MOCK_MEETING} />, {
+    render(<MeetingHeroSection meetingId={MOCK_MEETING.id} />, {
       wrapper: createWrapper(),
     });
 
@@ -156,7 +154,7 @@ describe('MeetingHeroSection', () => {
       isSessionExpired: false,
     });
 
-    render(<MeetingHeroSection meeting={MOCK_MEETING} />, {
+    render(<MeetingHeroSection meetingId={MOCK_MEETING.id} />, {
       wrapper: createWrapper(),
     });
 

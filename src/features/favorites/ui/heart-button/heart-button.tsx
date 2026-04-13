@@ -31,6 +31,8 @@ const ringSizeClass = {
 
 export function HeartButton({
   className,
+  sizeClass,
+  iconClass,
   size = 'lg',
   isFavorited = false,
   meetingId,
@@ -58,7 +60,7 @@ export function HeartButton({
       <Button
         variant="ghost"
         size="icon"
-        className={cn(HEART_BUTTON_CLASS, ringSizeClass[size])}
+        className={cn(HEART_BUTTON_CLASS, sizeClass ?? ringSizeClass[size])}
         onClick={handleClick}
       >
         <motion.div
@@ -70,7 +72,7 @@ export function HeartButton({
           whileTap={isAuthenticated ? { scale: 0.8, transition: { duration: 0.1 } } : undefined}
           className={HEART_BUTTON_ICON_WRAPPER_CLASS}
         >
-          <Image src={src} alt="좋아요" width={iconPx} height={iconPx} />
+          <Image src={src} alt="좋아요" width={iconPx} height={iconPx} className={iconClass} />
         </motion.div>
       </Button>
     </div>

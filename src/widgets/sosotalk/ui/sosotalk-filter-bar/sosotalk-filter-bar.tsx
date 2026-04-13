@@ -20,14 +20,14 @@ import type {
 } from './sosotalk-filter-bar.types';
 
 const DEFAULT_TABS: SosoTalkFilterTab[] = [
-  { label: '?꾩껜 TALK', value: 'all' },
-  { label: '?멸린 TALK', value: 'popular' },
+  { label: '전체 TALK', value: 'all' },
+  { label: '인기 TALK', value: 'popular' },
 ];
 
 const DEFAULT_SORT_OPTIONS: SosoTalkSortOption[] = [
-  { label: '?볤???', value: 'comments' },
-  { label: '醫뗭븘?붿닚', value: 'likes' },
-  { label: '理쒖떊??', value: 'latest' },
+  { label: '댓글순', value: 'comments' },
+  { label: '좋아요순', value: 'likes' },
+  { label: '최신순', value: 'latest' },
 ];
 
 export const SosoTalkFilterBar = ({

@@ -2,9 +2,8 @@
 
 import { Controller, type UseFormReturn } from 'react-hook-form';
 
-import { DatePicker } from '@/shared/ui/date-picker/date-picker';
+import { DateTimeField } from '@/shared/ui/date-picker/date-time-field';
 import { Input } from '@/shared/ui/input/input';
-import { TimeInput } from '@/shared/ui/time-picker/time-input';
 
 import type { MeetingEditFormData } from '../../model/meeting-edit.schema';
 
@@ -20,66 +19,71 @@ const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
 export const TabSchedule = ({ form }: TabProps) => {
   const {
     register,
+    control,
     formState: { errors },
   } = form;
 
   return (
-    <div className="flex flex-col gap-12">
-      {/* 모임 날짜 / 시간 */}
-      <fieldset className="flex flex-col gap-3">
-        <legend className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
+    <div className="flex flex-col gap-5">
+      {/* 모임 일정 */}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
           모임 일정{requiredIndicator}
-        </legend>
-        <div className="flex gap-3">
-          <div className="flex-1">
-            <Controller
-              name="meetingDate"
-              control={form.control}
-              render={({ field }) => <DatePicker {...field} />}
-            />
-          </div>
-          <div className="flex-1">
+        </label>
+        <Controller
+          name="meetingDate"
+          control={control}
+          render={({ field: dateField }) => (
             <Controller
               name="meetingTime"
-              control={form.control}
-              render={({ field }) => <TimeInput {...field} />}
+              control={control}
+              render={({ field: timeField }) => (
+                <DateTimeField
+                  dateValue={dateField.value}
+                  timeValue={timeField.value}
+                  onDateChange={dateField.onChange}
+                  onTimeChange={timeField.onChange}
+                />
+              )}
             />
-          </div>
-        </div>
+          )}
+        />
         {(errors.meetingDate || errors.meetingTime) && (
           <p className="text-destructive ml-1 text-xs">
             {errors.meetingDate?.message || errors.meetingTime?.message}
           </p>
         )}
-      </fieldset>
+      </div>
 
-      {/* 모집 마감 날짜 / 시간 */}
-      <fieldset className="flex flex-col gap-3">
-        <legend className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
+      {/* 모집 마감 */}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
           모집 마감 날짜{requiredIndicator}
-        </legend>
-        <div className="flex gap-3">
-          <div className="flex-1">
-            <Controller
-              name="registrationEndDate"
-              control={form.control}
-              render={({ field }) => <DatePicker {...field} />}
-            />
-          </div>
-          <div className="flex-1">
+        </label>
+        <Controller
+          name="registrationEndDate"
+          control={control}
+          render={({ field: dateField }) => (
             <Controller
               name="registrationEndTime"
-              control={form.control}
-              render={({ field }) => <TimeInput {...field} />}
+              control={control}
+              render={({ field: timeField }) => (
+                <DateTimeField
+                  dateValue={dateField.value}
+                  timeValue={timeField.value}
+                  onDateChange={dateField.onChange}
+                  onTimeChange={timeField.onChange}
+                />
+              )}
             />
-          </div>
-        </div>
+          )}
+        />
         {(errors.registrationEndDate || errors.registrationEndTime) && (
           <p className="text-destructive ml-1 text-xs">
             {errors.registrationEndDate?.message || errors.registrationEndTime?.message}
           </p>
         )}
-      </fieldset>
+      </div>
 
       {/* 모임 정원 */}
       <div className="flex flex-col gap-1.5">
@@ -91,11 +95,21 @@ export const TabSchedule = ({ form }: TabProps) => {
         </label>
         <Input
           id="edit-capacity"
-          type="number"
-          min={1}
-          max={100}
-          placeholder="정원을 입력해 주세요"
-          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 h-10 [appearance:textfield] border-transparent text-sm font-normal md:h-12 md:text-base [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          type="text"
+          inputMode="numeric"
+          placeholder="최소 2명 이상 입력해 주세요."
+          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 h-10 border-transparent text-sm font-normal md:h-12 md:text-base"
+          onKeyDown={(e) => {
+            if (e.key.length > 1 || e.ctrlKey || e.metaKey) return;
+            if (!/^\d$/.test(e.key)) {
+              e.preventDefault();
+            }
+          }}
+          onPaste={(e) => {
+            const text = e.clipboardData.getData('text');
+            if (!/^\d+$/.test(text)) e.preventDefault();
+          }}
+          onCompositionStart={(e) => e.preventDefault()}
           {...register('capacity', { valueAsNumber: true })}
         />
         {errors.capacity && (

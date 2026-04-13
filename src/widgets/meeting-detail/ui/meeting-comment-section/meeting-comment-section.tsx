@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { MessageSquareText } from 'lucide-react';
 
 import { useAuthStore } from '@/entities/auth';
-import type { MeetingComment as Comment } from '@/entities/meeting-comment';
+import type { MeetingComment as EntityComment } from '@/entities/meeting-comment';
 import { useCommentCount, useComments } from '@/entities/meeting-comment';
 import { useCreateComment } from '@/features/meeting-comment';
 import { cn } from '@/shared/lib/utils';
@@ -17,8 +17,8 @@ import { buildCommentTree } from './comment-tree';
 import { MeetingCommentItem } from './meeting-comment-item';
 import type { MeetingComment, MeetingCommentSectionProps } from './meeting-comment-section.types';
 
-function toMeetingCommentTree(raw: Comment[]): MeetingComment[] {
-  const list = raw as MeetingComment[];
+function toMeetingCommentTree(raw: EntityComment[]): MeetingComment[] {
+  const list = raw as unknown as MeetingComment[];
   if (list.some((c) => c.parentId != null)) {
     return buildCommentTree(list);
   }
@@ -27,15 +27,13 @@ function toMeetingCommentTree(raw: Comment[]): MeetingComment[] {
 
 export function MeetingCommentSection({
   meetingId,
-  initialComments,
-  initialCommentCount,
   commentSync,
   className,
 }: MeetingCommentSectionProps) {
   const [commentText, setCommentText] = useState('');
   const { isAuthenticated, user } = useAuthStore();
-  const { data: comments } = useComments(meetingId, initialComments as Comment[], commentSync);
-  const { data: countData } = useCommentCount(meetingId, initialCommentCount);
+  const { data: comments } = useComments(meetingId, commentSync);
+  const { data: countData } = useCommentCount(meetingId);
   const { mutate: createComment, isPending: isCreateCommentPending } = useCreateComment(meetingId, {
     nickname: user?.name ?? '',
     profileUrl: user?.image ?? null,
@@ -57,7 +55,7 @@ export function MeetingCommentSection({
   return (
     <section
       className={cn(
-        'border-sosoeat-gray-200 w-full rounded-[24px] border bg-white px-6 py-4',
+        'border-sosoeat-gray-200 w-full rounded-[24px] border bg-white px-4 py-4 md:px-6',
         className
       )}
     >

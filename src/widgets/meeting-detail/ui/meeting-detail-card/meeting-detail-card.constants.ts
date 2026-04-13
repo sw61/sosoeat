@@ -17,7 +17,7 @@ export const CATEGORY_LABEL: Record<MeetingCategory, string> = {
 
 /** 기본 액션 버튼 (참여하기 / 모임 확정하기) */
 export const actionButtonVariants = cva(
-  'h-full w-full rounded-2xl text-sm md:text-xl focus-visible:ring-0 focus-visible:border-transparent',
+  'h-full w-full rounded-2xl text-sm md:text-base lg:text-xl focus-visible:ring-0 focus-visible:border-transparent',
   {
     variants: {
       category: {
@@ -30,7 +30,7 @@ export const actionButtonVariants = cva(
 
 /** 흰 버튼 (참여 취소하기 / 공유하기) */
 export const outlineButtonVariants = cva(
-  'ring-0 h-full w-full rounded-2xl bg-white text-normal md:text-xl shadow-inner focus-visible:ring-0 focus-visible:border-transparent',
+  'ring-0 h-full w-full rounded-2xl bg-white text-sm md:text-base lg:text-xl shadow-inner focus-visible:ring-0 focus-visible:border-transparent',
   {
     variants: {
       category: {

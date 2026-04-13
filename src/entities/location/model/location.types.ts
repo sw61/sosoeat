@@ -10,9 +10,3 @@ export interface LocationSearchResult {
   /** 시/군/구 */
   region2: string;
 }
-
-export interface LocationSearchModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSelect: (result: LocationSearchResult) => void;
-}

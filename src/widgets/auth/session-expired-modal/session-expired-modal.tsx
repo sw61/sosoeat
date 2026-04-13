@@ -1,25 +1,21 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { useAuthStore } from '@/entities/auth';
 import { useLogoutMutation } from '@/features/auth';
 import { AlertModal } from '@/shared/ui/alert-modal/alert-modal';
 
 export const SessionExpiredModal = () => {
-  const router = useRouter();
   const { isSessionExpired, setSessionExpired } = useAuthStore();
   const { mutate: logout } = useLogoutMutation();
 
   const handleConfirm = () => {
-    logout();
     setSessionExpired(false);
-    router.push('/login');
+    logout('/login');
   };
 
   const handleCancel = () => {
-    logout();
     setSessionExpired(false);
+    logout('/home');
   };
 
   return (

@@ -12,9 +12,10 @@ export async function createProxyRequest(
   request: NextRequest,
   targetUrl: string,
   body: Blob | undefined,
-  retry = false
+  freshAccessToken?: string
 ): Promise<NextResponse> {
-  const accessToken = await CookieStorage.getAccessToken();
+  // freshAccessToken이 주어지면 우선 사용 (silentRefresh 후 재시도 시 쿠키 스냅샷 문제 방지)
+  const accessToken = freshAccessToken ?? (await CookieStorage.getAccessToken());
 
   const headers = new Headers();
 
@@ -48,10 +49,11 @@ export async function createProxyRequest(
   }
 
   // 401 발생 시 토큰 갱신 후 1회 재시도
-  if (response.status === 401 && !retry) {
-    const refreshed = await silentRefresh();
-    if (refreshed) {
-      return createProxyRequest(request, targetUrl, body, true);
+  // freshAccessToken이 없는 최초 요청에서만 시도 (재시도 방지)
+  if (response.status === 401 && !freshAccessToken) {
+    const newAccessToken = await silentRefresh();
+    if (newAccessToken) {
+      return createProxyRequest(request, targetUrl, body, newAccessToken);
     }
   }
 

@@ -58,7 +58,7 @@ jest.mock('@/shared/ui/date-picker/date-time-picker', () => ({
 }));
 
 // LocationSearchModal mock — 장소 검색 모달 자체는 별도 테스트, 여기선 선택 동작만 검증
-jest.mock('@/features/meeting-create/ui/_components/location-search/location-search-modal', () => ({
+jest.mock('@/entities/location', () => ({
   LocationSearchModal: ({
     open,
     onSelect,
