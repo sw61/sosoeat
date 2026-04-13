@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+﻿import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { MeetingFilterBar } from './meeting-filter-bar';
@@ -17,7 +17,7 @@ const defaultProps: Pick<
 };
 
 describe('MeetingFilterBar', () => {
-  it('모임 유형 라벨과 지역 버튼이 표시된다', () => {
+  it('모임 유형 필터와 지역 버튼을 렌더링한다', () => {
     render(<MeetingFilterBar {...defaultProps} />);
 
     expect(screen.getByText('전체')).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe('MeetingFilterBar', () => {
     expect(screen.getByRole('button', { name: '지역 전체' })).toBeInTheDocument();
   });
 
-  it('className이 루트 컨테이너에 적용된다', () => {
+  it('className을 루트 컨테이너에 적용한다', () => {
     const { container } = render(
       <MeetingFilterBar {...defaultProps} className="filter-bar-test" />
     );
@@ -44,7 +44,6 @@ describe('MeetingFilterBar', () => {
 
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '지역' })).toBeInTheDocument();
-    expect(screen.getByText('지역을 선택해주세요.')).toBeInTheDocument();
     expect(screen.getByRole('list', { name: '시·도 목록' })).toBeInTheDocument();
   });
 });

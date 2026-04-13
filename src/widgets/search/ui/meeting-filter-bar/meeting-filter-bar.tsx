@@ -105,7 +105,6 @@ export const MeetingFilterBar = ({
             </button>
           }
           title="지역"
-          description="지역을 선택해주세요."
           regionCascade={{ regions: regionData.regions }}
           dropdownSub={{
             data: { label: '_', options: [] },

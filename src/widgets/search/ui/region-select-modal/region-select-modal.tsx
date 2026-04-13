@@ -10,7 +10,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogTitle,
   DialogTrigger,
@@ -51,12 +50,16 @@ const scrollAreaClass =
 
 /** 푸터 행 — gap 16, 버튼 각 216@448 콘텐츠 폭 */
 const footerClass =
-  'mt-0 mb-0 w-full max-w-md flex-row! flex-wrap gap-4! border-0 bg-transparent p-0 shadow-none sm:justify-between!';
+  'mt-0 mb-0 w-full max-w-md flex-row! flex-wrap gap-4! border-0 bg-transparent p-0 shadow-none justify-between!';
 
 /** slate/200 border #DDDDDD, padding 16×30, text slate/600 */
 const cancelButtonClass =
   'h-12 sm:h-[60px] min-w-0 flex-1 rounded-2xl border border-[#DDDDDD] bg-white px-[30px] py-4 text-base sm:text-xl font-semibold ' +
   'tracking-[-0.02em] text-[#737373] shadow-none hover:bg-neutral-50';
+
+const resetButtonClass =
+  'h-12 sm:h-[60px] min-w-0 flex-1 rounded-2xl border border-sosoeat-orange-600 bg-white px-[30px] py-4 text-base sm:text-xl font-semibold ' +
+  'tracking-[-0.02em] text-sosoeat-orange-700 shadow-none hover:bg-sosoeat-orange-50';
 
 const confirmButtonClass =
   'h-12 sm:h-[60px] min-w-0 flex-1 rounded-2xl border-0 bg-[#FF6600] px-[30px] py-4 text-base sm:text-xl font-semibold ' +
@@ -65,7 +68,6 @@ const confirmButtonClass =
 export const RegionSelectModal = ({
   trigger,
   title,
-  description,
   dropdownSub,
   regionCascade,
   draftValue: draftValueProp,
@@ -86,7 +88,11 @@ export const RegionSelectModal = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild={triggerAsChild}>{trigger}</DialogTrigger>
-      <DialogContent showCloseButton={false} className={cn(dialogContentClass, contentClassName)}>
+      <DialogContent
+        showCloseButton={false}
+        aria-describedby={undefined}
+        className={cn(dialogContentClass, contentClassName)}
+      >
         {/* Frame 2611146: 헤더 gap 24 (title↔description) */}
         <div className="flex w-full max-w-md min-w-0 flex-col gap-6 self-start">
           <div className="flex min-h-8 w-full min-w-0 flex-row items-center justify-between gap-3">
@@ -103,11 +109,6 @@ export const RegionSelectModal = ({
               </Button>
             </DialogClose>
           </div>
-          {description != null ? (
-            <DialogDescription className="max-w-md text-base leading-6 font-normal tracking-[-0.02em] text-[#333333]">
-              {description}
-            </DialogDescription>
-          ) : null}
         </div>
 
         {/* Frame 2610642: 본문 영역 ↔ 푸터 gap 56 */}
@@ -136,15 +137,10 @@ export const RegionSelectModal = ({
           <DialogFooter className={cn(footerClass, dropdownSub != null && '[&>button]:min-w-0')}>
             {dropdownSub != null ? (
               <>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline" className={cancelButtonClass}>
-                    취소
-                  </Button>
-                </DialogClose>
                 <Button
                   type="button"
                   variant="outline"
-                  className={cancelButtonClass}
+                  className={resetButtonClass}
                   onClick={handleReset}
                 >
                   초기화

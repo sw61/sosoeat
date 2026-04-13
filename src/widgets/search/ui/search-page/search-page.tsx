@@ -60,7 +60,7 @@ export default function SearchPage({
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
-    <div className="mx-auto flex max-w-[1140px] flex-col items-center justify-center gap-4 md:px-4 md:pt-4">
+    <div className="">
       <div className="flex w-full flex-col gap-4 px-4 md:px-0">
         <SearchBar onChange={handleSearchQueryChange} value={inputValue} />
         <MeetingFilterBar
