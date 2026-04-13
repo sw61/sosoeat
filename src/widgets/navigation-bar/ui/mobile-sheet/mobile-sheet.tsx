@@ -1,8 +1,9 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { type ReadonlyURLSearchParams } from 'next/navigation';
 
 import { ChevronRight } from 'lucide-react';
 
@@ -23,7 +24,6 @@ import { getIsActive, getNavHref, NAV_ITEMS } from '../../lib/nav.constants';
 interface MobileSheetProps {
   user: AuthUser | null;
   pathname: string | null;
-  searchParams: ReadonlyURLSearchParams | null;
   favoritesCount: number;
   onLoginRequired: () => void;
   onLogout: () => void;
@@ -32,13 +32,23 @@ interface MobileSheetProps {
 export function MobileSheet({
   user,
   pathname,
-  searchParams,
   favoritesCount,
   onLoginRequired,
   onLogout,
 }: MobileSheetProps) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setOpen(false);
+    };
+    mq.addEventListener('change', handleChange);
+    return () => mq.removeEventListener('change', handleChange);
+  }, []);
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <button className="p-1 md:hidden" aria-label="메뉴 열기" suppressHydrationWarning>
           <Image src="/icons/icon-hamburger.png" alt="메뉴" width={24} height={24} />
@@ -50,7 +60,7 @@ export function MobileSheet({
 
         <div className="flex flex-col gap-1 px-4">
           {NAV_ITEMS.map((item) => {
-            const isActive = getIsActive(item, pathname, searchParams);
+            const isActive = getIsActive(item, pathname);
             const href = getNavHref(item, user);
             const className = cn(
               'flex h-[72px] items-center justify-between rounded-md px-3 text-sm font-medium transition-colors',
