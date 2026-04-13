@@ -73,7 +73,6 @@ export async function syncAmplitudeUser(user: AuthUser | null) {
     amplitude.reset();
     return;
   }
-  console.log(`Amplitude user identified: ${user.id}`);
   amplitude.setUserId(String(user.id) + '-' + user.email);
 
   const identify = new amplitude.Identify();
