@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useTransition } from 'react';
 
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useMeetingTabs } from '../../model/use-meeting-tabs';
@@ -64,7 +65,9 @@ export function MeetingTabs() {
           ) : (
             <div className="grid grid-cols-1 justify-items-center gap-4 py-4 lg:grid-cols-2 lg:justify-items-start">
               {cards.map((card) => (
-                <MyPageCard key={card.meetingId} {...card} />
+                <Link key={card.meetingId} href={`/meetings/${card.meetingId}`}>
+                  <MyPageCard {...card} />
+                </Link>
               ))}
             </div>
           )}

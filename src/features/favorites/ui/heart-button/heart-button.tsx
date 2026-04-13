@@ -46,7 +46,10 @@ export function HeartButton({
   const src = isFavoritedState ? '/icons/main-page-heart.svg' : '/icons/main-page-not-heart.svg';
   const iconPx = sizeIcon[size];
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!isAuthenticated) {
       setLoginRequired(true);
       return;
