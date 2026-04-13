@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
@@ -20,26 +21,54 @@ interface Banner {
   imageUrl: string;
   alt: string;
   href?: string;
+  badge: string;
+  titleWhite: string;
+  titleAccent: string;
+  description: string;
+  ctaLabel: string;
+  accentClassName: string;
+  buttonClassName: string;
 }
 
 const BANNERS: Banner[] = [
   {
-    imageUrl:
-      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021008378-d25ae489-1950-4c33-9e91-d962b4e63c14.jpg',
-    alt: '신선한 오늘의 추천 메뉴',
+    imageUrl: '/images/main_banner_001.jpg',
+    alt: '함께먹기 메인 배너',
     href: '/search',
+    badge: '함께먹기',
+    titleWhite: '함께하면 더',
+    titleAccent: '맛있어요',
+    description: '가고 싶었던 맛집, 혼자 가기 아쉬웠죠? 소소잇에서 같이 먹을 사람을 찾아보세요.',
+    ctaLabel: '함께먹기 모임 보기',
+    accentClassName: 'text-sosoeat-orange-600',
+    buttonClassName:
+      'border-sosoeat-orange-500/50 bg-sosoeat-orange-600 hover:bg-sosoeat-orange-500 shadow-[0_16px_40px_rgba(255,122,26,0.35)]',
   },
   {
-    imageUrl:
-      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021059723-2224efa7-cd60-4b75-9ef8-b05b1db43596.jpg',
-    alt: '모닝 브런치 스페셜 세트',
+    imageUrl: '/images/main_banner_002.jpg',
+    alt: '공동구매 메인 배너',
+    href: '/search',
+    badge: '공동구매',
+    titleWhite: '같이사면 더',
+    titleAccent: '행복해요',
+    description: '대용량 제품, 혼자 구매하기 어려웠죠? 소소잇에서 함께 나눌 사람을 찾아보세요.',
+    ctaLabel: '공동구매 모임 보기',
+    accentClassName: 'text-blue-500',
+    buttonClassName:
+      'border-blue-400/50 bg-blue-500 hover:bg-blue-400 shadow-[0_16px_40px_rgba(59,130,246,0.35)]',
+  },
+  {
+    imageUrl: '/images/main_banner_003.jpg',
+    alt: '소소토크 메인 배너',
     href: '/sosotalk',
-  },
-  {
-    imageUrl:
-      'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/together-dallaem/v2/tmp/meetings/1775021087340-27221ae9-edba-448c-97ee-775ae7e75b75.jpg',
-    alt: '저녁 모임을 위한 정갈한 요리',
-    href: '/search',
+    badge: '소소토크',
+    titleWhite: '소통하면 더',
+    titleAccent: '즐거워요',
+    description: '나만 아는 맛집, 나만 모르던 제품. 소소잇에서 함께 정보를 나누고 이득 보세요.',
+    ctaLabel: '소소토크 게시글 보기',
+    accentClassName: 'text-sosoeat-orange-600',
+    buttonClassName:
+      'border-sosoeat-orange-500/50 bg-sosoeat-orange-600 hover:bg-sosoeat-orange-500 shadow-[0_16px_40px_rgba(255,122,26,0.35)]',
   },
 ];
 
@@ -97,7 +126,6 @@ export function MainBanner() {
           ))}
         </CarouselContent>
 
-        {/* 내비게이션 버튼: 1200px 컨테이너 기준 배치 */}
         {BANNERS.length > 1 && (
           <div className="pointer-events-none absolute inset-0 z-30 hidden md:block">
             <div className="relative mx-auto h-full max-w-300">
@@ -124,7 +152,6 @@ export function MainBanner() {
         )}
       </Carousel>
 
-      {/* 중앙 콘텐츠(인디케이터/카운터) 영역 */}
       <div className="pointer-events-none absolute bottom-10 left-1/2 z-40 w-full -translate-x-1/2 px-4">
         <div className="mx-auto flex flex-col items-center gap-5">
           <div className="flex gap-2.5">
@@ -152,17 +179,43 @@ export function MainBanner() {
 
 function BannerImage({ banner, index }: { banner: Banner; index: number }) {
   return (
-    <div className="relative h-[450px]">
+    <div className="relative h-[420px] md:h-[450px]">
       <Image
         src={banner.imageUrl}
         alt={banner.alt}
         fill
         priority={index === 0}
         className="object-cover"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+        sizes="100vw"
       />
-      {/* 가독성을 위한 오버레이 */}
-      <div className="absolute inset-0 bg-black/55" />
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 z-10 flex items-center justify-center px-6 pb-14 md:pb-16">
+        <div className="w-full max-w-[294px] text-white md:max-w-[300px]">
+          <div className="mb-4 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-semibold backdrop-blur-md md:text-xs">
+            {banner.badge}
+          </div>
+          <div className="text-[40px] leading-[1.04] font-bold tracking-[-0.04em] md:text-[46px] xl:text-[48px]">
+            <p>{banner.titleWhite}</p>
+            <p className={banner.accentClassName}>{banner.titleAccent}</p>
+          </div>
+          <p className="mt-4 text-[13px] leading-5.5 break-keep text-white/82 md:text-[14px] md:leading-6">
+            {banner.description}
+          </p>
+          <div className="mt-5">
+            <span
+              className={cn(
+                'inline-flex min-h-10 items-center rounded-2xl border px-4.5 text-[13px] font-semibold text-white transition-colors md:min-h-11 md:px-5 md:text-sm',
+                banner.buttonClassName
+              )}
+            >
+              {banner.ctaLabel}
+              <span className="ml-3 text-base md:text-lg" aria-hidden="true">
+                {'>'}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
