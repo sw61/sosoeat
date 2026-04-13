@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
 
+import type { Metadata } from 'next';
+
 import { format } from 'date-fns';
 
 import {
@@ -13,6 +15,11 @@ import {
   MeetingTabs,
   UserCard,
 } from '@/widgets/mypage';
+
+export const metadata: Metadata = {
+  title: '마이페이지',
+  robots: { index: false, follow: false },
+};
 
 export default async function MyPage() {
   const user = await fetchMeServer();
