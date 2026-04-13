@@ -107,7 +107,7 @@ function HostRow({ name, profileImage, className }: HostRowProps) {
       </Avatar>
       <div>
         <p className="text-sosoeat-gray-600 text-xs font-medium">호스트</p>
-        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{name}</p>
+        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm lg:text-base">{name}</p>
       </div>
     </div>
   );
@@ -128,12 +128,18 @@ function InfoSection({ meeting, category, fullDateLabel, className }: InfoSectio
   return (
     <div className={cn('flex flex-col gap-1 md:gap-2', className)}>
       <InfoRow icon={<CalendarIcon />} category={category} label="날짜 및 시간">
-        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{fullDateLabel}</p>
+        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm lg:text-base">
+          {fullDateLabel}
+        </p>
       </InfoRow>
 
       <InfoRow icon={<MapPinIcon />} category={category} label="장소">
-        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm">{meeting.region}</p>
-        <p className="text-sosoeat-gray-600 text-xs font-semibold md:text-sm">{meeting.address}</p>
+        <p className="text-sosoeat-gray-900 text-xs font-bold md:text-sm lg:text-base">
+          {meeting.region}
+        </p>
+        <p className="text-sosoeat-gray-600 text-xs font-semibold md:text-sm lg:text-base">
+          {meeting.address}
+        </p>
       </InfoRow>
 
       <ParticipantsRow
@@ -161,20 +167,14 @@ interface ActionRowProps {
 function ActionRow({ actionButton, meetingId, isFavorited }: ActionRowProps) {
   return (
     <div className="flex items-center gap-2">
-      <div className="h-10 w-full md:h-[62px]">{actionButton}</div>
-      {/* sm·md: 40×40 */}
-      <HeartButton
-        meetingId={meetingId}
-        isFavorited={isFavorited}
-        size="sm"
-        className="border-sosoeat-gray-500 relative inset-auto m-0 lg:hidden"
-      />
-      {/* lg: 60×60 */}
+      <div className="h-10 w-full md:h-[52px] lg:h-[62px]">{actionButton}</div>
       <HeartButton
         meetingId={meetingId}
         isFavorited={isFavorited}
         size="lg"
-        className="border-sosoeat-gray-500 relative inset-auto m-0 hidden lg:block"
+        sizeClass="size-10 md:size-[50px] lg:size-[60px]"
+        iconClass="size-6 md:size-[38px] lg:size-10"
+        className="border-sosoeat-gray-500 relative inset-auto m-0"
       />
     </div>
   );
@@ -273,7 +273,7 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
           md: text-2xl/bold
           lg: text-3xl/bold
           ════════════════════════════════════════ */}
-      <h2 className="line-clamp-2 text-xl leading-snug font-semibold md:line-clamp-none md:text-2xl md:font-bold">
+      <h2 className="line-clamp-2 text-xl leading-snug font-semibold md:line-clamp-none md:text-2xl md:font-bold lg:text-3xl">
         {meeting.name}
       </h2>
 

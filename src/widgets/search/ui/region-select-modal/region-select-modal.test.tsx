@@ -144,7 +144,7 @@ describe('RegionSelectModal', () => {
     const user = userEvent.setup();
     const onChange = jest.fn();
     const cascadeRegions = [
-      { id: 'seoul', name: '서울특별시', nameEn: 'Seoul', districts: ['강남구', '서초구'] },
+      { id: 'seoul', name: '서울', nameEn: 'Seoul', districts: ['강남구', '서초구'] },
     ];
 
     render(
@@ -163,18 +163,18 @@ describe('RegionSelectModal', () => {
     await user.click(screen.getByRole('button', { name: '열기' }));
     await screen.findByRole('dialog');
 
-    await user.click(screen.getByRole('button', { name: '서울특별시' }));
+    await user.click(screen.getByRole('button', { name: '서울' }));
     await user.click(await screen.findByRole('menuitemcheckbox', { name: '강남구' }));
 
-    await user.click(screen.getByRole('button', { name: /서울특별시/ }));
+    await user.click(screen.getByRole('button', { name: /서울/ }));
     await user.click(await screen.findByRole('menuitemcheckbox', { name: '서초구' }));
 
     await user.click(screen.getByRole('button', { name: '확인' }));
 
     expect(onChange).toHaveBeenCalledWith(
       expect.arrayContaining([
-        { province: '서울특별시', district: '강남구' },
-        { province: '서울특별시', district: '서초구' },
+        { province: '서울', district: '강남구' },
+        { province: '서울', district: '서초구' },
       ])
     );
   });
@@ -199,7 +199,7 @@ describe('RegionSelectModal', () => {
   it('regionCascade에서 시도를 누르면 구 선택 드롭다운 메뉴가 열린다', async () => {
     const user = userEvent.setup();
     const cascadeRegions = [
-      { id: 'seoul', name: '서울특별시', nameEn: 'Seoul', districts: ['강남구', '서초구'] },
+      { id: 'seoul', name: '서울', nameEn: 'Seoul', districts: ['강남구', '서초구'] },
     ];
 
     render(
@@ -220,7 +220,7 @@ describe('RegionSelectModal', () => {
 
     expect(screen.getByRole('list', { name: '시·도 목록' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: '서울특별시' }));
+    await user.click(screen.getByRole('button', { name: '서울' }));
 
     expect(await screen.findByRole('menu')).toBeInTheDocument();
     expect(screen.getByRole('menuitemcheckbox', { name: '강남구' })).toBeInTheDocument();

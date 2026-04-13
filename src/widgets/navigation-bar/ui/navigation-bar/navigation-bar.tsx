@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 
+import { toast } from 'sonner';
+
 import { AuthUser, useAuthStore } from '@/entities/auth';
 import { useFavoritesCount } from '@/entities/favorites';
 import { useLogoutMutation } from '@/features/auth';
@@ -57,14 +59,22 @@ export function NavigationBar({
           />
 
           <div className="flex items-center gap-2">
-            <NavActions user={user} onOpenCreateModal={handleOpen} onLogout={performLogout} />
+            <NavActions
+              user={user}
+              onOpenCreateModal={handleOpen}
+              onLogout={() =>
+                performLogout(undefined, { onSuccess: () => toast.success('로그아웃 되었습니다.') })
+              }
+            />
             <MobileSheet
               user={user}
               pathname={pathname}
               searchParams={searchParams}
               favoritesCount={favoritesCount ?? initialFavoritesCount}
               onLoginRequired={() => setLoginRequired(true)}
-              onLogout={performLogout}
+              onLogout={() =>
+                performLogout(undefined, { onSuccess: () => toast.success('로그아웃 되었습니다.') })
+              }
             />
           </div>
         </div>

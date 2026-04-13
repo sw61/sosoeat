@@ -9,7 +9,7 @@ import { meetingsApi, mypageMeetingCountKey } from '@/entities/meeting';
 import { useDeleteMeeting, useJoinMeeting, useLeaveMeeting } from './meeting-detail.queries';
 
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn() }),
+  useRouter: () => ({ push: jest.fn(), back: jest.fn() }),
 }));
 
 jest.mock('@/entities/meeting', () => ({
@@ -17,6 +17,11 @@ jest.mock('@/entities/meeting', () => ({
     join: jest.fn(),
     leave: jest.fn(),
     deleteMeeting: jest.fn(),
+  },
+  meetingsQueryOptions: {
+    meetingDetail: (id: number) => ({
+      queryKey: ['meetings', 'detail', id],
+    }),
   },
   mypageMeetingCountKey: ['users', 'me', 'meeting-count'],
 }));
