@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { ko } from 'react-day-picker/locale';
 
-import Image from 'next/image';
-
 import { format, isSameDay, startOfDay } from 'date-fns';
 import { ChevronDown, Triangle } from 'lucide-react';
 
