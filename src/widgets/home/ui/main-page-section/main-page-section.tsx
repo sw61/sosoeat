@@ -13,7 +13,7 @@ export async function MainPageSection() {
   });
 
   return (
-    <section className="px-4 pt-8">
+    <section className="px-4">
       <h2 className="mb-3 flex items-center gap-3 text-lg font-bold md:text-xl lg:text-2xl">
         <Image src="icons/main-page-twinkle.svg" alt="twinkle" width={18} height={18} />
         추천 소잇
