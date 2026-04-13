@@ -16,11 +16,12 @@ export function NavigationBar({
   initialUnreadCount?: number;
 }) {
   return (
-    <header className="bg-background sticky top-0 z-50 w-full pt-[env(safe-area-inset-top)] md:static md:z-auto md:pt-0">
+    <header className="bg-background sticky top-0 z-50 w-full pt-[env(safe-area-inset-top)]">
       <div
         className={cn(
           'mx-auto flex w-full items-center justify-between',
-          'h-16 max-w-[1140px] px-4',
+          'h-12 max-w-[1140px] px-4',
+          'md:h-16',
           'md:px-[37px]'
         )}
       >
