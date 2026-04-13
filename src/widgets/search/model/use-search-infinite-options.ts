@@ -23,7 +23,6 @@ export const useSearchInfiniteOptions = (options: MeetingsOptions) => {
   const [cursor, setCursor] = useState<Record<string, string | undefined>>({});
   const [hasMoreByRegion, setHasMoreByRegion] = useState<Record<string, boolean>>({});
   const [accumlated, setAccumlated] = useState<Record<string, Array<MeetingWithHost>>>({});
-  // 캐싱되어있는 데이터를 가져다 쓴다면?
 
   // (regionKey, region, cursor) 기준으로 중복 처리 방지
   const processedRef = useRef<Set<string>>(new Set());
