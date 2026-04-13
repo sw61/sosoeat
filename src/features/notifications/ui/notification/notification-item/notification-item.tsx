@@ -14,7 +14,7 @@ import { NotificationItemThumbnail } from './notification-item.thumbnail';
 export const NotificationItem = (props: Notification) => {
   const { description, title, highlighted, isMeetingConfirmed, metaRight, thumbnailKey, image } =
     getNotificationViewModel(props);
-  const { markAsRead, deleteNotification } = useNotificationReadActions(props.id);
+  const { markAsRead, deleteNotification } = useNotificationReadActions(props.id, props.isRead);
 
   return (
     <div

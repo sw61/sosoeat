@@ -5,14 +5,14 @@ import {
   useMarkAsRead,
 } from './notification.mutations';
 
-export const useNotificationReadActions = (notificationId?: number) => {
+export const useNotificationReadActions = (notificationId?: number, isRead?: boolean) => {
   const { mutate } = useMarkAsRead();
   const { mutate: mutateAll } = useMarkAllAsRead();
   const { mutate: mutateDelete } = useDeleteNotification();
   const { mutate: mutateDeleteAll } = useDeleteAllNotifications();
 
   const markAsRead = () => {
-    if (notificationId == null) return;
+    if (notificationId == null || isRead) return;
     mutate(notificationId);
   };
 
