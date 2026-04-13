@@ -1,4 +1,5 @@
 import { fetchClient } from '@/shared/api/fetch-client';
+import { parseResponse } from '@/shared/api/parse-response';
 import {
   PresignedUrlRequestContentTypeEnum,
   PresignedUrlRequestFolderEnum,
@@ -43,18 +44,13 @@ export const imagesApi = {
       contentType,
       folder,
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '이미지 업로드에 실패했습니다.');
-    }
-
-    return response.json();
+    return parseResponse<PresignedUrlResponse>(response, '이미지 업로드에 실패했습니다.');
   },
 
   /**
    * S3에 이미지 직접 업로드
    * PUT presignedUrl
+   * S3 presigned URL은 에러 응답이 JSON이 아니므로 parseResponse 미사용
    */
   async uploadToS3(presignedUrl: string, file: File): Promise<void> {
     const response = await fetch(presignedUrl, {
@@ -62,7 +58,6 @@ export const imagesApi = {
       headers: { 'Content-Type': file.type.trim() },
       body: file,
     });
-
     if (!response.ok) {
       throw new Error('이미지 업로드에 실패했습니다.');
     }
