@@ -50,7 +50,7 @@ const scrollAreaClass =
 
 /** 푸터 행 — gap 16, 버튼 각 216@448 콘텐츠 폭 */
 const footerClass =
-  'mt-0 mb-0 w-full max-w-md flex-row! flex-wrap gap-4! border-0 bg-transparent p-0 shadow-none justify-between!';
+  'mx-0! mt-0 mb-0 w-full max-w-md self-center flex-row! flex-wrap justify-center! gap-4! border-0 bg-transparent p-0 shadow-none';
 
 /** slate/200 border #DDDDDD, padding 16×30, text slate/600 */
 const cancelButtonClass =
