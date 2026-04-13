@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { toast } from 'sonner';
 
-import { meetingsApi, mypageJoinedMeetingsKey } from '@/entities/meeting';
+import { meetingKeys, meetingsApi } from '@/entities/meeting';
 import { meetingCommentApi } from '@/entities/meeting-comment';
 import type { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 
@@ -14,7 +14,10 @@ jest.mock('@/entities/meeting', () => ({
   meetingsApi: {
     create: jest.fn(),
   },
-  mypageJoinedMeetingsKey: ['users', 'me', 'joined-meetings'],
+  meetingKeys: {
+    joined: () => ['meetings', 'joined'],
+    my: () => ['meetings', 'my'],
+  },
 }));
 
 jest.mock('sonner', () => ({
@@ -80,7 +83,7 @@ describe('useCreateMeeting', () => {
     expect(toast.success).toHaveBeenCalled();
   });
 
-  it('모임 생성 성공 시 mypageJoinedMeetingsKey를 invalidate한다', async () => {
+  it('모임 생성 성공 시 meetingKeys.joined()와 meetingKeys.my()를 invalidate한다', async () => {
     const mockMeeting = { id: 1, hostId: 42, teamId: 'team-abc' };
     mockCreate.mockResolvedValue(mockMeeting);
     mockSyncCreateMeeting.mockResolvedValue(undefined);
@@ -95,7 +98,8 @@ describe('useCreateMeeting', () => {
     result.current.mutate(MOCK_PAYLOAD);
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: mypageJoinedMeetingsKey });
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: meetingKeys.joined() });
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: meetingKeys.my() });
   });
 
   it('모임 생성 실패 시 isError 상태가 되고 error toast를 띄운다', async () => {
