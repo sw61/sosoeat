@@ -1,7 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { useCreatedMeetings, useFavoriteMeetings, useJoinedMeetings } from './mypage.queries';
 import { toFavoriteMeetingCards, toUserMeetingCards } from './mypage.service';
 import { TabValue } from './mypage.types';
@@ -11,18 +9,18 @@ export function useMeetingTabs(activeTab: TabValue) {
   const createdQuery = useCreatedMeetings();
   const favoriteQuery = useFavoriteMeetings();
 
-  const cards = useMemo(() => {
-    if (activeTab === 'all' && joinedQuery.data) {
-      return toUserMeetingCards(joinedQuery.data);
-    }
-    if (activeTab === 'created' && createdQuery.data) {
-      return toUserMeetingCards(createdQuery.data);
-    }
-    if (activeTab === 'favorite' && favoriteQuery.data) {
-      return toFavoriteMeetingCards(favoriteQuery.data);
-    }
-    return [];
-  }, [activeTab, joinedQuery.data, createdQuery.data, favoriteQuery.data]);
+  const favoritedIds = new Set(favoriteQuery.data?.data.map((f) => f.meeting.id) ?? []);
+
+  let cards: ReturnType<typeof toUserMeetingCards>;
+  if (activeTab === 'all' && joinedQuery.data) {
+    cards = toUserMeetingCards(joinedQuery.data, favoritedIds);
+  } else if (activeTab === 'created' && createdQuery.data) {
+    cards = toUserMeetingCards(createdQuery.data, favoritedIds);
+  } else if (activeTab === 'favorite' && favoriteQuery.data) {
+    cards = toFavoriteMeetingCards(favoriteQuery.data);
+  } else {
+    cards = [];
+  }
 
   const isLoading =
     (activeTab === 'all' && joinedQuery.isLoading) ||
