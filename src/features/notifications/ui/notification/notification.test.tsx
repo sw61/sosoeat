@@ -1,19 +1,44 @@
+'use client';
+
 import { useInView } from 'react-intersection-observer';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { fetchClient } from '@/shared/api/fetch-client';
-import type { Notification, NotificationList } from '@/shared/types/generated-client';
+import type { Notification } from '@/shared/types/generated-client';
+
+import { useNotificationInfiniteList, useUnreadCount } from '../../model/notification.queries';
 
 import { Notification as Nt } from './notification';
 
-jest.mock('@/shared/api/fetch-client', () => ({
-  fetchClient: {
-    get: jest.fn(),
-    put: jest.fn(),
+jest.mock('@/features/notifications/model/notification.queries', () => ({
+  useNotificationInfiniteList: jest.fn(),
+  useUnreadCount: jest.fn(),
+  notificationKeys: {
+    list: (options?: object) =>
+      options ? ['notifications', 'list', options] : ['notifications', 'list'],
+    unreadCount: () => ['notifications', 'unread-count'],
   },
+}));
+
+jest.mock('@/features/notifications/model/use-notification-read-actions', () => ({
+  useNotificationReadActions: jest.fn(() => ({
+    markAsRead: jest.fn(),
+    markAllAsRead: jest.fn(),
+    deleteNotification: jest.fn(),
+    deleteAllNotifications: jest.fn(),
+  })),
+}));
+
+jest.mock('react-intersection-observer', () => ({
+  useInView: jest.fn(),
+}));
+
+jest.mock('@/features/notifications/api/notifications.server', () => ({
+  getNotificationListServer: jest
+    .fn()
+    .mockResolvedValue({ data: [], hasMore: false, nextCursor: '' }),
 }));
 
 const testNotifications: Notification[] = [
@@ -37,27 +62,17 @@ const testNotifications: Notification[] = [
     isRead: true,
     createdAt: new Date('2025-01-15T10:00:00Z'),
   },
-  {
-    id: 3,
-    teamId: 'dallaem',
-    userId: 1,
-    type: 'MEETING_CANCELED',
-    message: '',
-    data: { meetingName: '테스트' },
-    isRead: false,
-    createdAt: new Date('2025-01-14T12:00:00Z'),
-  },
 ];
 
-const mockGet = fetchClient.get as jest.MockedFunction<typeof fetchClient.get>;
-const mockNotifications: NotificationList = {
-  data: testNotifications,
-  nextCursor: '',
-  hasMore: false,
-};
-jest.mock('react-intersection-observer', () => ({
-  useInView: jest.fn(),
-}));
+const mockInfiniteReturn = (overrides: object) => ({
+  isPending: false,
+  fetchNextPage: jest.fn(),
+  hasNextPage: false,
+  isFetchingNextPage: false,
+  error: null,
+  data: { pages: [] },
+  ...overrides,
+});
 
 const MAX_WIDTH_QUERY = '(max-width: 767px)';
 
@@ -81,7 +96,6 @@ const renderWithClient = (ui: Parameters<typeof render>[0]) => {
       mutations: { retry: false },
     },
   });
-
   return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
 };
 
@@ -89,13 +103,11 @@ describe('Notification', () => {
   beforeEach(() => {
     mockMatchMedia(false);
     jest.clearAllMocks();
-    mockGet.mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue(mockNotifications),
-    } as unknown as Response);
+    (useUnreadCount as jest.Mock).mockReturnValue({ data: 0 });
+    (useInView as jest.Mock).mockReturnValue({ ref: jest.fn(), inView: false });
+    (useNotificationInfiniteList as jest.Mock).mockReturnValue(mockInfiniteReturn({}));
   });
 
-  // 수정 후
   it('알림 열기 트리거가 표시된다', async () => {
     renderWithClient(<Nt />);
     expect(await screen.findByRole('button', { name: '알림 열기' })).toBeInTheDocument();
@@ -108,15 +120,23 @@ describe('Notification', () => {
     );
   });
 
-  it('트리거 클릭 시 알림 내역과 목록이 보인다 (넓은 화면: Popover)', async () => {
+  it('initialUnreadCount가 useUnreadCount에 전달된다', () => {
+    renderWithClient(<Nt initialUnreadCount={5} />);
+    expect(useUnreadCount).toHaveBeenCalledWith(5);
+  });
+
+  it('트리거 클릭 시 알림 내역과 목록이 보인다', async () => {
     const user = userEvent.setup();
-    (useInView as jest.Mock).mockReturnValue({ ref: jest.fn(), inView: false });
+    (useNotificationInfiniteList as jest.Mock).mockReturnValue(
+      mockInfiniteReturn({ data: { pages: [{ data: testNotifications }] } })
+    );
+
     renderWithClient(<Nt />);
-    await user.click(await screen.findByRole('button', { name: '알림 열기' })); // ← findBy
+    await user.click(await screen.findByRole('button', { name: '알림 열기' }));
 
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    expect(await screen.findByRole('heading', { name: '알림 내역' })).toBeInTheDocument(); // ← findBy
-    expect(await screen.findByRole('button', { name: '모두 읽기' })).toBeInTheDocument(); // ← findBy
-    expect(await screen.findByText('모임 확정')).toBeInTheDocument(); // ← findBy
+    expect(await screen.findByRole('heading', { name: '알림 내역' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: '모두 읽기' })).toBeInTheDocument();
+    expect(await screen.findByText('모임 확정')).toBeInTheDocument();
   });
 });

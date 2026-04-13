@@ -54,4 +54,18 @@ export const notificationApi = {
     }
     return response;
   },
+  deleteNotification: async (notificationId: number) => {
+    const response = await fetchClient.delete(`/notifications/${notificationId}`);
+    if (!response.ok) {
+      throw new Error(`Failed to delete notification ${notificationId}`);
+    }
+    return response;
+  },
+  deleteAllNotifications: async () => {
+    const response = await fetchClient.delete('/notifications');
+    if (!response.ok) {
+      throw new Error('Failed to delete all notifications');
+    }
+    return response;
+  },
 };
