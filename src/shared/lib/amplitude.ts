@@ -60,7 +60,6 @@ export async function trackEvent(eventName: string, eventProperties?: Record<str
   if (!isAmplitudeEnabled()) {
     return;
   }
-  await initAmplitude();
   amplitude.track(eventName, eventProperties);
 }
 
@@ -74,8 +73,8 @@ export async function syncAmplitudeUser(user: AuthUser | null) {
     amplitude.reset();
     return;
   }
-
-  amplitude.setUserId(String(user.id));
+  console.log(`Amplitude user identified: ${user.id}`);
+  amplitude.setUserId(String(user.id) + '-' + user.email);
 
   const identify = new amplitude.Identify();
 
