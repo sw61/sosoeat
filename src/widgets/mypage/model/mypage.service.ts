@@ -35,6 +35,7 @@ const toMeetingCard = (m: UserMeeting): MyPageCardProps => ({
   variant: 'groupEat',
   isCompleted: isCompleted(m.dateTime),
   isHost: m.role === UserMeetingRoleEnum.Host,
+  imageUrl: toImageUrl(m.image),
   isFavorited: false,
 });
 
