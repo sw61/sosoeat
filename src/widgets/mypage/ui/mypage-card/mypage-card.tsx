@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Calendar, Clock, LucideIcon, MapPin, UserRound } from 'lucide-react';
 
@@ -83,17 +84,20 @@ function StatusBadgeGroup({
       ) : (
         <EstablishmentStatusBadge confirmedAt={null} variant={variant} />
       )}
-      <HeartButton
-        className="relative -top-3 left-0 ml-auto max-md:hidden"
-        meetingId={meetingId}
-        isFavorited={isFavorited}
-      />
+      <div className="relative z-10 ml-auto max-md:hidden">
+        <HeartButton
+          className="relative -top-3 left-0"
+          meetingId={meetingId}
+          isFavorited={isFavorited}
+        />
+      </div>
     </div>
   );
 }
 
 export function MyPageCard({
   meetingId,
+  href,
   title,
   currentCount,
   maxCount,
@@ -113,11 +117,12 @@ export function MyPageCard({
   return (
     <Card
       className={cn(
-        'flex overflow-hidden rounded-4xl border-none p-0 shadow-none',
+        'relative flex overflow-hidden rounded-4xl border-none p-0 shadow-none',
         'gap-0 max-md:w-85.75 max-md:flex-col md:h-60 md:w-132.5 md:flex-row md:items-center md:gap-4 md:px-4 lg:w-full',
         className
       )}
     >
+      <Link href={href} aria-label={title} className="absolute inset-0 z-0" />
       {/* 이미지 */}
       <div className="relative shrink-0 overflow-hidden max-md:h-39 max-md:w-full max-md:rounded-t-4xl md:size-47 md:rounded-2xl">
         <Image src={imageUrl} alt={imageAlt ?? title} fill className="object-cover" />
@@ -125,11 +130,13 @@ export function MyPageCard({
         {/* 이미지 위 오버레이 (모바일 전용) */}
         <div className="absolute top-1 right-4 left-4 flex items-center justify-between md:hidden">
           <VariantBadge variant={variant} />
-          <HeartButton
-            className="relative top-3 left-1"
-            meetingId={meetingId}
-            isFavorited={isFavorited}
-          />
+          <div className="relative z-10">
+            <HeartButton
+              className="relative top-3 left-1"
+              meetingId={meetingId}
+              isFavorited={isFavorited}
+            />
+          </div>
         </div>
       </div>
 
