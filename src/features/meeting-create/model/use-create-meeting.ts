@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { meetingsApi, mypageJoinedMeetingsKey } from '@/entities/meeting';
+import { meetingKeys, meetingsApi } from '@/entities/meeting';
 import { meetingCommentApi } from '@/entities/meeting-comment';
 import { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 
@@ -20,7 +20,8 @@ export const useCreateMeeting = () => {
         .catch((error: Error) => {
           console.error('[useCreateMeeting] comment sync failed:', error);
         });
-      void queryClient.invalidateQueries({ queryKey: mypageJoinedMeetingsKey });
+      void queryClient.invalidateQueries({ queryKey: meetingKeys.joined() });
+      void queryClient.invalidateQueries({ queryKey: meetingKeys.my() });
       toast.success('모임이 생성되었습니다.');
     },
     onError: (error: Error) => {
