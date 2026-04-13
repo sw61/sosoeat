@@ -29,9 +29,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: meeting.name,
     description: meeting.description,
     openGraph: {
+      type: 'article',
       title: meeting.name,
       description: meeting.description,
-      images: [{ url: meeting.image }],
+      ...(meeting.image && { images: [{ url: meeting.image }] }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meeting.name,
+      description: meeting.description,
+      ...(meeting.image && { images: [meeting.image] }),
     },
   };
 }
