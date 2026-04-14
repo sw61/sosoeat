@@ -1,16 +1,17 @@
 'use client';
 
-import Cropper from 'react-easy-crop';
-
 import Image from 'next/image';
 
 import { Loader2, Pencil, XIcon } from 'lucide-react';
 
 import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
+import { BaseImageCropper } from '@/shared/ui/image-editor/base-image-cropper';
 
 import { useProfileImageEditor } from '../../../model/use-profile-image-editor';
 import type { ProfileImageEditorProps } from '../edit-profile-modal.types';
+
+import sliderStyles from '@/shared/ui/image-editor/image-editor-slider.module.css';
 
 const actionButtonClassName =
   'w-fill h-12 md:h-15 flex-1 md:rounded-2xl rounded-xl py-3 text-base md:text-xl font-semibold';
@@ -84,13 +85,13 @@ export function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorPro
 
           <div className="relative h-72 w-full overflow-hidden rounded-2xl bg-white">
             {rawSrc && (
-              <Cropper
+              <BaseImageCropper
                 image={rawSrc}
                 crop={crop}
                 zoom={zoom}
                 aspect={1}
                 cropShape="round"
-                showGrid={false}
+                showGrid={true}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={(_, pixels) => setCroppedAreaPixels(pixels)}
@@ -99,7 +100,6 @@ export function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorPro
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="text-sm text-gray-500">확대/축소</span>
             <input
               type="range"
               min={1}
@@ -107,7 +107,7 @@ export function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorPro
               step={0.01}
               value={zoom}
               onChange={(e) => setZoom(Number(e.target.value))}
-              className="h-1 w-full cursor-pointer accent-orange-500"
+              className={sliderStyles.slider}
             />
           </div>
 
