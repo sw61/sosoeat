@@ -32,14 +32,14 @@ export const actionButtonVariants = cva(
 
 /** 흰 버튼 (참여 취소하기 / 공유하기) */
 export const outlineButtonVariants = cva(
-  'ring-0 h-full w-full rounded-2xl bg-white text-sm md:text-base lg:text-xl shadow-inner focus-visible:ring-0 focus-visible:border-transparent',
+  'ring-0 h-full w-full rounded-2xl border-2 bg-white text-sm md:text-base lg:text-xl focus-visible:ring-0 focus-visible:border-transparent',
   {
     variants: {
       category: {
         groupEat:
-          'ring-1 text-sosoeat-orange-700 hover:bg-sosoeat-orange-100 hover:text-sosoeat-orange-700',
+          'text-sosoeat-orange-700 hover:bg-white hover:text-sosoeat-orange-700 hover:shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.15)]',
         groupBuy:
-          'ring-1 text-sosoeat-blue-700 hover:bg-sosoeat-blue-50 hover:text-sosoeat-blue-700',
+          'text-sosoeat-blue-700 hover:bg-white hover:text-sosoeat-blue-700 hover:shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.15)]',
       },
     },
   }

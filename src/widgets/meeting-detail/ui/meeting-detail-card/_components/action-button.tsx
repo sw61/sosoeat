@@ -28,15 +28,35 @@ export function ActionButton({ config, category, onClick, pending }: ActionButto
     );
   }
 
-  const className =
-    config.variant === 'primary'
-      ? actionButtonVariants({ category })
-      : outlineButtonVariants({ category });
+  if (config.variant === 'outline') {
+    return (
+      <Button
+        variant="ghost"
+        style={{
+          borderColor:
+            category === 'groupEat'
+              ? 'var(--color-sosoeat-orange-800)'
+              : 'var(--color-sosoeat-blue-800)',
+        }}
+        className={cn(
+          'cursor-pointer disabled:cursor-not-allowed',
+          outlineButtonVariants({ category })
+        )}
+        onClick={onClick}
+        disabled={!!pending}
+      >
+        {config.label}
+      </Button>
+    );
+  }
 
   return (
     <Button
       variant="ghost"
-      className={cn('cursor-pointer disabled:cursor-not-allowed', className)}
+      className={cn(
+        'cursor-pointer disabled:cursor-not-allowed',
+        actionButtonVariants({ category })
+      )}
       onClick={onClick}
       disabled={!!pending}
     >
