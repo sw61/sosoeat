@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
+import type { Meeting } from '@/entities/meeting';
 import { getMeetings } from '@/entities/meeting/index.server';
-import { MeetingWithHost } from '@/shared/types/generated-client/models/MeetingWithHost';
 import {
   BestSoeatSection,
   CtaSection,
@@ -13,9 +13,7 @@ import {
 
 const MainBanner = dynamic(() => import('@/widgets/main-banner').then((mod) => mod.MainBanner));
 
-async function getHomeMeetings(
-  params: Parameters<typeof getMeetings>[0]
-): Promise<MeetingWithHost[]> {
+async function getHomeMeetings(params: Parameters<typeof getMeetings>[0]): Promise<Meeting[]> {
   try {
     const { data } = await getMeetings(params);
     return data;
