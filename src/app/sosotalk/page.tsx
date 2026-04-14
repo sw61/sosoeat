@@ -1,6 +1,13 @@
 import type { Metadata } from 'next';
 
-import { SosoTalkMainPage } from '@/widgets/sosotalk';
+import { SearchParams } from 'nuqs';
+
+import { getSosoTalkPosts } from '@/entities/post/index.server';
+import {
+  createSosoTalkMainPageQueryParams,
+  SosoTalkMainPage,
+  sosotalkSearchParamsCache,
+} from '@/widgets/sosotalk';
 
 export const metadata: Metadata = {
   title: '소소톡',
@@ -13,6 +20,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SosoTalkPage() {
-  return <SosoTalkMainPage />;
+type SosoTalkPageProps = {
+  searchParams?: Promise<SearchParams>;
+};
+
+export default async function SosoTalkPage({ searchParams }: SosoTalkPageProps) {
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const { tab, sort } = sosotalkSearchParamsCache.parse(resolvedSearchParams);
+  const queryParams = createSosoTalkMainPageQueryParams(tab, sort);
+
+  const initialData = await getSosoTalkPosts(queryParams).catch(() => null);
+
+  return (
+    <SosoTalkMainPage initialData={initialData ?? undefined} initialTab={tab} initialSort={sort} />
+  );
 }
