@@ -21,8 +21,10 @@ export const actionButtonVariants = cva(
   {
     variants: {
       category: {
-        groupEat: 'bg-sosoeat-orange-600 text-white hover:bg-sosoeat-orange-700 hover:text-white',
-        groupBuy: 'bg-sosoeat-blue-600 text-white hover:bg-sosoeat-blue-700 hover:text-white',
+        groupEat:
+          'bg-sosoeat-orange-600 text-white hover:bg-sosoeat-orange-700 hover:text-sosoeat-orange-100 hover:shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.15)]',
+        groupBuy:
+          'bg-sosoeat-blue-600 text-white hover:bg-sosoeat-blue-700 hover:text-white hover:shadow-[inset_0_0_10px_1px_rgba(0,0,0,0.15)]',
       },
     },
   }
