@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { useGoogleLoginMutation } from '@/features/auth';
+import { kakaoRedirectUri } from '@/shared/lib/oauth-config';
 import { STORAGE_KEYS } from '@/shared/lib/storage-keys';
 import { isSafeCallbackUrl } from '@/shared/utils/url';
 
@@ -34,6 +35,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
   };
 
   const handleGoogleLogin = () => {
+    if (typeof google === 'undefined') return;
     saveCallbackUrl();
 
     const client = google.accounts.oauth2.initTokenClient({
@@ -52,10 +54,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
     saveCallbackUrl();
 
     const clientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
-    const isProduction = process.env.NODE_ENV === 'production';
-    const redirectUri = isProduction
-      ? process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI_PROD
-      : process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI_DEV;
+    const redirectUri = kakaoRedirectUri;
 
     if (!clientId || !redirectUri) {
       console.error('Missing Kakao OAuth config', {

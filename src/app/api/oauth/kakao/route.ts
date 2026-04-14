@@ -3,15 +3,13 @@ import { NextResponse } from 'next/server';
 import { fetchUserInfo } from '@/shared/lib/auth-utils';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
 import { createBffErrorResponse } from '@/shared/lib/error-handler';
+import { kakaoRedirectUri } from '@/shared/lib/oauth-config';
 
 const BASE_URL = process.env.API_BASE_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
 const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
 const KAKAO_CLIENT_SECRET = process.env.KAKAO_CLIENT_SECRET;
-const KAKAO_REDIRECT_URI =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI_PROD
-    : process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI_DEV;
+const KAKAO_REDIRECT_URI = kakaoRedirectUri;
 
 /**
  * [BFF] POST /api/oauth/kakao
@@ -20,6 +18,14 @@ const KAKAO_REDIRECT_URI =
  */
 export async function POST(request: Request) {
   try {
+    if (!KAKAO_CLIENT_ID || !KAKAO_CLIENT_SECRET || !KAKAO_REDIRECT_URI) {
+      return createBffErrorResponse(
+        'Missing Kakao OAuth environment variables',
+        '/api/oauth/kakao',
+        500
+      );
+    }
+
     const { code } = await request.json();
 
     if (!code) {
@@ -32,10 +38,10 @@ export async function POST(request: Request) {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         grant_type: 'authorization_code',
-        client_id: KAKAO_CLIENT_ID!,
-        client_secret: KAKAO_CLIENT_SECRET!,
+        client_id: KAKAO_CLIENT_ID,
+        client_secret: KAKAO_CLIENT_SECRET,
         code,
-        redirect_uri: KAKAO_REDIRECT_URI!,
+        redirect_uri: KAKAO_REDIRECT_URI,
       }),
     });
 
