@@ -35,7 +35,7 @@ export function ActionButton({ config, category, onClick, pending }: ActionButto
         style={{
           borderColor:
             category === 'groupEat'
-              ? 'var(--color-sosoeat-orange-800)'
+              ? 'var(--color-sosoeat-orange-700)'
               : 'var(--color-sosoeat-blue-800)',
         }}
         className={cn(
