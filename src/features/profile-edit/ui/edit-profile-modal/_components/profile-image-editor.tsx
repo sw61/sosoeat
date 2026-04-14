@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import { Loader2, Pencil, XIcon } from 'lucide-react';
 
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { BaseImageCropper } from '@/shared/ui/image-editor/base-image-cropper';
@@ -37,7 +38,7 @@ export function ProfileImageEditor({ imageUrl, onChange }: ProfileImageEditorPro
     <div className="flex justify-center">
       <div className="relative h-32.5 w-32.5 md:h-50 md:w-50">
         <Image
-          src={imageUrl || '/images/basic-profile.svg'}
+          src={toHttpsUrl(imageUrl) || '/images/basic-profile.svg'}
           alt="프로필 이미지"
           fill
           className="ring-sosoeat-gray-300 rounded-full object-cover ring-1"

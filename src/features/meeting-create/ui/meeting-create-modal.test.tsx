@@ -22,6 +22,7 @@ jest.mock('./_components/meeting-image-editor', () => ({
         aria-label="이미지 선택"
         onChange={() => onChange('https://s3.example.com/image.jpg')}
       />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       {imageUrl ? <img alt="모임 이미지" src={imageUrl} /> : null}
       {error ? <p>{error}</p> : null}
     </div>
