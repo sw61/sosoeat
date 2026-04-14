@@ -1,79 +1,54 @@
-//notification.queries.ts
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type QueryClient, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { TeamIdNotificationsGetRequest } from '@/shared/types/generated-client';
 
 import { notificationApi } from '../api/notifications.api';
 
-// Query Key Factory
 export const notificationKeys = {
   list: (options?: Omit<TeamIdNotificationsGetRequest, 'teamId'>) =>
     options ? (['notifications', 'list', options] as const) : (['notifications', 'list'] as const),
   unreadCount: () => ['notifications', 'unread-count'] as const,
 } as const;
 
-// useQuery
-export const useNotificationList = () =>
-  useQuery({
-    queryKey: notificationKeys.list(),
-    queryFn: notificationApi.getNotificationList,
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 10,
-  });
-export const useNotificationListWithOptions = (
-  options: Omit<TeamIdNotificationsGetRequest, 'teamId'>
-) =>
-  useQuery({
-    queryKey: notificationKeys.list(options),
-    queryFn: () => notificationApi.getNotificationOption(options),
-    staleTime: 1000 * 60,
-    gcTime: 1000 * 60 * 5,
-  });
+const getNotificationInfiniteQueryOptions = (
+  options?: Omit<TeamIdNotificationsGetRequest, 'teamId'>
+) => ({
+  queryKey: notificationKeys.list(options),
+  queryFn: ({ pageParam }: { pageParam: string | undefined }) =>
+    notificationApi.getNotificationOption(
+      options ? { ...options, cursor: pageParam } : { cursor: pageParam }
+    ),
+  getNextPageParam: (lastPage: { hasMore: boolean; nextCursor: string }) =>
+    lastPage.hasMore ? lastPage.nextCursor : undefined,
+  initialPageParam: undefined as string | undefined,
+});
 
 export const useNotificationInfiniteList = (
   options?: Omit<TeamIdNotificationsGetRequest, 'teamId'>
 ) =>
   useInfiniteQuery({
-    queryKey: notificationKeys.list(options),
-    queryFn: ({ pageParam }) =>
-      notificationApi.getNotificationOption(
-        options ? { ...options, cursor: pageParam } : { cursor: pageParam }
-      ),
-    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
-    initialPageParam: undefined as string | undefined,
+    ...getNotificationInfiniteQueryOptions(options),
     staleTime: 1000 * 60,
     gcTime: 1000 * 60 * 5,
   });
 
-export const useUnreadCount = () =>
+export const prefetchNotificationInfiniteList = (
+  queryClient: QueryClient,
+  options?: Omit<TeamIdNotificationsGetRequest, 'teamId'>
+) =>
+  queryClient.prefetchInfiniteQuery({
+    ...getNotificationInfiniteQueryOptions(options),
+    pages: 1,
+  });
+
+const MODULE_LOAD_TIME = Date.now();
+
+export const useUnreadCount = (initialCount = 0) =>
   useQuery({
     queryKey: notificationKeys.unreadCount(),
     queryFn: notificationApi.getUnreadCount,
+    initialData: initialCount,
+    initialDataUpdatedAt: MODULE_LOAD_TIME,
     staleTime: 1000 * 60,
     gcTime: 1000 * 60 * 5,
   });
-
-// useMutation
-export const useMarkAsRead = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (notificationId: number) => notificationApi.markAsRead(notificationId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: notificationKeys.list() });
-      queryClient.invalidateQueries({ queryKey: notificationKeys.unreadCount() });
-    },
-  });
-};
-
-export const useMarkAllAsRead = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: () => notificationApi.markAllAsRead(),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: notificationKeys.list() });
-      queryClient.invalidateQueries({ queryKey: notificationKeys.unreadCount() });
-    },
-  });
-};

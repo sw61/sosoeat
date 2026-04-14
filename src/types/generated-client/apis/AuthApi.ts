@@ -20,6 +20,7 @@ import type {
   ErrorResponse,
   LoginRequest,
   LoginResponse,
+  OAuthRequest,
   RefreshRequest,
   SignupRequest,
   User,
@@ -37,6 +38,8 @@ import {
   LoginRequestToJSON,
   LoginResponseFromJSON,
   LoginResponseToJSON,
+  OAuthRequestFromJSON,
+  OAuthRequestToJSON,
   RefreshRequestFromJSON,
   RefreshRequestToJSON,
   SignupRequestFromJSON,
@@ -45,27 +48,9 @@ import {
   UserToJSON,
 } from '../models/index';
 
-export interface AuthGoogleCallbackGetRequest {
-  code: string;
-  state: string;
-}
-
-export interface AuthKakaoCallbackGetRequest {
-  code: string;
-  state: string;
-}
-
 export interface TeamIdAuthEmailCheckPostRequest {
   teamId: string;
   emailCheckRequest?: EmailCheckRequest;
-}
-
-export interface TeamIdAuthGoogleGetRequest {
-  teamId: string;
-}
-
-export interface TeamIdAuthKakaoGetRequest {
-  teamId: string;
 }
 
 export interface TeamIdAuthLoginPostRequest {
@@ -88,162 +73,16 @@ export interface TeamIdAuthSignupPostRequest {
   signupRequest?: SignupRequest;
 }
 
+export interface TeamIdOauthProviderPostRequest {
+  teamId: string;
+  provider: TeamIdOauthProviderPostProviderEnum;
+  oAuthRequest?: OAuthRequest;
+}
+
 /**
  *
  */
 export class AuthApi extends runtime.BaseAPI {
-  /**
-   * Creates request options for authGoogleCallbackGet without sending the request
-   */
-  async authGoogleCallbackGetRequestOpts(
-    requestParameters: AuthGoogleCallbackGetRequest
-  ): Promise<runtime.RequestOpts> {
-    if (requestParameters['code'] == null) {
-      throw new runtime.RequiredError(
-        'code',
-        'Required parameter "code" was null or undefined when calling authGoogleCallbackGet().'
-      );
-    }
-
-    if (requestParameters['state'] == null) {
-      throw new runtime.RequiredError(
-        'state',
-        'Required parameter "state" was null or undefined when calling authGoogleCallbackGet().'
-      );
-    }
-
-    const queryParameters: any = {};
-
-    if (requestParameters['code'] != null) {
-      queryParameters['code'] = requestParameters['code'];
-    }
-
-    if (requestParameters['state'] != null) {
-      queryParameters['state'] = requestParameters['state'];
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {};
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken;
-      const tokenString = await token('Bearer', []);
-
-      if (tokenString) {
-        headerParameters['Authorization'] = `Bearer ${tokenString}`;
-      }
-    }
-
-    let urlPath = `/auth/google/callback`;
-
-    return {
-      path: urlPath,
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    };
-  }
-
-  /**
-   * 구글 로그인 완료 후 호출되는 콜백 URL입니다. 프론트엔드로 토큰과 함께 리다이렉트됩니다.
-   * 구글 OAuth 콜백
-   */
-  async authGoogleCallbackGetRaw(
-    requestParameters: AuthGoogleCallbackGetRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    const requestOptions = await this.authGoogleCallbackGetRequestOpts(requestParameters);
-    const response = await this.request(requestOptions, initOverrides);
-
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * 구글 로그인 완료 후 호출되는 콜백 URL입니다. 프론트엔드로 토큰과 함께 리다이렉트됩니다.
-   * 구글 OAuth 콜백
-   */
-  async authGoogleCallbackGet(
-    requestParameters: AuthGoogleCallbackGetRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<void> {
-    await this.authGoogleCallbackGetRaw(requestParameters, initOverrides);
-  }
-
-  /**
-   * Creates request options for authKakaoCallbackGet without sending the request
-   */
-  async authKakaoCallbackGetRequestOpts(
-    requestParameters: AuthKakaoCallbackGetRequest
-  ): Promise<runtime.RequestOpts> {
-    if (requestParameters['code'] == null) {
-      throw new runtime.RequiredError(
-        'code',
-        'Required parameter "code" was null or undefined when calling authKakaoCallbackGet().'
-      );
-    }
-
-    if (requestParameters['state'] == null) {
-      throw new runtime.RequiredError(
-        'state',
-        'Required parameter "state" was null or undefined when calling authKakaoCallbackGet().'
-      );
-    }
-
-    const queryParameters: any = {};
-
-    if (requestParameters['code'] != null) {
-      queryParameters['code'] = requestParameters['code'];
-    }
-
-    if (requestParameters['state'] != null) {
-      queryParameters['state'] = requestParameters['state'];
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {};
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken;
-      const tokenString = await token('Bearer', []);
-
-      if (tokenString) {
-        headerParameters['Authorization'] = `Bearer ${tokenString}`;
-      }
-    }
-
-    let urlPath = `/auth/kakao/callback`;
-
-    return {
-      path: urlPath,
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    };
-  }
-
-  /**
-   * 카카오 로그인 완료 후 호출되는 콜백 URL입니다. 프론트엔드로 토큰과 함께 리다이렉트됩니다.
-   * 카카오 OAuth 콜백
-   */
-  async authKakaoCallbackGetRaw(
-    requestParameters: AuthKakaoCallbackGetRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    const requestOptions = await this.authKakaoCallbackGetRequestOpts(requestParameters);
-    const response = await this.request(requestOptions, initOverrides);
-
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * 카카오 로그인 완료 후 호출되는 콜백 URL입니다. 프론트엔드로 토큰과 함께 리다이렉트됩니다.
-   * 카카오 OAuth 콜백
-   */
-  async authKakaoCallbackGet(
-    requestParameters: AuthKakaoCallbackGetRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<void> {
-    await this.authKakaoCallbackGetRaw(requestParameters, initOverrides);
-  }
-
   /**
    * Creates request options for teamIdAuthEmailCheckPost without sending the request
    */
@@ -313,136 +152,6 @@ export class AuthApi extends runtime.BaseAPI {
   ): Promise<EmailCheckResponse> {
     const response = await this.teamIdAuthEmailCheckPostRaw(requestParameters, initOverrides);
     return await response.value();
-  }
-
-  /**
-   * Creates request options for teamIdAuthGoogleGet without sending the request
-   */
-  async teamIdAuthGoogleGetRequestOpts(
-    requestParameters: TeamIdAuthGoogleGetRequest
-  ): Promise<runtime.RequestOpts> {
-    if (requestParameters['teamId'] == null) {
-      throw new runtime.RequiredError(
-        'teamId',
-        'Required parameter "teamId" was null or undefined when calling teamIdAuthGoogleGet().'
-      );
-    }
-
-    const queryParameters: any = {};
-
-    const headerParameters: runtime.HTTPHeaders = {};
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken;
-      const tokenString = await token('Bearer', []);
-
-      if (tokenString) {
-        headerParameters['Authorization'] = `Bearer ${tokenString}`;
-      }
-    }
-
-    let urlPath = `/{teamId}/auth/google`;
-    urlPath = urlPath.replace(
-      `{${'teamId'}}`,
-      encodeURIComponent(String(requestParameters['teamId']))
-    );
-
-    return {
-      path: urlPath,
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    };
-  }
-
-  /**
-   * 구글 소셜 로그인을 시작합니다. 구글 로그인 페이지로 리다이렉트됩니다.
-   * 구글 OAuth 시작
-   */
-  async teamIdAuthGoogleGetRaw(
-    requestParameters: TeamIdAuthGoogleGetRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    const requestOptions = await this.teamIdAuthGoogleGetRequestOpts(requestParameters);
-    const response = await this.request(requestOptions, initOverrides);
-
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * 구글 소셜 로그인을 시작합니다. 구글 로그인 페이지로 리다이렉트됩니다.
-   * 구글 OAuth 시작
-   */
-  async teamIdAuthGoogleGet(
-    requestParameters: TeamIdAuthGoogleGetRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<void> {
-    await this.teamIdAuthGoogleGetRaw(requestParameters, initOverrides);
-  }
-
-  /**
-   * Creates request options for teamIdAuthKakaoGet without sending the request
-   */
-  async teamIdAuthKakaoGetRequestOpts(
-    requestParameters: TeamIdAuthKakaoGetRequest
-  ): Promise<runtime.RequestOpts> {
-    if (requestParameters['teamId'] == null) {
-      throw new runtime.RequiredError(
-        'teamId',
-        'Required parameter "teamId" was null or undefined when calling teamIdAuthKakaoGet().'
-      );
-    }
-
-    const queryParameters: any = {};
-
-    const headerParameters: runtime.HTTPHeaders = {};
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken;
-      const tokenString = await token('Bearer', []);
-
-      if (tokenString) {
-        headerParameters['Authorization'] = `Bearer ${tokenString}`;
-      }
-    }
-
-    let urlPath = `/{teamId}/auth/kakao`;
-    urlPath = urlPath.replace(
-      `{${'teamId'}}`,
-      encodeURIComponent(String(requestParameters['teamId']))
-    );
-
-    return {
-      path: urlPath,
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    };
-  }
-
-  /**
-   * 카카오 소셜 로그인을 시작합니다. 카카오 로그인 페이지로 리다이렉트됩니다.
-   * 카카오 OAuth 시작
-   */
-  async teamIdAuthKakaoGetRaw(
-    requestParameters: TeamIdAuthKakaoGetRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    const requestOptions = await this.teamIdAuthKakaoGetRequestOpts(requestParameters);
-    const response = await this.request(requestOptions, initOverrides);
-
-    return new runtime.VoidApiResponse(response);
-  }
-
-  /**
-   * 카카오 소셜 로그인을 시작합니다. 카카오 로그인 페이지로 리다이렉트됩니다.
-   * 카카오 OAuth 시작
-   */
-  async teamIdAuthKakaoGet(
-    requestParameters: TeamIdAuthKakaoGetRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<void> {
-    await this.teamIdAuthKakaoGetRaw(requestParameters, initOverrides);
   }
 
   /**
@@ -719,4 +428,94 @@ export class AuthApi extends runtime.BaseAPI {
     const response = await this.teamIdAuthSignupPostRaw(requestParameters, initOverrides);
     return await response.value();
   }
+
+  /**
+   * Creates request options for teamIdOauthProviderPost without sending the request
+   */
+  async teamIdOauthProviderPostRequestOpts(
+    requestParameters: TeamIdOauthProviderPostRequest
+  ): Promise<runtime.RequestOpts> {
+    if (requestParameters['teamId'] == null) {
+      throw new runtime.RequiredError(
+        'teamId',
+        'Required parameter "teamId" was null or undefined when calling teamIdOauthProviderPost().'
+      );
+    }
+
+    if (requestParameters['provider'] == null) {
+      throw new runtime.RequiredError(
+        'provider',
+        'Required parameter "provider" was null or undefined when calling teamIdOauthProviderPost().'
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token('Bearer', []);
+
+      if (tokenString) {
+        headerParameters['Authorization'] = `Bearer ${tokenString}`;
+      }
+    }
+
+    let urlPath = `/{teamId}/oauth/{provider}`;
+    urlPath = urlPath.replace(
+      `{${'teamId'}}`,
+      encodeURIComponent(String(requestParameters['teamId']))
+    );
+    urlPath = urlPath.replace(
+      `{${'provider'}}`,
+      encodeURIComponent(String(requestParameters['provider']))
+    );
+
+    return {
+      path: urlPath,
+      method: 'POST',
+      headers: headerParameters,
+      query: queryParameters,
+      body: OAuthRequestToJSON(requestParameters['oAuthRequest']),
+    };
+  }
+
+  /**
+   * Google 또는 Kakao OAuth access token으로 로그인합니다. 최초 로그인 시 자동 가입되며, 기존 OAuth 계정이면 프로필을 업데이트합니다.
+   * OAuth 로그인
+   */
+  async teamIdOauthProviderPostRaw(
+    requestParameters: TeamIdOauthProviderPostRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<LoginResponse>> {
+    const requestOptions = await this.teamIdOauthProviderPostRequestOpts(requestParameters);
+    const response = await this.request(requestOptions, initOverrides);
+
+    return new runtime.JSONApiResponse(response, (jsonValue) => LoginResponseFromJSON(jsonValue));
+  }
+
+  /**
+   * Google 또는 Kakao OAuth access token으로 로그인합니다. 최초 로그인 시 자동 가입되며, 기존 OAuth 계정이면 프로필을 업데이트합니다.
+   * OAuth 로그인
+   */
+  async teamIdOauthProviderPost(
+    requestParameters: TeamIdOauthProviderPostRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<LoginResponse> {
+    const response = await this.teamIdOauthProviderPostRaw(requestParameters, initOverrides);
+    return await response.value();
+  }
 }
+
+/**
+ * @export
+ */
+export const TeamIdOauthProviderPostProviderEnum = {
+  Google: 'google',
+  Kakao: 'kakao',
+} as const;
+export type TeamIdOauthProviderPostProviderEnum =
+  (typeof TeamIdOauthProviderPostProviderEnum)[keyof typeof TeamIdOauthProviderPostProviderEnum];

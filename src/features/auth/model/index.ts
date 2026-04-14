@@ -6,9 +6,7 @@ export {
   useSocialLoginMutation,
 } from './auth.mutations';
 export { getErrorAnimationClasses, getInputClasses } from './auth.utils';
-export { loginSchema } from './login-form.schema';
 export { SIGNUP_STEPS, STEP_HEADING_MAP, STEP_TO_NUMBER } from './signup-form.constants';
-export { emailSchema, nameSchema, passwordSchema } from './signup-form.schema';
 export type {
   EmailValues,
   FirstStepProps,

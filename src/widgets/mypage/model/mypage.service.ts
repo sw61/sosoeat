@@ -20,24 +20,28 @@ const toVariant = (type?: string): 'groupBuy' | 'groupEat' =>
 
 const toImageUrl = (image?: string) => (image?.startsWith('https://') ? image : undefined);
 
-const toMeetingCard = (m: UserMeetingWithImage): MyPageCardProps => ({
-  meetingId: m.id,
-  href: `/meetings/${m.id}`,
-  title: m.name,
-  currentCount: m.participantCount,
-  maxCount: m.capacity,
-  location: m.region,
-  ...parseDateTime(m.dateTime),
-  variant: toVariant(m.type),
-  confirmedAt: m.confirmedAt ? new Date(m.confirmedAt) : null,
-  isCompleted: isCompleted(m.dateTime),
-  isHost: m.role === UserMeetingRoleEnum.Host,
-  imageUrl: toImageUrl(m.image),
-  isFavorited: false,
-});
+const toMeetingCard =
+  (favoritedIds: Set<number>) =>
+  (m: UserMeetingWithImage): MyPageCardProps => ({
+    meetingId: m.id,
+    href: `/meetings/${m.id}`,
+    title: m.name,
+    currentCount: m.participantCount,
+    maxCount: m.capacity,
+    location: m.region,
+    ...parseDateTime(m.dateTime),
+    variant: toVariant(m.type),
+    confirmedAt: m.confirmedAt ? new Date(m.confirmedAt) : null,
+    isCompleted: isCompleted(m.dateTime),
+    isHost: m.role === UserMeetingRoleEnum.Host,
+    imageUrl: toImageUrl(m.image),
+    isFavorited: favoritedIds.has(m.id),
+  });
 
-export const toUserMeetingCards = (data: UserMeetingsResponseWithImage): MyPageCardProps[] =>
-  data.data.map(toMeetingCard);
+export const toUserMeetingCards = (
+  data: UserMeetingsResponseWithImage,
+  favoritedIds: Set<number> = new Set()
+): MyPageCardProps[] => data.data.map(toMeetingCard(favoritedIds));
 
 export const toFavoriteMeetingCards = (data: FavoriteList): MyPageCardProps[] =>
   data.data.map((f) => ({

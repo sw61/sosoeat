@@ -2,15 +2,22 @@
 
 import { useState } from 'react';
 
+import dynamic from 'next/dynamic';
+
 import { Calendar, Mail, Pencil } from 'lucide-react';
 
-import { EditProfileModal } from '@/features/profile-edit';
+import type { EditProfileModalProps } from '@/features/profile-edit';
 import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarImage } from '@/shared/ui/avatar';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 
 import { UserCardProps } from './user-card.types';
+
+const EditProfileModal = dynamic<EditProfileModalProps>(
+  () => import('@/features/profile-edit').then((mod) => mod.EditProfileModal),
+  { ssr: false }
+);
 
 export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCardProps) {
   const { isOpen, open, close } = useModal();

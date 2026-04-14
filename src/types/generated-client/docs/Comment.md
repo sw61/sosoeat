@@ -10,6 +10,8 @@
 | `authorId`  | number              |
 | `author`    | [Author](Author.md) |
 | `content`   | string              |
+| `likeCount` | number              |
+| `isLiked`   | boolean             |
 | `createdAt` | Date                |
 | `updatedAt` | Date                |
 
@@ -26,6 +28,8 @@ const example = {
   authorId: null,
   author: null,
   content: null,
+  likeCount: null,
+  isLiked: null,
   createdAt: null,
   updatedAt: null,
 } satisfies Comment;

@@ -1,5 +1,3 @@
-import { type ReadonlyURLSearchParams } from 'next/navigation';
-
 import { AuthUser } from '@/entities/auth';
 
 export const NAV_ITEMS = [
@@ -14,18 +12,8 @@ export type NavItem = (typeof NAV_ITEMS)[number];
 export const getNavHref = (item: NavItem, user: AuthUser | null) =>
   'showBadge' in item && !user ? null : item.href;
 
-export const getIsActive = (
-  item: NavItem,
-  pathname: string | null,
-  searchParams: ReadonlyURLSearchParams | null
-) => {
+export const getIsActive = (item: NavItem, pathname: string | null) => {
   if (!pathname) return false;
-  const currentParams = searchParams ?? new URLSearchParams();
-  const [itemPath, itemQuery] = item.href.split('?');
-  if (!itemQuery) return pathname === itemPath;
-  const itemParams = new URLSearchParams(itemQuery);
-  return (
-    pathname === itemPath &&
-    [...itemParams.entries()].every(([key, value]) => currentParams.get(key) === value)
-  );
+  const [itemPath] = item.href.split('?');
+  return pathname === itemPath;
 };

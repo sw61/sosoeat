@@ -1,4 +1,5 @@
 import { commentClient } from '@/shared/api/comment-client';
+import { parseResponse, parseVoidResponse } from '@/shared/api/parse-response';
 
 export type MeetingComment = {
   id: number;
@@ -59,20 +60,15 @@ export const meetingCommentApi = {
       }
     }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '댓글을 불러오는데 실패했습니다.');
-    }
-    return response.json();
+    return parseResponse<MeetingComment[]>(response, '댓글을 불러오는데 실패했습니다.');
   },
 
   async getCommentCount(meetingId: number): Promise<MeetingCommentCountResponse> {
     const response = await commentClient.get(`/meetings/${meetingId}/comments/count`);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '댓글 수를 불러오는데 실패했습니다.');
-    }
-    return response.json();
+    return parseResponse<MeetingCommentCountResponse>(
+      response,
+      '댓글 수를 불러오는데 실패했습니다.'
+    );
   },
 
   async createComment(
@@ -80,11 +76,7 @@ export const meetingCommentApi = {
     payload: CreateMeetingCommentRequest
   ): Promise<MeetingComment> {
     const response = await commentClient.post(`/meetings/${meetingId}/comments`, payload);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '댓글 작성에 실패했습니다.');
-    }
-    return response.json();
+    return parseResponse<MeetingComment>(response, '댓글 작성에 실패했습니다.');
   },
 
   async updateComment(
@@ -92,50 +84,31 @@ export const meetingCommentApi = {
     payload: UpdateMeetingCommentRequest
   ): Promise<MeetingComment> {
     const response = await commentClient.patch(`/comments/${commentId}`, payload);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '댓글 수정에 실패했습니다.');
-    }
-    return response.json();
+    return parseResponse<MeetingComment>(response, '댓글 수정에 실패했습니다.');
   },
 
   async deleteComment(commentId: number): Promise<void> {
     const response = await commentClient.delete(`/comments/${commentId}`);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '댓글 삭제에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '댓글 삭제에 실패했습니다.');
   },
 
   async likeComment(commentId: number): Promise<void> {
     const response = await commentClient.post(`/comments/${commentId}/likes`);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '좋아요에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '좋아요에 실패했습니다.');
   },
 
   async unlikeComment(commentId: number): Promise<void> {
     const response = await commentClient.delete(`/comments/${commentId}/likes`);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '좋아요 취소에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '좋아요 취소에 실패했습니다.');
   },
 
   async syncCreateMeeting(payload: SyncMeetingRequest): Promise<void> {
     const response = await commentClient.post('/meetings', payload);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 동기화에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '모임 동기화에 실패했습니다.');
   },
 
   async syncDeleteMeeting(meetingId: number): Promise<void> {
     const response = await commentClient.delete(`/meetings/${meetingId}`);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || '모임 삭제 동기화에 실패했습니다.');
-    }
+    return parseVoidResponse(response, '모임 삭제 동기화에 실패했습니다.');
   },
 };

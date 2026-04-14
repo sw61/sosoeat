@@ -2,14 +2,15 @@
 
 ## Properties
 
-| Name            | Type                                             |
-| --------------- | ------------------------------------------------ |
-| `data`          | [Array&lt;PostWithAuthor&gt;](PostWithAuthor.md) |
-| `nextCursor`    | string                                           |
-| `hasMore`       | boolean                                          |
-| `totalCount`    | number                                           |
-| `currentOffset` | number                                           |
-| `limit`         | number                                           |
+| Name             | Type                                             |
+| ---------------- | ------------------------------------------------ |
+| `data`           | [Array&lt;PostWithAuthor&gt;](PostWithAuthor.md) |
+| `nextCursor`     | string                                           |
+| `hasMore`        | boolean                                          |
+| `totalCount`     | number                                           |
+| `currentOffset`  | number                                           |
+| `limit`          | number                                           |
+| `totalViewCount` | number                                           |
 
 ## Example
 
@@ -24,6 +25,7 @@ const example = {
   totalCount: null,
   currentOffset: null,
   limit: null,
+  totalViewCount: null,
 } satisfies PostList;
 
 console.log(example);
