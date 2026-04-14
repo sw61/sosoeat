@@ -8,6 +8,7 @@ import { Plus } from 'lucide-react';
 
 import { AuthUser } from '@/entities/auth';
 import { MeetingCreateModalProps, useMeetingCreateTrigger } from '@/features/meeting-create';
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
@@ -67,7 +68,7 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
             suppressHydrationWarning
           >
             <Image
-              src={user.image || '/images/basic-profile.svg'}
+              src={toHttpsUrl(user.image) || '/images/basic-profile.svg'}
               alt={user.name}
               width={32}
               height={32}

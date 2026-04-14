@@ -5,9 +5,6 @@ import { Controller } from 'react-hook-form';
 
 import Image from 'next/image';
 
-import { ImagePlus, Loader2 } from 'lucide-react';
-
-import { MIME_TO_EXT, useUploadImage } from '@/entities/image';
 import type { LocationSearchResult } from '@/entities/location';
 import { LocationSearchModal } from '@/entities/location';
 import { cn } from '@/shared/lib/utils';
@@ -15,14 +12,13 @@ import { Input } from '@/shared/ui/input/input';
 
 import type { StepProps } from '../../model/meeting-create.types';
 
-const ACCEPTED_IMAGE_TYPES = Object.keys(MIME_TO_EXT).join(',');
+import { MeetingImageEditor } from './meeting-image-editor';
 
 /**
  * 2단계: 모임 기본 정보 입력 (이름, 장소, 이미지)
  */
 export const StepBasicInfo = ({ form }: StepProps) => {
   const { register } = form;
-  const { mutateAsync, isPending, error: uploadError } = useUploadImage('meetings');
   const [locationModalOpen, setLocationModalOpen] = useState(false);
 
   const handleLocationSelect = (result: LocationSearchResult) => {
@@ -33,23 +29,6 @@ export const StepBasicInfo = ({ form }: StepProps) => {
     form.setValue('latitude', result.latitude);
     form.setValue('longitude', result.longitude);
     setLocationModalOpen(false);
-  };
-
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    onChange: (value: string) => void
-  ) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const url = await mutateAsync(file);
-      onChange(url);
-    } catch {
-      // 업로드 실패 시 uploadError로 표시
-    } finally {
-      e.target.value = ''; // 성공이나 실패 모두 초기화하여 재시도 가능하도록 처리
-    }
   };
 
   const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
@@ -118,49 +97,11 @@ export const StepBasicInfo = ({ form }: StepProps) => {
             <label className="text-sosoeat-gray-900 ml-1 text-sm font-medium md:text-base">
               이미지{requiredIndicator}
             </label>
-            <div className={field.value && !isPending ? 'relative w-full' : 'relative w-[147px]'}>
-              {field.value && !isPending ? (
-                <Image
-                  src={field.value as string}
-                  alt="모임 이미지"
-                  width={0}
-                  height={0}
-                  sizes="100vw"
-                  className="h-auto w-full rounded-2xl"
-                />
-              ) : (
-                <div className="bg-sosoeat-gray-100 text-sosoeat-gray-500 flex h-[147px] w-[147px] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed text-sm">
-                  {isPending ? (
-                    <Loader2 className="h-6 w-6 animate-spin" />
-                  ) : (
-                    <ImagePlus className="h-6 w-6" />
-                  )}
-                </div>
-              )}
-              {/* 이미지 업로드/변경을 위한 클릭 overlay */}
-              {!isPending && (
-                <label
-                  htmlFor="image"
-                  className="absolute inset-0 cursor-pointer rounded-2xl"
-                  aria-label="이미지 선택"
-                />
-              )}
-              <input
-                type="file"
-                id="image"
-                className="sr-only"
-                accept={ACCEPTED_IMAGE_TYPES}
-                disabled={isPending}
-                onChange={(e) => handleFileChange(e, field.onChange)}
-              />
-            </div>
-            {(error || uploadError) && (
-              <p className="animate-in fade-in slide-in-from-top-1 text-destructive text-xs">
-                {uploadError instanceof Error
-                  ? uploadError.message
-                  : error?.message || '이미지 업로드에 실패했습니다.'}
-              </p>
-            )}
+            <MeetingImageEditor
+              imageUrl={field.value as string}
+              onChange={field.onChange}
+              error={error?.message}
+            />
           </div>
         )}
       />
