@@ -119,6 +119,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           comments={comments.map((comment) =>
             mapCommentToCommentItemData(comment, {
               currentUserId: currentUser?.id,
+              postAuthorId: data.author.id,
               editingCommentId,
               editingCommentInput,
               isEditPending,

@@ -9,6 +9,7 @@ const SOSOTALK_AUTHOR_IMAGE_FALLBACK =
 
 interface MapCommentToCommentItemDataOptions {
   currentUserId?: number;
+  postAuthorId?: number;
   editingCommentId: number | null;
   editingCommentInput: string;
   isEditPending: boolean;
@@ -24,6 +25,7 @@ export function mapCommentToCommentItemData(
   comment: SosoTalkComment,
   {
     currentUserId,
+    postAuthorId,
     editingCommentId,
     editingCommentInput,
     isEditPending,
@@ -42,7 +44,7 @@ export function mapCommentToCommentItemData(
     createdAt: format(comment.createdAt, 'M월 d일 HH:mm', { locale: ko }),
     relativeTime: formatSosoTalkRelativeTime(comment.createdAt),
     content: comment.content,
-    isAuthorComment: currentUserId === comment.author.id,
+    isAuthorComment: postAuthorId === comment.author.id,
     isMine: currentUserId === comment.author.id,
     isLiked: comment.isLiked,
     likeCount: comment.likeCount,

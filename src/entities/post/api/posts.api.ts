@@ -4,7 +4,10 @@ import { CommentFromJSON } from '@/shared/types/generated-client/models/Comment'
 import { PostLikeFromJSON } from '@/shared/types/generated-client/models/PostLike';
 import { PostListFromJSON } from '@/shared/types/generated-client/models/PostList';
 import { PostWithAuthorFromJSON } from '@/shared/types/generated-client/models/PostWithAuthor';
-import { PostWithCommentsFromJSON } from '@/shared/types/generated-client/models/PostWithComments';
+import {
+  type PostWithComments,
+  PostWithCommentsFromJSON,
+} from '@/shared/types/generated-client/models/PostWithComments';
 import {
   PresignedUrlRequestContentTypeEnum,
   PresignedUrlRequestFolderEnum,
@@ -114,7 +117,7 @@ export const getSosoTalkPostDetail = async (
   const response = await fetchClient.get(`/posts/${postId}`);
 
   const data = await parseResponse<unknown>(response, '소소톡 게시글을 불러오지 못했습니다.');
-  const parsedPost = PostWithCommentsFromJSON(data) as GetSosoTalkPostDetailResponse;
+  const parsedPost: PostWithComments = PostWithCommentsFromJSON(data);
 
   return {
     ...parsedPost,
