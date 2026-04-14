@@ -6,6 +6,28 @@ import userEvent from '@testing-library/user-event';
 
 import { MeetingCreateModal } from './meeting-create-modal';
 
+jest.mock('./_components/meeting-image-editor', () => ({
+  MeetingImageEditor: ({
+    imageUrl,
+    onChange,
+    error,
+  }: {
+    imageUrl?: string;
+    onChange: (url: string) => void;
+    error?: string;
+  }) => (
+    <div>
+      <input
+        type="file"
+        aria-label="이미지 선택"
+        onChange={() => onChange('https://s3.example.com/image.jpg')}
+      />
+      {imageUrl ? <img alt="모임 이미지" src={imageUrl} /> : null}
+      {error ? <p>{error}</p> : null}
+    </div>
+  ),
+}));
+
 // useUploadImage mock — 이미지 업로드를 즉시 성공으로 처리
 jest.mock('@/entities/image', () => ({
   useUploadImage: () => ({
