@@ -34,10 +34,14 @@ export const sosotalkQueryKeys = {
   postDetail: (postId?: number) => ['sosotalk-post-detail', postId] as const,
 };
 
-export const sosotalkPostListQueryOptions = (params?: GetSosoTalkPostListParams) =>
+export const sosotalkPostListQueryOptions = (
+  params?: GetSosoTalkPostListParams,
+  initialData?: GetSosoTalkPostListResponse
+) =>
   queryOptions({
     queryKey: sosotalkQueryKeys.postList(params),
     queryFn: () => getSosoTalkPostList(params),
+    initialData,
     staleTime: SOSOTALK_QUERY_STALE_TIME,
     gcTime: SOSOTALK_QUERY_GC_TIME,
   });
@@ -57,8 +61,10 @@ export const sosotalkPostDetailQueryOptions = (postId?: number) =>
     gcTime: SOSOTALK_QUERY_GC_TIME,
   });
 
-export const useGetSosoTalkPostList = (params?: GetSosoTalkPostListParams) =>
-  useQuery(sosotalkPostListQueryOptions(params));
+export const useGetSosoTalkPostList = (
+  params?: GetSosoTalkPostListParams,
+  initialData?: GetSosoTalkPostListResponse
+) => useQuery(sosotalkPostListQueryOptions(params, initialData));
 
 export const useGetSosoTalkPostDetail = (postId?: number) =>
   useQuery(sosotalkPostDetailQueryOptions(postId));

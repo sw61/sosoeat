@@ -1,7 +1,5 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
-
 import { ChevronDown } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
@@ -39,12 +37,6 @@ export const SosoTalkFilterBar = ({
   onTabChange = () => {},
   onSortChange = () => {},
 }: SosoTalkFilterBarProps) => {
-  const isMounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-
   const selectedSortOption =
     sortOptions.find((option) => option.value === activeSort) ??
     sortOptions[0] ??
@@ -110,32 +102,29 @@ export const SosoTalkFilterBar = ({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium disabled:pointer-events-none md:hidden"
-              aria-label="?뺣젹 ?듭뀡"
-              disabled={!isMounted}
+              className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium md:hidden"
+              aria-label="정렬 옵션 열기"
             >
               <span>{selectedSortOption.label}</span>
               <ChevronDown className="size-4" aria-hidden />
             </button>
           </DropdownMenuTrigger>
-          {isMounted ? (
-            <DropdownMenuContent align="end" className="md:hidden">
-              <DropdownMenuRadioGroup
-                value={activeSort}
-                onValueChange={(value) => onSortChange(value as typeof activeSort)}
-              >
-                {sortOptions.map((option) => (
-                  <DropdownMenuRadioItem
-                    key={option.value}
-                    value={option.value}
-                    className="text-sosoeat-gray-900 py-2"
-                  >
-                    {option.label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          ) : null}
+          <DropdownMenuContent align="end" className="md:hidden">
+            <DropdownMenuRadioGroup
+              value={activeSort}
+              onValueChange={(value) => onSortChange(value as typeof activeSort)}
+            >
+              {sortOptions.map((option) => (
+                <DropdownMenuRadioItem
+                  key={option.value}
+                  value={option.value}
+                  className="text-sosoeat-gray-900 py-2"
+                >
+                  {option.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </section>
