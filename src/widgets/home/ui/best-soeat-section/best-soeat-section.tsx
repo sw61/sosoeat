@@ -6,16 +6,16 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import useEmblaCarousel from 'embla-carousel-react';
 
-import { MeetingWithHost } from '@/shared/types/generated-client/models/MeetingWithHost';
+import type { Meeting } from '@/entities/meeting';
 
 import { BestSoeatCard } from '../best-soeat-card';
 
-function formatDateTime(date: Date): string {
-  return format(date, 'M/d(E) HH:mm', { locale: ko });
+function formatDateTime(date: string | Date): string {
+  return format(new Date(date), 'M/d(E) HH:mm', { locale: ko });
 }
 
 interface BestSoeatSectionProps {
-  meetings: MeetingWithHost[];
+  meetings: Meeting[];
 }
 
 export function BestSoeatSection({ meetings }: BestSoeatSectionProps) {

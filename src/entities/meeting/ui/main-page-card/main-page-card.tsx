@@ -140,12 +140,15 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
             </div>
             <div className={MAIN_PAGE_CARD_BADGES_ROW_CLASS}>
               <DeadlineBadge
-                registrationEnd={meeting.registrationEnd}
+                registrationEnd={new Date(meeting.registrationEnd)}
                 variant={variant}
                 className="mt-0 min-w-0 flex-1"
               />
               <div className="hidden md:block">
-                <EstablishmentStatusBadge confirmedAt={meeting.confirmedAt} variant={variant} />
+                <EstablishmentStatusBadge
+                  confirmedAt={meeting.confirmedAt ? new Date(meeting.confirmedAt) : null}
+                  variant={variant}
+                />
               </div>
             </div>
 
