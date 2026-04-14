@@ -13,10 +13,10 @@ export async function MeetingRecommendedFetcher({ meetingId }: Props) {
     data: [],
   }));
 
-  return (
-    <MeetingRecommendedSection
-      meetings={meetingList.data as unknown as Meeting[]}
-      currentMeetingId={meetingId}
-    />
+  const now = new Date();
+  const futureMeetings = (meetingList.data as unknown as Meeting[]).filter(
+    (m) => new Date(m.dateTime) > now
   );
+
+  return <MeetingRecommendedSection meetings={futureMeetings} currentMeetingId={meetingId} />;
 }
