@@ -15,6 +15,7 @@
 import * as runtime from '../runtime';
 import type {
   Comment,
+  CommentLike,
   CommentList,
   CreateComment,
   CreatePost,
@@ -30,6 +31,8 @@ import type {
 import {
   CommentFromJSON,
   CommentToJSON,
+  CommentLikeFromJSON,
+  CommentLikeToJSON,
   CommentListFromJSON,
   CommentListToJSON,
   CreateCommentFromJSON,
@@ -72,6 +75,18 @@ export interface TeamIdPostsPostRequest {
 }
 
 export interface TeamIdPostsPostIdCommentsCommentIdDeleteRequest {
+  teamId: string;
+  postId: number;
+  commentId: number;
+}
+
+export interface TeamIdPostsPostIdCommentsCommentIdLikeDeleteRequest {
+  teamId: string;
+  postId: number;
+  commentId: number;
+}
+
+export interface TeamIdPostsPostIdCommentsCommentIdLikePostRequest {
   teamId: string;
   postId: number;
   commentId: number;
@@ -204,7 +219,7 @@ export class PostsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
+   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함  **응답 필드:** - totalViewCount: 위 필터(type, keyword 등)와 동일한 조건의 게시글 조회수(viewCount) 합계
    * 게시글 목록
    */
   async teamIdPostsGetRaw(
@@ -218,7 +233,7 @@ export class PostsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
+   * 게시글 목록을 조회합니다.  **조회 타입:** - type=all: 전체 게시글 (기본값, 최신순) - type=best: 베스트 게시글 (최근 30일 내 작성, likeCount 높은 순)  **정렬 기준 (sortBy):** - createdAt: 작성일순 (기본값) - viewCount: 조회수순 - likeCount: 좋아요순 - commentCount: 댓글 많은 순  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함  **응답 필드:** - totalViewCount: 위 필터(type, keyword 등)와 동일한 조건의 게시글 조회수(viewCount) 합계
    * 게시글 목록
    */
   async teamIdPostsGet(
@@ -386,6 +401,192 @@ export class PostsApi extends runtime.BaseAPI {
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<TeamIdMeetingsMeetingIdDelete200Response> {
     const response = await this.teamIdPostsPostIdCommentsCommentIdDeleteRaw(
+      requestParameters,
+      initOverrides
+    );
+    return await response.value();
+  }
+
+  /**
+   * Creates request options for teamIdPostsPostIdCommentsCommentIdLikeDelete without sending the request
+   */
+  async teamIdPostsPostIdCommentsCommentIdLikeDeleteRequestOpts(
+    requestParameters: TeamIdPostsPostIdCommentsCommentIdLikeDeleteRequest
+  ): Promise<runtime.RequestOpts> {
+    if (requestParameters['teamId'] == null) {
+      throw new runtime.RequiredError(
+        'teamId',
+        'Required parameter "teamId" was null or undefined when calling teamIdPostsPostIdCommentsCommentIdLikeDelete().'
+      );
+    }
+
+    if (requestParameters['postId'] == null) {
+      throw new runtime.RequiredError(
+        'postId',
+        'Required parameter "postId" was null or undefined when calling teamIdPostsPostIdCommentsCommentIdLikeDelete().'
+      );
+    }
+
+    if (requestParameters['commentId'] == null) {
+      throw new runtime.RequiredError(
+        'commentId',
+        'Required parameter "commentId" was null or undefined when calling teamIdPostsPostIdCommentsCommentIdLikeDelete().'
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token('Bearer', []);
+
+      if (tokenString) {
+        headerParameters['Authorization'] = `Bearer ${tokenString}`;
+      }
+    }
+
+    let urlPath = `/{teamId}/posts/{postId}/comments/{commentId}/like`;
+    urlPath = urlPath.replace(
+      `{${'teamId'}}`,
+      encodeURIComponent(String(requestParameters['teamId']))
+    );
+    urlPath = urlPath.replace(
+      `{${'postId'}}`,
+      encodeURIComponent(String(requestParameters['postId']))
+    );
+    urlPath = urlPath.replace(
+      `{${'commentId'}}`,
+      encodeURIComponent(String(requestParameters['commentId']))
+    );
+
+    return {
+      path: urlPath,
+      method: 'DELETE',
+      headers: headerParameters,
+      query: queryParameters,
+    };
+  }
+
+  /**
+   * 댓글의 좋아요를 취소합니다.
+   * 댓글 좋아요 취소
+   */
+  async teamIdPostsPostIdCommentsCommentIdLikeDeleteRaw(
+    requestParameters: TeamIdPostsPostIdCommentsCommentIdLikeDeleteRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<TeamIdMeetingsMeetingIdDelete200Response>> {
+    const requestOptions =
+      await this.teamIdPostsPostIdCommentsCommentIdLikeDeleteRequestOpts(requestParameters);
+    const response = await this.request(requestOptions, initOverrides);
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(jsonValue)
+    );
+  }
+
+  /**
+   * 댓글의 좋아요를 취소합니다.
+   * 댓글 좋아요 취소
+   */
+  async teamIdPostsPostIdCommentsCommentIdLikeDelete(
+    requestParameters: TeamIdPostsPostIdCommentsCommentIdLikeDeleteRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<TeamIdMeetingsMeetingIdDelete200Response> {
+    const response = await this.teamIdPostsPostIdCommentsCommentIdLikeDeleteRaw(
+      requestParameters,
+      initOverrides
+    );
+    return await response.value();
+  }
+
+  /**
+   * Creates request options for teamIdPostsPostIdCommentsCommentIdLikePost without sending the request
+   */
+  async teamIdPostsPostIdCommentsCommentIdLikePostRequestOpts(
+    requestParameters: TeamIdPostsPostIdCommentsCommentIdLikePostRequest
+  ): Promise<runtime.RequestOpts> {
+    if (requestParameters['teamId'] == null) {
+      throw new runtime.RequiredError(
+        'teamId',
+        'Required parameter "teamId" was null or undefined when calling teamIdPostsPostIdCommentsCommentIdLikePost().'
+      );
+    }
+
+    if (requestParameters['postId'] == null) {
+      throw new runtime.RequiredError(
+        'postId',
+        'Required parameter "postId" was null or undefined when calling teamIdPostsPostIdCommentsCommentIdLikePost().'
+      );
+    }
+
+    if (requestParameters['commentId'] == null) {
+      throw new runtime.RequiredError(
+        'commentId',
+        'Required parameter "commentId" was null or undefined when calling teamIdPostsPostIdCommentsCommentIdLikePost().'
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token('Bearer', []);
+
+      if (tokenString) {
+        headerParameters['Authorization'] = `Bearer ${tokenString}`;
+      }
+    }
+
+    let urlPath = `/{teamId}/posts/{postId}/comments/{commentId}/like`;
+    urlPath = urlPath.replace(
+      `{${'teamId'}}`,
+      encodeURIComponent(String(requestParameters['teamId']))
+    );
+    urlPath = urlPath.replace(
+      `{${'postId'}}`,
+      encodeURIComponent(String(requestParameters['postId']))
+    );
+    urlPath = urlPath.replace(
+      `{${'commentId'}}`,
+      encodeURIComponent(String(requestParameters['commentId']))
+    );
+
+    return {
+      path: urlPath,
+      method: 'POST',
+      headers: headerParameters,
+      query: queryParameters,
+    };
+  }
+
+  /**
+   * 댓글에 좋아요를 추가합니다.
+   * 댓글 좋아요 추가
+   */
+  async teamIdPostsPostIdCommentsCommentIdLikePostRaw(
+    requestParameters: TeamIdPostsPostIdCommentsCommentIdLikePostRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<CommentLike>> {
+    const requestOptions =
+      await this.teamIdPostsPostIdCommentsCommentIdLikePostRequestOpts(requestParameters);
+    const response = await this.request(requestOptions, initOverrides);
+
+    return new runtime.JSONApiResponse(response, (jsonValue) => CommentLikeFromJSON(jsonValue));
+  }
+
+  /**
+   * 댓글에 좋아요를 추가합니다.
+   * 댓글 좋아요 추가
+   */
+  async teamIdPostsPostIdCommentsCommentIdLikePost(
+    requestParameters: TeamIdPostsPostIdCommentsCommentIdLikePostRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<CommentLike> {
+    const response = await this.teamIdPostsPostIdCommentsCommentIdLikePostRaw(
       requestParameters,
       initOverrides
     );

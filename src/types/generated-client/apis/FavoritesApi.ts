@@ -409,6 +409,7 @@ export class FavoritesApi extends runtime.BaseAPI {
  */
 export const TeamIdFavoritesGetSortByEnum = {
   CreatedAt: 'createdAt',
+  MeetingCreatedAt: 'meetingCreatedAt',
   DateTime: 'dateTime',
   RegistrationEnd: 'registrationEnd',
   ParticipantCount: 'participantCount',
