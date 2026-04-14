@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 import Image from 'next/image';
 
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
+
 import type { NotificationThumbnailKey } from '../../../lib/notification-view.utils';
 
 import { ApprovedIcon, CommentIcon, MeetingIcon, UserIcon } from './notification-item.icons';
@@ -31,7 +33,13 @@ export const NotificationItemThumbnail = ({
   if (image) {
     return (
       <div className="size-[40px] shrink-0 overflow-hidden rounded-[8px]">
-        <Image src={image} alt="" width={80} height={80} className="size-full object-cover" />
+        <Image
+          src={toHttpsUrl(image)!}
+          alt=""
+          width={80}
+          height={80}
+          className="size-full object-cover"
+        />
       </div>
     );
   }
