@@ -72,7 +72,7 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
 
       router.replace(`/sosotalk/${createdPost.id}`);
     } catch {
-      toast.error('게시글 등록에 실패했어요. 다시 시도해 주세요.');
+      toast.error('게시글 등록 중 문제가 생겼어요. 다시 시도해 주세요.');
     } finally {
       setIsSubmitting(false);
     }
@@ -104,7 +104,7 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
 
       router.replace(`/sosotalk/${editPostId}`);
     } catch {
-      toast.error('게시글 수정에 실패했어요. 다시 시도해 주세요.');
+      toast.error('게시글 수정 중 문제가 생겼어요. 다시 시도해 주세요.');
     } finally {
       setIsSubmitting(false);
     }

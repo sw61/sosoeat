@@ -57,7 +57,7 @@ export function useSosoTalkPostDetailCommentActions({
       });
       setCommentInput('');
     } catch {
-      toast.error('댓글 등록에 실패했어요. 다시 시도해 주세요.');
+      toast.error('댓글 등록 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
 
@@ -94,7 +94,7 @@ export function useSosoTalkPostDetailCommentActions({
       });
       handleCancelEditComment();
     } catch {
-      toast.error('댓글 수정에 실패했어요. 다시 시도해 주세요.');
+      toast.error('댓글 수정 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
 
@@ -127,7 +127,7 @@ export function useSosoTalkPostDetailCommentActions({
 
       setPendingDeleteCommentId(null);
     } catch {
-      toast.error('댓글 삭제에 실패했어요. 다시 시도해 주세요.');
+      toast.error('댓글 삭제 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
 

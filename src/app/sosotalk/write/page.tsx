@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
+
 import { SosoTalkWritePageClient } from '@/features/sosotalk-write';
+
+export const metadata: Metadata = {
+  title: '소소톡 작성',
+  robots: { index: false, follow: false },
+};
 
 interface SosoTalkWritePageProps {
   searchParams?: Promise<{

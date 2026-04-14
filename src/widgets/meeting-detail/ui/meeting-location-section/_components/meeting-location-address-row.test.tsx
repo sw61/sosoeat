@@ -64,7 +64,7 @@ describe('MeetingLocationAddressRow', () => {
     await user.click(screen.getByRole('button', { name: '주소 복사' }));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('복사에 실패했습니다.');
+      expect(toast.error).toHaveBeenCalledWith('주소 복사 중 문제가 생겼어요. 다시 시도해 주세요.');
     });
     expect(toast.success).not.toHaveBeenCalled();
   });

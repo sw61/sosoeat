@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { Plus } from 'lucide-react';
 
+import type { GetSosoTalkPostListResponse } from '@/entities/post';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 
@@ -15,14 +16,22 @@ import { useSosoTalkMainPage } from './model';
 
 interface SosoTalkMainPageProps {
   className?: string;
+  initialData?: GetSosoTalkPostListResponse;
+  initialTab?: 'all' | 'popular';
+  initialSort?: 'comments' | 'likes' | 'latest';
 }
 
 const SOSOTALK_BANNER_IMAGE =
   'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop';
 
-export const SosoTalkMainPage = ({ className }: SosoTalkMainPageProps) => {
+export const SosoTalkMainPage = ({
+  className,
+  initialData,
+  initialTab,
+  initialSort,
+}: SosoTalkMainPageProps) => {
   const { activeSort, activeTab, isError, isLoading, posts, setActiveSort, setActiveTab } =
-    useSosoTalkMainPage();
+    useSosoTalkMainPage({ initialData, initialTab, initialSort });
 
   return (
     <div className={cn('bg-background min-h-screen w-full bg-[#f9f9f9] pb-24 md:pb-28', className)}>

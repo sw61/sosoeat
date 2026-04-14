@@ -12,11 +12,12 @@ export function useMeetingTabs(activeTab: TabValue) {
   const favoriteQuery = useFavoriteMeetings();
 
   const cards = useMemo(() => {
+    const favoritedIds = new Set(favoriteQuery.data?.data.map((f) => f.meeting.id) ?? []);
     if (activeTab === 'all' && joinedQuery.data) {
-      return toUserMeetingCards(joinedQuery.data);
+      return toUserMeetingCards(joinedQuery.data, favoritedIds);
     }
     if (activeTab === 'created' && createdQuery.data) {
-      return toUserMeetingCards(createdQuery.data);
+      return toUserMeetingCards(createdQuery.data, favoritedIds);
     }
     if (activeTab === 'favorite' && favoriteQuery.data) {
       return toFavoriteMeetingCards(favoriteQuery.data);

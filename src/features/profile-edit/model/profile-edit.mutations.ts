@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import { useAuthStore } from '@/entities/auth';
 import type { User } from '@/shared/types/generated-client';
@@ -23,6 +24,9 @@ export const useUpdateProfile = (onSuccess?: (user: User) => void) => {
         image: data.image,
       });
       onSuccess?.(data);
+    },
+    onError: () => {
+      toast.error('프로필 수정 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
 };

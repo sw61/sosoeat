@@ -27,7 +27,7 @@
       "@widgets/*": ["./src/widgets/*"],
       "@app/*": ["./src/app/*"]
     },
-    "types": ["jest", "node"]
+    "types": ["jest", "node", "next"]
   },
   "include": [
     "next-env.d.ts",

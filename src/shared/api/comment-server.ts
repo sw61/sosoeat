@@ -1,6 +1,6 @@
 import { CookieStorage } from '../lib/cookie-storage';
 
-const COMMENT_SERVER_URL = process.env.COMMENT_SERVER_URL;
+const COMMENT_SERVER_URL = process.env.COMMENT_SERVER_URL?.replace(/\/$/, '');
 
 /**
  * [Server-only] commentServer

@@ -60,11 +60,11 @@ export const useCreateComment = (meetingId: number, author: CommentAuthor) => {
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.list(meetingId) });
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.count(meetingId) });
     },
-    onError: (error: Error, _, context) => {
+    onError: (_error: Error, _, context) => {
       if (context?.previousComments) {
         queryClient.setQueryData(meetingCommentKeys.list(meetingId), context.previousComments);
       }
-      toast.error(error.message || '댓글 작성 중 오류가 발생했습니다.');
+      toast.error('댓글 작성 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
 };
@@ -108,11 +108,11 @@ export const useUpdateComment = (meetingId: number) => {
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.list(meetingId) });
       toast.success('댓글이 수정되었습니다.');
     },
-    onError: (error: Error, _, context) => {
+    onError: (_error: Error, _, context) => {
       if (context?.previousComments) {
         queryClient.setQueryData(meetingCommentKeys.list(meetingId), context.previousComments);
       }
-      toast.error(error.message || '댓글 수정 중 오류가 발생했습니다.');
+      toast.error('댓글 수정 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
 };
@@ -151,11 +151,11 @@ export const useDeleteComment = (meetingId: number) => {
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.count(meetingId) });
       toast.success('댓글이 삭제되었습니다.');
     },
-    onError: (error: Error, _, context) => {
+    onError: (_error: Error, _, context) => {
       if (context?.previousComments) {
         queryClient.setQueryData(meetingCommentKeys.list(meetingId), context.previousComments);
       }
-      toast.error(error.message || '댓글 삭제 중 오류가 발생했습니다.');
+      toast.error('댓글 삭제 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
 };
@@ -169,7 +169,7 @@ export const useLikeComment = (meetingId: number) => {
         ? meetingCommentApi.unlikeComment(commentId)
         : meetingCommentApi.likeComment(commentId),
     onError: () => {
-      toast.error('좋아요 처리 중 오류가 발생했습니다.');
+      toast.error('좋아요 처리 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.list(meetingId) });
