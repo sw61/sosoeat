@@ -13,6 +13,10 @@ const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
  */
 export async function POST(request: Request) {
   try {
+    if (!BASE_URL || !TEAM_ID) {
+      return createBffErrorResponse('Missing API config', '/api/oauth/google', 500);
+    }
+
     const { token } = await request.json();
 
     if (!token) {

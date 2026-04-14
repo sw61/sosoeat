@@ -35,11 +35,15 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
   };
 
   const handleGoogleLogin = () => {
-    if (typeof google === 'undefined') return;
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (typeof google === 'undefined' || !clientId) {
+      if (!clientId) console.error('Missing Google Client ID');
+      return;
+    }
     saveCallbackUrl();
 
     const client = google.accounts.oauth2.initTokenClient({
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+      client_id: clientId,
       scope: 'email profile',
       callback: (response) => {
         if (response.error || !response.access_token) return;

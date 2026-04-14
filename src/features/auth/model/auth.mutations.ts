@@ -145,5 +145,9 @@ export const useLogoutMutation = () => {
       queryClient.clear();
       router.push(redirectUrl);
     },
+    onError: () => {
+      logout();
+      queryClient.clear();
+    },
   });
 };
