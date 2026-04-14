@@ -9,7 +9,10 @@ export const EmptyPage = () => {
   return (
     <div
       data-testid="empty-page-root"
-      className={cn(EMPTY_PAGE_MARGIN_CLASSES, 'flex h-full flex-col items-center justify-center')}
+      className={cn(
+        EMPTY_PAGE_MARGIN_CLASSES,
+        'flex h-full w-full flex-col items-center justify-center'
+      )}
     >
       <Image
         src="/images/empty-page.svg"

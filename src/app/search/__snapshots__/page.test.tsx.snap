@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Search page metadata 를 잘 가져오는지 1`] = `
+{
+  "alternates": {
+    "canonical": "/search",
+  },
+  "description": "지역·날짜·키워드로 원하는 소모임을 찾아보세요. 취미가 맞는 사람들과의 만남이 기다리고 있어요.",
+  "keywords": [
+    "소모임 검색",
+    "지역별 모임",
+    "날짜별 모임",
+    "키워드 검색",
+    "소소잇",
+    "모임 검색",
+  ],
+  "openGraph": {
+    "description": "지역·날짜·키워드로 원하는 소모임을 찾아보세요. 취미가 맞는 사람들과의 만남이 기다리고 있어요.",
+    "images": [
+      {
+        "url": "/images/search-og-image.png",
+      },
+    ],
+    "title": "모임 검색 | 소소잇",
+    "type": "website",
+  },
+  "title": "모임 검색",
+  "twitter": {
+    "card": "summary_large_image",
+    "description": "지역·날짜·키워드로 원하는 소모임을 찾아보세요. 취미가 맞는 사람들과의 만남이 기다리고 있어요.",
+    "images": [
+      {
+        "url": "/images/search-og-image.png",
+      },
+    ],
+    "title": "모임 검색 | 소소잇",
+  },
+}
+`;

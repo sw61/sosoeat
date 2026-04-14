@@ -28,7 +28,7 @@ export const SearchBar = ({
   className,
 }: SearchBarProps) => {
   return (
-    <div className={cn('w-full max-w-[1140px]', className)}>
+    <div className={cn('w-full', className)}>
       <div className="relative w-full min-w-0">
         <Search
           className="pointer-events-none absolute top-1/2 left-3 size-[18px] -translate-y-1/2 text-[rgba(25,31,40,0.5)]"

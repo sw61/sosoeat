@@ -57,12 +57,12 @@ export const MeetingFilterBar = ({
     <div
       className={cn(
         // mobile-first: base = stacked rows, md+ = single row
-        'flex w-full flex-col justify-start gap-2 md:flex-row md:items-center md:justify-between md:gap-0',
+        'flex w-full min-w-0 flex-col justify-start gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-0',
         className
       )}
     >
       {/* Frame 2610400 — w 283, 탭 간 space-between (피그마 gap 60 대응) */}
-      <div className="flex h-10 w-full max-w-xs items-center gap-3 md:gap-[24.5px]">
+      <div className="flex h-10 w-full max-w-xs min-w-0 items-center gap-3 md:gap-[24.5px]">
         <MeetingFilterBarButton
           filterType="all"
           label="전체"
@@ -84,7 +84,7 @@ export const MeetingFilterBar = ({
       </div>
 
       {/* Frame 2610402 — h 32 필터 행 */}
-      <div className="flex w-full items-center justify-start gap-2 md:w-auto">
+      <div className="flex w-full min-w-0 flex-wrap items-center justify-start gap-2 lg:w-auto lg:flex-nowrap">
         <DetailDatePicker
           valueStart={dateStart}
           valueEnd={dateEnd}

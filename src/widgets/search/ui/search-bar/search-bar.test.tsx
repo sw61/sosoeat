@@ -34,6 +34,14 @@ describe('SearchBar', () => {
     );
 
     expect(container.firstChild).toHaveClass('search-bar-root-test');
+    expect(container.firstChild).toHaveClass('w-full');
+  });
+
+  it('search input에 전체 너비 스타일과 내부 여백이 적용된다', () => {
+    render(<SearchBar value="" onChange={() => {}} />);
+
+    const input = screen.getByRole('searchbox', { name: defaultPlaceholder });
+    expect(input).toHaveClass('w-full', 'pl-10', 'rounded-[14px]');
   });
 
   it('입력하면 값이 반영되고 onChange가 호출된다', async () => {

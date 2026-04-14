@@ -149,6 +149,7 @@ const NotificationPanelContent = ({
               onClick={() => {
                 if (showBadge) void markAllAsRead();
               }}
+              aria-label="모두 읽기"
             >
               모두 읽기
             </button>
@@ -183,6 +184,7 @@ const NotificationPanelContent = ({
                 setActiveTab(key);
                 setConfirmDelete(false);
               }}
+              aria-label="알림 읽기 버튼"
             >
               {label}
             </button>
@@ -219,6 +221,7 @@ const NotificationPanelContent = ({
               type="button"
               className="text-sosoeat-gray-500 hover:text-destructive cursor-pointer px-2 pb-3 text-sm font-semibold transition-colors"
               onClick={() => setConfirmDelete(true)}
+              aria-label="전체 삭제 버튼"
             >
               전체 삭제
             </button>
@@ -331,6 +334,37 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
           <div className={DESKTOP_PANEL_CLASS}>{panelContent}</div>
         </>
       )}
-    </div>
+      <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
+        <DialogPrimitive.Trigger asChild>
+          <NotificationTrigger
+            className={triggerClassName}
+            unreadCount={unreadCount ?? 0}
+            data-notification-trigger
+            aria-label="알림 열기"
+          />
+        </DialogPrimitive.Trigger>
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Content
+            aria-describedby={undefined}
+            className={cn(PANEL_CONTENT_CLASS)}
+            onInteractOutside={(e) => {
+              const target = e.target as HTMLElement;
+              if (target.closest('[data-notification-trigger]')) {
+                e.preventDefault();
+                return;
+              }
+              setOpen(false);
+            }}
+          >
+            <DialogPrimitive.Title className="sr-only">알림</DialogPrimitive.Title>
+            <NotificationPanelContent
+              titleId={titleId}
+              unreadCount={unreadCount}
+              onClose={() => setOpen(false)}
+            />
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
+    </>
   );
 };
