@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ImagePlus, Loader2, XIcon } from 'lucide-react';
 
 import { MIME_TO_EXT } from '@/entities/image';
+import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 import { BaseImageCropper } from '@/shared/ui/image-editor/base-image-cropper';
@@ -43,7 +44,7 @@ export function MeetingImageEditor({ imageUrl, onChange, error }: MeetingImageEd
 
   return (
     <>
-      <div className={imageUrl && !isPending ? 'relative w-full' : 'relative w-36.75'}>
+      <div className={cn('relative', imageUrl ? 'w-full' : 'w-36.75')}>
         {imageUrl && !isPending ? (
           <Image
             src={imageUrl}
@@ -131,7 +132,10 @@ export function MeetingImageEditor({ imageUrl, onChange, error }: MeetingImageEd
 
           <DialogFooter className="flex flex-row gap-3 border-0 bg-white">
             <Button
-              className={`${actionButtonClassName} border-sosoeat-gray-300 hover:bg-sosoeat-gray-100 cursor-pointer border bg-white text-gray-700`}
+              className={cn(
+                actionButtonClassName,
+                'border-sosoeat-gray-300 hover:bg-sosoeat-gray-100 cursor-pointer border bg-white text-gray-700'
+              )}
               onClick={handleCropCancel}
             >
               취소
