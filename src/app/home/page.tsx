@@ -3,7 +3,13 @@ import dynamic from 'next/dynamic';
 
 import { getMeetings } from '@/entities/meeting/index.server';
 import { MeetingWithHost } from '@/shared/types/generated-client/models/MeetingWithHost';
-import { BestSoeatSection, CtaSection, MainPageSection, MeetingTypeSection } from '@/widgets/home';
+import {
+  BestSoeatSection,
+  CtaSection,
+  HowToUseSection,
+  MainPageSection,
+  MeetingTypeSection,
+} from '@/widgets/home';
 
 const MainBanner = dynamic(() => import('@/widgets/main-banner').then((mod) => mod.MainBanner));
 
@@ -51,9 +57,12 @@ export default async function HomePage() {
     <div>
       <MainBanner />
       <div className="mx-auto max-w-[1136px]">
-        <MeetingTypeSection />
-        <MainPageSection meetings={latestMeetings} />
-        <BestSoeatSection meetings={bestMeetings} />
+        <div className="mt-8 flex flex-col gap-8">
+          <MeetingTypeSection />
+          <MainPageSection meetings={latestMeetings} />
+          <BestSoeatSection meetings={bestMeetings} />
+        </div>
+        <HowToUseSection />
       </div>
       <CtaSection />
     </div>

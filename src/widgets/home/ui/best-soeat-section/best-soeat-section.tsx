@@ -26,7 +26,7 @@ export function BestSoeatSection({ meetings }: BestSoeatSectionProps) {
   });
 
   return (
-    <section className="px-4 py-8 md:py-10 lg:py-12">
+    <section className="px-4">
       <h2 className="mb-4 flex items-center gap-3 text-lg font-bold md:text-xl lg:text-2xl">
         <Image src="icons/main-page-twinkle.svg" alt="twinkle" width={18} height={18} />
         지금 뜨는 베스트 소잇 🔥
