@@ -61,15 +61,11 @@ function InfoItem({ Icon, text }: { Icon: LucideIcon; text: string }) {
 function StatusBadgeGroup({
   confirmedAt,
   isCompleted,
-  isFavorited,
   variant,
-  meetingId,
 }: {
   confirmedAt: Date | null;
   isCompleted: boolean;
-  isFavorited: boolean;
   variant: Variant;
-  meetingId: number;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -83,13 +79,6 @@ function StatusBadgeGroup({
       ) : (
         <EstablishmentStatusBadge confirmedAt={null} variant={variant} />
       )}
-      <div className="relative z-10 ml-auto max-md:hidden">
-        <HeartButton
-          className="relative -top-3 left-0"
-          meetingId={meetingId}
-          isFavorited={isFavorited}
-        />
-      </div>
     </div>
   );
 }
@@ -149,9 +138,7 @@ export function MyPageCard({
             <StatusBadgeGroup
               confirmedAt={confirmedAt}
               isCompleted={isCompleted}
-              isFavorited={isFavorited}
               variant={variant}
-              meetingId={meetingId}
             />
           </div>
 
@@ -175,9 +162,7 @@ export function MyPageCard({
             <StatusBadgeGroup
               confirmedAt={confirmedAt}
               isCompleted={isCompleted}
-              isFavorited={isFavorited}
               variant={variant}
-              meetingId={meetingId}
             />
           </div>
         </div>
@@ -189,6 +174,10 @@ export function MyPageCard({
           meetingId={meetingId}
           isFavorited={isFavorited}
         />
+      </div>
+
+      <div className="absolute right-4 bottom-4 z-10 hidden md:block">
+        <HeartButton meetingId={meetingId} isFavorited={isFavorited} />
       </div>
     </Card>
   );
