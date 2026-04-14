@@ -58,7 +58,7 @@ const getProgressVariant = (meetingType: string): ProgressProps['variant'] =>
 
 export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProps) => {
   const variant = getProgressVariant(meeting.type);
-  const formatted = format(meeting.dateTime, 'M/d(E) HH:mm', { locale: ko });
+  const formatted = format(new Date(meeting.dateTime), 'M/d(E) HH:mm', { locale: ko });
   const progress =
     (meeting.participantCount / (meeting.capacity <= 0 ? 1 : meeting.capacity)) * 100;
 
