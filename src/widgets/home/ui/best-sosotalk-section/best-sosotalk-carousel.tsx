@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 
 import type { SosoTalkPostCardItem } from '@/entities/post';
 
-import { SosoTalkCardCompact } from '../best-soeat-card';
+import { SosoTalkCardCompact } from './sosotalk-card-compact';
 
 interface BestSosotalkCarouselProps {
   posts: SosoTalkPostCardItem[];
@@ -38,6 +38,7 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
     };
 
     const handleWheel = (e: WheelEvent) => {
+      if (el.scrollWidth <= el.clientWidth) return;
       if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         e.preventDefault();
         el.scrollLeft += e.deltaY;

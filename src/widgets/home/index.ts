@@ -1,4 +1,3 @@
-export { BestSoeatCard } from './ui/best-soeat-card/best-soeat-card';
 export { BestSosotalkSection } from './ui/best-sosotalk-section';
 export { CtaSection } from './ui/cta-section/cta-section';
 export { HowToUseSection } from './ui/how-to-use-section/how-to-use-section';
