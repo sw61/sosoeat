@@ -327,6 +327,7 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
         unreadCount={unreadCount ?? 0}
         onClick={() => handleOpen(!open)}
         data-notification-trigger
+        aria-label="알림 열기"
       />
       {open && (
         <>
@@ -334,37 +335,6 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
           <div className={DESKTOP_PANEL_CLASS}>{panelContent}</div>
         </>
       )}
-      <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
-        <DialogPrimitive.Trigger asChild>
-          <NotificationTrigger
-            className={triggerClassName}
-            unreadCount={unreadCount ?? 0}
-            data-notification-trigger
-            aria-label="알림 열기"
-          />
-        </DialogPrimitive.Trigger>
-        <DialogPrimitive.Portal>
-          <DialogPrimitive.Content
-            aria-describedby={undefined}
-            className={cn(PANEL_CONTENT_CLASS)}
-            onInteractOutside={(e) => {
-              const target = e.target as HTMLElement;
-              if (target.closest('[data-notification-trigger]')) {
-                e.preventDefault();
-                return;
-              }
-              setOpen(false);
-            }}
-          >
-            <DialogPrimitive.Title className="sr-only">알림</DialogPrimitive.Title>
-            <NotificationPanelContent
-              titleId={titleId}
-              unreadCount={unreadCount}
-              onClose={() => setOpen(false)}
-            />
-          </DialogPrimitive.Content>
-        </DialogPrimitive.Portal>
-      </DialogPrimitive.Root>
-    </>
+    </div>
   );
 };
