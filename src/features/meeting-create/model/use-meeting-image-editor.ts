@@ -9,9 +9,9 @@ import { useUploadImage } from '@/entities/image';
 import { getCroppedImg } from '@/shared/lib/image-crop';
 import { PresignedUrlRequestFolderEnum } from '@/shared/types/generated-client';
 
-export function useProfileImageEditor(onChange: (url: string) => void) {
+export function useMeetingImageEditor(onChange: (url: string) => void) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { mutateAsync, isPending } = useUploadImage(PresignedUrlRequestFolderEnum.Users);
+  const { mutateAsync, isPending } = useUploadImage(PresignedUrlRequestFolderEnum.Meetings);
 
   const [rawSrc, setRawSrc] = useState<string | null>(null);
   const [cropModalOpen, setCropModalOpen] = useState(false);
@@ -36,14 +36,14 @@ export function useProfileImageEditor(onChange: (url: string) => void) {
     if (!rawSrc || !croppedAreaPixels) return;
     try {
       const blob = await getCroppedImg(rawSrc, croppedAreaPixels);
-      const file = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
+      const file = new File([blob], 'meeting.jpg', { type: 'image/jpeg' });
       const publicUrl = await mutateAsync(file);
       if (publicUrl) onChange(publicUrl);
       URL.revokeObjectURL(rawSrc);
       setRawSrc(null);
       setCropModalOpen(false);
     } catch (error) {
-      console.error('프로필 이미지 처리 중 오류가 발생했습니다:', error);
+      console.error('이미지 처리 중 오류가 발생했습니다:', error);
       toast.error('이미지 업로드 중 문제가 생겼어요. 다시 시도해 주세요.');
     }
   };
