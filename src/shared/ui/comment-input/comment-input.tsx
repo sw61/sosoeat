@@ -13,7 +13,7 @@ import type { CommentInputProps } from './comment-input.types';
 
 export function CommentInput({
   value = '',
-  placeholder = '댓글을 입력하세요.',
+  placeholder = '댓글을 입력해 주세요.',
   onChange,
   onSubmit,
   disabled = false,

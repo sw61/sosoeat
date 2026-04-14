@@ -2,9 +2,11 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/r
 
 import {
   createSosoTalkComment,
+  createSosoTalkCommentLike,
   createSosoTalkPost,
   createSosoTalkPostLike,
   deleteSosoTalkComment,
+  deleteSosoTalkCommentLike,
   deleteSosoTalkPost,
   deleteSosoTalkPostLike,
   getSosoTalkPostDetail,
@@ -20,6 +22,7 @@ import type {
   GetSosoTalkPostDetailResponse,
   GetSosoTalkPostListParams,
   GetSosoTalkPostListResponse,
+  SosoTalkComment,
   SosoTalkPostMutationParams,
   UpdateSosoTalkCommentParams,
   UpdateSosoTalkPostParams,
@@ -117,6 +120,25 @@ const updateSosoTalkPostListLikeCache = (
 
 const invalidateSosoTalkListQueries = (queryClient: ReturnType<typeof useQueryClient>) =>
   queryClient.invalidateQueries({ queryKey: SOSOTALK_POST_LIST_QUERY_PREFIX });
+
+const updateSosoTalkCommentLikeCache = (
+  comments: SosoTalkComment[],
+  commentId: number,
+  nextIsLiked: boolean
+): SosoTalkComment[] =>
+  comments.map((comment) => {
+    if (comment.id === commentId) {
+      const likeDiff = nextIsLiked === comment.isLiked ? 0 : nextIsLiked ? 1 : -1;
+
+      return {
+        ...comment,
+        isLiked: nextIsLiked,
+        likeCount: Math.max(0, comment.likeCount + likeDiff),
+      };
+    }
+
+    return comment;
+  });
 
 const restoreSosoTalkLikeCache = (
   queryClient: ReturnType<typeof useQueryClient>,
@@ -235,6 +257,63 @@ export const useDeleteSosoTalkComment = () => {
     },
   });
 };
+
+const createSosoTalkCommentLikeMutation = (
+  nextIsLiked: boolean,
+  mutationFn: (params: CommentMutationParams) => Promise<unknown>
+) => {
+  return () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn,
+      onMutate: async ({ postId, commentId }) => {
+        await queryClient.cancelQueries({ queryKey: sosotalkQueryKeys.postDetail(postId) });
+        const previousDetail = queryClient.getQueryData<GetSosoTalkPostDetailResponse>(
+          sosotalkQueryKeys.postDetail(postId)
+        );
+
+        queryClient.setQueryData<GetSosoTalkPostDetailResponse>(
+          sosotalkQueryKeys.postDetail(postId),
+          (currentDetail) => {
+            if (!currentDetail) {
+              return currentDetail;
+            }
+
+            return {
+              ...currentDetail,
+              comments: updateSosoTalkCommentLikeCache(
+                currentDetail.comments,
+                commentId,
+                nextIsLiked
+              ),
+            };
+          }
+        );
+
+        return { previousDetail };
+      },
+      onError: (_error, { postId }, context) => {
+        if (context?.previousDetail) {
+          queryClient.setQueryData(sosotalkQueryKeys.postDetail(postId), context.previousDetail);
+        }
+      },
+      onSettled: (_data, _error, { postId }) => {
+        void queryClient.invalidateQueries({ queryKey: sosotalkQueryKeys.postDetail(postId) });
+      },
+    });
+  };
+};
+
+export const useCreateSosoTalkCommentLike = createSosoTalkCommentLikeMutation(
+  true,
+  createSosoTalkCommentLike
+);
+
+export const useDeleteSosoTalkCommentLike = createSosoTalkCommentLikeMutation(
+  false,
+  deleteSosoTalkCommentLike
+);
 
 export const useUpdateSosoTalkPost = () => {
   const queryClient = useQueryClient();
