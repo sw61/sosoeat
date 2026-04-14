@@ -1,11 +1,16 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 import { Star, Users } from 'lucide-react';
 
-import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
+import { useMeetingCreateTrigger } from '@/features/meeting-create';
 import { Button } from '@/shared/ui/button';
+
+const MeetingCreateModal = dynamic(() =>
+  import('@/features/meeting-create').then((mod) => mod.MeetingCreateModal)
+);
 
 export function CtaSection() {
   const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();

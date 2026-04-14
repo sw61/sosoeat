@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import dynamic from 'next/dynamic';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { AuthUser, useAuthStore } from '@/entities/auth';
@@ -9,7 +11,15 @@ import { AuthInitializer } from '@/features/auth';
 import { setCommentSessionExpiredHandler } from '@/shared/api/comment-client';
 import { setSessionExpiredHandler } from '@/shared/api/fetch-client';
 import { initAmplitude, syncAmplitudeUser } from '@/shared/lib/amplitude';
-import { LoginRequireModal, SessionExpiredModal } from '@/widgets/auth';
+
+const LoginRequireModal = dynamic(
+  () => import('@/widgets/auth').then((mod) => mod.LoginRequireModal),
+  { ssr: false }
+);
+const SessionExpiredModal = dynamic(
+  () => import('@/widgets/auth').then((mod) => mod.SessionExpiredModal),
+  { ssr: false }
+);
 
 export function Providers({
   children,
@@ -29,7 +39,16 @@ export function Providers({
   }, []);
 
   useEffect(() => {
-    void initAmplitude();
+    const run = () => {
+      initAmplitude();
+    };
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(run);
+      return () => window.cancelIdleCallback(id);
+    } else {
+      const timeoutId = setTimeout(run, 2000);
+      return () => clearTimeout(timeoutId);
+    }
   }, []);
 
   useEffect(() => {

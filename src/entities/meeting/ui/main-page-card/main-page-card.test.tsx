@@ -13,6 +13,37 @@ jest.mock('../../model/use-detail-router', () => ({
   }),
 }));
 
+jest.mock('framer-motion', () => ({
+  motion: new Proxy(
+    {},
+    {
+      get: (_, _key) => {
+        return ({ children, ...rest }: { children: React.ReactNode; [key: string]: unknown }) => (
+          <div {...(rest as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
+        );
+      },
+    }
+  ),
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  LazyMotion: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  domAnimation: {},
+}));
+
+jest.mock(
+  'framer-motion/m',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_, _key) => {
+          return ({ children, ...rest }: { children: React.ReactNode; [key: string]: unknown }) => (
+            <div {...(rest as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
+          );
+        },
+      }
+    )
+);
+
 jest.mock('next/image', () => ({
   __esModule: true,
   default: ({

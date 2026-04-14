@@ -17,6 +17,9 @@ const eslintConfig = [
   {
     ignores: [
       '.next/**',
+      '.next-benchmark/**',
+      '.next-benchmark-*/**',
+      '.claude/**',
       'node_modules/**',
       'dist/**',
       'storybook-static/**',

@@ -3,15 +3,19 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronLeft, Eye, EyeOff } from 'lucide-react';
 
 import type { MiddleStepProps, PasswordValues } from '@/features/auth/model';
-import { getErrorAnimationClasses, getInputClasses, passwordSchema } from '@/features/auth/model';
+import { getErrorAnimationClasses, getInputClasses } from '@/features/auth/model';
 import { AuthSubmitButton } from '@/features/auth/ui/auth-submit-button/auth-submit-button';
+import { createLazyZodResolver } from '@/shared/lib/lazy-zod-resolver';
 import { Button } from '@/shared/ui/button';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';
+
+const passwordFormResolver = createLazyZodResolver<PasswordValues>(() =>
+  import('@/features/auth/model/signup-form.schema').then((mod) => mod.passwordSchema)
+);
 
 export const PasswordStep = ({
   onNext,
@@ -26,7 +30,7 @@ export const PasswordStep = ({
     handleSubmit,
     formState: { errors, touchedFields, isSubmitted },
   } = useForm<PasswordValues>({
-    resolver: zodResolver(passwordSchema),
+    resolver: passwordFormResolver,
     mode: 'onBlur',
     defaultValues,
   });

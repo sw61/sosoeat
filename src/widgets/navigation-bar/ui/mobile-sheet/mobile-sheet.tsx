@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { LogOut, User } from 'lucide-react';
 
 import { AuthUser } from '@/entities/auth';
-import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
+import { MeetingCreateModalProps, useMeetingCreateTrigger } from '@/features/meeting-create';
 import { cn } from '@/shared/lib/utils';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 import {
@@ -21,6 +22,11 @@ import {
 } from '@/shared/ui/sheet';
 
 import { getIsActive, getNavHref, NAV_ITEMS } from '../../lib/nav.constants';
+
+const MeetingCreateModal = dynamic<MeetingCreateModalProps>(
+  () => import('@/features/meeting-create').then((mod) => mod.MeetingCreateModal),
+  { ssr: false }
+);
 
 interface MobileSheetProps {
   user: AuthUser | null;

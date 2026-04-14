@@ -1,11 +1,11 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { AuthUser } from '@/entities/auth';
-import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
-import { Notification } from '@/features/notifications';
+import { MeetingCreateModalProps, useMeetingCreateTrigger } from '@/features/meeting-create';
 import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
@@ -13,6 +13,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown';
+
+const MeetingCreateModal = dynamic<MeetingCreateModalProps>(
+  () => import('@/features/meeting-create').then((mod) => mod.MeetingCreateModal),
+  { ssr: false }
+);
+
+const Notification = dynamic(
+  () => import('@/features/notifications').then((mod) => mod.Notification),
+  { ssr: false }
+);
 
 interface NavActionsProps {
   user: AuthUser | null;
