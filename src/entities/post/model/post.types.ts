@@ -17,7 +17,14 @@ import type { PostWithComments } from '@/shared/types/generated-client/models/Po
 export type GetSosoTalkPostListParams = Omit<TeamIdPostsGetRequest, 'teamId'>;
 
 export type GetSosoTalkPostListResponse = PostList;
-export type GetSosoTalkPostDetailResponse = PostWithComments;
+export interface SosoTalkComment extends Comment {
+  parentId?: number | null;
+  likeCount: number;
+  isLiked: boolean;
+}
+export type GetSosoTalkPostDetailResponse = Omit<PostWithComments, 'comments'> & {
+  comments: SosoTalkComment[];
+};
 export type CreateSosoTalkPostPayload = CreatePost;
 export type CreateSosoTalkPostResponse = PostWithAuthor;
 export type RequestSosoTalkPostImageUploadUrlPayload = PresignedUrlRequest;
@@ -25,13 +32,17 @@ export type RequestSosoTalkPostImageUploadUrlResponse = PresignedUrlResponse;
 export type UpdateSosoTalkPostPayload = UpdatePost;
 export type UpdateSosoTalkPostResponse = PostWithAuthor;
 export type DeleteSosoTalkPostResponse = TeamIdMeetingsMeetingIdDelete200Response;
-export type CreateSosoTalkCommentPayload = CreateComment;
-export type CreateSosoTalkCommentResponse = Comment;
+export interface CreateSosoTalkCommentPayload extends CreateComment {
+  parentId?: number | null;
+}
+export type CreateSosoTalkCommentResponse = SosoTalkComment;
 export type UpdateSosoTalkCommentPayload = UpdateComment;
-export type UpdateSosoTalkCommentResponse = Comment;
+export type UpdateSosoTalkCommentResponse = SosoTalkComment;
 export type DeleteSosoTalkCommentResponse = TeamIdMeetingsMeetingIdDelete200Response;
 export type CreateSosoTalkPostLikeResponse = PostLike;
 export type DeleteSosoTalkPostLikeResponse = TeamIdMeetingsMeetingIdDelete200Response;
+export type CreateSosoTalkCommentLikeResponse = PostLike;
+export type DeleteSosoTalkCommentLikeResponse = TeamIdMeetingsMeetingIdDelete200Response;
 
 export interface SosoTalkPostMutationParams {
   postId: number;

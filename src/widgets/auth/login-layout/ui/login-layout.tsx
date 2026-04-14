@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
+import { useGoogleLoginMutation } from '@/features/auth';
+import { kakaoRedirectUri } from '@/shared/lib/oauth-config';
 import { STORAGE_KEYS } from '@/shared/lib/storage-keys';
 import { isSafeCallbackUrl } from '@/shared/utils/url';
 
@@ -24,13 +26,55 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams?.get('callbackUrl');
 
-  const buildSocialUrl = (provider: string) =>
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_TEAM_ID}/auth/${provider}`;
+  const googleLoginMutation = useGoogleLoginMutation();
 
-  const handleSocialLogin = () => {
+  const saveCallbackUrl = () => {
     if (callbackUrl && isSafeCallbackUrl(callbackUrl)) {
       sessionStorage.setItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL, callbackUrl);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (typeof google === 'undefined' || !clientId) {
+      if (!clientId) console.error('Missing Google Client ID');
+      return;
+    }
+    saveCallbackUrl();
+
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: clientId,
+      scope: 'email profile',
+      callback: (response) => {
+        if (response.error || !response.access_token) return;
+        googleLoginMutation.mutate(response.access_token);
+      },
+    });
+
+    client.requestAccessToken();
+  };
+
+  const handleKakaoLogin = () => {
+    saveCallbackUrl();
+
+    const clientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+    const redirectUri = kakaoRedirectUri;
+
+    if (!clientId || !redirectUri) {
+      console.error('Missing Kakao OAuth config', {
+        clientId: !!clientId,
+        redirectUri: !!redirectUri,
+      });
+      return;
+    }
+
+    const kakaoAuthUrl =
+      `https://kauth.kakao.com/oauth/authorize` +
+      `?client_id=${clientId}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&response_type=code`;
+
+    window.location.href = kakaoAuthUrl;
   };
 
   return (
@@ -49,23 +93,24 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
           </div>
 
           <div className="mt-6 flex flex-col items-center gap-3 md:flex-row md:gap-4">
-            <Link
-              href={buildSocialUrl('google')}
-              onClick={handleSocialLogin}
-              className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] border border-gray-300 bg-white text-base font-semibold text-slate-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 focus:outline-none md:flex-1"
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={googleLoginMutation.isPending}
+              className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] border border-gray-300 bg-white text-base font-semibold text-slate-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 focus:outline-none disabled:opacity-50 md:flex-1"
             >
               <Image src="/icons/google-icon.svg" alt="Google Logo" width={24} height={24} />
               구글로 계속하기
-            </Link>
+            </button>
 
-            <Link
-              href={buildSocialUrl('kakao')}
-              onClick={handleSocialLogin}
+            <button
+              type="button"
+              onClick={handleKakaoLogin}
               className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] bg-[#FEE500] text-base font-semibold text-[rgba(0,0,0,0.85)] opacity-90 hover:opacity-100 focus:ring-2 focus:ring-[#FFEE01] focus:ring-offset-1 focus:outline-none md:flex-1"
             >
               <Image src="/icons/kakao-icon.svg" alt="Kakao Logo" width={24} height={24} />
               카카오로 계속하기
-            </Link>
+            </button>
           </div>
         </div>
 

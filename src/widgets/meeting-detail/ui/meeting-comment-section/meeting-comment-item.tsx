@@ -3,6 +3,7 @@
 import { Heart, MessageCircle, UserRound } from 'lucide-react';
 
 import { useAuthStore } from '@/entities/auth';
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 
@@ -67,7 +68,7 @@ export function MeetingCommentItem({
         <div className="flex gap-2">
           {/* ── 아바타 ── */}
           <Avatar className="size-10 shrink-0 md:size-[54px]">
-            <AvatarImage src={author.profileUrl ?? undefined} alt={author.nickname} />
+            <AvatarImage src={toHttpsUrl(author.profileUrl)} alt={author.nickname} />
             <AvatarFallback className="text-sosoeat-orange-600">
               <UserRound className="size-6" />
             </AvatarFallback>

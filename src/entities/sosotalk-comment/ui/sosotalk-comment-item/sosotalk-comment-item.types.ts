@@ -6,11 +6,15 @@ export interface SosoTalkCommentItemData {
   relativeTime?: string;
   content: string;
   isAuthorComment?: boolean;
+  isMine?: boolean;
+  isLiked?: boolean;
+  likeCount?: number;
   isEditing?: boolean;
   editValue?: string;
   isEditPending?: boolean;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
+  onLikeClick?: () => void;
   onEditValueChange?: (value: string) => void;
   onEditSubmit?: () => void;
   onEditCancel?: () => void;

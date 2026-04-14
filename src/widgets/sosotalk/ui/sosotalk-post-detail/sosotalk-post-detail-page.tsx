@@ -64,6 +64,7 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
     handleStartEditComment,
     handleSubmitComment,
     handleSubmitEditComment,
+    handleToggleCommentLike,
   } = useSosoTalkPostDetailPage(postId);
 
   if (!isValidPostId) {
@@ -118,11 +119,13 @@ export function SosoTalkPostDetailPage({ postId }: SosoTalkPostDetailPageProps) 
           comments={comments.map((comment) =>
             mapCommentToCommentItemData(comment, {
               currentUserId: currentUser?.id,
+              postAuthorId: data.author.id,
               editingCommentId,
               editingCommentInput,
               isEditPending,
-              onEditClick: () => handleStartEditComment(comment),
-              onDeleteClick: () => void handleDeleteComment(comment.id),
+              onEditClick: handleStartEditComment,
+              onDeleteClick: (targetComment) => void handleDeleteComment(targetComment.id),
+              onLikeClick: (targetComment) => void handleToggleCommentLike(targetComment.id),
               onEditValueChange: setEditingCommentInput,
               onEditSubmit: () => void handleSubmitEditComment(),
               onEditCancel: handleCancelEditComment,

@@ -44,8 +44,10 @@ jest.mock('@/entities/post', () => {
   return {
     ...actual,
     useCreateSosoTalkComment: jest.fn(),
+    useCreateSosoTalkCommentLike: jest.fn(),
     useUpdateSosoTalkComment: jest.fn(),
     useDeleteSosoTalkComment: jest.fn(),
+    useDeleteSosoTalkCommentLike: jest.fn(),
     useCreateSosoTalkPostLike: jest.fn(),
     useDeleteSosoTalkPost: jest.fn(),
     useDeleteSosoTalkPostLike: jest.fn(),
@@ -59,16 +61,20 @@ const { useAuthStore } = jest.requireMock('@/entities/auth') as {
 
 const {
   useCreateSosoTalkComment,
+  useCreateSosoTalkCommentLike,
   useUpdateSosoTalkComment,
   useDeleteSosoTalkComment,
+  useDeleteSosoTalkCommentLike,
   useCreateSosoTalkPostLike,
   useDeleteSosoTalkPost,
   useDeleteSosoTalkPostLike,
   useGetSosoTalkPostDetail,
 } = jest.requireMock('@/entities/post') as {
   useCreateSosoTalkComment: jest.Mock;
+  useCreateSosoTalkCommentLike: jest.Mock;
   useUpdateSosoTalkComment: jest.Mock;
   useDeleteSosoTalkComment: jest.Mock;
+  useDeleteSosoTalkCommentLike: jest.Mock;
   useCreateSosoTalkPostLike: jest.Mock;
   useDeleteSosoTalkPost: jest.Mock;
   useDeleteSosoTalkPostLike: jest.Mock;
@@ -76,8 +82,10 @@ const {
 };
 
 const mockCreateCommentMutateAsync = jest.fn();
+const mockCreateCommentLikeMutateAsync = jest.fn();
 const mockUpdateCommentMutateAsync = jest.fn();
 const mockDeleteCommentMutateAsync = jest.fn();
+const mockDeleteCommentLikeMutateAsync = jest.fn();
 const mockCreateLikeMutateAsync = jest.fn();
 const mockDeletePostMutateAsync = jest.fn();
 const mockDeleteLikeMutateAsync = jest.fn();
@@ -85,8 +93,8 @@ const mockDeleteLikeMutateAsync = jest.fn();
 const mockPostDetailResponse = {
   id: 1,
   teamId: 'dallaem',
-  title: '마포 고깃집 같이 가실 분?',
-  content: '<p>오늘 저녁 같이 식사하실 분 구해요.</p>',
+  title: '맛집 같이 갈 사람 구해요',
+  content: '<p>오늘 저녁 같이 가실 분 구해요</p>',
   image: 'https://example.com/post-image.jpg',
   authorId: 10,
   viewCount: 20,
@@ -112,7 +120,9 @@ const mockPostDetailResponse = {
         name: '김유진',
         image: 'https://example.com/comment-author.jpg',
       },
-      content: '참여하고 싶어요!',
+      content: '참여하고 싶어요',
+      likeCount: 2,
+      isLiked: false,
       createdAt: new Date('2026-03-18T09:05:00.000Z'),
       updatedAt: new Date('2026-03-18T09:05:00.000Z'),
     },
@@ -182,6 +192,11 @@ describe('SosoTalkPostDetailPage', () => {
       isPending: false,
     });
 
+    useCreateSosoTalkCommentLike.mockReturnValue({
+      mutateAsync: mockCreateCommentLikeMutateAsync,
+      isPending: false,
+    });
+
     useUpdateSosoTalkComment.mockReturnValue({
       mutateAsync: mockUpdateCommentMutateAsync,
       isPending: false,
@@ -189,6 +204,11 @@ describe('SosoTalkPostDetailPage', () => {
 
     useDeleteSosoTalkComment.mockReturnValue({
       mutateAsync: mockDeleteCommentMutateAsync,
+      isPending: false,
+    });
+
+    useDeleteSosoTalkCommentLike.mockReturnValue({
+      mutateAsync: mockDeleteCommentLikeMutateAsync,
       isPending: false,
     });
 
@@ -212,16 +232,10 @@ describe('SosoTalkPostDetailPage', () => {
     jest.clearAllMocks();
   });
 
-  it('데스크톱에서는 공유 버튼 클릭 시 커스텀 공유 모달을 보여준다', async () => {
+  it('opens share modal on desktop', async () => {
     const user = userEvent.setup();
 
     render(<SosoTalkPostDetailPage postId="1" />);
-
-    useGetSosoTalkPostDetail.mockReturnValue({
-      data: currentPostDetailResponse,
-      isLoading: false,
-      isError: false,
-    });
 
     await user.click(screen.getByRole('button', { name: '공유' }));
 
@@ -231,7 +245,7 @@ describe('SosoTalkPostDetailPage', () => {
     expect(within(dialog).getByText(currentPostDetailResponse.title)).toBeInTheDocument();
   });
 
-  it('공유 모달에서 링크 복사를 누르면 링크를 복사하고 토스트를 보여준다', async () => {
+  it('copies share link from modal', async () => {
     const user = userEvent.setup();
     mockWriteClipboardText.mockResolvedValue(undefined);
 
@@ -244,7 +258,7 @@ describe('SosoTalkPostDetailPage', () => {
     expect(mockToastSuccess).toHaveBeenCalledWith('링크를 복사했어요.');
   });
 
-  it('목록으로 버튼을 누르면 소소톡 목록으로 이동한다', async () => {
+  it('navigates back to list', async () => {
     const user = userEvent.setup();
 
     render(<SosoTalkPostDetailPage postId="1" />);
@@ -254,7 +268,7 @@ describe('SosoTalkPostDetailPage', () => {
     expect(mockPush).toHaveBeenCalledWith('/sosotalk');
   });
 
-  it('댓글 버튼을 누르면 댓글 섹션으로 스크롤한다', async () => {
+  it('scrolls to comment section', async () => {
     const user = userEvent.setup();
 
     render(<SosoTalkPostDetailPage postId="1" />);
@@ -264,7 +278,7 @@ describe('SosoTalkPostDetailPage', () => {
     expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled();
   });
 
-  it('로그인 상태에서 좋아요 버튼을 누르면 좋아요 mutation을 호출하고 완료 후 서버 상태를 다시 따른다', async () => {
+  it('optimistically toggles post like', async () => {
     const user = userEvent.setup();
     let resolveLike: (() => void) | undefined;
     mockCreateLikeMutateAsync.mockReturnValue(
@@ -299,7 +313,7 @@ describe('SosoTalkPostDetailPage', () => {
     });
   });
 
-  it('비로그인 상태에서는 소소톡 하트 반응 없이 로그인 모달만 연다', async () => {
+  it('opens login prompt instead of liking when logged out', async () => {
     const user = userEvent.setup();
 
     useAuthStore.mockImplementation(
@@ -327,7 +341,7 @@ describe('SosoTalkPostDetailPage', () => {
     expect(screen.getByRole('button', { name: '좋아요 24개' })).toBeInTheDocument();
   });
 
-  it('댓글 작성 시 댓글 생성 mutation을 호출하고 입력창을 비운다', async () => {
+  it('submits a new comment', async () => {
     const user = userEvent.setup();
     mockCreateCommentMutateAsync.mockResolvedValue(undefined);
 
@@ -344,5 +358,19 @@ describe('SosoTalkPostDetailPage', () => {
       },
     });
     expect(textarea).toHaveValue('');
+  });
+
+  it('likes a comment', async () => {
+    const user = userEvent.setup();
+    mockCreateCommentLikeMutateAsync.mockResolvedValue(undefined);
+
+    render(<SosoTalkPostDetailPage postId="1" />);
+
+    await user.click(screen.getByRole('button', { name: '댓글 좋아요 2개' }));
+
+    expect(mockCreateCommentLikeMutateAsync).toHaveBeenCalledWith({
+      postId: 1,
+      commentId: 101,
+    });
   });
 });

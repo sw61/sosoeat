@@ -42,6 +42,7 @@ export default function RecommendedMeetingCard({ meeting, onClick }: Recommended
               fill
               sizes="302px"
               className="object-cover"
+              draggable={false}
             />
             <div
               className="absolute right-5 bottom-5 cursor-pointer"

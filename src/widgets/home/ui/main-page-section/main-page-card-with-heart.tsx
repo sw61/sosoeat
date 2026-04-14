@@ -1,11 +1,11 @@
 'use client';
 
+import type { Meeting } from '@/entities/meeting';
 import { MainPageCard } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
-import type { MeetingWithHost } from '@/shared/types/generated-client';
 
 interface MainPageCardWithHeartProps {
-  meeting: MeetingWithHost;
+  meeting: Meeting;
 }
 
 export function MainPageCardWithHeart({ meeting }: MainPageCardWithHeartProps) {

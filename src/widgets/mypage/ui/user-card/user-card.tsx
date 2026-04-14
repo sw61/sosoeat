@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { Calendar, Mail, Pencil } from 'lucide-react';
 
 import type { EditProfileModalProps } from '@/features/profile-edit';
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { useModal } from '@/shared/lib/use-modal';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarImage } from '@/shared/ui/avatar';
@@ -43,7 +44,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
         <CardHeader>
           <div className="flex items-center gap-6 md:hidden">
             <Avatar className="h-20.75 w-20.75 shrink-0 border-2 border-white">
-              <AvatarImage src={localImageUrl || '/images/basic-profile.svg'} />
+              <AvatarImage src={toHttpsUrl(localImageUrl) || '/images/basic-profile.svg'} />
             </Avatar>
             <div className="flex flex-col gap-1">
               <div className="flex items-center py-1">
@@ -67,7 +68,7 @@ export function UserCard({ name, joinedAt, email, imageUrl, className }: UserCar
 
           <div className="hidden items-center gap-6 md:flex">
             <Avatar className="h-42.25 w-42.25 shrink-0">
-              <AvatarImage src={localImageUrl || '/images/basic-profile.svg'} />
+              <AvatarImage src={toHttpsUrl(localImageUrl) || '/images/basic-profile.svg'} />
             </Avatar>
             <div className="flex flex-col gap-1">
               <CardTitle className="w-full text-[28px] font-bold">{localName}</CardTitle>

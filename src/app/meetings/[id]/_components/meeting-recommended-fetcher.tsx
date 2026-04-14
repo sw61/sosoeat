@@ -1,4 +1,3 @@
-import type { Meeting } from '@/entities/meeting';
 import { getMeetings } from '@/entities/meeting/index.server';
 import { MeetingRecommendedSection } from '@/widgets/meeting-detail';
 import { getMeetingById } from '@/widgets/meeting-detail/index.server';
@@ -13,10 +12,8 @@ export async function MeetingRecommendedFetcher({ meetingId }: Props) {
     data: [],
   }));
 
-  return (
-    <MeetingRecommendedSection
-      meetings={meetingList.data as unknown as Meeting[]}
-      currentMeetingId={meetingId}
-    />
-  );
+  const now = new Date();
+  const futureMeetings = meetingList.data.filter((m) => new Date(m.dateTime) > now);
+
+  return <MeetingRecommendedSection meetings={futureMeetings} currentMeetingId={meetingId} />;
 }

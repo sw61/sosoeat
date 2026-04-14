@@ -1,5 +1,6 @@
 import { apiServer } from '@/shared/api/api-server';
-import { MeetingList } from '@/shared/types/generated-client/models/MeetingList';
+
+import type { MeetingListResult } from '../model/meeting.types';
 
 export interface GetMeetingsParams {
   type?: string;
@@ -17,7 +18,7 @@ export interface GetMeetingsParams {
  * 모임 목록 조회 (서버 컴포넌트 전용)
  * GET /meetings
  */
-export async function getMeetings(params?: GetMeetingsParams): Promise<MeetingList> {
+export async function getMeetings(params?: GetMeetingsParams): Promise<MeetingListResult> {
   const searchParams = new URLSearchParams();
   if (params) {
     Object.entries(params).forEach(([key, value]) => {

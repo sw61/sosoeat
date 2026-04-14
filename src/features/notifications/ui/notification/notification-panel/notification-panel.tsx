@@ -27,33 +27,50 @@ import { NotificationTrigger } from '../notification-trigger/notification-trigge
 
 const PAGE_SIZE = 5;
 
-const PANEL_CONTENT_CLASS = [
-  // 공통
-  'fixed z-50 flex flex-col gap-0 overflow-hidden bg-white p-0 shadow-[0px_4px_16px_rgba(0,0,0,0.04)]',
-  // 모바일: 오른쪽 full-height sheet
-  'top-0 right-0 h-dvh w-[314px] rounded-l-[24px] rounded-r-none',
-  // 데스크탑: 우상단 고정 드롭다운 패널 (탭 40px 추가로 488px)
-  'md:top-16 md:h-[488px] md:rounded-[24px] md:border',
+// 모바일 full-height right sheet
+const MOBILE_PANEL_CLASS = [
+  'fixed z-50 top-0 right-0 h-dvh w-[314px]',
+  'flex flex-col gap-0 overflow-hidden bg-white p-0',
+  'rounded-l-[24px] rounded-r-none shadow-[0px_4px_16px_rgba(0,0,0,0.04)]',
 ].join(' ');
 
-const SCROLL_CLASS = [
-  'overflow-x-hidden overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#cccccc_transparent]',
-  // 모바일: flex-1로 남은 공간 채움
-  'min-h-0 flex-1',
-  // 데스크탑: 고정 높이
-  'md:h-[360px] md:flex-none',
+// PC 트리거 아래 드롭다운
+const DESKTOP_PANEL_CLASS = [
+  'absolute top-full right-0 z-50 mt-2 w-[314px] h-[488px]',
+  'flex flex-col gap-0 overflow-hidden bg-white p-0',
+  'rounded-[24px] border shadow-[0px_4px_16px_rgba(0,0,0,0.04)]',
 ].join(' ');
+
+const MOBILE_SCROLL_CLASS =
+  'overflow-x-hidden overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#cccccc_transparent] min-h-0 flex-1';
+const DESKTOP_SCROLL_CLASS =
+  'overflow-x-hidden overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#cccccc_transparent] h-[360px]';
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return isMobile;
+}
 
 interface NotificationPanelContentProps {
   titleId: string;
   unreadCount?: number;
   onClose: () => void;
+  isMobile: boolean;
 }
 
 const NotificationPanelContent = ({
   titleId,
   unreadCount,
   onClose,
+  isMobile,
 }: NotificationPanelContentProps) => {
   const { isPending, fetchNextPage, hasNextPage, isFetchingNextPage, error, data } =
     useNotificationInfiniteList({ size: PAGE_SIZE });
@@ -61,28 +78,27 @@ const NotificationPanelContent = ({
 
   const [activeTab, setActiveTab] = useState<NotificationTab>('all');
   const list = filterNotificationsByTab(allList, activeTab);
+  const tabContainerRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const labelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
 
   const updateIndicator = () => {
+    const container = tabContainerRef.current;
     const activeIndex = NOTIFICATION_TABS.findIndex((t) => t.key === activeTab);
     const btn = tabRefs.current[activeIndex];
-    const label = labelRefs.current[activeIndex];
-    if (!btn || !label) return;
+    if (!container || !btn) return;
+    const containerRect = container.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
     setIndicatorStyle({
-      left: btn.offsetLeft + label.offsetLeft,
-      width: label.offsetWidth,
+      left: btnRect.left - containerRect.left + 8, // px-2 = 8px
+      width: btnRect.width - 16, // 좌우 px-2 제외
     });
   };
 
   useEffect(() => {
     updateIndicator();
-
     const observer = new ResizeObserver(updateIndicator);
-    tabRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
+    if (tabContainerRef.current) observer.observe(tabContainerRef.current);
     return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
@@ -150,7 +166,7 @@ const NotificationPanelContent = ({
       </div>
 
       <div className="mt-4 flex shrink-0 flex-row items-end justify-between border-b border-gray-100 px-4">
-        <div className="relative flex flex-row gap-1">
+        <div ref={tabContainerRef} className="relative flex flex-row gap-1">
           {NOTIFICATION_TABS.map(({ key, label }, index) => (
             <button
               key={key}
@@ -170,13 +186,7 @@ const NotificationPanelContent = ({
               }}
               aria-label="알림 읽기 버튼"
             >
-              <span
-                ref={(el) => {
-                  labelRefs.current[index] = el;
-                }}
-              >
-                {label}
-              </span>
+              {label}
             </button>
           ))}
           <span
@@ -220,7 +230,7 @@ const NotificationPanelContent = ({
       </div>
 
       <div className="mt-2 flex min-h-0 flex-1 flex-col">
-        <div className={SCROLL_CLASS} ref={setRoot}>
+        <div className={isMobile ? MOBILE_SCROLL_CLASS : DESKTOP_SCROLL_CLASS} ref={setRoot}>
           {list.map((notification: Notification) => (
             <NotificationItem key={notification.id} {...notification} />
           ))}
@@ -257,6 +267,7 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
   const titleId = React.useId();
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
+  const isMobile = useIsMobile();
 
   const handleOpen = (nextOpen: boolean) => {
     if (nextOpen) {
@@ -265,10 +276,63 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
     setOpen(nextOpen);
   };
 
+  const panelContent = (
+    <NotificationPanelContent
+      titleId={titleId}
+      unreadCount={unreadCount}
+      onClose={() => setOpen(false)}
+      isMobile={isMobile}
+    />
+  );
+
+  if (isMobile) {
+    return (
+      <>
+        {open && <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setOpen(false)} />}
+        <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
+          <DialogPrimitive.Trigger asChild>
+            <NotificationTrigger
+              className={triggerClassName}
+              unreadCount={unreadCount ?? 0}
+              data-notification-trigger
+            />
+          </DialogPrimitive.Trigger>
+          <DialogPrimitive.Portal>
+            <DialogPrimitive.Content
+              aria-describedby={undefined}
+              className={MOBILE_PANEL_CLASS}
+              onInteractOutside={(e) => {
+                const target = e.target as HTMLElement;
+                if (target.closest('[data-notification-trigger]')) {
+                  e.preventDefault();
+                  return;
+                }
+                setOpen(false);
+              }}
+            >
+              <DialogPrimitive.Title className="sr-only">알림</DialogPrimitive.Title>
+              {panelContent}
+            </DialogPrimitive.Content>
+          </DialogPrimitive.Portal>
+        </DialogPrimitive.Root>
+      </>
+    );
+  }
+
+  // PC: 트리거 버튼 아래에 드롭다운
   return (
-    <>
+    <div className="relative">
+      <NotificationTrigger
+        className={triggerClassName}
+        unreadCount={unreadCount ?? 0}
+        onClick={() => handleOpen(!open)}
+        data-notification-trigger
+      />
       {open && (
-        <div className="fixed inset-0 z-40 bg-black/40 md:hidden" onClick={() => setOpen(false)} />
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className={DESKTOP_PANEL_CLASS}>{panelContent}</div>
+        </>
       )}
       <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
         <DialogPrimitive.Trigger asChild>
