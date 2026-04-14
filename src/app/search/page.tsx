@@ -58,13 +58,13 @@ export default async function Page({ searchParams }: PageProps) {
   }).catch(() => null);
 
   return (
-    <div>
-      <section aria-label="search-banner" className="flex justify-center">
+    <div className="flex w-full flex-col items-center justify-center">
+      <section aria-label="search-banner" className="w-full">
         <MeetingSearchBanner />
       </section>
       <section
         aria-label="search-results"
-        className="mx-auto flex max-w-[1140px] flex-col items-center justify-center gap-4 md:min-w-[780px] md:px-4 md:pt-4 lg:min-w-[1140px]"
+        className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-4"
       >
         <SearchPage initialData={initialData} />
       </section>
