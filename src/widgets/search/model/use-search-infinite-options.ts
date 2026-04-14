@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useQueries } from '@tanstack/react-query';
 
-import { meetingsQueryOptions } from '@/entities/meeting';
-import { MeetingWithHost, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
+import { type Meeting, meetingsQueryOptions } from '@/entities/meeting';
+import { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 
 type MeetingsOptions = Omit<TeamIdMeetingsGetRequest, 'teamId' | 'region'> & {
   region?: string | string[];
@@ -22,7 +22,7 @@ export const useSearchInfiniteOptions = (options: MeetingsOptions) => {
 
   const [cursor, setCursor] = useState<Record<string, string | undefined>>({});
   const [hasMoreByRegion, setHasMoreByRegion] = useState<Record<string, boolean>>({});
-  const [accumlated, setAccumlated] = useState<Record<string, Array<MeetingWithHost>>>({});
+  const [accumlated, setAccumlated] = useState<Record<string, Array<Meeting>>>({});
 
   // (regionKey, region, cursor) 기준으로 중복 처리 방지
   const processedRef = useRef<Set<string>>(new Set());

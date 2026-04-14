@@ -34,7 +34,6 @@ const mockMeeting: Meeting = {
   description: '',
   hostId: 1,
   teamId: 'test-team',
-  createdBy: 1,
   updatedAt: '2024/03/01T00:00:00.000Z',
   host: { id: 1, name: '김소소' },
   isFavorited: false,
