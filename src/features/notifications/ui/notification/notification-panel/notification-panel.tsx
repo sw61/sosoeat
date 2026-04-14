@@ -133,6 +133,7 @@ const NotificationPanelContent = ({
               onClick={() => {
                 if (showBadge) void markAllAsRead();
               }}
+              aria-label="모두 읽기"
             >
               모두 읽기
             </button>
@@ -167,6 +168,7 @@ const NotificationPanelContent = ({
                 setActiveTab(key);
                 setConfirmDelete(false);
               }}
+              aria-label="알림 읽기 버튼"
             >
               <span
                 ref={(el) => {
@@ -209,6 +211,7 @@ const NotificationPanelContent = ({
               type="button"
               className="text-sosoeat-gray-500 hover:text-destructive cursor-pointer px-2 pb-3 text-sm font-semibold transition-colors"
               onClick={() => setConfirmDelete(true)}
+              aria-label="전체 삭제 버튼"
             >
               전체 삭제
             </button>
@@ -273,6 +276,7 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
             className={triggerClassName}
             unreadCount={unreadCount ?? 0}
             data-notification-trigger
+            aria-label="알림 열기"
           />
         </DialogPrimitive.Trigger>
         <DialogPrimitive.Portal>
