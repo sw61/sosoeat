@@ -40,7 +40,7 @@ const titleClass =
 
 /** 피그마 Input — h 48, p 12, gray/50 #F9FAFB, radius 12 */
 const regionSelectDropdownTriggerClass =
-  'h-12 max-w-md rounded-xl bg-[#F9FAFB] px-3 py-3 text-base font-normal tracking-[-0.02em] text-[#333333]';
+  'h-12 max-w-md cursor-pointer rounded-xl bg-[#F9FAFB] px-3 py-3 text-base font-normal tracking-[-0.02em] text-[#333333] transition-colors hover:bg-accent';
 
 /** 스크롤 영역 — 스크롤바 ≈ w-1.5, thumb slate/300 느낌 */
 const scrollAreaClass =
@@ -130,6 +130,7 @@ export const RegionSelectModal = ({
                   regionSelectDropdownTriggerClass,
                   dropdownSub.triggerClassName
                 )}
+                itemClassName="cursor-pointer transition-colors hover:bg-accent"
               />
             ) : null}
             {children}

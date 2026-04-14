@@ -51,7 +51,7 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
     <>
       <Button
         size="lg"
-        className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white md:mr-1 md:flex"
+        className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden cursor-pointer items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white md:mr-1 md:flex"
         onClick={handleOpen}
       >
         <Plus className="size-4" strokeWidth={2.5} />
@@ -73,17 +73,21 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
               width={32}
               height={32}
               className="bg-sosoeat-gray-200 size-8 shrink-0 rounded-full object-cover"
-              onError={(e) => {
-                e.currentTarget.src = '/images/basic-profile.svg';
+              onError={(event) => {
+                event.currentTarget.src = '/images/basic-profile.svg';
               }}
             />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem className="h-10" asChild>
+          <DropdownMenuItem className="h-10 cursor-pointer pl-2" asChild>
             <Link href="/mypage">마이페이지</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="h-10" variant="destructive" onClick={onLogout}>
+          <DropdownMenuItem
+            className="h-10 cursor-pointer pl-2"
+            variant="destructive"
+            onClick={onLogout}
+          >
             로그아웃
           </DropdownMenuItem>
         </DropdownMenuContent>
