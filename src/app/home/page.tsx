@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { getMeetings } from '@/entities/meeting/index.server';
 import { MeetingWithHost } from '@/shared/types/generated-client/models/MeetingWithHost';
 import {
-  BestSoeatSection,
+  BestSosotalkSection,
   CtaSection,
   HowToUseSection,
   MainPageSection,
@@ -40,18 +40,11 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [bestMeetings, latestMeetings] = await Promise.all([
-    getHomeMeetings({
-      size: 6,
-      sortBy: 'participantCount',
-      sortOrder: 'desc',
-    }),
-    getHomeMeetings({
-      size: 6,
-      sortBy: 'registrationEnd',
-      sortOrder: 'desc',
-    }),
-  ]);
+  const latestMeetings = await getHomeMeetings({
+    size: 6,
+    sortBy: 'registrationEnd',
+    sortOrder: 'desc',
+  });
 
   return (
     <div>
@@ -60,7 +53,7 @@ export default async function HomePage() {
         <div className="mt-8 flex flex-col gap-8">
           <MeetingTypeSection />
           <MainPageSection meetings={latestMeetings} />
-          <BestSoeatSection meetings={bestMeetings} />
+          <BestSosotalkSection />
         </div>
         <HowToUseSection />
       </div>
