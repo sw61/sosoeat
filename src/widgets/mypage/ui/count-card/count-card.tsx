@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import { useFavoritesCount } from '@/entities/favorites';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -15,9 +17,15 @@ const TITLE = {
   post: '게시글 작성',
 } as const;
 
-export function CountCard({ count, variant = 'meeting', className }: CountCardProps) {
-  return (
-    <Card className={cn(cardVariants({ variant }), className)}>
+export function CountCard({ count, variant = 'meeting', className, href }: CountCardProps) {
+  const card = (
+    <Card
+      className={cn(
+        cardVariants({ variant }),
+        href && 'cursor-pointer transition-[filter] hover:brightness-95',
+        className
+      )}
+    >
       <CardHeader>
         <CardTitle>
           <p className={cn(countVariants({ variant }))}>{count}</p>
@@ -28,15 +36,25 @@ export function CountCard({ count, variant = 'meeting', className }: CountCardPr
       </CardContent>
     </Card>
   );
+
+  if (href) {
+    return <Link href={href}>{card}</Link>;
+  }
+
+  return card;
 }
 
 export function FavoriteCountCard({ initialCount }: { initialCount: number }) {
   const { data: count } = useFavoritesCount(initialCount);
-  return <CountCard variant="favorite" count={count} />;
+  return <CountCard variant="favorite" count={count} href="/mypage?tab=favorite" />;
 }
 
 export function MeetingCountCard({ initialCount }: { initialCount: number }) {
   const { data } = useJoinedMeetings();
   const count = data?.data.length ?? initialCount;
-  return <CountCard variant="meeting" count={count} />;
+  return <CountCard variant="meeting" count={count} href="/mypage?tab=all" />;
+}
+
+export function PostCountCard({ initialCount }: { initialCount: number }) {
+  return <CountCard variant="post" count={initialCount} href="/sosotalk" />;
 }

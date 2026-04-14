@@ -5,7 +5,6 @@ import type { Metadata } from 'next';
 import { format } from 'date-fns';
 
 import {
-  CountCard,
   FavoriteCountCard,
   fetchFavoriteCountServer,
   fetchMeetingCountServer,
@@ -13,6 +12,7 @@ import {
   fetchPostCountServer,
   MeetingCountCard,
   MeetingTabs,
+  PostCountCard,
   UserCard,
 } from '@/widgets/mypage';
 
@@ -44,7 +44,7 @@ export default async function MyPage() {
       <div className="flex flex-row justify-center gap-5 md:p-5">
         <MeetingCountCard initialCount={meetingCount} />
         <FavoriteCountCard initialCount={favoriteCount} />
-        <CountCard variant="post" count={postCount} />
+        <PostCountCard initialCount={postCount} />
       </div>
 
       <Suspense>

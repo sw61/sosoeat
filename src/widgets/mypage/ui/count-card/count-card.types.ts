@@ -7,5 +7,6 @@ export type CountCardVariant = 'meeting' | 'favorite' | 'post';
 export interface CountCardProps extends VariantProps<typeof cardVariants> {
   count: number;
   className?: string;
-  variant: CountCardVariant;
+  variant?: CountCardVariant;
+  href?: string;
 }
