@@ -125,7 +125,13 @@ export function MyPageCard({
       <Link href={href} aria-label={title} className="absolute inset-0 z-0" />
       {/* 이미지 */}
       <div className="relative shrink-0 overflow-hidden max-md:h-39 max-md:w-full max-md:rounded-t-4xl md:size-47 md:rounded-2xl">
-        <Image src={imageUrl} alt={imageAlt ?? title} fill className="object-cover" />
+        <Image
+          src={imageUrl}
+          alt={imageAlt ?? title}
+          fill
+          sizes="(min-width: 768px) 188px, 100vw"
+          className="object-cover"
+        />
 
         {/* 이미지 위 오버레이 (모바일 전용) */}
         <div className="absolute top-1 right-4 left-4 flex items-center justify-between md:hidden">

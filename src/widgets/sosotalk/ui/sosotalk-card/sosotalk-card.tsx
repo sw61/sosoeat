@@ -41,6 +41,7 @@ export function SosoTalkCard({
             src={imageUrl}
             alt="소소톡 게시글 이미지"
             fill
+            sizes="302px"
             className="object-cover object-center"
           />
         </div>

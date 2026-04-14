@@ -1,5 +1,5 @@
 export const MAIN_PAGE_CARD_CLASS =
-  'max-w-[340px] h-105 w-full max-w-90 cursor-pointer gap-0 overflow-hidden rounded-2xl border border-[#F3F4F6] bg-white py-0 font-medium shadow-none ring-0';
+  'max-w-[340px] h-105 w-full max-w-90 cursor-pointer gap-0 overflow-hidden rounded-2xl border border-sosoeat-gray-300 bg-white py-0 font-medium shadow-none ring-0';
 
 export const MAIN_PAGE_CARD_IMAGE_WRAPPER_CLASS =
   'relative h-[180px] w-full shrink-0 overflow-hidden';
