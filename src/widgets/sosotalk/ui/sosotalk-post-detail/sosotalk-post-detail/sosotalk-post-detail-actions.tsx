@@ -2,11 +2,13 @@
 
 import type { ReactNode } from 'react';
 
-import { motion } from 'framer-motion';
+import { LazyMotion } from 'framer-motion';
+import * as m from 'framer-motion/m';
 import { Eye, Heart, MessageCircle, Share2 } from 'lucide-react';
 
 import type { SosoTalkPostActionsProps } from './sosotalk-post-detail.types';
 
+const loadFeatures = () => import('framer-motion').then((m) => m.domAnimation);
 export function SosoTalkPostDetailActions({
   createdDateLabel,
   viewCount,
@@ -41,34 +43,37 @@ export function SosoTalkPostDetailActions({
       ) : null}
 
       <div className="flex items-center gap-4 md:gap-6">
-        <motion.button
-          type="button"
-          disabled={isLikePending}
-          aria-busy={isLikePending}
-          aria-pressed={isLiked}
-          aria-label={`좋아요 ${likeCount}개`}
-          onClick={onLikeClick}
-          whileHover={canLike ? { scale: 1.03 } : undefined}
-          whileTap={canLike ? { scale: isLikePending ? 1 : 0.92 } : undefined}
-          className={`inline-flex items-center gap-2 rounded-full px-1 py-1 transition-colors duration-150 ${
-            isLiked
-              ? 'text-sosoeat-orange-600'
-              : 'text-sosoeat-gray-900 hover:text-sosoeat-orange-600'
-          } ${isLikePending ? 'cursor-not-allowed opacity-55' : ''}`}
-        >
-          <motion.span
-            animate={
+        <LazyMotion features={loadFeatures}>
+          <m.button
+            type="button"
+            disabled={isLikePending}
+            aria-busy={isLikePending}
+            aria-pressed={isLiked}
+            aria-label={`좋아요 ${likeCount}개`}
+            onClick={onLikeClick}
+            whileHover={canLike ? { scale: 1.03 } : undefined}
+            whileTap={canLike ? { scale: isLikePending ? 1 : 0.92 } : undefined}
+            className={`inline-flex items-center gap-2 rounded-full px-1 py-1 transition-colors duration-150 ${
               isLiked
-                ? { scale: [1, 1.28, 0.96, 1], rotate: [0, -10, 10, 0] }
-                : { scale: 1, rotate: 0 }
-            }
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="inline-flex"
+                ? 'text-sosoeat-orange-600'
+                : 'text-sosoeat-gray-900 hover:text-sosoeat-orange-600'
+            } ${isLikePending ? 'cursor-not-allowed opacity-55' : ''}`}
           >
-            <Heart className={`h-6 w-6 shrink-0 ${isLiked ? 'fill-current' : ''}`} />
-          </motion.span>
-          <span>{likeCount}</span>
-        </motion.button>
+            <m.span
+              animate={
+                isLiked
+                  ? { scale: [1, 1.28, 0.96, 1], rotate: [0, -10, 10, 0] }
+                  : { scale: 1, rotate: 0 }
+              }
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="inline-flex"
+            >
+              <Heart className={`h-6 w-6 shrink-0 ${isLiked ? 'fill-current' : ''}`} />
+            </m.span>
+
+            <span>{likeCount}</span>
+          </m.button>
+        </LazyMotion>
 
         <button
           type="button"

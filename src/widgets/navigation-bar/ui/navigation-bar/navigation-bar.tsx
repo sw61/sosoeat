@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -9,12 +10,18 @@ import { toast } from 'sonner';
 import { AuthUser, useAuthStore } from '@/entities/auth';
 import { useFavoritesCount } from '@/entities/favorites';
 import { useLogoutMutation } from '@/features/auth';
-import { MeetingCreateModal, useMeetingCreateTrigger } from '@/features/meeting-create';
+import type { MeetingCreateModalProps } from '@/features/meeting-create';
+import { useMeetingCreateTrigger } from '@/features/meeting-create';
 import { cn } from '@/shared/lib/utils';
 
 import { DesktopNav } from '../desktop-nav/desktop-nav';
 import { MobileSheet } from '../mobile-sheet/mobile-sheet';
 import { NavActions } from '../nav-actions/nav-actions';
+
+const MeetingCreateModal = dynamic<MeetingCreateModalProps>(
+  () => import('@/features/meeting-create').then((mod) => mod.MeetingCreateModal),
+  { ssr: false }
+);
 
 export function NavigationBar({
   initialUser,

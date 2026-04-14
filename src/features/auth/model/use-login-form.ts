@@ -5,13 +5,16 @@ import { useForm } from 'react-hook-form';
 
 import { useSearchParams } from 'next/navigation';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
+import { createLazyZodResolver } from '@/shared/lib/lazy-zod-resolver';
 import type { LoginRequest } from '@/shared/types/generated-client/models';
 
 import { useLoginMutation } from './auth.mutations';
-import { loginSchema } from './login-form.schema';
+
+const loginFormResolver = createLazyZodResolver<LoginRequest>(() =>
+  import('./login-form.schema').then((mod) => mod.loginSchema)
+);
 
 interface LoginFormProps {
   defaultValues?: Partial<LoginRequest>;
@@ -45,7 +48,7 @@ export const useLoginForm = ({ defaultValues }: LoginFormProps) => {
     setError,
     formState: { errors, touchedFields, isSubmitted },
   } = useForm<LoginRequest>({
-    resolver: zodResolver(loginSchema),
+    resolver: loginFormResolver,
     mode: 'onSubmit',
     defaultValues,
   });

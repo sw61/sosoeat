@@ -2,15 +2,19 @@
 
 import { useForm } from 'react-hook-form';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronLeft } from 'lucide-react';
 
 import type { MiddleStepProps, NameValues } from '@/features/auth/model';
-import { getErrorAnimationClasses, getInputClasses, nameSchema } from '@/features/auth/model';
+import { getErrorAnimationClasses, getInputClasses } from '@/features/auth/model';
 import { AuthSubmitButton } from '@/features/auth/ui/auth-submit-button/auth-submit-button';
+import { createLazyZodResolver } from '@/shared/lib/lazy-zod-resolver';
 import { Button } from '@/shared/ui/button';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';
+
+const nameFormResolver = createLazyZodResolver<NameValues>(() =>
+  import('@/features/auth/model/signup-form.schema').then((mod) => mod.nameSchema)
+);
 
 export const NameStep = ({
   onNext,
@@ -23,7 +27,7 @@ export const NameStep = ({
     handleSubmit,
     formState: { errors, touchedFields, isSubmitted },
   } = useForm<NameValues>({
-    resolver: zodResolver(nameSchema),
+    resolver: nameFormResolver,
     mode: 'onBlur',
     defaultValues,
   });

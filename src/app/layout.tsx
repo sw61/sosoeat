@@ -31,6 +31,15 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/PretendardVariable.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
         <NuqsAdapter>
           <Providers initialUser={initialUser}>

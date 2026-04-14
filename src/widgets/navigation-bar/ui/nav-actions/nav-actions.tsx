@@ -1,10 +1,10 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { AuthUser } from '@/entities/auth';
-import { Notification } from '@/features/notifications';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import {
@@ -13,6 +13,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown';
+
+const Notification = dynamic(
+  () => import('@/features/notifications').then((mod) => mod.Notification),
+  { ssr: false }
+);
 
 interface NavActionsProps {
   user: AuthUser | null;

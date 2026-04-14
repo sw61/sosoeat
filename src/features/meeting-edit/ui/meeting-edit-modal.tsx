@@ -3,19 +3,22 @@
 import { useState } from 'react';
 import { type FieldErrors, useForm } from 'react-hook-form';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { useUploadImage } from '@/entities/image';
+import { createLazyZodResolver } from '@/shared/lib/lazy-zod-resolver';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { ResponsiveModal } from '@/shared/ui/responsive-modal/responsive-modal';
 
 import { BASIC_INFO_KEYS, EDIT_TABS } from '../model/meeting-edit.constants';
-import { type MeetingEditFormData, meetingEditFormSchema } from '../model/meeting-edit.schema';
+import type { MeetingEditFormData } from '../model/meeting-edit.schema';
 import type { MeetingEditModalProps, MeetingEditTab } from '../model/meeting-edit.types';
 import { useUpdateMeeting } from '../model/use-update-meeting';
 
 import { TabBasicInfo, TabSchedule } from './_components';
+
+const meetingEditFormResolver = createLazyZodResolver<MeetingEditFormData>(() =>
+  import('../model/meeting-edit.schema').then((mod) => mod.meetingEditFormSchema)
+);
 
 const MeetingEditForm = ({
   onClose,
@@ -32,7 +35,7 @@ const MeetingEditForm = ({
   } = useUploadImage('meetings');
 
   const form = useForm<MeetingEditFormData>({
-    resolver: zodResolver(meetingEditFormSchema),
+    resolver: meetingEditFormResolver,
     defaultValues,
     mode: 'onSubmit',
   });

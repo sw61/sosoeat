@@ -3,20 +3,22 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import type { EmailValues, FirstStepProps } from '@/features/auth/model';
 import {
-  emailSchema,
   getErrorAnimationClasses,
   getInputClasses,
   useCheckEmailDuplicateMutation,
 } from '@/features/auth/model';
 import { AuthSubmitButton } from '@/features/auth/ui/auth-submit-button/auth-submit-button';
+import { createLazyZodResolver } from '@/shared/lib/lazy-zod-resolver';
 import { Field, FieldContent, FieldError, FieldLabel } from '@/shared/ui/field';
 import { Input } from '@/shared/ui/input';
 
 type EmailStepProps = FirstStepProps<EmailValues>;
+
+const emailFormResolver = createLazyZodResolver<EmailValues>(() =>
+  import('@/features/auth/model/signup-form.schema').then((mod) => mod.emailSchema)
+);
 
 export const EmailStep = ({ onNext, defaultValues }: EmailStepProps) => {
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
@@ -28,7 +30,7 @@ export const EmailStep = ({ onNext, defaultValues }: EmailStepProps) => {
     formState: { errors, touchedFields, isSubmitted },
     setError,
   } = useForm<EmailValues>({
-    resolver: zodResolver(emailSchema),
+    resolver: emailFormResolver,
     mode: 'onBlur',
     defaultValues,
   });

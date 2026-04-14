@@ -3,22 +3,25 @@
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
+import dynamic from 'next/dynamic';
+
 import { MainPageCard } from '@/entities/meeting';
 import type { getMeetings } from '@/entities/meeting/index.server';
 import { HeartButton } from '@/features/favorites';
-import {
-  MeetingCreateModal,
-  MeetingMakeButton,
-  useMeetingCreateTrigger,
-} from '@/features/meeting-create';
+import { MeetingMakeButton, useMeetingCreateTrigger } from '@/features/meeting-create';
 
 import useSearchPage from '../../model/use-search-page';
 import { EmptyPage } from '../empty-page';
-import { MeetingFilterBar } from '../meeting-filter-bar';
 import { SearchBar } from '../search-bar';
 
 import SearchSkeleton from './search-skeleton';
 
+const MeetingCreateModal = dynamic(() =>
+  import('@/features/meeting-create').then((mod) => mod.MeetingCreateModal)
+);
+const MeetingFilterBar = dynamic(() =>
+  import('../meeting-filter-bar').then((mod) => mod.MeetingFilterBar)
+);
 export default function SearchPage({
   initialData,
 }: {

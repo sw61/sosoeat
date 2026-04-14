@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { type Control, type Resolver, useForm, useWatch } from 'react-hook-form';
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { createLazyZodResolver } from '@/shared/lib/lazy-zod-resolver';
 
 import { DEFAULT_FORM_VALUES, STEPS, TOTAL_STEPS } from './meeting-create.constants';
-import { meetingFormSchema, STEP_REQUIRED_FIELDS } from './meeting-create.schema';
 import type { MeetingFormData, MeetingStep } from './meeting-create.types';
+
+const meetingFormResolver = createLazyZodResolver<MeetingFormData>(() =>
+  import('./meeting-create.schema').then((mod) => mod.meetingFormSchema)
+);
 
 function isNonEmpty(value: unknown): boolean {
   if (typeof value === 'string') return value.trim().length > 0;
@@ -61,7 +64,7 @@ export const useMeetingForm = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const form = useForm<MeetingFormData>({
-    resolver: zodResolver(meetingFormSchema) as unknown as Resolver<MeetingFormData>,
+    resolver: meetingFormResolver as unknown as Resolver<MeetingFormData>,
     defaultValues: { ...DEFAULT_FORM_VALUES },
     mode: 'onSubmit',
   });
@@ -74,7 +77,8 @@ export const useMeetingForm = () => {
   const isCurrentStepValid = useStepValid(form.control, currentStep);
 
   const goNext = async () => {
-    const fields = STEP_REQUIRED_FIELDS[currentStep] as unknown as (keyof MeetingFormData)[];
+    const { STEP_REQUIRED_FIELDS } = await import('./meeting-create.schema');
+    const fields = STEP_REQUIRED_FIELDS[currentStep as MeetingStep];
     const isValid = await form.trigger(fields);
     if (isValid && currentStepIndex < TOTAL_STEPS - 1) {
       setCurrentStepIndex((prev) => prev + 1);
