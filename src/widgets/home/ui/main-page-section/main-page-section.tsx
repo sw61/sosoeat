@@ -1,11 +1,11 @@
 // app/_components/main-page-section/main-page-section.tsx
 import Image from 'next/image';
 
-import { MeetingWithHost } from '@/shared/types/generated-client/models/MeetingWithHost';
+import type { Meeting } from '@/entities/meeting';
 
 import { MainPageCardWithHeart } from './main-page-card-with-heart';
 
-export function MainPageSection({ meetings }: { meetings: MeetingWithHost[] }) {
+export function MainPageSection({ meetings }: { meetings: Meeting[] }) {
   return (
     <section className="px-4">
       <h2 className="mb-3 flex items-center gap-3 text-lg font-bold md:text-xl lg:text-2xl">

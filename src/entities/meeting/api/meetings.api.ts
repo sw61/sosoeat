@@ -2,13 +2,12 @@ import qs from 'qs';
 
 import { fetchClient } from '@/shared/api/fetch-client';
 import { parseResponse, parseVoidResponse } from '@/shared/api/parse-response';
-import { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
+import { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 import { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
-import { MeetingWithHost } from '@/shared/types/generated-client/models/MeetingWithHost';
 import { UpdateMeeting } from '@/shared/types/generated-client/models/UpdateMeeting';
 import { UpdateMeetingStatus } from '@/shared/types/generated-client/models/UpdateMeetingStatus';
 
-import type { Meeting } from '../model/meeting.types';
+import type { Meeting, MeetingListResult } from '../model/meeting.types';
 
 const makeQueryString = (params: Omit<TeamIdMeetingsGetRequest, 'teamId'>): string => {
   return qs.stringify(params, {
@@ -28,38 +27,38 @@ export const meetingsApi = {
     return parseResponse<Meeting>(response, '모임 조회에 실패했습니다.');
   },
 
-  async getList(): Promise<MeetingList> {
+  async getList(): Promise<MeetingListResult> {
     const response = await fetchClient.get('/meetings');
-    return parseResponse<MeetingList>(response, '모임 목록 조회에 실패했습니다.');
+    return parseResponse<MeetingListResult>(response, '모임 목록 조회에 실패했습니다.');
   },
 
-  async getByFilter(options: Omit<TeamIdMeetingsGetRequest, 'teamId'>): Promise<MeetingList> {
+  async getByFilter(options: Omit<TeamIdMeetingsGetRequest, 'teamId'>): Promise<MeetingListResult> {
     const queryString = makeQueryString(options);
     const response = await fetchClient.get(`/meetings${queryString}`);
-    return parseResponse<MeetingList>(response, '모임 목록 조회에 실패했습니다.');
+    return parseResponse<MeetingListResult>(response, '모임 목록 조회에 실패했습니다.');
   },
 
   /**
    * 모임 생성 요청
    * POST /meetings
    */
-  async create(payload: CreateMeeting): Promise<MeetingWithHost> {
+  async create(payload: CreateMeeting): Promise<Meeting> {
     const response = await fetchClient.post('/meetings', payload);
-    return parseResponse<MeetingWithHost>(response, '모임 생성에 실패했습니다.');
+    return parseResponse<Meeting>(response, '모임 생성에 실패했습니다.');
   },
 
   /**
    * 모임 수정 요청
    * PATCH /meetings/:id
    */
-  async update(id: number, payload: UpdateMeeting): Promise<MeetingWithHost> {
+  async update(id: number, payload: UpdateMeeting): Promise<Meeting> {
     const response = await fetchClient.patch(`/meetings/${id}`, payload);
-    return parseResponse<MeetingWithHost>(response, '모임 수정에 실패했습니다.');
+    return parseResponse<Meeting>(response, '모임 수정에 실패했습니다.');
   },
 
-  async updateStatus(id: number, payload: UpdateMeetingStatus): Promise<MeetingWithHost> {
+  async updateStatus(id: number, payload: UpdateMeetingStatus): Promise<Meeting> {
     const response = await fetchClient.patch(`/meetings/${id}/status`, payload);
-    return parseResponse<MeetingWithHost>(response, '모임 상태 변경에 실패했습니다.');
+    return parseResponse<Meeting>(response, '모임 상태 변경에 실패했습니다.');
   },
 
   async deleteMeeting(id: number): Promise<void> {

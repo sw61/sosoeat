@@ -1,7 +1,8 @@
-import type { MeetingList, TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
+import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 
 import { meetingsApi } from '../api/meetings.api';
 import type { getMeetings } from '../index.server';
+import type { MeetingListResult } from '../model/meeting.types';
 
 const searchKeys = {
   all: () => ['search'] as const,
@@ -44,7 +45,7 @@ export const meetingsQueryOptions = {
     queryFn: ({ pageParam }: { pageParam?: string }) =>
       meetingsApi.getByFilter({ ...options, cursor: pageParam }),
     initialPageParam: undefined,
-    getNextPageParam: (lastPage: MeetingList) => {
+    getNextPageParam: (lastPage: MeetingListResult) => {
       return lastPage.hasMore ? lastPage.nextCursor : undefined;
     },
     initialData: initialData ? { pages: [initialData], pageParams: [undefined] } : undefined,
