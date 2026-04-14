@@ -1,28 +1,25 @@
-# 소소잇 프로젝트
+# Team9 프로젝트
 
 ## 🚀 기술 스택 (Tech Stack)
 
 ### 핵심 기술 (Core)
 
-- **상태 및 최적화**: React Compiler 1.0 (별도의 `React.memo`, `useMemo`, `useCallback` 불필요)
 - **프레임워크**: Next.js 16 (App Router)
-- **언어**: TypeScript 5
+- **언어**: TypeScript
 - **스타일링**: Tailwind CSS v4
-- **애니메이션**: framer motion
 
 ### 상태 및 데이터 관리 (State & Data)
 
-- **상태 관리**: Zustand 5 (전역 상태 관리)
+- **상태 관리**: Zustand (전역 상태 관리)
 - **서버 상태 관리**: TanStack Query v5 (데이터 페칭 및 캐싱)
-- **시간 관리 **: date-fns/locale
 
 ### 테스트 및 개발 도구 (Testing & Tooling)
 
-- **단위 테스트**: Jest 30, React Testing Library 16
-- **E2E 테스트**: Playwright 1.58
-- **컴포넌트 문서화**: Storybook 10.2
-- **코드 품질 관리**: ESLint 9 (Flat Config), Prettier 3
-- **Git 작업 자동화**: Husky 9, Commitlint 20, lint-staged 16
+- **단위 테스트**: Jest, Vitest, React Testing Library
+- **E2E 테스트**: Playwright
+- **컴포넌트 문서화**: Storybook
+- **코드 품질 관리**: ESLint 9 (Flat Config), Prettier
+- **Git 작업 자동화**: Husky, Commitlint, lint-staged
 
 ---
 
@@ -43,14 +40,7 @@
    npm install
    ```
 
-3. **환경 변수 설정**
-   `.env.example` 파일을 복사하여 `.env` 파일을 생성하고 필요한 값을 채워넣습니다.
-
-   ```bash
-   cp .env.example .env
-   ```
-
-4. **개발 서버 실행**
+3. **개발 서버 실행**
    ```bash
    npm run dev
    ```
@@ -58,6 +48,17 @@
 ---
 
 ## 🛠️ 개발 및 실행 방법 (Available Commands)
+
+### 📌 핵심 명령어 요약 (Quick Start)
+
+| 명령어               | 용도                       |
+| :------------------- | :------------------------- |
+| `npm run dev`        | 로컬 개발 서버 실행        |
+| `npm run build`      | 프로덕션 빌드 및 최종 점검 |
+| `npm run format`     | 코드 스타일 자동 정렬      |
+| `npm run type-check` | TypeScript 타입 체크       |
+| `npm run test`       | 단위 테스트 실행           |
+| `npm run storybook`  | UI 컴포넌트 개별 개발      |
 
 ### 🚀 상세 명령어 목록
 
@@ -187,11 +188,54 @@ FSD의 핵심은 **하위 레이어는 상위 레이어를 참조할 수 없다*
 
 ---
 
-## 📏 컨벤션 및 가이드 (Conventions)
+## 📏 개발 규칙 및 컨벤션 (Conventions)
 
-상세한 폴더 구조 관리 규칙, 스토리북 작성법, 코딩 컨벤션 및 테스트 작성 규칙은 별도의 문서에서 관리합니다.
+### 1. 브랜치 전략 (Branch Strategy)
 
-👉 **[프로젝트 컨벤션 가이드 바로가기](./docs/CONVENTION.md)**
+본 프로젝트는 **Git Flow** 전략을 기반으로 협업합니다.
+
+- **main**: 프로덕션 환경에 배포되는 최상위 브랜치입니다.
+- **develop**: 다음 출시 버전을 개발하는 통합 브랜치입니다.
+- **feature**: 새로운 기능을 개발하는 브랜치입니다. `develop`에서 생성하며, 완료 후 `develop`으로 PR을 보냅니다.
+
+**브랜치 네이밍 규칙**: `type/#issuenumber-description` (예: `feat/#12-login-page`)
+
+### 2. 네이밍 컨벤션
+
+| 타입별 명명      | 규칙       | 예시                        |
+| :--------------- | :--------- | :-------------------------- |
+| 폴더명           | kebab-case | `button/`, `user-auth/`     |
+| 파일명           | kebab-case | `button.tsx`, `use-auth.ts` |
+| 컴포넌트         | PascalCase | `Button`, `DatePicker`      |
+| 훅               | camelCase  | `useAuth`, `useToggle`      |
+| 타입 선언 (필수) | PascalCase | `interface ButtonProps {}`  |
+
+> 💡 **타입 선언 규칙**: 본 프로젝트에서는 객체의 타입을 정의할 때 `type` 키워드 대신 확장성이 좋은 **`interface` 구문만을 사용**하도록 강제합니다. (예: `type User = {}` 지양, `interface User {}` 권장)
+
+### 3. Import 순서 정렬 (자동화)
+
+```typescript
+// 1. React 관련 -> 2. Next.js 관련 -> 3. 외부 라이브러리 -> 4. 프로젝트 내부 (@/*) -> 5. 상대 경로
+import React from 'react';
+import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { LocalUtils } from './utils';
+```
+
+### 4. 커밋 메시지 규칙 (Commitlint)
+
+`type: description` 형식을 엄격히 준수해야 커밋이 가능합니다.
+
+- `feat`: 새로운 기능 추가
+- `fix`: 버그 수정
+- `docs`: 문서 수정
+- `style`: 코드 포맷팅 (로직 변경 없음)
+- `refactor`: 코드 리팩토링
+- `test`: 테스트 코드 추가 및 수정
+- `chore`: 빌드 업무, 패키지 설정 변경
+- `design`: UI 디자인 스타일만 수정 (CSS 등)
+- `perf`: 성능 개선 작업
 
 ---
 
