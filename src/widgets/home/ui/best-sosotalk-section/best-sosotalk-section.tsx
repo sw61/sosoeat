@@ -30,7 +30,7 @@ export async function BestSosotalkSection() {
       <div className="mb-4 flex items-center justify-between px-4">
         <h2 className="flex items-center gap-3 text-lg font-bold md:text-xl lg:text-2xl">
           <Image src="icons/main-page-twinkle.svg" alt="twinkle" width={18} height={18} />
-          지금 뜨는 베스트 소잇 🔥
+          지금 뜨는 베스트 소소토크 🔥
         </h2>
         <Link href="/sosotalk" className="text-sm font-medium text-gray-500 hover:text-gray-800">
           소소토크 보러가기 →
