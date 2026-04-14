@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { LogOut, User } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 import { AuthUser } from '@/entities/auth';
 import { MeetingCreateModalProps, useMeetingCreateTrigger } from '@/features/meeting-create';
@@ -159,18 +159,16 @@ export function MobileSheet({
               <SheetClose asChild>
                 <Link
                   href="/mypage"
-                  className="hover:text-sosoeat-orange-600 flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-gray-600 transition-colors"
+                  className="hover:text-sosoeat-orange-600 flex h-11 items-center rounded-md px-3 text-sm font-medium text-gray-600 transition-colors"
                 >
-                  <User className="size-4 shrink-0" />
                   마이페이지
                 </Link>
               </SheetClose>
               <SheetClose asChild>
                 <button
                   onClick={onLogout}
-                  className="text-destructive flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors hover:opacity-70"
+                  className="text-destructive flex h-11 items-center rounded-md px-3 text-sm font-medium transition-colors hover:opacity-70"
                 >
-                  <LogOut className="size-4 shrink-0" />
                   로그아웃
                 </button>
               </SheetClose>
@@ -187,7 +185,7 @@ export function MobileSheet({
                   handleOpen();
                 }}
               >
-                <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
+                <Plus className="size-4" strokeWidth={2.5} />
                 모임 만들기
               </button>
             </SheetClose>

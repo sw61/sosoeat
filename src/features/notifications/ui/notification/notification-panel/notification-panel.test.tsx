@@ -73,6 +73,21 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }));
 
+const MAX_WIDTH_QUERY = '(max-width: 767px)';
+
+function mockMatchMedia(matchesNarrow: boolean) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    configurable: true,
+    value: jest.fn().mockImplementation((query: string) => ({
+      matches: query === MAX_WIDTH_QUERY ? matchesNarrow : false,
+      media: query,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    })),
+  });
+}
+
 const renderWithClient = (ui: React.ReactElement) => {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -83,11 +98,13 @@ const renderWithClient = (ui: React.ReactElement) => {
 const openPanel = async () => {
   const user = userEvent.setup();
   await user.click(screen.getByRole('button', { name: '알림 열기' }));
-  await screen.findByRole('dialog');
+  await screen.findByRole('heading', { name: '알림 내역' });
   return user;
 };
 
 beforeEach(() => {
+  mockMatchMedia(false);
+  jest.clearAllMocks();
   (useNotificationReadActions as jest.Mock).mockReturnValue({
     markAllAsRead: jest.fn(),
     markAsRead: jest.fn(),
@@ -157,9 +174,20 @@ describe('NotificationPanel', () => {
     expect(screen.getByText('알림이 없어요')).toBeInTheDocument();
   });
 
-  it('닫기 버튼 클릭 시 패널이 닫힌다', async () => {
+  it('닫기 버튼 클릭 시 패널이 닫힌다 (PC)', async () => {
     renderWithClient(<NotificationPanel />);
     const user = await openPanel();
+
+    await user.click(screen.getByRole('button', { name: '알림 닫기' }));
+    expect(screen.queryByRole('heading', { name: '알림 내역' })).not.toBeInTheDocument();
+  });
+
+  it('닫기 버튼 클릭 시 패널이 닫힌다 (모바일)', async () => {
+    mockMatchMedia(true);
+    renderWithClient(<NotificationPanel />);
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button', { name: '알림 열기' }));
+    await screen.findByRole('dialog');
 
     await user.click(screen.getByRole('button', { name: '알림 닫기' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();

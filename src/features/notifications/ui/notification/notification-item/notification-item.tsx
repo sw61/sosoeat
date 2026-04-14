@@ -53,7 +53,7 @@ export const NotificationItem = (props: Notification) => {
       <button
         type="button"
         aria-label="알림 삭제"
-        className="text-sosoeat-gray-400 hover:text-sosoeat-gray-900 mt-3 flex size-4 shrink-0 cursor-pointer items-center justify-center transition-colors"
+        className="text-sosoeat-gray-400 hover:text-sosoeat-gray-900 ml-2 flex size-4 shrink-0 cursor-pointer items-center justify-center transition-colors"
         onClick={deleteNotification}
       >
         <X className="size-3.5" strokeWidth={2} />
