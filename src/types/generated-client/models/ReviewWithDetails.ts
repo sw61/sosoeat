@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ParticipantUser } from './ParticipantUser';
+import type { ReviewWithDetailsAllOfUser } from './ReviewWithDetailsAllOfUser';
 import {
-  ParticipantUserFromJSON,
-  ParticipantUserFromJSONTyped,
-  ParticipantUserToJSON,
-  ParticipantUserToJSONTyped,
-} from './ParticipantUser';
+  ReviewWithDetailsAllOfUserFromJSON,
+  ReviewWithDetailsAllOfUserFromJSONTyped,
+  ReviewWithDetailsAllOfUserToJSON,
+  ReviewWithDetailsAllOfUserToJSONTyped,
+} from './ReviewWithDetailsAllOfUser';
 import type { ReviewWithDetailsAllOfMeeting } from './ReviewWithDetailsAllOfMeeting';
 import {
   ReviewWithDetailsAllOfMeetingFromJSON,
@@ -84,10 +84,10 @@ export interface ReviewWithDetails {
   updatedAt: Date;
   /**
    *
-   * @type {ParticipantUser}
+   * @type {ReviewWithDetailsAllOfUser}
    * @memberof ReviewWithDetails
    */
-  user: ParticipantUser;
+  user: ReviewWithDetailsAllOfUser;
   /**
    *
    * @type {ReviewWithDetailsAllOfMeeting}
@@ -133,7 +133,7 @@ export function ReviewWithDetailsFromJSONTyped(
     comment: json['comment'],
     createdAt: new Date(json['createdAt']),
     updatedAt: new Date(json['updatedAt']),
-    user: ParticipantUserFromJSON(json['user']),
+    user: ReviewWithDetailsAllOfUserFromJSON(json['user']),
     meeting: ReviewWithDetailsAllOfMeetingFromJSON(json['meeting']),
   };
 }
@@ -159,7 +159,7 @@ export function ReviewWithDetailsToJSONTyped(
     comment: value['comment'],
     createdAt: value['createdAt'].toISOString(),
     updatedAt: value['updatedAt'].toISOString(),
-    user: ParticipantUserToJSON(value['user']),
+    user: ReviewWithDetailsAllOfUserToJSON(value['user']),
     meeting: ReviewWithDetailsAllOfMeetingToJSON(value['meeting']),
   };
 }

@@ -14,12 +14,15 @@ docs/AuthTokens.md
 docs/Author.md
 docs/CategoryStatisticsItem.md
 docs/Comment.md
+docs/CommentLike.md
 docs/CommentList.md
 docs/CreateComment.md
 docs/CreateMeeting.md
 docs/CreateMeetingType.md
 docs/CreatePost.md
 docs/CreateReviewByMeeting.md
+docs/EmailCheckRequest.md
+docs/EmailCheckResponse.md
 docs/ErrorResponse.md
 docs/Favorite.md
 docs/FavoriteCount.md
@@ -42,6 +45,7 @@ docs/Notification.md
 docs/NotificationData.md
 docs/NotificationList.md
 docs/NotificationsApi.md
+docs/OAuthRequest.md
 docs/OGApi.md
 docs/OgMetadata.md
 docs/PaginatedReview.md
@@ -63,6 +67,7 @@ docs/Review.md
 docs/ReviewStatistics.md
 docs/ReviewWithDetails.md
 docs/ReviewWithDetailsAllOfMeeting.md
+docs/ReviewWithDetailsAllOfUser.md
 docs/ReviewsApi.md
 docs/SignupRequest.md
 docs/TeamIdMeetingsMeetingIdDelete200Response.md
@@ -90,12 +95,15 @@ models/AuthTokens.ts
 models/Author.ts
 models/CategoryStatisticsItem.ts
 models/Comment.ts
+models/CommentLike.ts
 models/CommentList.ts
 models/CreateComment.ts
 models/CreateMeeting.ts
 models/CreateMeetingType.ts
 models/CreatePost.ts
 models/CreateReviewByMeeting.ts
+models/EmailCheckRequest.ts
+models/EmailCheckResponse.ts
 models/ErrorResponse.ts
 models/Favorite.ts
 models/FavoriteCount.ts
@@ -113,6 +121,7 @@ models/MeetingWithHost.ts
 models/Notification.ts
 models/NotificationData.ts
 models/NotificationList.ts
+models/OAuthRequest.ts
 models/OgMetadata.ts
 models/PaginatedReview.ts
 models/Participant.ts
@@ -132,6 +141,7 @@ models/Review.ts
 models/ReviewStatistics.ts
 models/ReviewWithDetails.ts
 models/ReviewWithDetailsAllOfMeeting.ts
+models/ReviewWithDetailsAllOfUser.ts
 models/SignupRequest.ts
 models/TeamIdMeetingsMeetingIdDelete200Response.ts
 models/TeamIdNotificationsDelete200Response.ts

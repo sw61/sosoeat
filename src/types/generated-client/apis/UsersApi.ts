@@ -63,6 +63,8 @@ export interface TeamIdUsersMePostsGetRequest {
   teamId: string;
   sortBy?: TeamIdUsersMePostsGetSortByEnum;
   sortOrder?: TeamIdUsersMePostsGetSortOrderEnum;
+  offset?: number;
+  limit?: number;
   size?: number;
   cursor?: string;
 }
@@ -338,6 +340,14 @@ export class UsersApi extends runtime.BaseAPI {
       queryParameters['sortOrder'] = requestParameters['sortOrder'];
     }
 
+    if (requestParameters['offset'] != null) {
+      queryParameters['offset'] = requestParameters['offset'];
+    }
+
+    if (requestParameters['limit'] != null) {
+      queryParameters['limit'] = requestParameters['limit'];
+    }
+
     if (requestParameters['size'] != null) {
       queryParameters['size'] = requestParameters['size'];
     }
@@ -372,7 +382,7 @@ export class UsersApi extends runtime.BaseAPI {
   }
 
   /**
-   * 현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다.
+   * 현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다.  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
    * 내가 작성한 게시글 목록 조회
    */
   async teamIdUsersMePostsGetRaw(
@@ -388,7 +398,7 @@ export class UsersApi extends runtime.BaseAPI {
   }
 
   /**
-   * 현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다.
+   * 현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다.  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
    * 내가 작성한 게시글 목록 조회
    */
   async teamIdUsersMePostsGet(

@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
-import { CookieStorage } from '@/lib/auth/cookie-storage';
-import { silentRefresh } from '@/lib/auth/silent-refresh';
+import { createProxyRequest } from '@/shared/lib/proxy-handler';
 
 const COMMENT_SERVER_URL = process.env.COMMENT_SERVER_URL;
 
@@ -18,52 +17,7 @@ async function handler(request: NextRequest, { params }: { params: Promise<{ pat
   const body =
     request.method !== 'GET' && request.method !== 'HEAD' ? await request.blob() : undefined;
 
-  return proxyRequest(request, targetUrl, body);
-}
-
-async function proxyRequest(
-  request: NextRequest,
-  targetUrl: string,
-  body: Blob | undefined,
-  retry = false
-): Promise<NextResponse> {
-  const accessToken = await CookieStorage.getAccessToken();
-
-  const headers = new Headers();
-  request.headers.forEach((value, key) => {
-    if (key !== 'host' && key !== 'content-length') {
-      headers.set(key, value);
-    }
-  });
-
-  if (accessToken) {
-    headers.set('Authorization', `Bearer ${accessToken}`);
-  }
-
-  const response = await fetch(targetUrl, {
-    method: request.method,
-    headers,
-    body,
-  });
-
-  if (response.status === 401 && !retry) {
-    const refreshed = await silentRefresh();
-    if (refreshed) {
-      return proxyRequest(request, targetUrl, body, true);
-    }
-  }
-
-  const responseHeaders = new Headers();
-  response.headers.forEach((value, key) => {
-    if (key !== 'content-encoding' && key !== 'transfer-encoding') {
-      responseHeaders.set(key, value);
-    }
-  });
-
-  return new NextResponse(response.body, {
-    status: response.status,
-    headers: responseHeaders,
-  });
+  return createProxyRequest(request, targetUrl, body);
 }
 
 export { handler as DELETE, handler as GET, handler as PATCH, handler as POST, handler as PUT };

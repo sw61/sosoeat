@@ -58,6 +58,10 @@ export interface TeamIdNotificationsReadAllPutRequest {
   teamId: string;
 }
 
+export interface TeamIdNotificationsUnreadCountGetRequest {
+  teamId: string;
+}
+
 /**
  *
  */
@@ -183,7 +187,7 @@ export class NotificationsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 현재 사용자의 알림 목록을 조회합니다.  - 알림 종류: 개설 확정(MEETING_CONFIRMED), 모임 취소(MEETING_CANCELED), 댓글(COMMENT) - isRead 파라미터로 읽음/미읽음 필터링 가능
+   * 현재 사용자의 알림 목록을 조회합니다.  - 알림 종류: 개설 확정(MEETING_CONFIRMED), 모임 취소(MEETING_CANCELED), 모임 삭제(MEETING_DELETED), 댓글(COMMENT) - isRead 파라미터로 읽음/미읽음 필터링 가능
    * 알림 목록
    */
   async teamIdNotificationsGetRaw(
@@ -199,7 +203,7 @@ export class NotificationsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 현재 사용자의 알림 목록을 조회합니다.  - 알림 종류: 개설 확정(MEETING_CONFIRMED), 모임 취소(MEETING_CANCELED), 댓글(COMMENT) - isRead 파라미터로 읽음/미읽음 필터링 가능
+   * 현재 사용자의 알림 목록을 조회합니다.  - 알림 종류: 개설 확정(MEETING_CONFIRMED), 모임 취소(MEETING_CANCELED), 모임 삭제(MEETING_DELETED), 댓글(COMMENT) - isRead 파라미터로 읽음/미읽음 필터링 가능
    * 알림 목록
    */
   async teamIdNotificationsGet(
@@ -439,6 +443,78 @@ export class NotificationsApi extends runtime.BaseAPI {
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<TeamIdNotificationsDelete200Response> {
     const response = await this.teamIdNotificationsReadAllPutRaw(requestParameters, initOverrides);
+    return await response.value();
+  }
+
+  /**
+   * Creates request options for teamIdNotificationsUnreadCountGet without sending the request
+   */
+  async teamIdNotificationsUnreadCountGetRequestOpts(
+    requestParameters: TeamIdNotificationsUnreadCountGetRequest
+  ): Promise<runtime.RequestOpts> {
+    if (requestParameters['teamId'] == null) {
+      throw new runtime.RequiredError(
+        'teamId',
+        'Required parameter "teamId" was null or undefined when calling teamIdNotificationsUnreadCountGet().'
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken;
+      const tokenString = await token('Bearer', []);
+
+      if (tokenString) {
+        headerParameters['Authorization'] = `Bearer ${tokenString}`;
+      }
+    }
+
+    let urlPath = `/{teamId}/notifications/unread-count`;
+    urlPath = urlPath.replace(
+      `{${'teamId'}}`,
+      encodeURIComponent(String(requestParameters['teamId']))
+    );
+
+    return {
+      path: urlPath,
+      method: 'GET',
+      headers: headerParameters,
+      query: queryParameters,
+    };
+  }
+
+  /**
+   * 현재 사용자의 읽지 않은 알림 수를 조회합니다.
+   * 읽지 않은 알림 수 조회
+   */
+  async teamIdNotificationsUnreadCountGetRaw(
+    requestParameters: TeamIdNotificationsUnreadCountGetRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<TeamIdNotificationsDelete200Response>> {
+    const requestOptions =
+      await this.teamIdNotificationsUnreadCountGetRequestOpts(requestParameters);
+    const response = await this.request(requestOptions, initOverrides);
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      TeamIdNotificationsDelete200ResponseFromJSON(jsonValue)
+    );
+  }
+
+  /**
+   * 현재 사용자의 읽지 않은 알림 수를 조회합니다.
+   * 읽지 않은 알림 수 조회
+   */
+  async teamIdNotificationsUnreadCountGet(
+    requestParameters: TeamIdNotificationsUnreadCountGetRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<TeamIdNotificationsDelete200Response> {
+    const response = await this.teamIdNotificationsUnreadCountGetRaw(
+      requestParameters,
+      initOverrides
+    );
     return await response.value();
   }
 }

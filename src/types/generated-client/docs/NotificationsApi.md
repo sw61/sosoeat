@@ -2,13 +2,14 @@
 
 All URIs are relative to *https://together-dallaem-api.vercel.app*
 
-| Method                                                                                                       | HTTP request                                          | Description         |
-| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- | ------------------- |
-| [**teamIdNotificationsDelete**](NotificationsApi.md#teamidnotificationsdelete)                               | **DELETE** /{teamId}/notifications                    | 전체 알림 삭제      |
-| [**teamIdNotificationsGet**](NotificationsApi.md#teamidnotificationsget)                                     | **GET** /{teamId}/notifications                       | 알림 목록           |
-| [**teamIdNotificationsNotificationIdDelete**](NotificationsApi.md#teamidnotificationsnotificationiddelete)   | **DELETE** /{teamId}/notifications/{notificationId}   | 알림 삭제           |
-| [**teamIdNotificationsNotificationIdReadPut**](NotificationsApi.md#teamidnotificationsnotificationidreadput) | **PUT** /{teamId}/notifications/{notificationId}/read | 알림 읽음 처리      |
-| [**teamIdNotificationsReadAllPut**](NotificationsApi.md#teamidnotificationsreadallput)                       | **PUT** /{teamId}/notifications/read-all              | 모든 알림 읽음 처리 |
+| Method                                                                                                       | HTTP request                                          | Description            |
+| ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- | ---------------------- |
+| [**teamIdNotificationsDelete**](NotificationsApi.md#teamidnotificationsdelete)                               | **DELETE** /{teamId}/notifications                    | 전체 알림 삭제         |
+| [**teamIdNotificationsGet**](NotificationsApi.md#teamidnotificationsget)                                     | **GET** /{teamId}/notifications                       | 알림 목록              |
+| [**teamIdNotificationsNotificationIdDelete**](NotificationsApi.md#teamidnotificationsnotificationiddelete)   | **DELETE** /{teamId}/notifications/{notificationId}   | 알림 삭제              |
+| [**teamIdNotificationsNotificationIdReadPut**](NotificationsApi.md#teamidnotificationsnotificationidreadput) | **PUT** /{teamId}/notifications/{notificationId}/read | 알림 읽음 처리         |
+| [**teamIdNotificationsReadAllPut**](NotificationsApi.md#teamidnotificationsreadallput)                       | **PUT** /{teamId}/notifications/read-all              | 모든 알림 읽음 처리    |
+| [**teamIdNotificationsUnreadCountGet**](NotificationsApi.md#teamidnotificationsunreadcountget)               | **GET** /{teamId}/notifications/unread-count          | 읽지 않은 알림 수 조회 |
 
 ## teamIdNotificationsDelete
 
@@ -83,7 +84,7 @@ example().catch(console.error);
 
 알림 목록
 
-현재 사용자의 알림 목록을 조회합니다. - 알림 종류: 개설 확정(MEETING_CONFIRMED), 모임 취소(MEETING_CANCELED), 댓글(COMMENT) - isRead 파라미터로 읽음/미읽음 필터링 가능
+현재 사용자의 알림 목록을 조회합니다. - 알림 종류: 개설 확정(MEETING_CONFIRMED), 모임 취소(MEETING_CANCELED), 모임 삭제(MEETING_DELETED), 댓글(COMMENT) - isRead 파라미터로 읽음/미읽음 필터링 가능
 
 ### Example
 
@@ -358,6 +359,73 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 | ----------- | ----------- | ---------------- |
 | **200**     | 처리 성공   | -                |
+| **401**     | 인증 필요   | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+## teamIdNotificationsUnreadCountGet
+
+> TeamIdNotificationsDelete200Response teamIdNotificationsUnreadCountGet(teamId)
+
+읽지 않은 알림 수 조회
+
+현재 사용자의 읽지 않은 알림 수를 조회합니다.
+
+### Example
+
+```ts
+import { Configuration, NotificationsApi } from '';
+import type { TeamIdNotificationsUnreadCountGetRequest } from '';
+
+async function example() {
+  console.log('🚀 Testing  SDK...');
+  const config = new Configuration({
+    // Configure HTTP bearer authorization: Bearer
+    accessToken: 'YOUR BEARER TOKEN',
+  });
+  const api = new NotificationsApi(config);
+
+  const body = {
+    // string
+    teamId: dallaem,
+  } satisfies TeamIdNotificationsUnreadCountGetRequest;
+
+  try {
+    const data = await api.teamIdNotificationsUnreadCountGet(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+| Name       | Type     | Description | Notes                     |
+| ---------- | -------- | ----------- | ------------------------- |
+| **teamId** | `string` |             | [Defaults to `undefined`] |
+
+### Return type
+
+[**TeamIdNotificationsDelete200Response**](TeamIdNotificationsDelete200Response.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+| ----------- | ----------- | ---------------- |
+| **200**     | 조회 성공   | -                |
 | **401**     | 인증 필요   | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)

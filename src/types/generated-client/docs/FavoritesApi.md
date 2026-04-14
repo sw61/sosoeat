@@ -78,11 +78,11 @@ example().catch(console.error);
 
 ## teamIdFavoritesGet
 
-> FavoriteList teamIdFavoritesGet(teamId, type, region, dateStart, dateEnd, sortBy, sortOrder, cursor, size)
+> FavoriteList teamIdFavoritesGet(teamId, type, region, dateStart, dateEnd, sortBy, sortOrder, cursor, offset, limit, size)
 
 찜 목록
 
-찜한 모임 목록을 조회합니다.
+찜한 모임 목록을 조회합니다. **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
 
 ### Example
 
@@ -112,13 +112,17 @@ async function example() {
     dateStart: 2026-02-09T15:00:00Z,
     // Date | 모임 끝 범위 (이하, ISO 8601) (optional)
     dateEnd: 2026-02-10T14:59:59.999Z,
-    // 'createdAt' | 'dateTime' | 'registrationEnd' | 'participantCount' | 정렬 기준 (optional)
+    // 'createdAt' | 'meetingCreatedAt' | 'dateTime' | 'registrationEnd' | 'participantCount' | 정렬 기준 (createdAt: 찜한 시간, meetingCreatedAt: 모임 생성 시간) (optional)
     sortBy: sortBy_example,
     // 'asc' | 'desc' | 정렬 순서 (optional)
     sortOrder: sortOrder_example,
-    // string | 다음 페이지를 위한 커서 (optional)
+    // string | 다음 페이지를 위한 커서 (offset과 함께 사용 불가) (optional)
     cursor: eyJpZCI6MTB9,
-    // number | 페이지 크기 (1-100) (optional)
+    // number | 건너뛸 항목 수 (cursor와 함께 사용 불가) (optional)
+    offset: 0,
+    // number | 조회할 최대 항목 수 (offset 사용 시, 기본 10, 최대 100) (optional)
+    limit: 10,
+    // number | 페이지 크기 - cursor 사용 시 (1-100) (optional)
     size: 10,
   } satisfies TeamIdFavoritesGetRequest;
 
@@ -136,17 +140,19 @@ example().catch(console.error);
 
 ### Parameters
 
-| Name          | Type                                                           | Description                     | Notes                                                                                                         |
-| ------------- | -------------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **teamId**    | `string`                                                       |                                 | [Defaults to `undefined`]                                                                                     |
-| **type**      | `string`                                                       | 모임 종류로 필터링              | [Optional] [Defaults to `undefined`]                                                                          |
-| **region**    | `string`                                                       | 지역으로 필터링                 | [Optional] [Defaults to `undefined`]                                                                          |
-| **dateStart** | `Date`                                                         | 모임 시작 범위 (이상, ISO 8601) | [Optional] [Defaults to `undefined`]                                                                          |
-| **dateEnd**   | `Date`                                                         | 모임 끝 범위 (이하, ISO 8601)   | [Optional] [Defaults to `undefined`]                                                                          |
-| **sortBy**    | `createdAt`, `dateTime`, `registrationEnd`, `participantCount` | 정렬 기준                       | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, dateTime, registrationEnd, participantCount] |
-| **sortOrder** | `asc`, `desc`                                                  | 정렬 순서                       | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                                                   |
-| **cursor**    | `string`                                                       | 다음 페이지를 위한 커서         | [Optional] [Defaults to `undefined`]                                                                          |
-| **size**      | `number`                                                       | 페이지 크기 (1-100)             | [Optional] [Defaults to `10`]                                                                                 |
+| Name          | Type                                                                               | Description                                                        | Notes                                                                                                                           |
+| ------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| **teamId**    | `string`                                                                           |                                                                    | [Defaults to `undefined`]                                                                                                       |
+| **type**      | `string`                                                                           | 모임 종류로 필터링                                                 | [Optional] [Defaults to `undefined`]                                                                                            |
+| **region**    | `string`                                                                           | 지역으로 필터링                                                    | [Optional] [Defaults to `undefined`]                                                                                            |
+| **dateStart** | `Date`                                                                             | 모임 시작 범위 (이상, ISO 8601)                                    | [Optional] [Defaults to `undefined`]                                                                                            |
+| **dateEnd**   | `Date`                                                                             | 모임 끝 범위 (이하, ISO 8601)                                      | [Optional] [Defaults to `undefined`]                                                                                            |
+| **sortBy**    | `createdAt`, `meetingCreatedAt`, `dateTime`, `registrationEnd`, `participantCount` | 정렬 기준 (createdAt: 찜한 시간, meetingCreatedAt: 모임 생성 시간) | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, meetingCreatedAt, dateTime, registrationEnd, participantCount] |
+| **sortOrder** | `asc`, `desc`                                                                      | 정렬 순서                                                          | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                                                                     |
+| **cursor**    | `string`                                                                           | 다음 페이지를 위한 커서 (offset과 함께 사용 불가)                  | [Optional] [Defaults to `undefined`]                                                                                            |
+| **offset**    | `number`                                                                           | 건너뛸 항목 수 (cursor와 함께 사용 불가)                           | [Optional] [Defaults to `undefined`]                                                                                            |
+| **limit**     | `number`                                                                           | 조회할 최대 항목 수 (offset 사용 시, 기본 10, 최대 100)            | [Optional] [Defaults to `undefined`]                                                                                            |
+| **size**      | `number`                                                                           | 페이지 크기 - cursor 사용 시 (1-100)                               | [Optional] [Defaults to `10`]                                                                                                   |
 
 ### Return type
 

@@ -13,6 +13,9 @@
  */
 
 import { mapValues } from '../runtime';
+import type { Host } from './Host';
+import { HostFromJSON, HostFromJSONTyped, HostToJSON, HostToJSONTyped } from './Host';
+
 /**
  *
  * @export
@@ -30,13 +33,19 @@ export interface UserMeeting {
    * @type {string}
    * @memberof UserMeeting
    */
+  teamId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserMeeting
+   */
   name: string;
   /**
    *
-   * @type {Date}
+   * @type {string}
    * @memberof UserMeeting
    */
-  dateTime: Date;
+  type: string;
   /**
    *
    * @type {string}
@@ -45,10 +54,34 @@ export interface UserMeeting {
   region: string;
   /**
    *
+   * @type {string}
+   * @memberof UserMeeting
+   */
+  address: string;
+  /**
+   *
    * @type {number}
    * @memberof UserMeeting
    */
-  participantCount: number;
+  latitude: number;
+  /**
+   *
+   * @type {number}
+   * @memberof UserMeeting
+   */
+  longitude: number;
+  /**
+   *
+   * @type {Date}
+   * @memberof UserMeeting
+   */
+  dateTime: Date;
+  /**
+   *
+   * @type {Date}
+   * @memberof UserMeeting
+   */
+  registrationEnd: Date;
   /**
    *
    * @type {number}
@@ -57,10 +90,94 @@ export interface UserMeeting {
   capacity: number;
   /**
    *
+   * @type {number}
+   * @memberof UserMeeting
+   */
+  participantCount: number;
+  /**
+   *
+   * @type {string}
+   * @memberof UserMeeting
+   */
+  image: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserMeeting
+   */
+  description: string;
+  /**
+   *
+   * @type {Date}
+   * @memberof UserMeeting
+   */
+  canceledAt: Date;
+  /**
+   *
+   * @type {Date}
+   * @memberof UserMeeting
+   */
+  confirmedAt: Date;
+  /**
+   *
+   * @type {number}
+   * @memberof UserMeeting
+   */
+  hostId: number;
+  /**
+   *
+   * @type {number}
+   * @memberof UserMeeting
+   */
+  createdBy: number;
+  /**
+   *
+   * @type {Date}
+   * @memberof UserMeeting
+   */
+  createdAt: Date;
+  /**
+   *
+   * @type {Date}
+   * @memberof UserMeeting
+   */
+  updatedAt: Date;
+  /**
+   *
+   * @type {Host}
+   * @memberof UserMeeting
+   */
+  host: Host;
+  /**
+   * 로그인한 사용자의 찜 여부 (비로그인 시 미포함)
    * @type {boolean}
    * @memberof UserMeeting
    */
-  isReviewed?: boolean;
+  isFavorited?: boolean;
+  /**
+   * 로그인한 사용자의 참여 여부 (비로그인 시 미포함)
+   * @type {boolean}
+   * @memberof UserMeeting
+   */
+  isJoined?: boolean;
+  /**
+   *
+   * @type {boolean}
+   * @memberof UserMeeting
+   */
+  isCompleted: boolean;
+  /**
+   *
+   * @type {Date}
+   * @memberof UserMeeting
+   */
+  joinedAt: Date;
+  /**
+   *
+   * @type {boolean}
+   * @memberof UserMeeting
+   */
+  isReviewed: boolean;
   /**
    *
    * @type {UserMeetingRoleEnum}
@@ -83,11 +200,29 @@ export type UserMeetingRoleEnum = (typeof UserMeetingRoleEnum)[keyof typeof User
  */
 export function instanceOfUserMeeting(value: object): value is UserMeeting {
   if (!('id' in value) || value['id'] === undefined) return false;
+  if (!('teamId' in value) || value['teamId'] === undefined) return false;
   if (!('name' in value) || value['name'] === undefined) return false;
-  if (!('dateTime' in value) || value['dateTime'] === undefined) return false;
+  if (!('type' in value) || value['type'] === undefined) return false;
   if (!('region' in value) || value['region'] === undefined) return false;
-  if (!('participantCount' in value) || value['participantCount'] === undefined) return false;
+  if (!('address' in value) || value['address'] === undefined) return false;
+  if (!('latitude' in value) || value['latitude'] === undefined) return false;
+  if (!('longitude' in value) || value['longitude'] === undefined) return false;
+  if (!('dateTime' in value) || value['dateTime'] === undefined) return false;
+  if (!('registrationEnd' in value) || value['registrationEnd'] === undefined) return false;
   if (!('capacity' in value) || value['capacity'] === undefined) return false;
+  if (!('participantCount' in value) || value['participantCount'] === undefined) return false;
+  if (!('image' in value) || value['image'] === undefined) return false;
+  if (!('description' in value) || value['description'] === undefined) return false;
+  if (!('canceledAt' in value) || value['canceledAt'] === undefined) return false;
+  if (!('confirmedAt' in value) || value['confirmedAt'] === undefined) return false;
+  if (!('hostId' in value) || value['hostId'] === undefined) return false;
+  if (!('createdBy' in value) || value['createdBy'] === undefined) return false;
+  if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
+  if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
+  if (!('host' in value) || value['host'] === undefined) return false;
+  if (!('isCompleted' in value) || value['isCompleted'] === undefined) return false;
+  if (!('joinedAt' in value) || value['joinedAt'] === undefined) return false;
+  if (!('isReviewed' in value) || value['isReviewed'] === undefined) return false;
   if (!('role' in value) || value['role'] === undefined) return false;
   return true;
 }
@@ -102,12 +237,31 @@ export function UserMeetingFromJSONTyped(json: any, ignoreDiscriminator: boolean
   }
   return {
     id: json['id'],
+    teamId: json['teamId'],
     name: json['name'],
-    dateTime: new Date(json['dateTime']),
+    type: json['type'],
     region: json['region'],
-    participantCount: json['participantCount'],
+    address: json['address'],
+    latitude: json['latitude'],
+    longitude: json['longitude'],
+    dateTime: new Date(json['dateTime']),
+    registrationEnd: new Date(json['registrationEnd']),
     capacity: json['capacity'],
-    isReviewed: json['isReviewed'] == null ? undefined : json['isReviewed'],
+    participantCount: json['participantCount'],
+    image: json['image'],
+    description: json['description'],
+    canceledAt: new Date(json['canceledAt']),
+    confirmedAt: new Date(json['confirmedAt']),
+    hostId: json['hostId'],
+    createdBy: json['createdBy'],
+    createdAt: new Date(json['createdAt']),
+    updatedAt: new Date(json['updatedAt']),
+    host: HostFromJSON(json['host']),
+    isFavorited: json['isFavorited'] == null ? undefined : json['isFavorited'],
+    isJoined: json['isJoined'] == null ? undefined : json['isJoined'],
+    isCompleted: json['isCompleted'],
+    joinedAt: new Date(json['joinedAt']),
+    isReviewed: json['isReviewed'],
     role: json['role'],
   };
 }
@@ -126,11 +280,30 @@ export function UserMeetingToJSONTyped(
 
   return {
     id: value['id'],
+    teamId: value['teamId'],
     name: value['name'],
-    dateTime: value['dateTime'].toISOString(),
+    type: value['type'],
     region: value['region'],
-    participantCount: value['participantCount'],
+    address: value['address'],
+    latitude: value['latitude'],
+    longitude: value['longitude'],
+    dateTime: value['dateTime'].toISOString(),
+    registrationEnd: value['registrationEnd'].toISOString(),
     capacity: value['capacity'],
+    participantCount: value['participantCount'],
+    image: value['image'],
+    description: value['description'],
+    canceledAt: value['canceledAt'].toISOString(),
+    confirmedAt: value['confirmedAt'].toISOString(),
+    hostId: value['hostId'],
+    createdBy: value['createdBy'],
+    createdAt: value['createdAt'].toISOString(),
+    updatedAt: value['updatedAt'].toISOString(),
+    host: HostToJSON(value['host']),
+    isFavorited: value['isFavorited'],
+    isJoined: value['isJoined'],
+    isCompleted: value['isCompleted'],
+    joinedAt: value['joinedAt'].toISOString(),
     isReviewed: value['isReviewed'],
     role: value['role'],
   };

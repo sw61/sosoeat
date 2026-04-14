@@ -124,56 +124,67 @@
 
 ## 📂 폴더 구조 (Folder Structure)
 
-본 프로젝트는 **계층형 구조(Layered Architecture)**와 **App Router의 Route Colocation** 패턴을 채택하여 유지보수성과 확장성을 극대화했습니다. 모든 폴더와 파일 이름은 **kebab-case**를 사용합니다.
+본 프로젝트는 **FSD (Feature-Sliced Design)** 방법론을 채택하여 유지보수성과 확장성을 극대화했습니다. 모든 폴더와 파일 이름은 **kebab-case**를 사용합니다.
 
 ```text
 src/
-├── app/                # Next.js App Router (라우팅 및 페이지 레이아웃)
-│   ├── (auth)/         # 라우팅 그룹 (login, signup 등)
-│   ├── [route]/        # 개별 페이지 라우트
-│   │   ├── _components/# 해당 페이지 전용 컴포넌트 (Colocation)
-│   │   └── page.tsx    # 페이지 엔트리포인트
-│   ├── layout.tsx      # 전역 레이아웃
-│   ├── providers.tsx   # 전역 컨텍스트 프로바이더 (QueryClient 등)
-│   └── globals.css     # 전역 스타일
-├── components/         # 재사용 가능한 공통 UI 컴포넌트
-│   ├── ui/             # [Level 1] 원자(Atomic) 단위 컴포넌트 (shadcn 기반)
-│   │   └── [name]/     # 폴더 단위 관리 (예: button/button.tsx)
-│   └── common/         # [Level 2] UI 조각들을 조합한 공통 패턴 컴포넌트
-│       └── [name]/     # 폴더 단위 관리 (예: labeled-input/labeled-input.tsx)
-├── services/           # API fetch 함수 + TanStack Query 커스텀 훅
-├── store/              # Zustand 기반 클라이언트 전역 상태 관리
-├── hooks/              # 전역 공통 커스텀 훅
-├── lib/                # 외부 라이브러리 설정 (axios 인스턴스 등)
-├── types/              # 전역 공통 타입 정의 및 API 응답 타입
-└── utils/              # 순수 함수 및 유틸리티 로직
-
-tests/e2e               # Playwright E2E 테스트 시나리오
-.github/workflows/      # CI/CD (GitHub Actions)
+├── app/                  # [App Layer] Next.js App Router 전용 (라우팅, 레이아웃)
+│   ├── (auth)/           # 인증 관련 라우트 그룹
+│   ├── meetings/         # 모임 상세 및 목록 페이지
+│   ├── mypage/           # 마이페이지
+│   ├── sosotalk/         # 게시판 페이지
+│   ├── layout.tsx        # 전역 레이아웃
+│   └── providers.tsx     # 전역 Provider 설정
+│
+├── widgets/              # [Widgets Layer] 독립적인 복합 블록 (페이지에서 조합)
+│   ├── navigation-bar/   # 상단 네비게이션 바
+│   ├── footer/           # 하단 푸터
+│   ├── meeting-list/     # 모임 목록 섹션
+│   └── ...
+│
+├── features/             # [Features Layer] 사용자 액션 단위 (Mutation, 폼 제출)
+│   ├── auth/             # 로그인, 회원가입 폼 및 로직
+│   ├── meeting-create/   # 모임 생성 모달 및 로직
+│   ├── favorites/        # 좋아요 토글 버튼 및 로직
+│   └── ...
+│
+├── entities/             # [Entities Layer] 비즈니스 엔티티 (데이터 모델, 조회 로직)
+│   ├── meeting/          # 모임 데이터, API, 카드 UI
+│   ├── user/             # 유저 데이터, 프로필 UI
+│   ├── comment/          # 댓글 데이터, 목록 UI
+│   └── ...
+│
+├── shared/               # [Shared Layer] 도메인 무관 재사용 요소
+│   ├── ui/               # 공통 UI 컴포넌트 (Button, Input, Modal 등)
+│   ├── api/              # 공통 API 클라이언트 (fetchClient, apiServer)
+│   ├── lib/              # 유틸리티 함수 (cn, date-utils 등)
+│   ├── hooks/            # 공통 커스텀 훅 (useModal 등)
+│   └── types/            # 전역 타입 정의 (OpenAPI 생성 타입 등)
+│
+├── tests/e2e             # Playwright E2E 테스트 시나리오
+└── .github/workflows/    # CI/CD (GitHub Actions)
 ```
 
-### 💡 컴포넌트 관리 규칙
+### 📏 레이어별 계층 규칙 (Layer Hierarchy)
 
-- **Colocation**: 특정 페이지에서만 쓰이는 컴포넌트는 해당 라우트의 `_components/` 폴더에 위치시킵니다.
-- **Atomic & Composed**: 순수 UI 조각은 `ui/`, 이를 조합한 재사용 패턴은 `common/`에서 관리합니다.
-- **Barrel Pattern**: 각 컴포넌트 폴더에는 `index.ts`를 두어 외부에서 깔끔하게 임포트할 수 있도록 re-export합니다.
-- **Testing & Stories**: 컴포넌트 파일(`.tsx`), 테스트(`.test.tsx`), 스토리북(`.stories.tsx`)은 반드시 **동일한 폴더**에 함께 둡니다.
+FSD의 핵심은 **하위 레이어는 상위 레이어를 참조할 수 없다**는 단방향 의존성 원칙입니다.
 
-### 🎨 스토리북 구조 (Storybook Structure)
+`app` > `widgets` > `features` > `entities` > `shared`
 
-Storybook 내에서의 컴포넌트 계층 구조는 다음과 같은 명명 규칙을 따릅니다:
+- `shared`는 그 무엇도 참조하지 않습니다.
+- `entities`는 다른 `entities`나 `features`를 참조할 수 없습니다.
+- `features`는 `entities`를 참조할 수 있지만, 다른 `features`나 `widgets`는 참조할 수 없습니다.
+- `widgets`는 `features`와 `entities`를 조합할 수 있습니다.
+- `app`은 모든 레이어를 조립하는 최종 단계입니다.
 
-- **Components/ui**: 원자(Atomic) 단위의 UI 컴포넌트
-- **Components/common**: 공통으로 재사용되는 조합형 컴포넌트
+### 🧩 슬라이스 내부 구조 (Slice Internal Structure)
 
-`.stories.tsx` 파일의 `title` 속성을 통해 다음과 같이 설정합니다:
+각 레이어(`widgets`, `features`, `entities`) 내의 개별 도메인(슬라이스)은 기능별로 구분된 세그먼트(Segment) 폴더를 가집니다.
 
-```typescript
-const meta = {
-  title: 'Components/ui/Button', // or 'Components/common/LabeledInput'
-  component: Button,
-} satisfies Meta<typeof Button>;
-```
+- `ui/`: 화면에 그려지는 UI 컴포넌트 (예: `*_component.tsx`)
+- `model/`: 비즈니스 로직, 전역/지역 상태 관리, 커스텀 훅 및 스키마 (예: `use-*.ts`, `*.schema.ts`, `*.store.ts`)
+- `api/`: 해당 특성이나 엔티티의 API 호출 함수 (서버 통신 로직)
+- `lib/` (선택): 도메인 내에서 쓰이는 독립적인 유틸 함수
 
 ---
 

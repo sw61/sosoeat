@@ -50,6 +50,7 @@ export interface TeamIdMeetingsGetRequest {
   id?: number;
   type?: string;
   region?: string;
+  keyword?: string;
   dateStart?: Date;
   dateEnd?: Date;
   createdBy?: number;
@@ -113,6 +114,8 @@ export interface TeamIdMeetingsMyGetRequest {
   sortBy?: TeamIdMeetingsMyGetSortByEnum;
   sortOrder?: TeamIdMeetingsMyGetSortOrderEnum;
   cursor?: string;
+  offset?: number;
+  limit?: number;
   size?: number;
 }
 
@@ -150,6 +153,10 @@ export class MeetingsApi extends runtime.BaseAPI {
 
     if (requestParameters['region'] != null) {
       queryParameters['region'] = requestParameters['region'];
+    }
+
+    if (requestParameters['keyword'] != null) {
+      queryParameters['keyword'] = requestParameters['keyword'];
     }
 
     if (requestParameters['dateStart'] != null) {
@@ -924,6 +931,14 @@ export class MeetingsApi extends runtime.BaseAPI {
       queryParameters['cursor'] = requestParameters['cursor'];
     }
 
+    if (requestParameters['offset'] != null) {
+      queryParameters['offset'] = requestParameters['offset'];
+    }
+
+    if (requestParameters['limit'] != null) {
+      queryParameters['limit'] = requestParameters['limit'];
+    }
+
     if (requestParameters['size'] != null) {
       queryParameters['size'] = requestParameters['size'];
     }
@@ -954,7 +969,7 @@ export class MeetingsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 현재 사용자가 호스트인 모임 목록을 조회합니다.
+   * 현재 사용자가 호스트인 모임 목록을 조회합니다.  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
    * 내가 만든 모임 목록
    */
   async teamIdMeetingsMyGetRaw(
@@ -968,7 +983,7 @@ export class MeetingsApi extends runtime.BaseAPI {
   }
 
   /**
-   * 현재 사용자가 호스트인 모임 목록을 조회합니다.
+   * 현재 사용자가 호스트인 모임 목록을 조회합니다.  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
    * 내가 만든 모임 목록
    */
   async teamIdMeetingsMyGet(
@@ -1056,6 +1071,7 @@ export const TeamIdMeetingsGetSortByEnum = {
   DateTime: 'dateTime',
   RegistrationEnd: 'registrationEnd',
   ParticipantCount: 'participantCount',
+  CreatedAt: 'createdAt',
 } as const;
 export type TeamIdMeetingsGetSortByEnum =
   (typeof TeamIdMeetingsGetSortByEnum)[keyof typeof TeamIdMeetingsGetSortByEnum];

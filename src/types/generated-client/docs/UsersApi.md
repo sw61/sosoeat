@@ -242,11 +242,11 @@ example().catch(console.error);
 
 ## teamIdUsersMePostsGet
 
-> UserPostsResponse teamIdUsersMePostsGet(teamId, sortBy, sortOrder, size, cursor)
+> UserPostsResponse teamIdUsersMePostsGet(teamId, sortBy, sortOrder, offset, limit, size, cursor)
 
 내가 작성한 게시글 목록 조회
 
-현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다.
+현재 로그인된 사용자가 작성한 게시글 목록을 조회합니다. 정렬 옵션을 지원합니다. **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
 
 ### Example
 
@@ -269,6 +269,10 @@ async function example() {
     sortBy: createdAt,
     // 'asc' | 'desc' (optional)
     sortOrder: desc,
+    // number (optional)
+    offset: 0,
+    // number (optional)
+    limit: 10,
     // number (optional)
     size: 10,
     // string (optional)
@@ -294,6 +298,8 @@ example().catch(console.error);
 | **teamId**    | `string`                              |             | [Defaults to `undefined`]                                                              |
 | **sortBy**    | `createdAt`, `viewCount`, `likeCount` |             | [Optional] [Defaults to `&#39;createdAt&#39;`] [Enum: createdAt, viewCount, likeCount] |
 | **sortOrder** | `asc`, `desc`                         |             | [Optional] [Defaults to `&#39;desc&#39;`] [Enum: asc, desc]                            |
+| **offset**    | `number`                              |             | [Optional] [Defaults to `undefined`]                                                   |
+| **limit**     | `number`                              |             | [Optional] [Defaults to `undefined`]                                                   |
 | **size**      | `number`                              |             | [Optional] [Defaults to `10`]                                                          |
 | **cursor**    | `string`                              |             | [Optional] [Defaults to `undefined`]                                                   |
 

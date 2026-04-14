@@ -38,13 +38,31 @@ export interface FavoriteList {
    * @type {string}
    * @memberof FavoriteList
    */
-  nextCursor: string;
+  nextCursor?: string;
   /**
    *
    * @type {boolean}
    * @memberof FavoriteList
    */
   hasMore: boolean;
+  /**
+   *
+   * @type {number}
+   * @memberof FavoriteList
+   */
+  totalCount?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof FavoriteList
+   */
+  currentOffset?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof FavoriteList
+   */
+  limit?: number;
 }
 
 /**
@@ -52,7 +70,6 @@ export interface FavoriteList {
  */
 export function instanceOfFavoriteList(value: object): value is FavoriteList {
   if (!('data' in value) || value['data'] === undefined) return false;
-  if (!('nextCursor' in value) || value['nextCursor'] === undefined) return false;
   if (!('hasMore' in value) || value['hasMore'] === undefined) return false;
   return true;
 }
@@ -67,8 +84,11 @@ export function FavoriteListFromJSONTyped(json: any, ignoreDiscriminator: boolea
   }
   return {
     data: (json['data'] as Array<any>).map(FavoriteWithMeetingFromJSON),
-    nextCursor: json['nextCursor'],
+    nextCursor: json['nextCursor'] == null ? undefined : json['nextCursor'],
     hasMore: json['hasMore'],
+    totalCount: json['totalCount'] == null ? undefined : json['totalCount'],
+    currentOffset: json['currentOffset'] == null ? undefined : json['currentOffset'],
+    limit: json['limit'] == null ? undefined : json['limit'],
   };
 }
 
@@ -88,5 +108,8 @@ export function FavoriteListToJSONTyped(
     data: (value['data'] as Array<any>).map(FavoriteWithMeetingToJSON),
     nextCursor: value['nextCursor'],
     hasMore: value['hasMore'],
+    totalCount: value['totalCount'],
+    currentOffset: value['currentOffset'],
+    limit: value['limit'],
   };
 }

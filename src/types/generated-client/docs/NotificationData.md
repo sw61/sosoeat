@@ -2,14 +2,15 @@
 
 ## Properties
 
-| Name          | Type   |
-| ------------- | ------ |
-| `meetingId`   | number |
-| `meetingName` | string |
-| `postId`      | number |
-| `postTitle`   | string |
-| `commentId`   | number |
-| `image`       | string |
+| Name             | Type   |
+| ---------------- | ------ |
+| `meetingId`      | number |
+| `meetingName`    | string |
+| `postId`         | number |
+| `postTitle`      | string |
+| `commentId`      | number |
+| `commentContent` | string |
+| `image`          | string |
 
 ## Example
 
@@ -23,6 +24,7 @@ const example = {
   postId: null,
   postTitle: null,
   commentId: null,
+  commentContent: null,
   image: null,
 } satisfies NotificationData;
 

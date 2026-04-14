@@ -1,0 +1,64 @@
+'use client';
+
+import { useState } from 'react';
+
+import type { RegionSelection } from '../region-select-modal.types';
+
+import { UseRegionSelectModalParams } from './use-region-select-modal.types';
+
+export function useRegionSelectModal({
+  dropdownSub,
+  regionCascade,
+  draftValueProp,
+  onDraftChange,
+}: UseRegionSelectModalParams) {
+  const draftControlled = draftValueProp !== undefined && onDraftChange !== undefined;
+
+  const [open, setOpen] = useState(false);
+  const [internalDraft, setInternalDraft] = useState<RegionSelection>(null);
+
+  const draftValue = draftControlled ? draftValueProp : internalDraft;
+
+  const setDraft = (draft: RegionSelection) => {
+    if (draftControlled) {
+      onDraftChange(draft);
+    } else {
+      setInternalDraft(draft);
+    }
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setOpen(open);
+    if (!open) return;
+    if (dropdownSub != null) {
+      const v = dropdownSub.value;
+      const seed = v == null ? null : [...v];
+      setDraft(seed);
+    } else {
+      setDraft(null);
+    }
+  };
+
+  const showCascade = regionCascade != null && dropdownSub != null;
+
+  const handleConfirm = () => {
+    if (dropdownSub != null) {
+      dropdownSub.onChange(draftValue);
+    }
+    setOpen(false);
+  };
+
+  const handleReset = () => {
+    setDraft(null);
+  };
+
+  return {
+    open,
+    draftValue,
+    setDraft,
+    handleOpenChange,
+    handleConfirm,
+    handleReset,
+    showCascade,
+  };
+}

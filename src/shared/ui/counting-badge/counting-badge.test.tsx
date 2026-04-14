@@ -1,0 +1,68 @@
+import { render, screen } from '@testing-library/react';
+
+import { CountingBadge } from './counting-badge';
+
+describe('CountingBadge', () => {
+  describe('large (기본 사이즈)', () => {
+    it('count가 렌더링된다', () => {
+      render(<CountingBadge count={5} />);
+      expect(screen.getByText('5')).toBeInTheDocument();
+    });
+
+    it('count가 0일 때 0이 렌더링된다', () => {
+      render(<CountingBadge count={0} />);
+      expect(screen.getByText('0')).toBeInTheDocument();
+    });
+
+    it('large 기본 스타일이 적용된다', () => {
+      render(<CountingBadge count={3} />);
+      const badge = screen.getByText('3');
+      expect(badge).toHaveClass(
+        'h-5',
+        'text-xs',
+        'font-semibold',
+        'rounded-full',
+        'bg-sosoeat-orange-600',
+        'text-white',
+        'min-w-5'
+      );
+    });
+  });
+
+  describe('99+ 초과 카운트', () => {
+    it('count가 99를 초과하면 99+가 렌더링된다', () => {
+      render(<CountingBadge count={100} />);
+      expect(screen.getByText('99+')).toBeInTheDocument();
+    });
+
+    it('count가 99이면 99가 렌더링된다', () => {
+      render(<CountingBadge count={99} />);
+      expect(screen.getByText('99')).toBeInTheDocument();
+    });
+
+    it("large 사이즈에서 99+ 일 때 현재 'min-w-4 w-auto px-[3px]'스타일이 적용된다", () => {
+      render(<CountingBadge count={100} />);
+      const badge = screen.getByText('99+');
+      expect(badge).toHaveClass('min-w-4', 'w-auto', 'px-[3px]');
+    });
+
+    it('small 사이즈에서 99+ 일 때 min-w-4 px-[3px] 스타일이 적용된다', () => {
+      render(<CountingBadge count={100} size="small" />);
+      const badge = screen.getByText('99+');
+      expect(badge).toHaveClass('min-w-4', 'px-[3px]');
+    });
+  });
+
+  describe('small 사이즈', () => {
+    it('count가 렌더링된다', () => {
+      render(<CountingBadge count={5} size="small" />);
+      expect(screen.getByText('5')).toBeInTheDocument();
+    });
+
+    it('small 스타일이 적용된다', () => {
+      render(<CountingBadge count={3} size="small" />);
+      const badge = screen.getByText('3');
+      expect(badge).toHaveClass('h-4', 'w-4', 'px-0', 'text-[10px]', 'leading-[10px]');
+    });
+  });
+});

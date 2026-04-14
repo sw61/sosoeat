@@ -38,13 +38,31 @@ export interface CommentList {
    * @type {string}
    * @memberof CommentList
    */
-  nextCursor: string;
+  nextCursor?: string;
   /**
    *
    * @type {boolean}
    * @memberof CommentList
    */
   hasMore: boolean;
+  /**
+   *
+   * @type {number}
+   * @memberof CommentList
+   */
+  totalCount?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof CommentList
+   */
+  currentOffset?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof CommentList
+   */
+  limit?: number;
 }
 
 /**
@@ -52,7 +70,6 @@ export interface CommentList {
  */
 export function instanceOfCommentList(value: object): value is CommentList {
   if (!('data' in value) || value['data'] === undefined) return false;
-  if (!('nextCursor' in value) || value['nextCursor'] === undefined) return false;
   if (!('hasMore' in value) || value['hasMore'] === undefined) return false;
   return true;
 }
@@ -67,8 +84,11 @@ export function CommentListFromJSONTyped(json: any, ignoreDiscriminator: boolean
   }
   return {
     data: (json['data'] as Array<any>).map(CommentFromJSON),
-    nextCursor: json['nextCursor'],
+    nextCursor: json['nextCursor'] == null ? undefined : json['nextCursor'],
     hasMore: json['hasMore'],
+    totalCount: json['totalCount'] == null ? undefined : json['totalCount'],
+    currentOffset: json['currentOffset'] == null ? undefined : json['currentOffset'],
+    limit: json['limit'] == null ? undefined : json['limit'],
   };
 }
 
@@ -88,5 +108,8 @@ export function CommentListToJSONTyped(
     data: (value['data'] as Array<any>).map(CommentToJSON),
     nextCursor: value['nextCursor'],
     hasMore: value['hasMore'],
+    totalCount: value['totalCount'],
+    currentOffset: value['currentOffset'],
+    limit: value['limit'],
   };
 }

@@ -63,6 +63,12 @@ export interface PostList {
    * @memberof PostList
    */
   limit?: number;
+  /**
+   * 필터 조건에 맞는 게시글들의 조회수 합계
+   * @type {number}
+   * @memberof PostList
+   */
+  totalViewCount: number;
 }
 
 /**
@@ -71,6 +77,7 @@ export interface PostList {
 export function instanceOfPostList(value: object): value is PostList {
   if (!('data' in value) || value['data'] === undefined) return false;
   if (!('hasMore' in value) || value['hasMore'] === undefined) return false;
+  if (!('totalViewCount' in value) || value['totalViewCount'] === undefined) return false;
   return true;
 }
 
@@ -89,6 +96,7 @@ export function PostListFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     totalCount: json['totalCount'] == null ? undefined : json['totalCount'],
     currentOffset: json['currentOffset'] == null ? undefined : json['currentOffset'],
     limit: json['limit'] == null ? undefined : json['limit'],
+    totalViewCount: json['totalViewCount'],
   };
 }
 
@@ -111,5 +119,6 @@ export function PostListToJSONTyped(
     totalCount: value['totalCount'],
     currentOffset: value['currentOffset'],
     limit: value['limit'],
+    totalViewCount: value['totalViewCount'],
   };
 }

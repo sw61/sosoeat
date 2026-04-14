@@ -2,11 +2,14 @@
 
 ## Properties
 
-| Name         | Type                                                                     |
-| ------------ | ------------------------------------------------------------------------ |
-| `data`       | [Array&lt;UserPostsResponseDataInner&gt;](UserPostsResponseDataInner.md) |
-| `nextCursor` | string                                                                   |
-| `hasMore`    | boolean                                                                  |
+| Name            | Type                                                                     |
+| --------------- | ------------------------------------------------------------------------ |
+| `data`          | [Array&lt;UserPostsResponseDataInner&gt;](UserPostsResponseDataInner.md) |
+| `nextCursor`    | string                                                                   |
+| `hasMore`       | boolean                                                                  |
+| `totalCount`    | number                                                                   |
+| `currentOffset` | number                                                                   |
+| `limit`         | number                                                                   |
 
 ## Example
 
@@ -18,6 +21,9 @@ const example = {
   data: null,
   nextCursor: null,
   hasMore: null,
+  totalCount: null,
+  currentOffset: null,
+  limit: null,
 } satisfies UserPostsResponse;
 
 console.log(example);

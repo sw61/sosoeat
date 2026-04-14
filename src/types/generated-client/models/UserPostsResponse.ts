@@ -38,13 +38,31 @@ export interface UserPostsResponse {
    * @type {string}
    * @memberof UserPostsResponse
    */
-  nextCursor: string;
+  nextCursor?: string;
   /**
    *
    * @type {boolean}
    * @memberof UserPostsResponse
    */
   hasMore: boolean;
+  /**
+   *
+   * @type {number}
+   * @memberof UserPostsResponse
+   */
+  totalCount?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof UserPostsResponse
+   */
+  currentOffset?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof UserPostsResponse
+   */
+  limit?: number;
 }
 
 /**
@@ -52,7 +70,6 @@ export interface UserPostsResponse {
  */
 export function instanceOfUserPostsResponse(value: object): value is UserPostsResponse {
   if (!('data' in value) || value['data'] === undefined) return false;
-  if (!('nextCursor' in value) || value['nextCursor'] === undefined) return false;
   if (!('hasMore' in value) || value['hasMore'] === undefined) return false;
   return true;
 }
@@ -70,8 +87,11 @@ export function UserPostsResponseFromJSONTyped(
   }
   return {
     data: (json['data'] as Array<any>).map(UserPostsResponseDataInnerFromJSON),
-    nextCursor: json['nextCursor'],
+    nextCursor: json['nextCursor'] == null ? undefined : json['nextCursor'],
     hasMore: json['hasMore'],
+    totalCount: json['totalCount'] == null ? undefined : json['totalCount'],
+    currentOffset: json['currentOffset'] == null ? undefined : json['currentOffset'],
+    limit: json['limit'] == null ? undefined : json['limit'],
   };
 }
 
@@ -91,5 +111,8 @@ export function UserPostsResponseToJSONTyped(
     data: (value['data'] as Array<any>).map(UserPostsResponseDataInnerToJSON),
     nextCursor: value['nextCursor'],
     hasMore: value['hasMore'],
+    totalCount: value['totalCount'],
+    currentOffset: value['currentOffset'],
+    limit: value['limit'],
   };
 }

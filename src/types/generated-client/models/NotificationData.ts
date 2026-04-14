@@ -54,6 +54,12 @@ export interface NotificationData {
    * @type {string}
    * @memberof NotificationData
    */
+  commentContent?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof NotificationData
+   */
   image?: string;
 }
 
@@ -81,6 +87,7 @@ export function NotificationDataFromJSONTyped(
     postId: json['postId'] == null ? undefined : json['postId'],
     postTitle: json['postTitle'] == null ? undefined : json['postTitle'],
     commentId: json['commentId'] == null ? undefined : json['commentId'],
+    commentContent: json['commentContent'] == null ? undefined : json['commentContent'],
     image: json['image'] == null ? undefined : json['image'],
   };
 }
@@ -103,6 +110,7 @@ export function NotificationDataToJSONTyped(
     postId: value['postId'],
     postTitle: value['postTitle'],
     commentId: value['commentId'],
+    commentContent: value['commentContent'],
     image: value['image'],
   };
 }

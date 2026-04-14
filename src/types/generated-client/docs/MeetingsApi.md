@@ -18,7 +18,7 @@ All URIs are relative to *https://together-dallaem-api.vercel.app*
 
 ## teamIdMeetingsGet
 
-> MeetingList teamIdMeetingsGet(teamId, id, type, region, dateStart, dateEnd, createdBy, sortBy, sortOrder, cursor, size)
+> MeetingList teamIdMeetingsGet(teamId, id, type, region, keyword, dateStart, dateEnd, createdBy, sortBy, sortOrder, cursor, size)
 
 모임 목록
 
@@ -50,15 +50,17 @@ async function example() {
     type: 달램핏,
     // string | 지역으로 필터링 (예: 강남, 건대입구, 홍대입구) (optional)
     region: 건대입구,
+    // string | 모임명·설명·지역·종류·주소 검색 (optional)
+    keyword: keyword_example,
     // Date | 모임 시작 범위 (이상, ISO 8601). 예: KST 2026-02-10 하루를 조회하려면 dateStart=2026-02-09T15:00:00Z (optional)
     dateStart: 2026-02-09T15:00:00Z,
     // Date | 모임 끝 범위 (이하, ISO 8601). 예: KST 2026-02-10 하루를 조회하려면 dateEnd=2026-02-10T14:59:59.999Z (optional)
     dateEnd: 2026-02-10T14:59:59.999Z,
     // number | 호스트 사용자 ID로 필터링 (optional)
     createdBy: 1,
-    // 'dateTime' | 'registrationEnd' | 'participantCount' | 정렬 기준: dateTime(모임 일시), registrationEnd(모집 마감일), participantCount(참가자 수) (optional)
+    // 'dateTime' | 'registrationEnd' | 'participantCount' | 'createdAt' | 정렬 기준: dateTime(모임 일시), registrationEnd(모집 마감일), participantCount(참가자 수), createdAt(모임 생성 시각). sortOrder 생략 시 createdAt은 최신순(desc), 그 외는 오름차순(asc) (optional)
     sortBy: dateTime,
-    // 'asc' | 'desc' | 정렬 순서: asc(오름차순), desc(내림차순) (optional)
+    // 'asc' | 'desc' | 정렬 순서: asc(오름차순), desc(내림차순). 생략 시 sortBy=createdAt이면 desc, 아니면 asc (optional)
     sortOrder: asc,
     // string | 다음 페이지를 위한 커서 (optional)
     cursor: eyJpZCI6MTB9,
@@ -80,19 +82,20 @@ example().catch(console.error);
 
 ### Parameters
 
-| Name          | Type                                              | Description                                                                                               | Notes                                                                                             |
-| ------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| **teamId**    | `string`                                          |                                                                                                           | [Defaults to `undefined`]                                                                         |
-| **id**        | `number`                                          | 특정 모임 ID로 필터링                                                                                     | [Optional] [Defaults to `undefined`]                                                              |
-| **type**      | `string`                                          | 모임 종류로 필터링 (예: 달램핏, 오피스 스트레칭)                                                          | [Optional] [Defaults to `undefined`]                                                              |
-| **region**    | `string`                                          | 지역으로 필터링 (예: 강남, 건대입구, 홍대입구)                                                            | [Optional] [Defaults to `undefined`]                                                              |
-| **dateStart** | `Date`                                            | 모임 시작 범위 (이상, ISO 8601). 예: KST 2026-02-10 하루를 조회하려면 dateStart&#x3D;2026-02-09T15:00:00Z | [Optional] [Defaults to `undefined`]                                                              |
-| **dateEnd**   | `Date`                                            | 모임 끝 범위 (이하, ISO 8601). 예: KST 2026-02-10 하루를 조회하려면 dateEnd&#x3D;2026-02-10T14:59:59.999Z | [Optional] [Defaults to `undefined`]                                                              |
-| **createdBy** | `number`                                          | 호스트 사용자 ID로 필터링                                                                                 | [Optional] [Defaults to `undefined`]                                                              |
-| **sortBy**    | `dateTime`, `registrationEnd`, `participantCount` | 정렬 기준: dateTime(모임 일시), registrationEnd(모집 마감일), participantCount(참가자 수)                 | [Optional] [Defaults to `&#39;dateTime&#39;`] [Enum: dateTime, registrationEnd, participantCount] |
-| **sortOrder** | `asc`, `desc`                                     | 정렬 순서: asc(오름차순), desc(내림차순)                                                                  | [Optional] [Defaults to `&#39;asc&#39;`] [Enum: asc, desc]                                        |
-| **cursor**    | `string`                                          | 다음 페이지를 위한 커서                                                                                   | [Optional] [Defaults to `undefined`]                                                              |
-| **size**      | `number`                                          | 페이지 크기 (1-100)                                                                                       | [Optional] [Defaults to `10`]                                                                     |
+| Name          | Type                                                           | Description                                                                                                                                                                             | Notes                                                                                                        |
+| ------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **teamId**    | `string`                                                       |                                                                                                                                                                                         | [Defaults to `undefined`]                                                                                    |
+| **id**        | `number`                                                       | 특정 모임 ID로 필터링                                                                                                                                                                   | [Optional] [Defaults to `undefined`]                                                                         |
+| **type**      | `string`                                                       | 모임 종류로 필터링 (예: 달램핏, 오피스 스트레칭)                                                                                                                                        | [Optional] [Defaults to `undefined`]                                                                         |
+| **region**    | `string`                                                       | 지역으로 필터링 (예: 강남, 건대입구, 홍대입구)                                                                                                                                          | [Optional] [Defaults to `undefined`]                                                                         |
+| **keyword**   | `string`                                                       | 모임명·설명·지역·종류·주소 검색                                                                                                                                                         | [Optional] [Defaults to `undefined`]                                                                         |
+| **dateStart** | `Date`                                                         | 모임 시작 범위 (이상, ISO 8601). 예: KST 2026-02-10 하루를 조회하려면 dateStart&#x3D;2026-02-09T15:00:00Z                                                                               | [Optional] [Defaults to `undefined`]                                                                         |
+| **dateEnd**   | `Date`                                                         | 모임 끝 범위 (이하, ISO 8601). 예: KST 2026-02-10 하루를 조회하려면 dateEnd&#x3D;2026-02-10T14:59:59.999Z                                                                               | [Optional] [Defaults to `undefined`]                                                                         |
+| **createdBy** | `number`                                                       | 호스트 사용자 ID로 필터링                                                                                                                                                               | [Optional] [Defaults to `undefined`]                                                                         |
+| **sortBy**    | `dateTime`, `registrationEnd`, `participantCount`, `createdAt` | 정렬 기준: dateTime(모임 일시), registrationEnd(모집 마감일), participantCount(참가자 수), createdAt(모임 생성 시각). sortOrder 생략 시 createdAt은 최신순(desc), 그 외는 오름차순(asc) | [Optional] [Defaults to `&#39;dateTime&#39;`] [Enum: dateTime, registrationEnd, participantCount, createdAt] |
+| **sortOrder** | `asc`, `desc`                                                  | 정렬 순서: asc(오름차순), desc(내림차순). 생략 시 sortBy&#x3D;createdAt이면 desc, 아니면 asc                                                                                            | [Optional] [Defaults to `undefined`] [Enum: asc, desc]                                                       |
+| **cursor**    | `string`                                                       | 다음 페이지를 위한 커서                                                                                                                                                                 | [Optional] [Defaults to `undefined`]                                                                         |
+| **size**      | `number`                                                       | 페이지 크기 (1-100)                                                                                                                                                                     | [Optional] [Defaults to `10`]                                                                                |
 
 ### Return type
 
@@ -721,11 +724,11 @@ example().catch(console.error);
 
 ## teamIdMeetingsMyGet
 
-> MeetingList teamIdMeetingsMyGet(teamId, sortBy, sortOrder, cursor, size)
+> MeetingList teamIdMeetingsMyGet(teamId, sortBy, sortOrder, cursor, offset, limit, size)
 
 내가 만든 모임 목록
 
-현재 사용자가 호스트인 모임 목록을 조회합니다.
+현재 사용자가 호스트인 모임 목록을 조회합니다. **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
 
 ### Example
 
@@ -748,9 +751,13 @@ async function example() {
     sortBy: dateTime,
     // 'asc' | 'desc' | 정렬 순서: asc(오름차순), desc(내림차순) (optional)
     sortOrder: asc,
-    // string | 다음 페이지를 위한 커서 (optional)
+    // string | 다음 페이지를 위한 커서 (offset과 함께 사용 불가) (optional)
     cursor: eyJpZCI6MTB9,
-    // number | 페이지 크기 (1-100) (optional)
+    // number | 건너뛸 항목 수 (cursor와 함께 사용 불가) (optional)
+    offset: 0,
+    // number | 조회할 최대 항목 수 (offset 사용 시, 기본 10, 최대 100) (optional)
+    limit: 10,
+    // number | 페이지 크기 - cursor 사용 시 (1-100) (optional)
     size: 10,
   } satisfies TeamIdMeetingsMyGetRequest;
 
@@ -773,8 +780,10 @@ example().catch(console.error);
 | **teamId**    | `string`                                          |                                                                                           | [Defaults to `undefined`]                                                                         |
 | **sortBy**    | `dateTime`, `registrationEnd`, `participantCount` | 정렬 기준: dateTime(모임 일시), registrationEnd(모집 마감일), participantCount(참가자 수) | [Optional] [Defaults to `&#39;dateTime&#39;`] [Enum: dateTime, registrationEnd, participantCount] |
 | **sortOrder** | `asc`, `desc`                                     | 정렬 순서: asc(오름차순), desc(내림차순)                                                  | [Optional] [Defaults to `&#39;asc&#39;`] [Enum: asc, desc]                                        |
-| **cursor**    | `string`                                          | 다음 페이지를 위한 커서                                                                   | [Optional] [Defaults to `undefined`]                                                              |
-| **size**      | `number`                                          | 페이지 크기 (1-100)                                                                       | [Optional] [Defaults to `10`]                                                                     |
+| **cursor**    | `string`                                          | 다음 페이지를 위한 커서 (offset과 함께 사용 불가)                                         | [Optional] [Defaults to `undefined`]                                                              |
+| **offset**    | `number`                                          | 건너뛸 항목 수 (cursor와 함께 사용 불가)                                                  | [Optional] [Defaults to `undefined`]                                                              |
+| **limit**     | `number`                                          | 조회할 최대 항목 수 (offset 사용 시, 기본 10, 최대 100)                                   | [Optional] [Defaults to `undefined`]                                                              |
+| **size**      | `number`                                          | 페이지 크기 - cursor 사용 시 (1-100)                                                      | [Optional] [Defaults to `10`]                                                                     |
 
 ### Return type
 

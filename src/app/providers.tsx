@@ -2,15 +2,24 @@
 
 import { useEffect, useState } from 'react';
 
+import dynamic from 'next/dynamic';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { AuthInitializer } from '@/app/_components/auth-initializer';
-import { LoginRequireModal } from '@/components/common/login-require-modal/login-require-modal';
-import { SessionExpiredModal } from '@/components/common/session-expired-modal/session-expired-modal';
-import { setCommentSessionExpiredHandler } from '@/lib/http/comment-client';
-import { setSessionExpiredHandler } from '@/lib/http/fetch-client';
-import { useAuthStore } from '@/store/auth-store';
-import { AuthUser } from '@/types/auth';
+import { AuthUser, useAuthStore } from '@/entities/auth';
+import { AuthInitializer } from '@/features/auth';
+import { setCommentSessionExpiredHandler } from '@/shared/api/comment-client';
+import { setSessionExpiredHandler } from '@/shared/api/fetch-client';
+import { initAmplitude, syncAmplitudeUser } from '@/shared/lib/amplitude';
+
+const LoginRequireModal = dynamic(
+  () => import('@/widgets/auth').then((mod) => mod.LoginRequireModal),
+  { ssr: false }
+);
+const SessionExpiredModal = dynamic(
+  () => import('@/widgets/auth').then((mod) => mod.SessionExpiredModal),
+  { ssr: false }
+);
 
 export function Providers({
   children,
@@ -20,29 +29,31 @@ export function Providers({
   initialUser: AuthUser | null;
 }) {
   const [queryClient] = useState(() => new QueryClient());
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
-    // 세션 만료 시 Zustand 상태를 초기화하고 모달을 띄우는 콜백을 주입합니다.
-    // - 로그인 상태에서 401: 세션 만료 모달
-    // - 비로그인 상태에서 401: 로그인 요구 모달
-    // getState()로 직접 참조하여 stale closure 방지
-    setSessionExpiredHandler(() => {
-      const { isAuthenticated, setSessionExpired, setLoginRequired } = useAuthStore.getState();
-      if (isAuthenticated) {
-        setSessionExpired(true);
-      } else {
-        setLoginRequired(true);
-      }
-    });
-    setCommentSessionExpiredHandler(() => {
-      const { isAuthenticated, setSessionExpired, setLoginRequired } = useAuthStore.getState();
-      if (isAuthenticated) {
-        setSessionExpired(true);
-      } else {
-        setLoginRequired(true);
-      }
-    });
+    // 401 응답 시 인증 상태에 따라 적절한 모달을 띄우는 핸들러를 주입합니다.
+    const handleAuthError = () => useAuthStore.getState().handleAuthError();
+    setSessionExpiredHandler(handleAuthError);
+    setCommentSessionExpiredHandler(handleAuthError);
   }, []);
+
+  useEffect(() => {
+    const run = () => {
+      initAmplitude();
+    };
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(run);
+      return () => window.cancelIdleCallback(id);
+    } else {
+      const timeoutId = setTimeout(run, 2000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, []);
+
+  useEffect(() => {
+    syncAmplitudeUser(user);
+  }, [user]);
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -1,23 +1,32 @@
 import { Suspense } from 'react';
 
+import type { Metadata } from 'next';
+
 import { format } from 'date-fns';
 
-import { CountCard } from './_components/count-card';
-import { MeetingTabs } from './_components/meeting-tabs';
-import { UserCard } from './_components/user-card';
 import {
+  CountCard,
+  FavoriteCountCard,
   fetchFavoriteCountServer,
   fetchMeetingCountServer,
   fetchMeServer,
   fetchPostCountServer,
-} from './repositories/mypage.repository.server';
+  MeetingCountCard,
+  MeetingTabs,
+  UserCard,
+} from '@/widgets/mypage';
+
+export const metadata: Metadata = {
+  title: '마이페이지',
+  robots: { index: false, follow: false },
+};
 
 export default async function MyPage() {
   const user = await fetchMeServer();
   const [meetingCount, favoriteCount, postCount] = await Promise.all([
     fetchMeetingCountServer(),
     fetchFavoriteCountServer(),
-    user ? fetchPostCountServer(user.id) : Promise.resolve(0),
+    fetchPostCountServer(),
   ]);
 
   return (
@@ -33,8 +42,8 @@ export default async function MyPage() {
       </div>
 
       <div className="flex flex-row justify-center gap-5 md:p-5">
-        <CountCard variant="meeting" count={meetingCount} />
-        <CountCard variant="favorite" count={favoriteCount} />
+        <MeetingCountCard initialCount={meetingCount} />
+        <FavoriteCountCard initialCount={favoriteCount} />
         <CountCard variant="post" count={postCount} />
       </div>
 

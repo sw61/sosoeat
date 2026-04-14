@@ -38,13 +38,31 @@ export interface MeetingList {
    * @type {string}
    * @memberof MeetingList
    */
-  nextCursor: string;
+  nextCursor?: string;
   /**
    *
    * @type {boolean}
    * @memberof MeetingList
    */
   hasMore: boolean;
+  /**
+   *
+   * @type {number}
+   * @memberof MeetingList
+   */
+  totalCount?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof MeetingList
+   */
+  currentOffset?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof MeetingList
+   */
+  limit?: number;
 }
 
 /**
@@ -52,7 +70,6 @@ export interface MeetingList {
  */
 export function instanceOfMeetingList(value: object): value is MeetingList {
   if (!('data' in value) || value['data'] === undefined) return false;
-  if (!('nextCursor' in value) || value['nextCursor'] === undefined) return false;
   if (!('hasMore' in value) || value['hasMore'] === undefined) return false;
   return true;
 }
@@ -67,8 +84,11 @@ export function MeetingListFromJSONTyped(json: any, ignoreDiscriminator: boolean
   }
   return {
     data: (json['data'] as Array<any>).map(MeetingWithHostFromJSON),
-    nextCursor: json['nextCursor'],
+    nextCursor: json['nextCursor'] == null ? undefined : json['nextCursor'],
     hasMore: json['hasMore'],
+    totalCount: json['totalCount'] == null ? undefined : json['totalCount'],
+    currentOffset: json['currentOffset'] == null ? undefined : json['currentOffset'],
+    limit: json['limit'] == null ? undefined : json['limit'],
   };
 }
 
@@ -88,5 +108,8 @@ export function MeetingListToJSONTyped(
     data: (value['data'] as Array<any>).map(MeetingWithHostToJSON),
     nextCursor: value['nextCursor'],
     hasMore: value['hasMore'],
+    totalCount: value['totalCount'],
+    currentOffset: value['currentOffset'],
+    limit: value['limit'],
   };
 }

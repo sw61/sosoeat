@@ -12,7 +12,7 @@
 | `comment`   | string                                                            |
 | `createdAt` | Date                                                              |
 | `updatedAt` | Date                                                              |
-| `user`      | [ParticipantUser](ParticipantUser.md)                             |
+| `user`      | [ReviewWithDetailsAllOfUser](ReviewWithDetailsAllOfUser.md)       |
 | `meeting`   | [ReviewWithDetailsAllOfMeeting](ReviewWithDetailsAllOfMeeting.md) |
 
 ## Example

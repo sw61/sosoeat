@@ -46,6 +46,8 @@ export interface TeamIdFavoritesGetRequest {
   sortBy?: TeamIdFavoritesGetSortByEnum;
   sortOrder?: TeamIdFavoritesGetSortOrderEnum;
   cursor?: string;
+  offset?: number;
+  limit?: number;
   size?: number;
 }
 
@@ -172,6 +174,14 @@ export class FavoritesApi extends runtime.BaseAPI {
       queryParameters['cursor'] = requestParameters['cursor'];
     }
 
+    if (requestParameters['offset'] != null) {
+      queryParameters['offset'] = requestParameters['offset'];
+    }
+
+    if (requestParameters['limit'] != null) {
+      queryParameters['limit'] = requestParameters['limit'];
+    }
+
     if (requestParameters['size'] != null) {
       queryParameters['size'] = requestParameters['size'];
     }
@@ -202,7 +212,7 @@ export class FavoritesApi extends runtime.BaseAPI {
   }
 
   /**
-   * 찜한 모임 목록을 조회합니다.
+   * 찜한 모임 목록을 조회합니다.  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
    * 찜 목록
    */
   async teamIdFavoritesGetRaw(
@@ -216,7 +226,7 @@ export class FavoritesApi extends runtime.BaseAPI {
   }
 
   /**
-   * 찜한 모임 목록을 조회합니다.
+   * 찜한 모임 목록을 조회합니다.  **페이지네이션:** - 커서 기반: cursor (이전 응답의 nextCursor) + size (기본 10, 최대 100) - 오프셋 기반: offset (건너뛸 항목 수) + limit (기본 10, 최대 100) - offset 사용 시 응답에 totalCount 포함, cursor/nextCursor 미포함
    * 찜 목록
    */
   async teamIdFavoritesGet(
@@ -399,6 +409,7 @@ export class FavoritesApi extends runtime.BaseAPI {
  */
 export const TeamIdFavoritesGetSortByEnum = {
   CreatedAt: 'createdAt',
+  MeetingCreatedAt: 'meetingCreatedAt',
   DateTime: 'dateTime',
   RegistrationEnd: 'registrationEnd',
   ParticipantCount: 'participantCount',
