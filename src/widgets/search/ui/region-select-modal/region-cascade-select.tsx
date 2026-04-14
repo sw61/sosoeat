@@ -17,7 +17,7 @@ import type { KoreaRegionRegion, RegionSelection } from './region-select-modal.t
 
 /** 피그마 Input 행 — h 48, p 12, bg gray/50 #F9FAFB, 본문 slate/800 #333333, radius 12 */
 const triggerClass =
-  'focus-visible:ring-sosoeat-gray-600/35 inline-flex h-12 w-full min-w-0 items-center justify-between gap-2 ' +
+  'focus-visible:ring-sosoeat-gray-600/35 inline-flex h-12 w-full min-w-0 cursor-pointer items-center justify-between gap-2 ' +
   'rounded-xl bg-[#F9FAFB] px-3 py-3 text-left text-base font-normal tracking-[-0.02em] text-[#333333] outline-none ' +
   'transition-colors hover:bg-neutral-100 focus-visible:ring-2 data-[state=open]:bg-neutral-100';
 
@@ -84,6 +84,7 @@ export function RegionCascadeSelect({
                     <DropdownMenuCheckboxItem
                       key={district}
                       checked={selectedDistricts.includes(district)}
+                      className="cursor-pointer transition-colors hover:bg-neutral-100"
                       onCheckedChange={(checked) => {
                         const next = (value ?? []).filter(
                           (s) => !(s.province === r.name && s.district === district)
