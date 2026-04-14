@@ -66,4 +66,30 @@ export const authApi = {
     });
     return parseResponse<AuthResponse>(response, '소셜 로그인에 실패했습니다.');
   },
+
+  /**
+   * Google OAuth 로그인 (BFF 호출)
+   * 프론트에서 획득한 Google access_token을 백엔드로 전달하여 JWT를 발급받습니다.
+   */
+  async googleOAuth(token: string): Promise<AuthResponse> {
+    const response = await fetch('/api/oauth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+    return parseResponse<AuthResponse>(response, '구글 로그인에 실패했습니다.');
+  },
+
+  /**
+   * Kakao OAuth 로그인 (BFF 호출)
+   * 프론트에서 획득한 Kakao 인가코드를 BFF로 전달하여 JWT를 발급받습니다.
+   */
+  async kakaoOAuth(code: string): Promise<AuthResponse> {
+    const response = await fetch('/api/oauth/kakao', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+    return parseResponse<AuthResponse>(response, '카카오 로그인에 실패했습니다.');
+  },
 };
