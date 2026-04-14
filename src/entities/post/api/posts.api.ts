@@ -14,11 +14,13 @@ import { TeamIdMeetingsMeetingIdDelete200ResponseFromJSON } from '@/shared/types
 
 import type {
   CommentMutationParams,
+  CreateSosoTalkCommentLikeResponse,
   CreateSosoTalkCommentParams,
   CreateSosoTalkCommentResponse,
   CreateSosoTalkPostLikeResponse,
   CreateSosoTalkPostParams,
   CreateSosoTalkPostResponse,
+  DeleteSosoTalkCommentLikeResponse,
   DeleteSosoTalkCommentResponse,
   DeleteSosoTalkPostLikeResponse,
   DeleteSosoTalkPostResponse,
@@ -26,6 +28,7 @@ import type {
   GetSosoTalkPostListParams,
   GetSosoTalkPostListResponse,
   RequestSosoTalkPostImageUploadUrlResponse,
+  SosoTalkComment,
   SosoTalkPostMutationParams,
   UpdateSosoTalkCommentParams,
   UpdateSosoTalkCommentResponse,
@@ -62,6 +65,27 @@ const getSosoTalkImageContentType = (file: File) => {
   return contentType;
 };
 
+type SosoTalkCommentApiResponse = {
+  parentId?: number | null;
+  likeCount?: number;
+  isLiked?: boolean;
+};
+
+const mapSosoTalkComment = (comment: unknown): SosoTalkComment => {
+  const rawComment = comment as SosoTalkCommentApiResponse;
+  const parsedComment = CommentFromJSON(comment) as SosoTalkComment;
+
+  return {
+    ...parsedComment,
+    parentId:
+      typeof rawComment.parentId === 'number' || rawComment.parentId === null
+        ? rawComment.parentId
+        : null,
+    likeCount: typeof rawComment.likeCount === 'number' ? rawComment.likeCount : 0,
+    isLiked: Boolean(rawComment.isLiked),
+  };
+};
+
 export const getSosoTalkPostList = async (
   params: GetSosoTalkPostListParams = {}
 ): Promise<GetSosoTalkPostListResponse> => {
@@ -90,7 +114,14 @@ export const getSosoTalkPostDetail = async (
   const response = await fetchClient.get(`/posts/${postId}`);
 
   const data = await parseResponse<unknown>(response, '소소톡 게시글을 불러오지 못했습니다.');
-  return PostWithCommentsFromJSON(data) as GetSosoTalkPostDetailResponse;
+  const parsedPost = PostWithCommentsFromJSON(data) as GetSosoTalkPostDetailResponse;
+
+  return {
+    ...parsedPost,
+    comments: Array.isArray((data as { comments?: unknown[] })?.comments)
+      ? (data as { comments: unknown[] }).comments.map(mapSosoTalkComment)
+      : [],
+  };
 };
 
 export const createSosoTalkPost = async ({
@@ -158,7 +189,7 @@ export const createSosoTalkComment = async ({
 }: CreateSosoTalkCommentParams): Promise<CreateSosoTalkCommentResponse> => {
   const response = await fetchClient.post(`/posts/${postId}/comments`, payload);
   const data = await parseResponse<unknown>(response, '소소톡 댓글 작성에 실패했습니다.');
-  return CommentFromJSON(data) as CreateSosoTalkCommentResponse;
+  return mapSosoTalkComment(data);
 };
 
 export const updateSosoTalkComment = async ({
@@ -168,7 +199,7 @@ export const updateSosoTalkComment = async ({
 }: UpdateSosoTalkCommentParams): Promise<UpdateSosoTalkCommentResponse> => {
   const response = await fetchClient.patch(`/posts/${postId}/comments/${commentId}`, payload);
   const data = await parseResponse<unknown>(response, '소소톡 댓글 수정에 실패했습니다.');
-  return CommentFromJSON(data) as UpdateSosoTalkCommentResponse;
+  return mapSosoTalkComment(data);
 };
 
 export const deleteSosoTalkComment = async ({
@@ -178,6 +209,26 @@ export const deleteSosoTalkComment = async ({
   const response = await fetchClient.delete(`/posts/${postId}/comments/${commentId}`);
   const data = await parseResponse<unknown>(response, '소소톡 댓글 삭제에 실패했습니다.');
   return TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(data) as DeleteSosoTalkCommentResponse;
+};
+
+export const createSosoTalkCommentLike = async ({
+  postId,
+  commentId,
+}: CommentMutationParams): Promise<CreateSosoTalkCommentLikeResponse> => {
+  const response = await fetchClient.post(`/posts/${postId}/comments/${commentId}/like`);
+  const data = await parseResponse<unknown>(response, '소소톡 댓글 좋아요에 실패했습니다.');
+  return PostLikeFromJSON(data) as CreateSosoTalkCommentLikeResponse;
+};
+
+export const deleteSosoTalkCommentLike = async ({
+  postId,
+  commentId,
+}: CommentMutationParams): Promise<DeleteSosoTalkCommentLikeResponse> => {
+  const response = await fetchClient.delete(`/posts/${postId}/comments/${commentId}/like`);
+  const data = await parseResponse<unknown>(response, '소소톡 댓글 좋아요 취소에 실패했습니다.');
+  return TeamIdMeetingsMeetingIdDelete200ResponseFromJSON(
+    data
+  ) as DeleteSosoTalkCommentLikeResponse;
 };
 
 export const updateSosoTalkPost = async ({

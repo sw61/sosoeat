@@ -37,23 +37,7 @@ export function SosoTalkCommentSection({
 
       <div className="mt-6 space-y-2">
         {comments.map((comment) => (
-          <SosoTalkCommentItem
-            key={comment.id}
-            authorName={comment.authorName}
-            authorImageUrl={comment.authorImageUrl}
-            createdAt={comment.createdAt}
-            relativeTime={comment.relativeTime}
-            content={comment.content}
-            isAuthorComment={comment.isAuthorComment}
-            isEditing={comment.isEditing}
-            editValue={comment.editValue}
-            isEditPending={comment.isEditPending}
-            onEditClick={comment.onEditClick}
-            onDeleteClick={comment.onDeleteClick}
-            onEditValueChange={comment.onEditValueChange}
-            onEditSubmit={comment.onEditSubmit}
-            onEditCancel={comment.onEditCancel}
-          />
+          <SosoTalkCommentItem key={comment.id} {...comment} />
         ))}
       </div>
 

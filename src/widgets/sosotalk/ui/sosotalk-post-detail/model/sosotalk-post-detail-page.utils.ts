@@ -1,9 +1,8 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-import type { GetSosoTalkPostDetailResponse } from '@/entities/post';
+import type { GetSosoTalkPostDetailResponse, SosoTalkComment } from '@/entities/post';
 import type { SosoTalkCommentItemData } from '@/entities/sosotalk-comment';
-import type { Comment } from '@/shared/types/generated-client/models/Comment';
 
 const SOSOTALK_AUTHOR_IMAGE_FALLBACK =
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop';
@@ -13,15 +12,16 @@ interface MapCommentToCommentItemDataOptions {
   editingCommentId: number | null;
   editingCommentInput: string;
   isEditPending: boolean;
-  onEditClick: () => void;
-  onDeleteClick: () => void;
+  onEditClick: (comment: SosoTalkComment) => void;
+  onDeleteClick: (comment: SosoTalkComment) => void;
+  onLikeClick: (comment: SosoTalkComment) => void;
   onEditValueChange: (value: string) => void;
   onEditSubmit: () => void;
   onEditCancel: () => void;
 }
 
 export function mapCommentToCommentItemData(
-  comment: Comment,
+  comment: SosoTalkComment,
   {
     currentUserId,
     editingCommentId,
@@ -29,6 +29,7 @@ export function mapCommentToCommentItemData(
     isEditPending,
     onEditClick,
     onDeleteClick,
+    onLikeClick,
     onEditValueChange,
     onEditSubmit,
     onEditCancel,
@@ -42,11 +43,15 @@ export function mapCommentToCommentItemData(
     relativeTime: formatSosoTalkRelativeTime(comment.createdAt),
     content: comment.content,
     isAuthorComment: currentUserId === comment.author.id,
+    isMine: currentUserId === comment.author.id,
+    isLiked: comment.isLiked,
+    likeCount: comment.likeCount,
     isEditing: editingCommentId === comment.id,
     editValue: editingCommentId === comment.id ? editingCommentInput : comment.content,
     isEditPending,
-    onEditClick,
-    onDeleteClick,
+    onEditClick: () => onEditClick(comment),
+    onDeleteClick: () => onDeleteClick(comment),
+    onLikeClick: () => onLikeClick(comment),
     onEditValueChange,
     onEditSubmit,
     onEditCancel,
