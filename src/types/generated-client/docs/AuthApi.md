@@ -4,155 +4,12 @@ All URIs are relative to *https://together-dallaem-api.vercel.app*
 
 | Method                                                              | HTTP request                        | Description                |
 | ------------------------------------------------------------------- | ----------------------------------- | -------------------------- |
-| [**authGoogleCallbackGet**](AuthApi.md#authgooglecallbackget)       | **GET** /auth/google/callback       | 구글 OAuth 콜백            |
-| [**authKakaoCallbackGet**](AuthApi.md#authkakaocallbackget)         | **GET** /auth/kakao/callback        | 카카오 OAuth 콜백          |
 | [**teamIdAuthEmailCheckPost**](AuthApi.md#teamidauthemailcheckpost) | **POST** /{teamId}/auth/email-check | 이메일 사용 가능 여부 확인 |
-| [**teamIdAuthGoogleGet**](AuthApi.md#teamidauthgoogleget)           | **GET** /{teamId}/auth/google       | 구글 OAuth 시작            |
-| [**teamIdAuthKakaoGet**](AuthApi.md#teamidauthkakaoget)             | **GET** /{teamId}/auth/kakao        | 카카오 OAuth 시작          |
 | [**teamIdAuthLoginPost**](AuthApi.md#teamidauthloginpost)           | **POST** /{teamId}/auth/login       | 로그인                     |
 | [**teamIdAuthLogoutPost**](AuthApi.md#teamidauthlogoutpost)         | **POST** /{teamId}/auth/logout      | 로그아웃                   |
 | [**teamIdAuthRefreshPost**](AuthApi.md#teamidauthrefreshpost)       | **POST** /{teamId}/auth/refresh     | 토큰 갱신                  |
 | [**teamIdAuthSignupPost**](AuthApi.md#teamidauthsignuppost)         | **POST** /{teamId}/auth/signup      | 회원가입                   |
-
-## authGoogleCallbackGet
-
-> authGoogleCallbackGet(code, state)
-
-구글 OAuth 콜백
-
-구글 로그인 완료 후 호출되는 콜백 URL입니다. 프론트엔드로 토큰과 함께 리다이렉트됩니다.
-
-### Example
-
-```ts
-import { Configuration, AuthApi } from '';
-import type { AuthGoogleCallbackGetRequest } from '';
-
-async function example() {
-  console.log('🚀 Testing  SDK...');
-  const config = new Configuration({
-    // Configure HTTP bearer authorization: Bearer
-    accessToken: 'YOUR BEARER TOKEN',
-  });
-  const api = new AuthApi(config);
-
-  const body = {
-    // string | 구글에서 발급한 인증 코드
-    code: code_example,
-    // string | 요청 시 전달한 teamId
-    state: state_example,
-  } satisfies AuthGoogleCallbackGetRequest;
-
-  try {
-    const data = await api.authGoogleCallbackGet(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-| Name      | Type     | Description               | Notes                     |
-| --------- | -------- | ------------------------- | ------------------------- |
-| **code**  | `string` | 구글에서 발급한 인증 코드 | [Defaults to `undefined`] |
-| **state** | `string` | 요청 시 전달한 teamId     | [Defaults to `undefined`] |
-
-### Return type
-
-`void` (Empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: `application/json`
-
-### HTTP response details
-
-| Status code | Description                                                                                | Response headers |
-| ----------- | ------------------------------------------------------------------------------------------ | ---------------- |
-| **302**     | 프론트엔드로 리다이렉트 - ?accessToken&#x3D;...&amp;refreshToken&#x3D;... 형태로 토큰 전달 | -                |
-| **400**     | OAuth 실패 - 인증 코드가 유효하지 않음                                                     | -                |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-## authKakaoCallbackGet
-
-> authKakaoCallbackGet(code, state)
-
-카카오 OAuth 콜백
-
-카카오 로그인 완료 후 호출되는 콜백 URL입니다. 프론트엔드로 토큰과 함께 리다이렉트됩니다.
-
-### Example
-
-```ts
-import { Configuration, AuthApi } from '';
-import type { AuthKakaoCallbackGetRequest } from '';
-
-async function example() {
-  console.log('🚀 Testing  SDK...');
-  const config = new Configuration({
-    // Configure HTTP bearer authorization: Bearer
-    accessToken: 'YOUR BEARER TOKEN',
-  });
-  const api = new AuthApi(config);
-
-  const body = {
-    // string | 카카오에서 발급한 인증 코드
-    code: code_example,
-    // string | 요청 시 전달한 teamId
-    state: state_example,
-  } satisfies AuthKakaoCallbackGetRequest;
-
-  try {
-    const data = await api.authKakaoCallbackGet(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-| Name      | Type     | Description                 | Notes                     |
-| --------- | -------- | --------------------------- | ------------------------- |
-| **code**  | `string` | 카카오에서 발급한 인증 코드 | [Defaults to `undefined`] |
-| **state** | `string` | 요청 시 전달한 teamId       | [Defaults to `undefined`] |
-
-### Return type
-
-`void` (Empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: `application/json`
-
-### HTTP response details
-
-| Status code | Description                                                                                | Response headers |
-| ----------- | ------------------------------------------------------------------------------------------ | ---------------- |
-| **302**     | 프론트엔드로 리다이렉트 - ?accessToken&#x3D;...&amp;refreshToken&#x3D;... 형태로 토큰 전달 | -                |
-| **400**     | OAuth 실패 - 인증 코드가 유효하지 않음                                                     | -                |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+| [**teamIdOauthProviderPost**](AuthApi.md#teamidoauthproviderpost)   | **POST** /{teamId}/oauth/{provider} | OAuth 로그인               |
 
 ## teamIdAuthEmailCheckPost
 
@@ -223,138 +80,6 @@ example().catch(console.error);
 | Status code | Description                            | Response headers |
 | ----------- | -------------------------------------- | ---------------- |
 | **200**     | 조회 성공 - 이메일 사용 가능 여부 반환 | -                |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-## teamIdAuthGoogleGet
-
-> teamIdAuthGoogleGet(teamId)
-
-구글 OAuth 시작
-
-구글 소셜 로그인을 시작합니다. 구글 로그인 페이지로 리다이렉트됩니다.
-
-### Example
-
-```ts
-import { Configuration, AuthApi } from '';
-import type { TeamIdAuthGoogleGetRequest } from '';
-
-async function example() {
-  console.log('🚀 Testing  SDK...');
-  const config = new Configuration({
-    // Configure HTTP bearer authorization: Bearer
-    accessToken: 'YOUR BEARER TOKEN',
-  });
-  const api = new AuthApi(config);
-
-  const body = {
-    // string
-    teamId: dallaem,
-  } satisfies TeamIdAuthGoogleGetRequest;
-
-  try {
-    const data = await api.teamIdAuthGoogleGet(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-| Name       | Type     | Description | Notes                     |
-| ---------- | -------- | ----------- | ------------------------- |
-| **teamId** | `string` |             | [Defaults to `undefined`] |
-
-### Return type
-
-`void` (Empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: Not defined
-
-### HTTP response details
-
-| Status code | Description                                                         | Response headers |
-| ----------- | ------------------------------------------------------------------- | ---------------- |
-| **302**     | 구글 로그인 페이지로 리다이렉트 - 브라우저에서 직접 호출해야 합니다 | -                |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-## teamIdAuthKakaoGet
-
-> teamIdAuthKakaoGet(teamId)
-
-카카오 OAuth 시작
-
-카카오 소셜 로그인을 시작합니다. 카카오 로그인 페이지로 리다이렉트됩니다.
-
-### Example
-
-```ts
-import { Configuration, AuthApi } from '';
-import type { TeamIdAuthKakaoGetRequest } from '';
-
-async function example() {
-  console.log('🚀 Testing  SDK...');
-  const config = new Configuration({
-    // Configure HTTP bearer authorization: Bearer
-    accessToken: 'YOUR BEARER TOKEN',
-  });
-  const api = new AuthApi(config);
-
-  const body = {
-    // string
-    teamId: dallaem,
-  } satisfies TeamIdAuthKakaoGetRequest;
-
-  try {
-    const data = await api.teamIdAuthKakaoGet(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-| Name       | Type     | Description | Notes                     |
-| ---------- | -------- | ----------- | ------------------------- |
-| **teamId** | `string` |             | [Defaults to `undefined`] |
-
-### Return type
-
-`void` (Empty response body)
-
-### Authorization
-
-[Bearer](../README.md#Bearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: Not defined
-
-### HTTP response details
-
-| Status code | Description                                                           | Response headers |
-| ----------- | --------------------------------------------------------------------- | ---------------- |
-| **302**     | 카카오 로그인 페이지로 리다이렉트 - 브라우저에서 직접 호출해야 합니다 | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -647,5 +372,82 @@ example().catch(console.error);
 | ----------- | --------------------------------------------------------- | ---------------- |
 | **201**     | 회원가입 성공 - 생성된 사용자 정보 반환                   | -                |
 | **409**     | 이미 존재하는 이메일 - 동일한 이메일로 가입된 계정이 있음 | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+## teamIdOauthProviderPost
+
+> LoginResponse teamIdOauthProviderPost(teamId, provider, oAuthRequest)
+
+OAuth 로그인
+
+Google 또는 Kakao OAuth access token으로 로그인합니다. 최초 로그인 시 자동 가입되며, 기존 OAuth 계정이면 프로필을 업데이트합니다.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AuthApi,
+} from '';
+import type { TeamIdOauthProviderPostRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({
+    // Configure HTTP bearer authorization: Bearer
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new AuthApi(config);
+
+  const body = {
+    // string
+    teamId: dallaem,
+    // 'google' | 'kakao'
+    provider: google,
+    // OAuthRequest | OAuth 제공자에서 받은 access token (optional)
+    oAuthRequest: ...,
+  } satisfies TeamIdOauthProviderPostRequest;
+
+  try {
+    const data = await api.teamIdOauthProviderPost(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+| Name             | Type                            | Description                        | Notes                                           |
+| ---------------- | ------------------------------- | ---------------------------------- | ----------------------------------------------- |
+| **teamId**       | `string`                        |                                    | [Defaults to `undefined`]                       |
+| **provider**     | `google`, `kakao`               |                                    | [Defaults to `undefined`] [Enum: google, kakao] |
+| **oAuthRequest** | [OAuthRequest](OAuthRequest.md) | OAuth 제공자에서 받은 access token | [Optional]                                      |
+
+### Return type
+
+[**LoginResponse**](LoginResponse.md)
+
+### Authorization
+
+[Bearer](../README.md#Bearer)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+### HTTP response details
+
+| Status code | Description                                   | Response headers |
+| ----------- | --------------------------------------------- | ---------------- |
+| **200**     | OAuth 로그인 성공 - 사용자 정보와 토큰 반환   | -                |
+| **401**     | OAuth 인증 실패 - 제공자 토큰이 유효하지 않음 | -                |
+| **409**     | 이미 다른 방식으로 가입된 이메일              | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)

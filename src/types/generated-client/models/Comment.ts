@@ -60,6 +60,18 @@ export interface Comment {
   content: string;
   /**
    *
+   * @type {number}
+   * @memberof Comment
+   */
+  likeCount: number;
+  /**
+   *
+   * @type {boolean}
+   * @memberof Comment
+   */
+  isLiked: boolean;
+  /**
+   *
    * @type {Date}
    * @memberof Comment
    */
@@ -82,6 +94,8 @@ export function instanceOfComment(value: object): value is Comment {
   if (!('authorId' in value) || value['authorId'] === undefined) return false;
   if (!('author' in value) || value['author'] === undefined) return false;
   if (!('content' in value) || value['content'] === undefined) return false;
+  if (!('likeCount' in value) || value['likeCount'] === undefined) return false;
+  if (!('isLiked' in value) || value['isLiked'] === undefined) return false;
   if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
   if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
   return true;
@@ -102,6 +116,8 @@ export function CommentFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
     authorId: json['authorId'],
     author: AuthorFromJSON(json['author']),
     content: json['content'],
+    likeCount: json['likeCount'],
+    isLiked: json['isLiked'],
     createdAt: new Date(json['createdAt']),
     updatedAt: new Date(json['updatedAt']),
   };
@@ -126,6 +142,8 @@ export function CommentToJSONTyped(
     authorId: value['authorId'],
     author: AuthorToJSON(value['author']),
     content: value['content'],
+    likeCount: value['likeCount'],
+    isLiked: value['isLiked'],
     createdAt: value['createdAt'].toISOString(),
     updatedAt: value['updatedAt'].toISOString(),
   };
