@@ -132,7 +132,22 @@ describe('Notification', () => {
     expect(useUnreadCount).toHaveBeenCalledWith(5);
   });
 
-  it('트리거 클릭 시 알림 내역과 목록이 보인다', async () => {
+  it('트리거 클릭 시 알림 내역과 목록이 보인다 (PC)', async () => {
+    const user = userEvent.setup();
+    (useNotificationInfiniteList as jest.Mock).mockReturnValue(
+      mockInfiniteReturn({ data: { pages: [{ data: testNotifications }] } })
+    );
+
+    renderWithClient(<Nt />);
+    await user.click(await screen.findByRole('button', { name: '알림 열기' }));
+
+    expect(await screen.findByRole('heading', { name: '알림 내역' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: '모두 읽기' })).toBeInTheDocument();
+    expect(await screen.findByText('모임 확정')).toBeInTheDocument();
+  });
+
+  it('트리거 클릭 시 알림 내역과 목록이 보인다 (모바일)', async () => {
+    mockMatchMedia(true);
     const user = userEvent.setup();
     (useNotificationInfiniteList as jest.Mock).mockReturnValue(
       mockInfiniteReturn({ data: { pages: [{ data: testNotifications }] } })

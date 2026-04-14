@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Plus } from 'lucide-react';
+
 import { AuthUser } from '@/entities/auth';
 import { MeetingCreateModalProps, useMeetingCreateTrigger } from '@/features/meeting-create';
 import { Button } from '@/shared/ui/button';
@@ -51,7 +53,7 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
         className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white md:mr-1 md:flex"
         onClick={handleOpen}
       >
-        <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
+        <Plus className="size-4" strokeWidth={2.5} />
         모임 만들기
       </Button>
 

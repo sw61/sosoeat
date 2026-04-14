@@ -82,6 +82,54 @@ export const useSocialLoginMutation = () => {
 };
 
 /**
+ * [Feature] useGoogleLoginMutation
+ * Google access_token을 받아 BFF → 백엔드로 전달하고 세션을 설정합니다.
+ */
+export const useGoogleLoginMutation = () => {
+  const router = useRouter();
+  const login = useAuthStore((state) => state.login);
+
+  return useMutation({
+    mutationFn: (token: string) => authApi.googleOAuth(token),
+    onSuccess: (data) => {
+      login(data.user);
+      const storedCallbackUrl = sessionStorage.getItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
+      router.push(getSafeCallbackUrl(storedCallbackUrl, '/home'));
+    },
+    onError: () => {
+      toast.error('구글 로그인에 실패했습니다. 다시 시도해 주세요.');
+    },
+    onSettled: () => {
+      sessionStorage.removeItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
+    },
+  });
+};
+
+/**
+ * [Feature] useKakaoLoginMutation
+ * Kakao 인가코드를 받아 BFF → 백엔드로 전달하고 세션을 설정합니다.
+ */
+export const useKakaoLoginMutation = () => {
+  const router = useRouter();
+  const login = useAuthStore((state) => state.login);
+
+  return useMutation({
+    mutationFn: (code: string) => authApi.kakaoOAuth(code),
+    onSuccess: (data) => {
+      login(data.user);
+      const storedCallbackUrl = sessionStorage.getItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
+      router.push(getSafeCallbackUrl(storedCallbackUrl, '/home'));
+    },
+    onError: () => {
+      toast.error('카카오 로그인에 실패했습니다. 다시 시도해 주세요.');
+    },
+    onSettled: () => {
+      sessionStorage.removeItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL);
+    },
+  });
+};
+
+/**
  * [Feature] useLogoutMutation
  * 로그아웃 API 호출 + 성공/실패 처리 (캐시 초기화, 라우팅, 상태 관리)
  */
@@ -96,6 +144,10 @@ export const useLogoutMutation = () => {
       logout();
       queryClient.clear();
       router.push(redirectUrl);
+    },
+    onError: () => {
+      logout();
+      queryClient.clear();
     },
   });
 };

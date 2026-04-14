@@ -1,5 +1,7 @@
 export {
   useCheckEmailDuplicateMutation,
+  useGoogleLoginMutation,
+  useKakaoLoginMutation,
   useLoginMutation,
   useLogoutMutation,
   useSignUpMutation,

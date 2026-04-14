@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { STORAGE_KEYS } from '@/shared/lib/storage-keys';
+import { isSafeCallbackUrl } from '@/shared/utils/url';
 
 import { useSocialLoginMutation } from './auth.mutations';
 
@@ -38,7 +39,7 @@ export const useSocialLogin = () => {
 
     // callback URL이 있으면 sessionStorage에 저장 (mutation의 onSuccess에서 사용)
     const callbackUrl = searchParams?.get('callbackUrl');
-    if (callbackUrl) {
+    if (callbackUrl && isSafeCallbackUrl(callbackUrl)) {
       sessionStorage.setItem(STORAGE_KEYS.SOCIAL_LOGIN_CALLBACK_URL, callbackUrl);
     }
 

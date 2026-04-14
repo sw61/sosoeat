@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 // eslint-disable-next-line feature-sliced/absolute-relative
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
@@ -64,6 +65,7 @@ export default async function RootLayout({
         />
       </head>
       <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
+        <Script src="https://accounts.google.com/gsi/client" strategy="beforeInteractive" />
         <NuqsAdapter>
           <Providers initialUser={initialUser}>
             <NavigationBar
