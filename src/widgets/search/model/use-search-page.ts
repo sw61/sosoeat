@@ -10,7 +10,6 @@ import {
   parseAsStringLiteral,
   useQueryState,
 } from 'nuqs';
-import { z } from 'zod';
 
 import { useSearchInfiniteOption } from '@/entities/meeting';
 import type { getMeetings } from '@/entities/meeting/index.server';
@@ -192,22 +191,19 @@ const useSearchPage = (
   const handleSearchQueryChange = (e: string) => {
     setInputValue(e);
   };
-  const searchError = inputValue.length === 1 ? '2글자 이상 입력해주세요' : undefined;
+  const searchError = inputValue.trim().length === 1 ? '2글자 이상 입력해주세요' : undefined;
 
   useEffect(() => {
-    const searchQueryZod = z.string().min(2);
-    const result = searchQueryZod.safeParse(inputValue);
-
     const delayDebounce = setTimeout(() => {
-      if (inputValue === '' || result.success) {
-        setSearchQuery(inputValue);
+      const trimmedValue = inputValue.trim();
+      if (trimmedValue === '' || trimmedValue.length > 1) {
+        setSearchQuery(trimmedValue);
       }
     }, 500);
 
     return () => clearTimeout(delayDebounce);
 
     // debounce 효과를 위해 searchQuery 의존성에서 제외 (불필요한 재실행 방지)
-     
   }, [inputValue, setSearchQuery]);
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
