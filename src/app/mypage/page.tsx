@@ -30,7 +30,7 @@ export default async function MyPage() {
   ]);
 
   return (
-    <div className="bg-sosoeat-gray-100 min-h-screen">
+    <div className="bg-sosoeat-gray-100 flex flex-1 flex-col overflow-y-auto">
       <div className="relative flex justify-center">
         <UserCard
           name={user?.name ?? ''}

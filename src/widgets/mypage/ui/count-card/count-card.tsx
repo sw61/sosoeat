@@ -34,10 +34,14 @@ export function CountCard({ count, variant = 'meeting', className, href }: Count
   );
 
   if (href) {
-    return <Link href={href}>{card}</Link>;
+    return (
+      <Link href={href} className="hidden max-w-85 min-w-0 flex-1 md:flex">
+        {card}
+      </Link>
+    );
   }
 
-  return card;
+  return <div className="hidden max-w-85 min-w-0 flex-1 md:flex">{card}</div>;
 }
 
 export function FavoriteCountCard({ initialCount }: { initialCount: number }) {
