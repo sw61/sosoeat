@@ -147,7 +147,11 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
             </div>
             <div className={MAIN_PAGE_CARD_BADGES_ROW_CLASS}>
               <div data-testid="closed-badge" className="mt-0 min-w-0 flex-1">
-                <DeadlineBadge registrationEnd={registrationEnd} variant={variant} />
+                <DeadlineBadge
+                  registrationEnd={registrationEnd}
+                  variant={variant}
+                  className="w-full overflow-hidden"
+                />
               </div>
               <div className="hidden md:block">
                 <EstablishmentStatusBadge
