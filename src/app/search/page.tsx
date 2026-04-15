@@ -2,16 +2,10 @@ import type { Metadata } from 'next';
 
 import * as Sentry from '@sentry/nextjs';
 import { startOfDay } from 'date-fns';
-import { addDays, startOfDay } from 'date-fns';
 import { SearchParams } from 'nuqs';
 
 import { getMeetings } from '@/entities/meeting/index.server';
-import {
-  getDefaultSearchDateStartIso,
-  MeetingSearchBanner,
-  SearchPage,
-  searchParamsCache,
-} from '@/widgets/search';
+import { MeetingSearchBanner, SearchPage, searchParamsCache } from '@/widgets/search';
 
 export const metadata: Metadata = {
   title: '모임 검색',
@@ -54,14 +48,13 @@ export default async function Page({ searchParams }: PageProps) {
     await searchParams
   );
   const finalDateStart = dateStart ?? startOfDay(new Date());
-  const toApiKeyword = (keyword: typeof queryKeyword) => {
-    return keyword === 'all' ? undefined : keyword;
-  };
   const requestParams = {
-    dateStart: finalDateStart.toISOString(),
     sortBy,
     sortOrder,
-    keyword: toApiKeyword(queryKeyword),
+    typeFilter: typeFilter === 'all' ? undefined : typeFilter,
+    dateEnd: dateEnd ? dateEnd.toISOString() : undefined,
+    dateStart: finalDateStart.toISOString(),
+    search,
   };
   const initialData = await getMeetings(requestParams).catch((error) => {
     Sentry.captureException(error, {
@@ -88,7 +81,7 @@ export default async function Page({ searchParams }: PageProps) {
       >
         <SearchPage
           initialData={initialData}
-          initialDefaultDateStartIso={initialDefaultDateStartIso}
+          initialDefaultDateStartIso={dateStart?.toISOString() ?? ''}
         />
       </section>
     </div>

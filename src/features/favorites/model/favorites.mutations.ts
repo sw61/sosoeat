@@ -62,7 +62,7 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
   useEffect(() => {
     hasUserInteractedRef.current = false;
     committedRef.current = initialIsFavorited;
-  }, [meetingId]);
+  }, [meetingId, initialIsFavorited]);
 
   // 사용자가 아직 상호작용하지 않은 상태에서 initialIsFavorited가 변경되면 캐시를 동기화
   useEffect(() => {
