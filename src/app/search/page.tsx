@@ -1,15 +1,11 @@
 import type { Metadata } from 'next';
 
-import { addDays, startOfDay } from 'date-fns';
+import * as Sentry from '@sentry/nextjs';
+import { startOfDay } from 'date-fns';
 import { SearchParams } from 'nuqs';
 
 import { getMeetings } from '@/entities/meeting/index.server';
-import {
-  getDefaultSearchDateStartIso,
-  MeetingSearchBanner,
-  SearchPage,
-  searchParamsCache,
-} from '@/widgets/search';
+import { MeetingSearchBanner, SearchPage, searchParamsCache } from '@/widgets/search';
 
 export const metadata: Metadata = {
   title: '모임 검색',
@@ -51,17 +47,28 @@ export default async function Page({ searchParams }: PageProps) {
   const { dateStart, dateEnd, search, typeFilter, sortBy, sortOrder } = searchParamsCache.parse(
     await searchParams
   );
-  const initialDefaultDateStartIso = getDefaultSearchDateStartIso();
-  const finalDateStartIso = dateStart?.toISOString() ?? initialDefaultDateStartIso;
-  const finalDateEnd = dateEnd ? addDays(startOfDay(dateEnd), 1).toISOString() : undefined;
-  const initialData = await getMeetings({
-    dateStart: finalDateStartIso,
-    dateEnd: finalDateEnd,
-    type: typeFilter === 'all' ? undefined : typeFilter,
+  const finalDateStart = dateStart ?? startOfDay(new Date());
+  const requestParams = {
     sortBy,
     sortOrder,
-    keyword: search === '' ? undefined : search,
-  }).catch(() => null);
+    typeFilter: typeFilter === 'all' ? undefined : typeFilter,
+    dateEnd: dateEnd ? dateEnd.toISOString() : undefined,
+    dateStart: finalDateStart.toISOString(),
+    search,
+  };
+  const initialData = await getMeetings(requestParams).catch((error) => {
+    Sentry.captureException(error, {
+      tags: {
+        area: 'search',
+        action: 'load-initial-data',
+      },
+      extra: {
+        requestParams,
+      },
+    });
+
+    return null;
+  });
 
   return (
     <div className="bg-sosoeat-gray-100 flex w-full flex-col items-center justify-center">
@@ -74,7 +81,7 @@ export default async function Page({ searchParams }: PageProps) {
       >
         <SearchPage
           initialData={initialData}
-          initialDefaultDateStartIso={initialDefaultDateStartIso}
+          initialDefaultDateStartIso={dateStart?.toISOString() ?? ''}
         />
       </section>
     </div>

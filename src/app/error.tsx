@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import * as Sentry from '@sentry/nextjs';
+
 export default function Error({
   error,
   reset,
@@ -13,7 +15,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('[Error Boundary]', error);
+    Sentry.captureException(error);
   }, [error]);
 
   return (

@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import type { Area } from 'react-easy-crop';
 
+import * as Sentry from '@sentry/nextjs';
 import { toast } from 'sonner';
 
 import { useUploadImage } from '@/entities/image';
@@ -43,6 +44,12 @@ export function useProfileImageEditor(onChange: (url: string) => void) {
       setRawSrc(null);
       setCropModalOpen(false);
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          area: 'profile-edit',
+          action: 'profile-image-editor',
+        },
+      });
       console.error('프로필 이미지 처리 중 오류가 발생했습니다:', error);
       toast.error('이미지 업로드 중 문제가 생겼어요. 다시 시도해 주세요.');
     }

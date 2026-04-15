@@ -19,6 +19,7 @@
         "name": "next"
       }
     ],
+
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
@@ -33,9 +34,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "**/*.mts",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
   ],
   "exclude": ["node_modules", ".next"]
 }

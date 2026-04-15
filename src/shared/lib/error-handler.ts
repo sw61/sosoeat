@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import * as Sentry from '@sentry/nextjs';
+
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
 
 /**
@@ -58,6 +60,23 @@ function logBffError(statusCode: number, error: unknown, context?: RequestContex
   });
 }
 
+function captureBffError(statusCode: number, error: unknown, context?: RequestContext): void {
+  if (statusCode < 500) {
+    return;
+  }
+
+  Sentry.captureException(error, {
+    tags: {
+      area: 'bff',
+      method: context?.method ?? 'UNKNOWN',
+      path: context?.path ?? 'unknown',
+    },
+    extra: {
+      statusCode,
+    },
+  });
+}
+
 /**
  * 에러 객체에서 메시지를 추출합니다.
  */
@@ -83,6 +102,7 @@ export function createErrorResponse(
   const rawMessage = getErrorMessage(error, defaultMessage);
   const message = sanitizeMessage(rawMessage, statusCode);
   logBffError(statusCode, error, context);
+  captureBffError(statusCode, error, context);
   return NextResponse.json({ message }, { status: statusCode });
 }
 
@@ -106,6 +126,7 @@ export async function forwardBackendError(
 
   const message = sanitizeMessage(rawMessage, statusCode);
   logBffError(statusCode, { backendStatus: statusCode, rawMessage }, context);
+  captureBffError(statusCode, new Error(rawMessage), context);
   return NextResponse.json({ message }, { status: statusCode });
 }
 

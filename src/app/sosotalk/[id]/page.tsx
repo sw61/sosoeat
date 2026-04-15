@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+import * as Sentry from '@sentry/nextjs';
+
 import { apiServer } from '@/shared/api/api-server';
 import { SosoTalkPostDetailPage } from '@/widgets/sosotalk';
 
@@ -11,11 +13,35 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const response = await apiServer.get(`/posts/${id}`).catch(() => null);
+  const response = await apiServer.get(`/posts/${id}`).catch((error) => {
+    Sentry.captureException(error, {
+      tags: {
+        area: 'sosotalk-detail',
+        location: 'generateMetadata',
+      },
+      extra: {
+        postId: id,
+      },
+    });
+
+    return null;
+  });
 
   if (!response?.ok) return {};
 
-  const post = await response.json().catch(() => null);
+  const post = await response.json().catch((error) => {
+    Sentry.captureException(error, {
+      tags: {
+        area: 'sosotalk-detail',
+        location: 'generateMetadata.json',
+      },
+      extra: {
+        postId: id,
+      },
+    });
+
+    return null;
+  });
 
   if (!post) return {};
 

@@ -24,7 +24,7 @@ const withAuthState =
     return <Story />;
   };
 
-const MOCK_USER = { id: 1, name: '홍길동', email: 'test@example.com', teamId: 'dallaem' };
+const MOCK_USER = { id: 1, email: 'test@test.com', name: '홍길동' };
 
 export const NotLoggedIn: Story = {
   name: '비로그인',
@@ -43,7 +43,7 @@ export const NotLoggedInWishList: Story = {
   name: '비로그인 / 찜한 모임 클릭 → 로그인 이동',
   decorators: [withAuthState({ user: null })],
   parameters: {
-    nextjs: { navigation: { pathname: '/mypage?tab=liked' } },
+    nextjs: { navigation: { pathname: '/mypage?tab=favorite' } },
   },
 };
 
@@ -56,7 +56,7 @@ export const LoggedInActiveMenu: Story = {
   name: '로그인 / 활성메뉴',
   decorators: [withAuthState({ user: MOCK_USER })],
   parameters: {
-    nextjs: { navigation: { pathname: '/meetings' } },
+    nextjs: { navigation: { pathname: '/together' } },
   },
 };
 
@@ -65,11 +65,10 @@ export const LoggedInWithProfileImage: Story = {
   decorators: [
     withAuthState({
       user: {
-        id: 1,
-        name: '김철수',
-        email: 'test@example.com',
+        id: 2,
+        email: 'test2@test.com',
+        name: '김소소',
         image: 'https://i.pravatar.cc/32?img=47',
-        teamId: 'dallaem',
       },
     }),
   ],

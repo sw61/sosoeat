@@ -116,8 +116,10 @@ const useSearchPage = (
     dateEnd == null
       ? undefined
       : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1).toISOString();
-  const resolvedDefaultDateStartIso = defaultDateStartIso;
-  const resolvedDefaultDateStart = new Date(resolvedDefaultDateStartIso);
+  const resolvedDefaultDateStart = useMemo(
+    () => new Date(defaultDateStartIso),
+    [defaultDateStartIso]
+  );
 
   const options: Omit<TeamIdMeetingsGetRequest, 'teamId' | 'region'> & {
     region?: string | string[];

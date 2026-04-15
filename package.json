@@ -26,6 +26,7 @@
     "@amplitude/unified": "^1.0.16",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-separator": "^1.1.0",
+    "@sentry/nextjs": "^10.48.0",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-query-devtools": "^5.91.3",
     "class-variance-authority": "^0.7.1",

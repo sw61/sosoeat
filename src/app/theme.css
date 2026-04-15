@@ -11,7 +11,6 @@
   --color-sosoeat-gray-800: var(--sosoeat-gray-800);
   --color-sosoeat-gray-900: var(--sosoeat-gray-900);
 
-  --color-sosoeat-orange-100: var(--sosoeat-orange-50);
   --color-sosoeat-orange-100: var(--sosoeat-orange-100);
   --color-sosoeat-orange-200: var(--sosoeat-orange-200);
   --color-sosoeat-orange-300: var(--sosoeat-orange-300);
@@ -22,7 +21,6 @@
   --color-sosoeat-orange-800: var(--sosoeat-orange-800);
   --color-sosoeat-orange-900: var(--sosoeat-orange-900);
   --color-sosoeat-orange-1000: var(--sosoeat-orange-1000);
-  --background-image-sosoeat-orange-gradation: var(--sosoeat-orange-gradation);
 
   --color-sosoeat-blue-50: var(--sosoeat-blue-50);
   --color-sosoeat-blue-100: var(--sosoeat-blue-100);
@@ -34,9 +32,6 @@
   --color-sosoeat-blue-700: var(--sosoeat-blue-700);
   --color-sosoeat-blue-800: var(--sosoeat-blue-800);
   --color-sosoeat-blue-900: var(--sosoeat-blue-900);
-
-  /* ── Shadow ────────────────────────────────────── */
-  --shadow-sosoeat-inset: 0 0 7px 1px rgba(0, 0, 0, 0.48) inset;
 
   /* ── Colors (shadcn) ───────────────────────────── */
   --color-background: var(--background);
@@ -130,7 +125,7 @@
   --sosoeat-gray-900: #1e1e1e;
 
   /* ── Orange ────────────────────────────────────── */
-  --sosoeat-orange-100: #fff2ec;
+  --sosoeat-orange-100: #ffe7cc;
   --sosoeat-orange-200: #ffe8db;
   --sosoeat-orange-300: #ffd5c0;
   --sosoeat-orange-400: #ffb999;
@@ -140,7 +135,6 @@
   --sosoeat-orange-800: #b93901;
   --sosoeat-orange-900: #862b00;
   --sosoeat-orange-1000: #471601;
-  --sosoeat-orange-gradation: linear-gradient(90deg, #ff4000 0%, #ffb62d 100%);
 
   /* ── Blue ──────────────────────────────────────── */
   --sosoeat-blue-50: #e8f3ff;
@@ -156,11 +150,11 @@
 
   /* ── Light Mode (shadcn) ───────────────────────── */
   --background: oklch(1 0 0);
-  --foreground: var(--sosoeat-gray-900);
+  --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: var(--sosoeat-gray-900);
+  --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: var(--sosoeat-gray-900);
+  --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
@@ -180,7 +174,7 @@
   --chart-5: oklch(0.424 0.199 265.638);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: var(--sosoeat-gray-900);
+  --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
