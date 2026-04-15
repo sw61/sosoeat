@@ -64,7 +64,7 @@ export const passwordSchema = z
 /**
  * [이름 단계 스키마]
  * 1. 정규식(Regex)을 사용하여 완전한 영문자, 완전한 한글, 혹은 숫자로만 입력 제한
- * 2. 최대 20자 제한
+ * 2. 최대 12자 제한
  */
 export const nameSchema = z.object({
   name: z
@@ -77,10 +77,10 @@ export const nameSchema = z.object({
           code: 'custom',
           message: '특수문자, 공백, 자음/모음 단일 사용은 불가합니다.',
         });
-      } else if (val.length > 20) {
+      } else if (val.length > 12) {
         ctx.addIssue({
           code: 'custom',
-          message: '이름은 최대 20자까지 입력할 수 있습니다.',
+          message: '이름은 최대 12자까지 입력할 수 있습니다.',
         });
       }
     }),

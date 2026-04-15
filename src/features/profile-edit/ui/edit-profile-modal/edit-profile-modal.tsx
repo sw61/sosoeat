@@ -33,6 +33,7 @@ export function EditProfileModal({
   onOpenChange: externalOnOpenChange,
 }: EditProfileModalProps) {
   const [name, setName] = useState(initialName);
+  const [nameError, setNameError] = useState('');
   const [imageUrl, setImageUrl] = useState(initialImageUrl);
   const [internalOpen, setInternalOpen] = useState(false);
 
@@ -42,6 +43,19 @@ export function EditProfileModal({
   const { mutate, isPending } = useUpdateProfile(onSuccess);
 
   const handleSubmit = () => {
+    if (!name.trim()) {
+      setNameError('이름을 입력해주세요.');
+      return;
+    }
+    if (!/^[가-힣a-zA-Z0-9]+$/.test(name)) {
+      setNameError('특수문자, 공백, 자음/모음 단일 사용은 불가합니다.');
+      return;
+    }
+    if (name.length > 12) {
+      setNameError('이름은 최대 12자까지 입력할 수 있습니다.');
+      return;
+    }
+    setNameError('');
     mutate({ name, image: imageUrl || undefined }, { onSuccess: () => setOpen(false) });
   };
 
@@ -79,7 +93,12 @@ export function EditProfileModal({
             id="name"
             label="이름"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              setNameError('');
+            }}
+            maxLength={12}
+            error={nameError}
           />
         </FieldGroup>
 

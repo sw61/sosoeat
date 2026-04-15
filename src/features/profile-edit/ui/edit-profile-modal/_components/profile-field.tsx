@@ -9,14 +9,30 @@ const inputClassName =
   'focus:border-sosoeat-gray-700 border border-transparent focus:ring-0 focus:outline-none';
 const fieldLabelClassName = 'text-sm font-semibold';
 
-export function ProfileField({ id, label, type = 'text', value, onChange }: ProfileFieldProps) {
+export function ProfileField({
+  id,
+  label,
+  type = 'text',
+  value,
+  onChange,
+  maxLength,
+  error,
+}: ProfileFieldProps) {
   return (
     <Field orientation="vertical" className="gap-2">
       <FieldLabel htmlFor={id} className={fieldLabelClassName}>
         {label}
       </FieldLabel>
       <FieldContent>
-        <Input id={id} type={type} value={value} onChange={onChange} className={inputClassName} />
+        <Input
+          id={id}
+          type={type}
+          value={value}
+          onChange={onChange}
+          className={inputClassName}
+          maxLength={maxLength}
+        />
+        {error && <p className="text-destructive mt-1 ml-1 text-xs">{error}</p>}
       </FieldContent>
     </Field>
   );

@@ -36,7 +36,7 @@ interface NavActionsProps {
 export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavActionsProps) {
   const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const { data: unreadCount = 0 } = useUnreadCount(initialUnreadCount);
+  const { data: unreadCount = 0 } = useUnreadCount(initialUnreadCount, !!user);
 
   if (!user) {
     return (
