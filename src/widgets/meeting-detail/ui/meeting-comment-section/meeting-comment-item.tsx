@@ -99,7 +99,12 @@ export function MeetingCommentItem({
                 </div>
               </div>
               {isHostComment && (
-                <span className="bg-sosoeat-orange-100 text-sosoeat-orange-700 mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-semibold">
+                <span
+                  className={cn(
+                    'text-sosoeat-orange-700 mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-semibold',
+                    isReply ? 'border-sosoeat-orange-200 border bg-white' : 'bg-sosoeat-orange-100'
+                  )}
+                >
                   작성자
                 </span>
               )}
@@ -150,7 +155,7 @@ export function MeetingCommentItem({
           ) : (
             <p
               className={cn(
-                'text-sosoeat-gray-900 mt-1 text-base leading-6 font-normal break-words whitespace-pre-wrap',
+                'mt-1 text-base leading-6 font-normal break-words whitespace-pre-wrap',
                 isDeleted ? 'text-sosoeat-gray-600 italic' : 'text-sosoeat-gray-800'
               )}
             >
@@ -220,6 +225,7 @@ export function MeetingCommentItem({
                     handleReplySubmit();
                   }
                 }}
+                autoFocus
               />
               <div className="flex gap-1">
                 <button

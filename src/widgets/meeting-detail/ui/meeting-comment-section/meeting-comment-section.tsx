@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { MessageCircle } from 'lucide-react';
 
@@ -39,10 +39,14 @@ export function MeetingCommentSection({
     profileUrl: user?.image ?? null,
   });
 
-  const tree = toMeetingCommentTree(comments ?? []);
+  const tree = useMemo(() => toMeetingCommentTree(comments ?? []), [comments]);
   const totalCommentCount = countData?.count ?? 0;
-  const visibleRoots = tree.filter(
-    (comment) => !comment.isDeleted || comment.replies?.some((reply) => !reply.isDeleted)
+  const visibleRoots = useMemo(
+    () =>
+      tree.filter(
+        (comment) => !comment.isDeleted || comment.replies?.some((reply) => !reply.isDeleted)
+      ),
+    [tree]
   );
 
   const handleSubmit = () => {
