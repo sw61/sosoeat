@@ -47,7 +47,6 @@ export default function SearchPage({
     isLoading,
     isError,
     hasNextPage,
-    isFetching,
     isFetchingNextPage,
     fetchNextPage,
     inputValue,
@@ -107,7 +106,7 @@ export default function SearchPage({
             <div ref={ref} className="col-span-full flex h-1 items-center justify-center" />
           </div>
         )}
-        {isFetching ? (
+        {isFetchingNextPage ? (
           <Loading />
         ) : inView && hasNextPage ? (
           <SearchSkeleton />

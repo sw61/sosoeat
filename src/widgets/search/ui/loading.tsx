@@ -8,7 +8,7 @@ function Loading() {
     jump: {
       transition: {
         staggerChildren: 0.2,
-        staggerDirection: -1,
+        staggerDirection: 1,
       },
     },
   };
