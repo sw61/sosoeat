@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { startOfDay } from 'date-fns';
 import {
@@ -10,6 +10,7 @@ import {
   parseAsStringLiteral,
   useQueryState,
 } from 'nuqs';
+import { z } from 'zod';
 
 import { useSearchInfiniteOption } from '@/entities/meeting';
 import type { getMeetings } from '@/entities/meeting/index.server';
@@ -41,13 +42,9 @@ const useSearchPage = (
   initialData: Awaited<ReturnType<typeof getMeetings>> | null,
   initialDefaultDateStartIso?: string
 ) => {
-  const fallbackDefaultDateStartIsoRef = useRef(
-    initialDefaultDateStartIso ?? getDefaultSearchDateStartIso()
+  const [defaultDateStartIso] = useState(
+    () => initialDefaultDateStartIso ?? getDefaultSearchDateStartIso()
   );
-  const [defaultDateStartIso, setDefaultDateStartIso] = useState(
-    fallbackDefaultDateStartIsoRef.current
-  );
-  const hasMountedRef = useRef(false);
 
   const [regionCommitted, setRegionCommitted] = useQueryState<RegionSelection>(
     'regionCommitted',
@@ -120,19 +117,8 @@ const useSearchPage = (
     dateEnd == null
       ? undefined
       : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1).toISOString();
-  const resolvedDefaultDateStartIso = defaultDateStartIso ?? fallbackDefaultDateStartIsoRef.current;
+  const resolvedDefaultDateStartIso = defaultDateStartIso;
   const resolvedDefaultDateStart = new Date(resolvedDefaultDateStartIso);
-
-  useEffect(() => {
-    if (!hasMountedRef.current) {
-      hasMountedRef.current = true;
-      return;
-    }
-
-    if (dateStart != null) return;
-
-    setDefaultDateStartIso(getDefaultSearchDateStartIso());
-  }, [dateStart, dateEndExclusiveIso, region, searchQuery, sortBy, sortOrder, typeFilter]);
 
   const options: Omit<TeamIdMeetingsGetRequest, 'teamId' | 'region'> & {
     region?: string | string[];
@@ -176,11 +162,11 @@ const useSearchPage = (
       typeFilter,
     ]
   );
-  const initialOptionSnapshotRef = useRef<SearchOptionSnapshot>(currentOptionSnapshot);
+  const [initialOptionSnapshot] = useState<SearchOptionSnapshot>(() => currentOptionSnapshot);
   const shouldUseInitialData =
     initialData != null &&
     region == null &&
-    JSON.stringify(initialOptionSnapshotRef.current) === JSON.stringify(currentOptionSnapshot);
+    JSON.stringify(initialOptionSnapshot) === JSON.stringify(currentOptionSnapshot);
 
   const isMulti = Array.isArray(options.region) && options.region.length > 1;
 
@@ -206,10 +192,14 @@ const useSearchPage = (
   const handleSearchQueryChange = (e: string) => {
     setInputValue(e);
   };
+  const searchError = inputValue.length === 1 ? '2글자 이상 입력해주세요' : undefined;
 
   useEffect(() => {
+    const searchQueryZod = z.string().min(2);
+    const result = searchQueryZod.safeParse(inputValue);
+
     const delayDebounce = setTimeout(() => {
-      if (inputValue !== searchQuery) {
+      if (inputValue === '' || result.success) {
         setSearchQuery(inputValue);
       }
     }, 500);
@@ -217,7 +207,7 @@ const useSearchPage = (
     return () => clearTimeout(delayDebounce);
 
     // debounce 효과를 위해 searchQuery 의존성에서 제외 (불필요한 재실행 방지)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [inputValue, setSearchQuery]);
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
@@ -276,6 +266,7 @@ const useSearchPage = (
     inputValue,
     handleSearchQueryChange,
     isSearchPending,
+    searchError,
   };
 };
 

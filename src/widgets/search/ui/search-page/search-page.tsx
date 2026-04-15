@@ -53,6 +53,7 @@ export default function SearchPage({
     fetchNextPage,
     inputValue,
     handleSearchQueryChange,
+    searchError,
   } = useSearchPage(initialData, initialDefaultDateStartIso);
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function SearchPage({
   return (
     <div className="w-full max-w-[1140px]">
       <div className="flex w-full flex-col gap-4 px-4 md:px-0">
-        <SearchBar onChange={handleSearchQueryChange} value={inputValue} />
+        <SearchBar onChange={handleSearchQueryChange} value={inputValue} error={searchError} />
         <MeetingFilterBar
           sortBy={sortBy}
           sortOrder={sortOrder}
