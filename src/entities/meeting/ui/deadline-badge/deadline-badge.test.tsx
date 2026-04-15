@@ -64,7 +64,7 @@ describe('DeadlineBadge', () => {
     jest.useRealTimers();
   });
 
-  it('마감 후에는 마감 종료가 표시된다', () => {
+  it('마감 후에는 마감 완료가 표시된다', () => {
     (useTimeFormatter as jest.Mock).mockReturnValue({
       contentText: '',
       isEnded: true,
@@ -74,7 +74,7 @@ describe('DeadlineBadge', () => {
       <DeadlineBadge registrationEnd={new Date('2025-03-18T10:00:00+09:00')} variant="groupEat" />
     );
 
-    expect(screen.getByText('마감 종료')).toBeInTheDocument();
+    expect(screen.getByText('마감 완료')).toBeInTheDocument();
   });
 
   it('24시간 초과 남으면 일·시간 문구가 표시된다', () => {

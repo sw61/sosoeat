@@ -83,7 +83,7 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
           <div className={MAIN_PAGE_CARD_IMAGE_WRAPPER_CLASS}>
             {registrationEnd < new Date() && (
               <div data-testid="closed-overlay" className={MAIN_PAGE_CARD_CLOSED_OVERLAY_CLASS}>
-                마감 종료
+                마감 완료
               </div>
             )}
             <Image

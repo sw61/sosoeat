@@ -211,7 +211,7 @@ describe('MainPageCard', () => {
   });
 
   describe('마감 상태', () => {
-    it('마감된 모임일 때 마감 종료가 표시된다', () => {
+    it('마감된 모임일 때 마감 완료가 표시된다', () => {
       (useTimeFormatter as jest.Mock).mockReturnValue({
         contentText: '',
         isEnded: true,
@@ -223,7 +223,7 @@ describe('MainPageCard', () => {
       expect(screen.getByTestId('closed-badge')).toBeInTheDocument();
     });
 
-    it('마감된 모임일 때 마감 종료 오버레이가 표시된다', () => {
+    it('마감된 모임일 때 마감 완료 오버레이가 표시된다', () => {
       (useTimeFormatter as jest.Mock).mockReturnValue({
         contentText: '',
         isEnded: true,
