@@ -51,6 +51,7 @@ export default function SearchPage({
     fetchNextPage,
     inputValue,
     handleSearchQueryChange,
+    isSearchPending,
   } = useSearchPage(initialData);
 
   useEffect(() => {
@@ -75,7 +76,7 @@ export default function SearchPage({
           onRegionChange={handleRegionChange}
           onSortChange={handleSortChange}
         />
-        {isLoading ? (
+        {isLoading || isSearchPending ? (
           <SearchSkeleton />
         ) : isError ? (
           <div className="flex min-h-80 w-full items-center justify-center rounded-2xl border border-[#F3F4F6] bg-white px-6 py-12 text-center">
