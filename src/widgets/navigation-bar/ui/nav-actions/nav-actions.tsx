@@ -1,13 +1,14 @@
 'use client';
 
+import { useState } from 'react';
+
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Plus } from 'lucide-react';
-
 import { AuthUser } from '@/entities/auth';
 import { MeetingCreateModalProps, useMeetingCreateTrigger } from '@/features/meeting-create';
+import { NotificationTrigger, useUnreadCount } from '@/features/notifications';
 import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { Button } from '@/shared/ui/button';
 import {
@@ -22,11 +23,10 @@ const MeetingCreateModal = dynamic<MeetingCreateModalProps>(
   { ssr: false }
 );
 
-const Notification = dynamic(
-  () => import('@/features/notifications').then((mod) => mod.Notification),
+const NotificationPanel = dynamic(
+  () => import('@/features/notifications').then((mod) => mod.NotificationPanel),
   { ssr: false }
 );
-
 interface NavActionsProps {
   user: AuthUser | null;
   onLogout: () => void;
@@ -35,6 +35,8 @@ interface NavActionsProps {
 
 export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavActionsProps) {
   const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const { data: unreadCount = 0 } = useUnreadCount(initialUnreadCount);
 
   if (!user) {
     return (
@@ -51,14 +53,28 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
     <>
       <Button
         size="lg"
-        className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden cursor-pointer items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white md:mr-1 md:flex"
+        className="bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 hidden items-center justify-center gap-1 rounded-xl px-4 py-2 font-medium text-white md:mr-1 md:flex"
         onClick={handleOpen}
       >
-        <Plus className="size-4" strokeWidth={2.5} />
+        <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
         모임 만들기
       </Button>
 
-      <Notification initialUnreadCount={initialUnreadCount} />
+      <div className="relative flex items-center">
+        <NotificationTrigger
+          unreadCount={unreadCount}
+          onClick={() => setNotificationOpen((prev) => !prev)}
+          data-notification-trigger
+          aria-label="알림 열기"
+        />
+        {notificationOpen && (
+          <NotificationPanel
+            unreadCount={unreadCount}
+            open={notificationOpen}
+            onOpenChange={setNotificationOpen}
+          />
+        )}
+      </div>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -73,21 +89,17 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
               width={32}
               height={32}
               className="bg-sosoeat-gray-200 size-8 shrink-0 rounded-full object-cover"
-              onError={(event) => {
-                event.currentTarget.src = '/images/basic-profile.svg';
+              onError={(e) => {
+                e.currentTarget.src = '/images/basic-profile.svg';
               }}
             />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem className="h-10 cursor-pointer pl-2" asChild>
+          <DropdownMenuItem className="h-10" asChild>
             <Link href="/mypage">마이페이지</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="h-10 cursor-pointer pl-2"
-            variant="destructive"
-            onClick={onLogout}
-          >
+          <DropdownMenuItem className="h-10" variant="destructive" onClick={onLogout}>
             로그아웃
           </DropdownMenuItem>
         </DropdownMenuContent>
