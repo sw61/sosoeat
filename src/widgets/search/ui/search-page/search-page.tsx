@@ -14,6 +14,7 @@ import {
 
 import useSearchPage from '../../model/use-search-page';
 import { EmptyPage } from '../empty-page';
+import Loading from '../loading';
 import { MeetingFilterBar } from '../meeting-filter-bar';
 import { SearchBar } from '../search-bar';
 
@@ -46,7 +47,6 @@ export default function SearchPage({
     isLoading,
     isError,
     hasNextPage,
-    isFetching,
     isFetchingNextPage,
     fetchNextPage,
     inputValue,
@@ -106,10 +106,8 @@ export default function SearchPage({
             <div ref={ref} className="col-span-full flex h-1 items-center justify-center" />
           </div>
         )}
-        {isFetching ? (
-          <span className="text-sosoeat-gray-600 col-span-full flex justify-center">
-            Loading...
-          </span>
+        {isFetchingNextPage ? (
+          <Loading />
         ) : inView && hasNextPage ? (
           <SearchSkeleton />
         ) : (
