@@ -78,7 +78,7 @@ export function MeetingCommentSection({
         </div>
       </ScrollArea>
 
-      <div className="mt-4 rounded-[24px] px-6 py-4">
+      <div className="mt-4 rounded-[24px] px-4 py-4">
         <CommentInput
           value={commentText}
           onChange={setCommentText}
