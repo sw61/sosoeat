@@ -56,4 +56,16 @@ describe('SearchBar', () => {
     expect(onChangeSpy).toHaveBeenCalled();
     expect(onChangeSpy).toHaveBeenLastCalledWith('테스트');
   });
+
+  it('error prop이 있으면 에러 메시지가 표시된다', () => {
+    render(<SearchBar value="" onChange={() => {}} error="2글자 이상 입력해주세요" />);
+
+    expect(screen.getByText('2글자 이상 입력해주세요')).toBeInTheDocument();
+  });
+
+  it('error prop이 없으면 에러 메시지가 표시되지 않는다', () => {
+    render(<SearchBar value="" onChange={() => {}} />);
+
+    expect(screen.queryByText('2글자 이상 입력해주세요')).not.toBeInTheDocument();
+  });
 });

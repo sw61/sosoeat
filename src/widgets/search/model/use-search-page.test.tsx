@@ -195,6 +195,50 @@ describe('useSearchPage', () => {
     );
   });
 
+  it('1글자 입력 시 searchError가 반환된다', () => {
+    const { result } = renderHookWithClient(() => useSearchPage(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김');
+    });
+
+    expect(result.current.searchError).toBe('2글자 이상 입력해주세요');
+  });
+
+  it('2글자 이상 입력 시 searchError가 undefined다', () => {
+    const { result } = renderHookWithClient(() => useSearchPage(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김칠');
+    });
+
+    expect(result.current.searchError).toBeUndefined();
+  });
+
+  it('0글자일 때 searchError가 undefined다', () => {
+    const { result } = renderHookWithClient(() => useSearchPage(null));
+
+    expect(result.current.searchError).toBeUndefined();
+  });
+
+  it('1글자 입력 후 600ms 경과해도 API keyword가 전달되지 않는다', async () => {
+    const { result } = renderHookWithClient(() => useSearchPage(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김');
+    });
+
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        queryKey: ['search', 'infinite-list', expect.objectContaining({ keyword: undefined })],
+      })
+    );
+  });
+
   it('복수 지역 데이터를 합산하여 반환해야 한다', async () => {
     const meeting1 = { id: 1, region: '부산 북구', dateTime: '2026-01-01' };
     const meeting2 = { id: 2, region: '서울 강남구', dateTime: '2026-01-02' };
