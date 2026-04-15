@@ -21,19 +21,19 @@ jest.mock('next/image', () => ({
 }));
 
 describe('EmptyPage', () => {
-  it('루트에 뷰포트별 margin-top 유틸 클래스가 모두 포함된다', () => {
+  it('루트에 뷰포트별 margin-y 유틸 클래스가 모두 포함된다', () => {
     render(<EmptyPage />);
     const root = screen.getByTestId('empty-page-root');
 
-    expect(root).toHaveClass('mt-[145px]');
-    expect(root).toHaveClass('md:mt-[180px]');
-    expect(root).toHaveClass('lg:mt-[200px]');
+    expect(root).toHaveClass('my-[80px]');
+    expect(root).toHaveClass('md:my-[100px]');
+    expect(root).toHaveClass('lg:my-[120px]');
   });
 
-  it('EMPTY_PAGE_MARGIN_CLASSES 상수가 기본·375·744 구간용 mt를 모두 담는다', () => {
-    expect(EMPTY_PAGE_MARGIN_CLASSES).toContain('mt-[145px]');
-    expect(EMPTY_PAGE_MARGIN_CLASSES).toContain('md:mt-[180px]');
-    expect(EMPTY_PAGE_MARGIN_CLASSES).toContain('lg:mt-[200px]');
+  it('EMPTY_PAGE_MARGIN_CLASSES 상수가 기본·375·744 구간용 my를 모두 담는다', () => {
+    expect(EMPTY_PAGE_MARGIN_CLASSES).toContain('my-[80px]');
+    expect(EMPTY_PAGE_MARGIN_CLASSES).toContain('md:my-[100px]');
+    expect(EMPTY_PAGE_MARGIN_CLASSES).toContain('lg:my-[120px]');
   });
 
   it('빈 페이지 일러스트가 렌더된다', () => {

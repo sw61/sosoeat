@@ -1,20 +1,17 @@
 import { cva } from 'class-variance-authority';
 
-export const cardVariants = cva(
-  'hidden md:flex flex-col gap-1 rounded-2xl text-center ring-0 h-20 w-85',
-  {
-    variants: {
-      variant: {
-        meeting: 'bg-sosoeat-orange-100',
-        favorite: 'bg-[#FFF0F0]',
-        post: 'bg-sosoeat-blue-50',
-      },
+export const cardVariants = cva('flex flex-col gap-1 rounded-2xl text-center ring-0 h-20 w-full', {
+  variants: {
+    variant: {
+      meeting: 'bg-sosoeat-orange-100',
+      favorite: 'bg-[#FFF0F0]',
+      post: 'bg-sosoeat-blue-50',
     },
-    defaultVariants: {
-      variant: 'meeting',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'meeting',
+  },
+});
 
 export const countVariants = cva('text-base leading-6 font-black', {
   variants: {

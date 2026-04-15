@@ -26,6 +26,7 @@ export function DropdownSub({
             <DropdownMenuCheckboxItem
               key={district}
               checked={selectedOption === district}
+              onSelect={(e) => e.preventDefault()}
               onCheckedChange={(checked) => {
                 onChange(
                   checked

@@ -15,7 +15,19 @@ jest.mock('next/navigation', () => ({
 }));
 
 jest.mock('@/features/notifications', () => ({
-  Notification: () => <button aria-label="알림 열기">알림</button>,
+  NotificationTrigger: ({
+    onClick,
+    'aria-label': ariaLabel,
+  }: {
+    onClick: () => void;
+    'aria-label'?: string;
+  }) => (
+    <button aria-label={ariaLabel ?? '알림 열기'} onClick={onClick}>
+      알림
+    </button>
+  ),
+  NotificationPanel: () => null,
+  useUnreadCount: jest.fn().mockReturnValue({ data: 0 }),
 }));
 
 const mockPush = jest.fn();
@@ -160,7 +172,7 @@ describe('NavigationBar', () => {
       renderWithClient(<NavigationBar {...defaultProps} />);
 
       await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: '메뉴' })).toBeInTheDocument();
     });
 
     it('닫기 버튼 클릭 시 메뉴 패널이 닫힌다', async () => {
@@ -168,8 +180,9 @@ describe('NavigationBar', () => {
       renderWithClient(<NavigationBar {...defaultProps} />);
 
       await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
-      await user.click(screen.getByRole('button', { name: 'Close' }));
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: '메뉴' })).toBeInTheDocument();
+      await user.keyboard('{Escape}');
+      expect(screen.queryByRole('dialog', { name: '메뉴' })).not.toBeInTheDocument();
     });
   });
 

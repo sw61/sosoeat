@@ -4,7 +4,6 @@ import { useInView } from 'react-intersection-observer';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 import type { Notification } from '@/shared/types/generated-client';
 
@@ -115,46 +114,30 @@ describe('Notification', () => {
     (useNotificationInfiniteList as jest.Mock).mockReturnValue(mockInfiniteReturn({}));
   });
 
-  it('알림 열기 트리거가 표시된다', async () => {
-    renderWithClient(<Nt />);
-    expect(await screen.findByRole('button', { name: '알림 열기' })).toBeInTheDocument();
-  });
-
-  it('triggerClassName이 트리거 버튼에 적용된다', async () => {
-    renderWithClient(<Nt triggerClassName="trigger-test-class" />);
-    expect(await screen.findByRole('button', { name: '알림 열기' })).toHaveClass(
-      'trigger-test-class'
-    );
-  });
-
   it('initialUnreadCount가 useUnreadCount에 전달된다', () => {
-    renderWithClient(<Nt initialUnreadCount={5} />);
+    renderWithClient(<Nt initialUnreadCount={5} open={false} onOpenChange={jest.fn()} />);
     expect(useUnreadCount).toHaveBeenCalledWith(5);
   });
 
-  it('트리거 클릭 시 알림 내역과 목록이 보인다 (PC)', async () => {
-    const user = userEvent.setup();
+  it('open=true일 때 알림 내역과 목록이 보인다 (PC)', async () => {
     (useNotificationInfiniteList as jest.Mock).mockReturnValue(
       mockInfiniteReturn({ data: { pages: [{ data: testNotifications }] } })
     );
 
-    renderWithClient(<Nt />);
-    await user.click(await screen.findByRole('button', { name: '알림 열기' }));
+    renderWithClient(<Nt open={true} onOpenChange={jest.fn()} />);
 
     expect(await screen.findByRole('heading', { name: '알림 내역' })).toBeInTheDocument();
     expect(await screen.findByRole('button', { name: '모두 읽기' })).toBeInTheDocument();
     expect(await screen.findByText('모임 확정')).toBeInTheDocument();
   });
 
-  it('트리거 클릭 시 알림 내역과 목록이 보인다 (모바일)', async () => {
+  it('open=true일 때 알림 내역과 목록이 보인다 (모바일)', async () => {
     mockMatchMedia(true);
-    const user = userEvent.setup();
     (useNotificationInfiniteList as jest.Mock).mockReturnValue(
       mockInfiniteReturn({ data: { pages: [{ data: testNotifications }] } })
     );
 
-    renderWithClient(<Nt />);
-    await user.click(await screen.findByRole('button', { name: '알림 열기' }));
+    renderWithClient(<Nt open={true} onOpenChange={jest.fn()} />);
 
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     expect(await screen.findByRole('heading', { name: '알림 내역' })).toBeInTheDocument();

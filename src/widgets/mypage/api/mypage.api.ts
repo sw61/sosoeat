@@ -11,14 +11,20 @@ export type UserMeetingsResponseWithImage = Omit<UserMeetingsResponse, 'data'> &
 };
 
 export const mypageApi = {
-  fetchJoinedMeetings: async (): Promise<UserMeetingsResponse> => {
-    const res = await fetchClient.get('/users/me/meetings?type=joined');
+  fetchJoinedMeetings: async (cursor?: string): Promise<UserMeetingsResponseWithImage> => {
+    const url = cursor
+      ? `/users/me/meetings?type=joined&cursor=${encodeURIComponent(cursor)}`
+      : '/users/me/meetings?type=joined';
+    const res = await fetchClient.get(url);
     if (!res.ok) return { data: [], nextCursor: '', hasMore: false };
     return res.json();
   },
 
-  fetchCreatedMeetings: async (): Promise<UserMeetingsResponseWithImage> => {
-    const res = await fetchClient.get('/users/me/meetings?type=created');
+  fetchCreatedMeetings: async (cursor?: string): Promise<UserMeetingsResponseWithImage> => {
+    const url = cursor
+      ? `/users/me/meetings?type=created&cursor=${encodeURIComponent(cursor)}`
+      : '/users/me/meetings?type=created';
+    const res = await fetchClient.get(url);
     if (!res.ok) return { data: [], nextCursor: '', hasMore: false };
     return res.json();
   },

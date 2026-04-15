@@ -6,10 +6,11 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Plus } from 'lucide-react';
+import { LogOut, Menu, User } from 'lucide-react';
 
 import { AuthUser } from '@/entities/auth';
-import { MeetingCreateModalProps, useMeetingCreateTrigger } from '@/features/meeting-create';
+import type { MeetingCreateModalProps } from '@/features/meeting-create';
+import { useMeetingCreateTrigger } from '@/features/meeting-create';
 import { cn } from '@/shared/lib/utils';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 import {
@@ -59,8 +60,8 @@ export function MobileSheet({
     <>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <button className="p-1 md:hidden" aria-label="메뉴 열기" suppressHydrationWarning>
-            <Image src="/icons/icon-hamburger.png" alt="메뉴" width={24} height={24} />
+          <button className="p-1 md:hidden" aria-label="메뉴 열기">
+            <Menu className="text-sosoeat-gray-600 size-6" strokeWidth={1.5} />
           </button>
         </SheetTrigger>
         <SheetContent side="right" className="flex w-64 flex-col gap-0 rounded-l-[24px] p-0">
@@ -117,7 +118,7 @@ export function MobileSheet({
           )}
 
           {/* 메뉴 섹션 */}
-          <div className="flex flex-col px-4 pt-5">
+          <div className="flex flex-col px-4 py-5">
             <p className="mb-1 px-3 text-xs font-semibold text-gray-400">메뉴</p>
             {NAV_ITEMS.map((item) => {
               const isActive = getIsActive(item, pathname);
@@ -159,16 +160,18 @@ export function MobileSheet({
               <SheetClose asChild>
                 <Link
                   href="/mypage"
-                  className="hover:text-sosoeat-orange-600 flex h-11 items-center rounded-md px-3 text-sm font-medium text-gray-600 transition-colors"
+                  className="hover:text-sosoeat-orange-600 flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-gray-600 transition-colors"
                 >
+                  <User className="size-4 shrink-0" />
                   마이페이지
                 </Link>
               </SheetClose>
               <SheetClose asChild>
                 <button
                   onClick={onLogout}
-                  className="text-destructive flex h-11 items-center rounded-md px-3 text-sm font-medium transition-colors hover:opacity-70"
+                  className="text-destructive flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors hover:opacity-70"
                 >
+                  <LogOut className="size-4 shrink-0" />
                   로그아웃
                 </button>
               </SheetClose>
@@ -185,7 +188,7 @@ export function MobileSheet({
                   handleOpen();
                 }}
               >
-                <Plus className="size-4" strokeWidth={2.5} />
+                <Image src="/icons/icon-createGroup.png" alt="" width={16} height={16} />
                 모임 만들기
               </button>
             </SheetClose>

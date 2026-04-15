@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from 'react';
 
-import { EllipsisVerticalIcon } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/shared/ui/button';
 import {
@@ -23,8 +23,8 @@ const subscribe = () => () => {};
 export function EllipsisMenu({ onEdit, onDelete, isDeletePending }: EllipsisMenuProps) {
   const mounted = useSyncExternalStore(
     subscribe,
-    () => true, // 클라이언트: true
-    () => false // 서버: false
+    () => true,
+    () => false
   );
 
   if (!mounted) return null;
@@ -32,8 +32,13 @@ export function EllipsisMenu({ onEdit, onDelete, isDeletePending }: EllipsisMenu
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-sm" className="cursor-pointer" aria-label="더보기">
-          <EllipsisVerticalIcon className="text-sosoeat-gray-500 size-5" />
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          className="cursor-pointer rounded-full"
+          aria-label="더보기"
+        >
+          <MoreHorizontal className="text-sosoeat-gray-500 size-5" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

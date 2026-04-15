@@ -123,7 +123,7 @@ export function SosoTalkCommentItem({
                 type="button"
                 onClick={onLikeClick}
                 className={cn(
-                  'inline-flex items-center gap-1.5 text-sm font-medium transition-colors',
+                  'inline-flex cursor-pointer items-center gap-1.5 text-sm font-medium transition-colors',
                   isLiked
                     ? 'text-sosoeat-orange-600'
                     : 'text-sosoeat-gray-500 hover:text-sosoeat-orange-600'

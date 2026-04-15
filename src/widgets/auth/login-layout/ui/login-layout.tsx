@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
+import * as Sentry from '@sentry/nextjs';
+
 import { useGoogleLoginMutation } from '@/features/auth';
 import { kakaoRedirectUri } from '@/shared/lib/oauth-config';
 import { STORAGE_KEYS } from '@/shared/lib/storage-keys';
@@ -37,7 +39,16 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
   const handleGoogleLogin = () => {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (typeof google === 'undefined' || !clientId) {
-      if (!clientId) console.error('Missing Google Client ID');
+      if (!clientId) {
+        const error = new Error('Missing Google Client ID');
+        console.error(error.message);
+        Sentry.captureException(error, {
+          tags: {
+            area: 'auth',
+            action: 'google-login-config',
+          },
+        });
+      }
       return;
     }
     saveCallbackUrl();
@@ -64,6 +75,16 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
       console.error('Missing Kakao OAuth config', {
         clientId: !!clientId,
         redirectUri: !!redirectUri,
+      });
+      Sentry.captureException(new Error('Missing Kakao OAuth config'), {
+        tags: {
+          area: 'auth',
+          action: 'kakao-login-config',
+        },
+        extra: {
+          hasClientId: !!clientId,
+          hasRedirectUri: !!redirectUri,
+        },
       });
       return;
     }

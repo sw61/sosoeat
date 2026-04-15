@@ -47,7 +47,7 @@ export default async function Page({ searchParams }: PageProps) {
   const initialData = await getInitialSearchData(requestParams);
 
   return (
-    <div className="flex w-full flex-col items-center justify-center">
+    <div className="bg-sosoeat-gray-100 flex w-full flex-col items-center justify-center">
       <section aria-label="search-banner" className="w-full">
         <MeetingSearchBanner />
       </section>

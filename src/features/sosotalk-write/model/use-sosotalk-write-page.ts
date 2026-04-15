@@ -12,6 +12,7 @@ import {
   useGetSosoTalkPostDetail,
   useUpdateSosoTalkPost,
 } from '@/entities/post';
+import { capture5xxException } from '@/shared/lib/sentry-error';
 
 import type { SosoTalkPostSubmitPayload } from './sosotalk-post-editor.types';
 
@@ -71,7 +72,13 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
       });
 
       router.replace(`/sosotalk/${createdPost.id}`);
-    } catch {
+    } catch (error) {
+      capture5xxException(error, {
+        tags: {
+          area: 'sosotalk-write',
+          action: 'create-post',
+        },
+      });
       toast.error('게시글 등록 중 문제가 생겼어요. 다시 시도해 주세요.');
     } finally {
       setIsSubmitting(false);
@@ -103,7 +110,16 @@ export function useSosoTalkWritePage({ editPostId }: UseSosoTalkWritePageParams)
       });
 
       router.replace(`/sosotalk/${editPostId}`);
-    } catch {
+    } catch (error) {
+      capture5xxException(error, {
+        tags: {
+          area: 'sosotalk-write',
+          action: 'update-post',
+        },
+        extra: {
+          postId: editPostId,
+        },
+      });
       toast.error('게시글 수정 중 문제가 생겼어요. 다시 시도해 주세요.');
     } finally {
       setIsSubmitting(false);

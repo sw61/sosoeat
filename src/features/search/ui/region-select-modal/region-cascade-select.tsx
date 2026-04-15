@@ -17,11 +17,10 @@ import {
 
 import type { KoreaRegionRegion, RegionSelection } from './region-select-modal.types';
 
-/** 피그마 Input 행 — h 48, p 12, bg gray/50 #F9FAFB, 본문 slate/800 #333333, radius 12 */
 const triggerClass =
-  'focus-visible:ring-sosoeat-gray-600/35 inline-flex h-12 w-full min-w-0 items-center justify-between gap-2 ' +
+  'focus-visible:ring-sosoeat-gray-600/35 inline-flex h-12 w-full min-w-0 cursor-pointer items-center justify-between gap-2 ' +
   'rounded-xl bg-[#F9FAFB] px-3 py-3 text-left text-base font-normal tracking-[-0.02em] text-[#333333] outline-none ' +
-  'transition-colors hover:bg-neutral-100 focus-visible:ring-2 data-[state=open]:bg-neutral-100';
+  'transition-colors hover:bg-accent focus-visible:ring-2 data-[state=open]:bg-accent';
 
 const triggerSelectedClass =
   'bg-sosoeat-gray-50 ring-2 ring-inset ring-sosoeat-gray-500 hover:bg-sosoeat-gray-100';
@@ -58,7 +57,9 @@ export function RegionCascadeSelect({
         const selectedDistricts = (value ?? [])
           .filter((s) => s.province === r.name)
           .map((s) => s.district);
+
         const hasSelection = selectedDistricts.length > 0;
+
         return (
           <li key={r.id}>
             <DropdownMenu>
@@ -85,6 +86,7 @@ export function RegionCascadeSelect({
                   />
                 )}
               </DropdownMenuTrigger>
+
               <DropdownMenuContent
                 align="start"
                 sideOffset={4}
@@ -95,10 +97,12 @@ export function RegionCascadeSelect({
                     <DropdownMenuCheckboxItem
                       key={district}
                       checked={selectedDistricts.includes(district)}
+                      className="hover:bg-accent cursor-pointer py-3 text-base transition-colors md:py-1"
                       onCheckedChange={(checked) => {
                         const next = (value ?? []).filter(
                           (s) => !(s.province === r.name && s.district === district)
                         );
+
                         if (checked) {
                           onChange([...next, { province: r.name, district }]);
                         } else {

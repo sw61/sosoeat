@@ -1,8 +1,8 @@
-name: Preview 배포 (Develop)
+name: Preview 배포 및 검증 (PR 전용)
 
 on:
-  push:
-    branches: [develop]
+  pull_request:
+    branches: [main, develop]
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: write
     steps:
       - name: 저장소 불러오기
         uses: actions/checkout@v4
@@ -21,18 +22,11 @@ jobs:
       - name: Node.js 설치
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
 
       - name: 의존성 설치
         run: npm ci
-
-      - name: 단위 테스트 실행
-        run: npm test
-        env:
-          LANG: ko_KR.UTF-8
-          LC_ALL: ko_KR.UTF-8
-          TZ: Asia/Seoul
 
       - name: 프로젝트 빌드 실행
         run: npm run build
@@ -53,3 +47,19 @@ jobs:
         run: |
           DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+
+      - name: PR에 Preview 링크 댓글 달기
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = process.env.DEPLOY_URL;
+            const body = `🚀 **Preview 배포가 완료되었습니다!**\n\n| 서비스 | 링크 |\n| :--- | :--- |\n| **Vercel Preview** | [${url}](${url}) |\n\n---\n*최근 업데이트: ${new Date().toLocaleString('ko-KR')}*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            })
+        env:
+          DEPLOY_URL: ${{ steps.deploy.outputs.url }}

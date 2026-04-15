@@ -19,6 +19,7 @@ import { EstablishmentStatusBadge } from '../establishment-status-badge';
 import {
   MAIN_PAGE_CARD_BADGES_ROW_CLASS,
   MAIN_PAGE_CARD_CLASS,
+  MAIN_PAGE_CARD_CLOSED_OVERLAY_CLASS,
   MAIN_PAGE_CARD_CONTENT_CLASS,
   MAIN_PAGE_CARD_FOOTER_CLASS,
   MAIN_PAGE_CARD_HEADER_CLASS,
@@ -58,6 +59,7 @@ const getProgressVariant = (meetingType: string): ProgressProps['variant'] =>
 
 export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProps) => {
   const variant = getProgressVariant(meeting.type);
+  const registrationEnd = new Date(meeting.registrationEnd);
   const formatted = format(new Date(meeting.dateTime), 'M/d(E) HH:mm', { locale: ko });
   const progress =
     (meeting.participantCount / (meeting.capacity <= 0 ? 1 : meeting.capacity)) * 100;
@@ -79,6 +81,11 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
           onKeyDown={handleCardKeyDown}
         >
           <div className={MAIN_PAGE_CARD_IMAGE_WRAPPER_CLASS}>
+            {registrationEnd < new Date() && (
+              <div data-testid="closed-overlay" className={MAIN_PAGE_CARD_CLOSED_OVERLAY_CLASS}>
+                마감 완료
+              </div>
+            )}
             <Image
               src={meeting.image}
               fill
@@ -139,11 +146,13 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
               </span>
             </div>
             <div className={MAIN_PAGE_CARD_BADGES_ROW_CLASS}>
-              <DeadlineBadge
-                registrationEnd={new Date(meeting.registrationEnd)}
-                variant={variant}
-                className="mt-0 min-w-0 flex-1"
-              />
+              <div data-testid="closed-badge" className="mt-0 min-w-0 flex-1">
+                <DeadlineBadge
+                  registrationEnd={registrationEnd}
+                  variant={variant}
+                  className="w-full overflow-hidden"
+                />
+              </div>
               <div className="hidden md:block">
                 <EstablishmentStatusBadge
                   confirmedAt={meeting.confirmedAt ? new Date(meeting.confirmedAt) : null}

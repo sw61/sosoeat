@@ -53,8 +53,8 @@ storybook-static
 # swc
 .swc/
 
-# cursor
-.cursor/
+#나를 위한 설명
+/docs
 
 # GitHub issue drafts (로컬/자동 생성용 — 레포에 올리지 않음)
 docs/issue-drafts/
@@ -85,3 +85,7 @@ AGENTS.md
 src/graphify-out/cache/
 .claude/settings.local.json/
 .next-benchmark/
+# Sentry Config File
+.env.sentry-build-plugin
+
+.opencode

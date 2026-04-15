@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { startOfDay, startOfMinute } from 'date-fns';
 import {
@@ -137,7 +137,6 @@ const useSearchState = (
   const handleSearchQueryChange = (e: string) => {
     setInputValue(e);
   };
-
   const searchError = inputValue.trim().length === 1 ? '2글자 이상 입력해주세요' : undefined;
 
   useEffect(() => {

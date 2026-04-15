@@ -240,6 +240,105 @@ describe('useSearchState', () => {
     );
   });
 
+  it('dateStart가 없으면 전달된 기본 시작 시각을 사용한다', () => {
+    const initialDefaultDateStartIso = getDefaultSearchDateStartIso(
+      new Date('2026-04-15T09:00:45')
+    );
+
+    renderHookWithClient(() => useSearchState(null, initialDefaultDateStartIso));
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        queryKey: [
+          'search',
+          'infinite-list',
+          expect.objectContaining({
+            dateStart: new Date(initialDefaultDateStartIso),
+          }),
+        ],
+      })
+    );
+  });
+
+  it('검색 조건이 바뀌면 초기 서버 데이터를 다시 주입하지 않는다', async () => {
+    const initialData = {
+      data: [{ id: 99 }],
+      nextCursor: '',
+      hasMore: false,
+    };
+    const initialDefaultDateStartIso = getDefaultSearchDateStartIso(
+      new Date('2026-04-15T09:00:45')
+    );
+
+    const { result } = renderHookWithClient(() =>
+      useSearchState(initialData as never, initialDefaultDateStartIso)
+    );
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        initialData: { pages: [initialData], pageParams: [undefined] },
+      })
+    );
+
+    act(() => {
+      result.current.handleSearchQueryChange('김칠수');
+    });
+
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        initialData: undefined,
+      })
+    );
+  });
+
+  it('1글자 입력 시 searchError가 반환된다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김');
+    });
+
+    expect(result.current.searchError).toBe('2글자 이상 입력해주세요');
+  });
+
+  it('2글자 이상 입력 시 searchError가 undefined다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김칠');
+    });
+
+    expect(result.current.searchError).toBeUndefined();
+  });
+
+  it('0글자일 때 searchError가 undefined다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    expect(result.current.searchError).toBeUndefined();
+  });
+
+  it('1글자 입력 후 600ms 경과해도 API keyword가 전달되지 않는다', async () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김');
+    });
+
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        queryKey: ['search', 'infinite-list', expect.objectContaining({ keyword: undefined })],
+      })
+    );
+  });
+
   it('복수 지역 데이터를 합산하여 반환해야 한다', async () => {
     const meeting1 = { id: 1, region: '부산 북구', dateTime: '2026-01-01' };
     const meeting2 = { id: 2, region: '서울 강남구', dateTime: '2026-01-02' };

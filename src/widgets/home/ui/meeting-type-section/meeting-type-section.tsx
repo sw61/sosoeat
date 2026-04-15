@@ -10,7 +10,7 @@ export function MeetingTypeSection() {
         {/* 함께먹기 */}
         <Link
           href="/search?typeFilter=groupEat"
-          className="bg-sosoeat-orange-600 relative flex-1 overflow-hidden rounded-2xl p-4 md:p-5 lg:p-6"
+          className="bg-sosoeat-orange-600 relative flex-1 overflow-hidden rounded-2xl p-4 shadow-[0_4px_8px_0_rgba(0,0,0,0.28)] transition-transform duration-200 hover:-translate-y-1 md:p-5 lg:p-6"
         >
           <div className="flex flex-col gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-[14px] bg-white/20 lg:h-10 lg:w-10">
@@ -22,7 +22,7 @@ export function MeetingTypeSection() {
               <br />
               함께 할 사람을 모아요
             </p>
-            <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white lg:px-4 lg:py-1.5 lg:text-sm">
+            <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-white bg-white/20 px-3 py-1 text-xs font-bold text-white lg:px-4 lg:py-1.5 lg:text-sm">
               모임 찾기
               <ArrowRight className="size-3 lg:size-4" />
             </span>
@@ -33,7 +33,7 @@ export function MeetingTypeSection() {
         {/* 공동구매 */}
         <Link
           href="/search?typeFilter=groupBuy"
-          className="bg-sosoeat-blue-600 relative flex-1 overflow-hidden rounded-2xl p-4 md:p-5 lg:p-6"
+          className="bg-sosoeat-blue-600 relative flex-1 overflow-hidden rounded-2xl p-4 shadow-[0_4px_8px_0_rgba(0,0,0,0.28)] transition-transform duration-200 hover:-translate-y-1 md:p-5 lg:p-6"
         >
           <div className="flex flex-col gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-[14px] bg-white/20 lg:h-10 lg:w-10">
@@ -45,7 +45,7 @@ export function MeetingTypeSection() {
               <br />
               식재료를 함께 구매해요
             </p>
-            <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white lg:px-4 lg:py-1.5 lg:text-sm">
+            <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-white bg-white/20 px-3 py-1 text-xs font-bold text-white lg:px-4 lg:py-1.5 lg:text-sm">
               모임 찾기
               <ArrowRight className="size-3 lg:size-4" />
             </span>

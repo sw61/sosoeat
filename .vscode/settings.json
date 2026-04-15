@@ -17,13 +17,5 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "editor.quickSuggestions": {
-    "other": true,
-    "comments": false,
-    "strings": true
-  },
-  "editor.suggestOnTriggerCharacters": true,
-  "editor.inlineSuggest.enabled": true,
-  "editor.wordBasedSuggestions": "matchingDocuments"
+  }
 }
