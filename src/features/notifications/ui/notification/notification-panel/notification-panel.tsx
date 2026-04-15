@@ -87,7 +87,7 @@ const NotificationPanelContent = ({
     const label = labelRefs.current[activeIndex];
     if (!btn || !label) return;
     setIndicatorStyle({
-      left: btn.offsetLeft + label.offsetLeft,
+      left: label.offsetLeft,
       width: label.offsetWidth,
     });
   };
@@ -279,6 +279,12 @@ export const NotificationPanel = ({ unreadCount, open, onOpenChange }: Notificat
     onOpenChange(nextOpen);
   };
 
+  useEffect(() => {
+    if (!isMobile && open) {
+      void prefetchNotificationInfiniteList(queryClient, { size: PAGE_SIZE });
+    }
+  }, [isMobile, open, queryClient]);
+
   const panelContent = (
     <NotificationPanelContent
       titleId={titleId}
@@ -321,8 +327,12 @@ export const NotificationPanel = ({ unreadCount, open, onOpenChange }: Notificat
   // PC: 트리거 버튼 아래에 드롭다운
   return (
     <>
-      {open && <div className="fixed inset-0 z-40" onClick={() => onOpenChange(false)} />}
-      <div className={DESKTOP_PANEL_CLASS}>{panelContent}</div>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => onOpenChange(false)} />
+          <div className={DESKTOP_PANEL_CLASS}>{panelContent}</div>
+        </>
+      )}
     </>
   );
 };
