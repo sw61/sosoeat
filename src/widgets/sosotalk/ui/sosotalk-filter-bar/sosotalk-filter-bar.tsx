@@ -55,7 +55,7 @@ export const SosoTalkFilterBar = ({
                 type="button"
                 onClick={() => onTabChange(tab.value)}
                 className={cn(
-                  'inline-flex h-8 items-center text-xl leading-none font-semibold transition-colors',
+                  'inline-flex h-8 cursor-pointer items-center text-xl leading-none font-semibold transition-colors',
                   isActive
                     ? 'text-sosoeat-orange-600 font-bold'
                     : 'text-sosoeat-gray-900 hover:text-sosoeat-orange-600'
@@ -78,7 +78,7 @@ export const SosoTalkFilterBar = ({
                 type="button"
                 onClick={() => onSortChange(option.value)}
                 className={cn(
-                  'relative inline-flex h-8 items-center pl-3 text-base leading-none font-semibold transition-colors',
+                  'relative inline-flex h-8 cursor-pointer items-center pl-3 text-base leading-none font-semibold transition-colors',
                   isActive
                     ? 'text-sosoeat-gray-900'
                     : 'text-sosoeat-gray-500 hover:text-sosoeat-gray-900'
@@ -102,7 +102,7 @@ export const SosoTalkFilterBar = ({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="text-sosoeat-gray-900 inline-flex h-8 items-center gap-1 text-base leading-none font-medium md:hidden"
+              className="text-sosoeat-gray-900 inline-flex h-8 cursor-pointer items-center gap-1 text-base leading-none font-medium md:hidden"
               aria-label="정렬 옵션 열기"
             >
               <span>{selectedSortOption.label}</span>
