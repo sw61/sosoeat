@@ -52,6 +52,15 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
   const committedRef = useRef(initialIsFavorited);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isPendingRef = useRef(false);
+  const hasUserInteractedRef = useRef(false);
+
+  // 사용자가 아직 상호작용하지 않은 상태에서 initialIsFavorited가 변경되면 캐시를 동기화
+  useEffect(() => {
+    if (!hasUserInteractedRef.current) {
+      queryClient.setQueryData(favoriteKeys.status(meetingId), initialIsFavorited);
+      committedRef.current = initialIsFavorited;
+    }
+  }, [initialIsFavorited, meetingId, queryClient]);
 
   const sendRequest = (targetState: boolean) => {
     isPendingRef.current = true;
@@ -82,6 +91,7 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
       return;
     }
 
+    hasUserInteractedRef.current = true;
     const nextLocalState = !queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId));
     queryClient.setQueryData(favoriteKeys.status(meetingId), nextLocalState);
 
