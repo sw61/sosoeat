@@ -160,7 +160,7 @@ describe('NavigationBar', () => {
       renderWithClient(<NavigationBar {...defaultProps} />);
 
       await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: '메뉴' })).toBeInTheDocument();
     });
 
     it('닫기 버튼 클릭 시 메뉴 패널이 닫힌다', async () => {
@@ -168,8 +168,9 @@ describe('NavigationBar', () => {
       renderWithClient(<NavigationBar {...defaultProps} />);
 
       await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
-      await user.click(screen.getByRole('button', { name: 'Close' }));
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.getByRole('dialog', { name: '메뉴' })).toBeInTheDocument();
+      await user.keyboard('{Escape}');
+      expect(screen.queryByRole('dialog', { name: '메뉴' })).not.toBeInTheDocument();
     });
   });
 

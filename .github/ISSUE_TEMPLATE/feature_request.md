@@ -1,3 +1,11 @@
+---
+name: feature_request
+about: 새로운 기능 추가를 제안할 때 사용해주세요.
+title: '[Feature]: '
+labels: '✨ Feature'
+assignees: ''
+---
+
 # [Feature] {ComponentName} - {컴포넌트 한 줄 설명}
 
 ## 📋 요약
