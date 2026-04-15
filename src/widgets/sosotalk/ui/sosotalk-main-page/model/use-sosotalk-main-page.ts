@@ -1,11 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
 import type { GetSosoTalkPostListResponse } from '@/entities/post';
-import { mapPostToSosoTalkCardItem, useGetSosoTalkPostList } from '@/entities/post';
+import { mapPostToSosoTalkCardItem, useGetSosoTalkPostInfiniteList } from '@/entities/post';
 
 import type {
   SosoTalkSortValue,
@@ -38,21 +36,19 @@ export function useSosoTalkMainPage({
       .withOptions({ history: 'push' })
   );
 
-  const queryParams = useMemo(
-    () => createSosoTalkMainPageQueryParams(activeTab, activeSort),
-    [activeSort, activeTab]
-  );
+  const queryParams = createSosoTalkMainPageQueryParams(activeTab, activeSort);
   const shouldUseInitialData = activeTab === initialTab && activeSort === initialSort;
-  const { data, isLoading, isError } = useGetSosoTalkPostList(
-    queryParams,
-    shouldUseInitialData ? initialData : undefined
-  );
-  const posts = useMemo(() => data?.data.map(mapPostToSosoTalkCardItem) ?? [], [data]);
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useGetSosoTalkPostInfiniteList(queryParams, shouldUseInitialData ? initialData : undefined);
+  const posts = data?.pages.flatMap((page) => page.data).map(mapPostToSosoTalkCardItem) ?? [];
 
   return {
     activeSort,
     activeTab,
+    fetchNextPage,
+    hasNextPage,
     isError,
+    isFetchingNextPage,
     isLoading,
     posts,
     setActiveSort: (value: SosoTalkSortValue) => void setActiveSort(value),
