@@ -59,17 +59,41 @@ interface SosoTalkShareModalProps {
 }
 
 const KAKAO_JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
+const PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sosoeat.com';
 
-const toAbsoluteImageUrl = (imageUrl?: string) => {
+const toPublicSiteUrl = (value: string) => {
+  if (typeof window === 'undefined') {
+    return value;
+  }
+
+  const resolved = new URL(value, window.location.origin);
+
+  return new URL(
+    `${resolved.pathname}${resolved.search}${resolved.hash}`,
+    PUBLIC_SITE_URL
+  ).toString();
+};
+
+export const toAbsoluteImageUrl = (imageUrl?: string) => {
   const path = imageUrl || '/images/logo.svg';
 
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path;
   }
 
-  if (typeof window === 'undefined') return path;
+  return toPublicSiteUrl(path.startsWith('/') ? path : `/${path}`);
+};
 
-  return `${window.location.origin}${path.startsWith('/') ? '' : '/'}${path}`;
+export const toKakaoShareUrl = (url: string) => {
+  if (!url) {
+    return url;
+  }
+
+  try {
+    return toPublicSiteUrl(url);
+  } catch {
+    return url;
+  }
 };
 
 export function SosoTalkShareModal({
@@ -96,6 +120,8 @@ export function SosoTalkShareModal({
       return;
     }
 
+    const shareUrl = toKakaoShareUrl(url);
+
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
@@ -103,16 +129,16 @@ export function SosoTalkShareModal({
         description: '소소톡 게시글을 확인해 보세요.',
         imageUrl: toAbsoluteImageUrl(imageUrl),
         link: {
-          mobileWebUrl: url,
-          webUrl: url,
+          mobileWebUrl: shareUrl,
+          webUrl: shareUrl,
         },
       },
       buttons: [
         {
           title: '게시글 보기',
           link: {
-            mobileWebUrl: url,
-            webUrl: url,
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl,
           },
         },
       ],
