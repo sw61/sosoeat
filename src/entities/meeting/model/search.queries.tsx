@@ -6,7 +6,7 @@ import { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client/apis/M
 
 import type { getMeetings } from '../index.server';
 
-import { meetingsQueryOptions } from './meetings.options';
+import { meetingsQueryOptions } from './meeting-search-query-options';
 
 export const useSearchList = () => {
   return useQuery(meetingsQueryOptions.all());

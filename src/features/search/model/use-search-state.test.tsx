@@ -2,12 +2,11 @@
 
 import { useInfiniteQuery, useQueries } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
-import { startOfDay } from 'date-fns';
+import { startOfDay, startOfMinute } from 'date-fns';
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing';
 
-import { getDefaultSearchDateStartIso } from './search-date';
 import { useSearchInfiniteOptions } from './use-search-infinite-options';
-import useSearchPage from './use-search-page';
+import useSearchState from './use-search-state';
 
 jest.mock('@tanstack/react-query', () => ({
   ...jest.requireActual('@tanstack/react-query'),
@@ -26,13 +25,15 @@ const makeQueryResult = (
   dataUpdatedAt,
 });
 
-const renderHookWithClient = (hook: () => ReturnType<typeof useSearchPage>) => {
+const getDefaultSearchDateStartIso = (now = new Date()) => startOfMinute(now).toISOString();
+
+const renderHookWithClient = (hook: () => ReturnType<typeof useSearchState>) => {
   return renderHook(hook, {
     wrapper: withNuqsTestingAdapter({ searchParams: {} }),
   });
 };
 
-describe('useSearchPage', () => {
+describe('useSearchState', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     (useInfiniteQuery as jest.Mock).mockReturnValue({
@@ -50,7 +51,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleRegionChange일 때 상태가 업데이트되어야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleRegionChange([{ province: '서울', district: '강남구' }]);
@@ -60,7 +61,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleDateChange에서 값이 모두 없으면 날짜 상태를 초기화해야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
     const startDate = new Date('2026-04-06T10:30:00');
     const endDate = new Date('2026-04-08T18:00:00');
 
@@ -77,7 +78,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleDateChange에서 시작일만 있으면 시작일 기준으로 상태를 업데이트해야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
     const startDate = new Date('2026-04-06T10:30:00');
 
     act(() => {
@@ -89,7 +90,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleDateChange에서 종료일만 있으면 종료일 기준으로 상태를 업데이트해야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
     const endDate = new Date('2026-04-08T18:00:00');
 
     act(() => {
@@ -101,7 +102,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleTypeFilterChange일 때 타입 필터가 업데이트되어야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleTypeFilterChange('groupBuy');
@@ -111,7 +112,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleSortChange일 때 정렬 기준과 순서가 업데이트되어야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleSortChange('dateTime', 'desc');
@@ -134,10 +135,10 @@ describe('useSearchPage', () => {
       fetchNextPage: jest.fn(),
     });
 
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     expect(result.current.meetingData).toHaveLength(3);
-    expect(result.current.meetingData.map((m) => m.id)).toEqual([1, 2, 3]);
+    expect(result.current.meetingData.map((m: { id: number }) => m.id)).toEqual([1, 2, 3]);
   });
 
   it('dateStart가 없으면 전달된 기본 시작 시각을 사용한다', () => {
@@ -145,7 +146,7 @@ describe('useSearchPage', () => {
       new Date('2026-04-15T09:00:45')
     );
 
-    renderHookWithClient(() => useSearchPage(null, initialDefaultDateStartIso));
+    renderHookWithClient(() => useSearchState(null, initialDefaultDateStartIso));
 
     expect(useInfiniteQuery).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -171,7 +172,7 @@ describe('useSearchPage', () => {
     );
 
     const { result } = renderHookWithClient(() =>
-      useSearchPage(initialData as never, initialDefaultDateStartIso)
+      useSearchState(initialData as never, initialDefaultDateStartIso)
     );
 
     expect(useInfiniteQuery).toHaveBeenLastCalledWith(
@@ -196,7 +197,7 @@ describe('useSearchPage', () => {
   });
 
   it('1글자 입력 시 searchError가 반환된다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleSearchQueryChange('김');
@@ -206,7 +207,7 @@ describe('useSearchPage', () => {
   });
 
   it('2글자 이상 입력 시 searchError가 undefined다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleSearchQueryChange('김칠');
@@ -216,13 +217,112 @@ describe('useSearchPage', () => {
   });
 
   it('0글자일 때 searchError가 undefined다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     expect(result.current.searchError).toBeUndefined();
   });
 
   it('1글자 입력 후 600ms 경과해도 API keyword가 전달되지 않는다', async () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김');
+    });
+
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        queryKey: ['search', 'infinite-list', expect.objectContaining({ keyword: undefined })],
+      })
+    );
+  });
+
+  it('dateStart가 없으면 전달된 기본 시작 시각을 사용한다', () => {
+    const initialDefaultDateStartIso = getDefaultSearchDateStartIso(
+      new Date('2026-04-15T09:00:45')
+    );
+
+    renderHookWithClient(() => useSearchState(null, initialDefaultDateStartIso));
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        queryKey: [
+          'search',
+          'infinite-list',
+          expect.objectContaining({
+            dateStart: new Date(initialDefaultDateStartIso),
+          }),
+        ],
+      })
+    );
+  });
+
+  it('검색 조건이 바뀌면 초기 서버 데이터를 다시 주입하지 않는다', async () => {
+    const initialData = {
+      data: [{ id: 99 }],
+      nextCursor: '',
+      hasMore: false,
+    };
+    const initialDefaultDateStartIso = getDefaultSearchDateStartIso(
+      new Date('2026-04-15T09:00:45')
+    );
+
+    const { result } = renderHookWithClient(() =>
+      useSearchState(initialData as never, initialDefaultDateStartIso)
+    );
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        initialData: { pages: [initialData], pageParams: [undefined] },
+      })
+    );
+
+    act(() => {
+      result.current.handleSearchQueryChange('김칠수');
+    });
+
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        initialData: undefined,
+      })
+    );
+  });
+
+  it('1글자 입력 시 searchError가 반환된다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김');
+    });
+
+    expect(result.current.searchError).toBe('2글자 이상 입력해주세요');
+  });
+
+  it('2글자 이상 입력 시 searchError가 undefined다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김칠');
+    });
+
+    expect(result.current.searchError).toBeUndefined();
+  });
+
+  it('0글자일 때 searchError가 undefined다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    expect(result.current.searchError).toBeUndefined();
+  });
+
+  it('1글자 입력 후 600ms 경과해도 API keyword가 전달되지 않는다', async () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleSearchQueryChange('김');

@@ -2,8 +2,10 @@ import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
+import type { RegionSelection } from '@/entities/location';
+
 import { MeetingFilterBar } from './meeting-filter-bar';
-import type { MeetingFilterBarProps, RegionSelection } from './meeting-filter-bar.types';
+import type { MeetingFilterBarProps } from './meeting-filter-bar.types';
 
 const meta = {
   title: 'app/meetings/meeting-filter-bar',

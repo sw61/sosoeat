@@ -1,14 +1,12 @@
 import { useInView } from 'react-intersection-observer';
 
 import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
-import { fireEvent, render, renderHook, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing';
 
 import { useAuthStore } from '@/entities/auth';
 import type { Host, MeetingWithHost } from '@/shared/types/generated-client';
 import type { MeetingList } from '@/shared/types/generated-client/models/MeetingList';
-
-import { useSearchPage } from '../..';
 
 import SearchPage from './search-page';
 
@@ -25,15 +23,6 @@ const renderWithNuqs = (ui: React.ReactElement) => {
     ),
   });
 };
-
-const renderHookWithNuqs = <T,>(hook: () => T) =>
-  renderHook(hook, {
-    wrapper: ({ children }) => (
-      <QueryClientProvider client={new QueryClient()}>
-        <NuqsWrapper>{children}</NuqsWrapper>
-      </QueryClientProvider>
-    ),
-  });
 
 const mockHost: Host = {
   id: 1,
@@ -153,17 +142,22 @@ describe('SearchPage', () => {
       data: undefined,
       isLoading: true,
     });
-    const { result } = renderHookWithNuqs(() => useSearchPage(null, DEFAULT_DATE_START_ISO));
-    expect(result.current.isLoading).toBe(true);
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
+    const skeletons = document.querySelectorAll('.animate-pulse');
+    expect(skeletons.length).toBeGreaterThan(0);
   });
 
-  it('isError일 때 에러 상태를 반환한다', () => {
+  it('isError일 때 에러 메시지를 보여준다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       isError: true,
     });
-    const { result } = renderHookWithNuqs(() => useSearchPage(null, DEFAULT_DATE_START_ISO));
-    expect(result.current.isError).toBe(true);
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
+    expect(screen.getByText('모임 목록을 불러오지 못했어요.')).toBeInTheDocument();
   });
 
   it('meetingData가 비어 있으면 Empty Page를 보여준다', () => {
@@ -177,9 +171,13 @@ describe('SearchPage', () => {
     expect(screen.getAllByAltText('Empty Page')).toHaveLength(2);
   });
 
-  it('meetingData가 있으면 검색 결과를 반환한다', () => {
-    const { result } = renderHookWithNuqs(() => useSearchPage(null, DEFAULT_DATE_START_ISO));
-    expect(result.current.meetingData).toEqual(mockMeetingList.data);
+  it('meetingData가 있으면 검색 결과를 보여준다', () => {
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
+    expect(screen.getByText('강남 점심 같이 먹어요')).toBeInTheDocument();
+    expect(screen.getByText('생필품 공동구매 모임')).toBeInTheDocument();
+    expect(screen.getByText('판교 저녁 모임')).toBeInTheDocument();
   });
 
   it('isFetching 상태면 skeleton이 보인다', () => {

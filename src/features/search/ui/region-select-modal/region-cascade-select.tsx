@@ -38,12 +38,14 @@ export function RegionCascadeSelect({
   onChange,
   className,
 }: RegionCascadeSelectProps) {
-  const sortedRegions = useMemo(() => {
-    return regions.map((r) => ({
-      ...r,
-      districts: [...r.districts].sort((a, b) => a.localeCompare(b, 'ko')),
-    }));
-  }, [regions]);
+  const sortedRegions = useMemo(
+    () =>
+      regions.map((region) => ({
+        ...region,
+        districts: [...region.districts].sort((a, b) => a.localeCompare(b, 'ko-KR')),
+      })),
+    [regions]
+  );
 
   return (
     <ul

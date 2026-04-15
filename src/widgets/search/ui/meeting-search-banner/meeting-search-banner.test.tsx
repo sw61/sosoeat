@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import MeetingSearchBanner from './meeting-search-banner';
+import { MeetingSearchBanner } from './meeting-search-banner';
 
 jest.mock('next/image', () => {
   function MockImage({ alt, src }: { alt: string; src: string }) {

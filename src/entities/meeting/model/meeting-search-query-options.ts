@@ -1,16 +1,13 @@
-import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
-
 import { meetingsApi } from '../api/meetings.api';
 import type { getMeetings } from '../index.server';
-import type { MeetingListResult } from '../model/meeting.types';
+
+import type { MeetingListResult, MeetingSearchRequest } from './meeting.types';
 
 const searchKeys = {
   all: () => ['search'] as const,
   detail: (id: number) => ['search', 'detail', id] as const,
-  options: (options: Omit<TeamIdMeetingsGetRequest, 'teamId'>) =>
-    ['search', 'list', options] as const,
-  infiniteOptions: (options: Omit<TeamIdMeetingsGetRequest, 'teamId'>) =>
-    ['search', 'infinite-list', options] as const,
+  options: (options: MeetingSearchRequest) => ['search', 'list', options] as const,
+  infiniteOptions: (options: MeetingSearchRequest) => ['search', 'infinite-list', options] as const,
 } as const;
 
 export const meetingsQueryOptions = {
@@ -22,23 +19,23 @@ export const meetingsQueryOptions = {
   all: () => ({
     queryKey: searchKeys.all(),
     queryFn: () => meetingsApi.getList(),
-    staleTime: 1000 * 60 * 5, // 5분
-    gcTime: 1000 * 60 * 10, // 10분
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
   }),
   detail: (id: number) => ({
     queryKey: searchKeys.detail(id),
     queryFn: async () => meetingsApi.getById(id),
-    staleTime: 1000 * 60 * 5, // 5분
-    gcTime: 1000 * 60 * 10, // 10분
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
   }),
-  options: (options: Omit<TeamIdMeetingsGetRequest, 'teamId'>) => ({
+  options: (options: MeetingSearchRequest) => ({
     queryKey: searchKeys.options(options),
     queryFn: () => meetingsApi.getByFilter(options),
-    staleTime: 1000 * 60 * 5, // 5분
-    gcTime: 1000 * 60 * 10, // 10분
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
   }),
   infiniteOptions: (
-    options: Omit<TeamIdMeetingsGetRequest, 'teamId'>,
+    options: MeetingSearchRequest,
     initialData?: Awaited<ReturnType<typeof getMeetings>>
   ) => ({
     queryKey: searchKeys.infiniteOptions(options),
