@@ -11,6 +11,7 @@ import { Toaster } from '@/shared/ui/sonner';
 import { Footer } from '@/widgets/footer';
 import { NavigationBar } from '@/widgets/navigation-bar';
 
+import { FontLoader } from './font-loader';
 import { Providers } from './providers';
 
 import './globals.css';
@@ -56,16 +57,7 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link
-          rel="stylesheet"
-          as="style"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-          media="print"
-          onLoad={(e) => {
-            (e.currentTarget as HTMLLinkElement).media = 'all';
-          }}
-        />
+        <FontLoader />
       </head>
       <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
         <Script src="https://accounts.google.com/gsi/client" strategy="lazyOnload" />
