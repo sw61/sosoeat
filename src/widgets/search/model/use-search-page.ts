@@ -191,12 +191,13 @@ const useSearchPage = (
   const handleSearchQueryChange = (e: string) => {
     setInputValue(e);
   };
-  const searchError = inputValue.length === 1 ? '2글자 이상 입력해주세요' : undefined;
+  const searchError = inputValue.trim().length === 1 ? '2글자 이상 입력해주세요' : undefined;
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      if (inputValue === '' || inputValue.length > 1) {
-        setSearchQuery(inputValue);
+      const trimmedValue = inputValue.trim();
+      if (trimmedValue === '' || trimmedValue.length > 1) {
+        setSearchQuery(trimmedValue);
       }
     }, 500);
 
