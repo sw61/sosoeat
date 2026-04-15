@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { useQueryClient } from '@tanstack/react-query';
 import { X } from 'lucide-react';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 
@@ -17,10 +16,7 @@ import {
   NOTIFICATION_TABS,
   type NotificationTab,
 } from '../../../lib/notification-view.utils';
-import {
-  prefetchNotificationInfiniteList,
-  useNotificationInfiniteList,
-} from '../../../model/notification.queries';
+import { useNotificationInfiniteList } from '../../../model/notification.queries';
 import { useNotificationReadActions } from '../../../model/use-notification-read-actions';
 import { NotificationItem } from '../notification-item/notification-item';
 
@@ -81,18 +77,18 @@ const NotificationPanelContent = ({
   const labelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
 
-  const updateIndicator = () => {
-    const activeIndex = NOTIFICATION_TABS.findIndex((t) => t.key === activeTab);
-    const btn = tabRefs.current[activeIndex];
-    const label = labelRefs.current[activeIndex];
-    if (!btn || !label) return;
-    setIndicatorStyle({
-      left: label.offsetLeft,
-      width: label.offsetWidth,
-    });
-  };
-
   useEffect(() => {
+    const updateIndicator = () => {
+      const activeIndex = NOTIFICATION_TABS.findIndex((t) => t.key === activeTab);
+      const btn = tabRefs.current[activeIndex];
+      const label = labelRefs.current[activeIndex];
+      if (!btn || !label) return;
+      setIndicatorStyle({
+        left: label.offsetLeft,
+        width: label.offsetWidth,
+      });
+    };
+
     updateIndicator();
 
     const observer = new ResizeObserver(updateIndicator);
@@ -100,7 +96,6 @@ const NotificationPanelContent = ({
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   const showBadge = unreadCount != null && unreadCount > 0;
@@ -269,21 +264,7 @@ interface NotificationPanelProps {
 
 export const NotificationPanel = ({ unreadCount, open, onOpenChange }: NotificationPanelProps) => {
   const titleId = React.useId();
-  const queryClient = useQueryClient();
   const isMobile = useIsMobile();
-
-  const handleOpen = (nextOpen: boolean) => {
-    if (nextOpen) {
-      void prefetchNotificationInfiniteList(queryClient, { size: PAGE_SIZE });
-    }
-    onOpenChange(nextOpen);
-  };
-
-  useEffect(() => {
-    if (!isMobile && open) {
-      void prefetchNotificationInfiniteList(queryClient, { size: PAGE_SIZE });
-    }
-  }, [isMobile, open, queryClient]);
 
   const panelContent = (
     <NotificationPanelContent
@@ -300,7 +281,7 @@ export const NotificationPanel = ({ unreadCount, open, onOpenChange }: Notificat
         {open && (
           <div className="fixed inset-0 z-40 bg-black/40" onClick={() => onOpenChange(false)} />
         )}
-        <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
+        <DialogPrimitive.Root open={open} onOpenChange={onOpenChange} modal={false}>
           <DialogPrimitive.Portal>
             <DialogPrimitive.Content
               aria-describedby={undefined}
