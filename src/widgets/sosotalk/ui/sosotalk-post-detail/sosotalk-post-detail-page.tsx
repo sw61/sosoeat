@@ -178,9 +178,7 @@ function SosoTalkPostDetailPageLayout({ children }: { children: ReactNode }) {
   return (
     <div className="bg-sosoeat-gray-100 flex min-h-screen flex-col">
       <main className="flex-1 px-4 py-8 md:px-6 md:py-10">
-        <div className="mx-auto w-full max-w-[1280px]">
-          <div className="mx-auto w-full max-w-[860px] xl:max-w-[960px]">{children}</div>
-        </div>
+        <div className="mx-auto w-full max-w-[1280px]">{children}</div>
       </main>
     </div>
   );

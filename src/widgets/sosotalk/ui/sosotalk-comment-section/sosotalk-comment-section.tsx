@@ -44,6 +44,7 @@ export function SosoTalkCommentSection({
       <div className="bg-sosoeat-gray-100 -mx-4 mt-4 rounded-b-[24px] px-4 py-6 sm:-mx-6 sm:px-6 sm:py-7 md:-mx-8 md:px-8 md:py-8">
         <div className="mx-auto w-full">
           <CommentInput
+            className="px-4 sm:px-5"
             value={inputValue}
             placeholder={inputPlaceholder}
             onChange={onChangeInput}

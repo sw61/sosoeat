@@ -72,7 +72,17 @@ describe('MeetingCommentSection', () => {
       expect(screen.getByRole('textbox')).not.toBeDisabled();
     });
 
-    it('텍스트 입력 후 제출하면 입력창이 초기화된다', async () => {
+    it('소소토크처럼 하단 입력 영역 배경이 적용된다', () => {
+      const { container } = render(<MeetingCommentSection meetingId={1} />, {
+        wrapper: createWrapper(),
+      });
+
+      expect(
+        container.querySelector('.bg-sosoeat-gray-100.rounded-b-\\[24px\\]')
+      ).toBeInTheDocument();
+    });
+
+    it('텍스트를 입력 후 제출하면 입력창이 초기화된다', async () => {
       const user = userEvent.setup();
       render(<MeetingCommentSection meetingId={1} />, {
         wrapper: createWrapper(),

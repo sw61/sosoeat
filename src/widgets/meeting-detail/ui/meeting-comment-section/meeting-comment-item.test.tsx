@@ -18,6 +18,7 @@ jest.mock('@/features/meeting-comment', () => ({
 
 jest.mock('./format-date', () => ({
   formatCommentDate: jest.fn((date: string) => date),
+  formatCommentRelativeTime: jest.fn(() => '2시간 전'),
 }));
 
 const { useAuthStore } = jest.requireMock('@/entities/auth') as {
@@ -27,9 +28,8 @@ const { useAuthStore } = jest.requireMock('@/entities/auth') as {
 const mockComment: MeetingComment = {
   id: 1,
   parentId: null,
-  author: { nickname: '\uB9C8\uB8E8', profileUrl: null },
-  content:
-    '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?',
+  author: { nickname: '마루', profileUrl: null },
+  content: '안녕하세요. 이 모임 참여 가능할까요?',
   isDeleted: false,
   createdAt: '03/12',
   likeCount: 3,
@@ -53,25 +53,30 @@ describe('MeetingCommentItem', () => {
     useAuthStore.mockReturnValue({
       isAuthenticated: true,
       user: {
-        name: '\uB9C8\uB8E8',
+        name: '마루',
         image: null,
       },
     });
   });
 
-  it('renders author, content, date, and like count', () => {
+  it('renders author, content, date, relative time, and like count', () => {
     render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
       wrapper: createWrapper(),
     });
 
-    expect(screen.getByText('\uB9C8\uB8E8')).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        '\uC548\uB155\uD558\uC138\uC694. \uC774 \uBAA8\uC784 \uCC38\uC5EC \uAC00\uB2A5\uD560\uAE4C\uC694?'
-      )
-    ).toBeInTheDocument();
+    expect(screen.getByText('마루')).toBeInTheDocument();
+    expect(screen.getByText('안녕하세요. 이 모임 참여 가능할까요?')).toBeInTheDocument();
     expect(screen.getByText('03/12')).toBeInTheDocument();
+    expect(screen.getByText('2시간 전')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
+  });
+
+  it('keeps the root comment avatar at sosotalk size', () => {
+    const { container } = render(<MeetingCommentItem comment={mockComment} meetingId={1} />, {
+      wrapper: createWrapper(),
+    });
+
+    expect(container.querySelector('[class*="h-\\[54px\\]"]')).toBeInTheDocument();
   });
 
   describe('host badge', () => {
@@ -83,7 +88,9 @@ describe('MeetingCommentItem', () => {
         }
       );
 
-      expect(screen.getByText('\uC791\uC131\uC790')).toBeInTheDocument();
+      const badge = screen.getByText('작성자');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveClass('bg-sosoeat-orange-100');
     });
 
     it('does not show the host badge for non-host comments', () => {
@@ -91,7 +98,7 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(screen.queryByText('\uC791\uC131\uC790')).not.toBeInTheDocument();
+      expect(screen.queryByText('작성자')).not.toBeInTheDocument();
     });
   });
 
@@ -101,7 +108,7 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(screen.getByRole('button', { name: '\uB354\uBCF4\uAE30' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '더보기' })).toBeInTheDocument();
     });
 
     it('hides the menu button for other users comments', () => {
@@ -109,9 +116,7 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(
-        screen.queryByRole('button', { name: '\uB354\uBCF4\uAE30', hidden: true })
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: '더보기' })).not.toBeInTheDocument();
     });
   });
 
@@ -121,9 +126,7 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(
-        screen.getByText('\uC0AD\uC81C\uB41C \uB313\uAE00\uC785\uB2C8\uB2E4.')
-      ).toBeInTheDocument();
+      expect(screen.getByText('삭제된 댓글입니다.')).toBeInTheDocument();
     });
 
     it('hides like and reply actions', () => {
@@ -137,8 +140,8 @@ describe('MeetingCommentItem', () => {
         }
       );
 
-      expect(screen.queryByRole('button', { name: '\uC88B\uC544\uC694' })).not.toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: '\uB2F5\uAE00' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: '좋아요' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: '답글' })).not.toBeInTheDocument();
     });
   });
 
@@ -158,7 +161,7 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      await user.click(screen.getByRole('button', { name: '\uC88B\uC544\uC694' }));
+      await user.click(screen.getByRole('button', { name: '좋아요' }));
       jest.advanceTimersByTime(300);
 
       expect(mockMutate).toHaveBeenCalledWith(
@@ -179,9 +182,9 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      await user.click(screen.getByRole('button', { name: '\uC88B\uC544\uC694' }));
-      await user.click(screen.getByRole('button', { name: '\uC88B\uC544\uC694' }));
-      await user.click(screen.getByRole('button', { name: '\uC88B\uC544\uC694' }));
+      await user.click(screen.getByRole('button', { name: '좋아요' }));
+      await user.click(screen.getByRole('button', { name: '좋아요' }));
+      await user.click(screen.getByRole('button', { name: '좋아요' }));
       jest.advanceTimersByTime(300);
 
       expect(mockMutate).toHaveBeenCalledTimes(1);
@@ -195,27 +198,83 @@ describe('MeetingCommentItem', () => {
         { wrapper: createWrapper() }
       );
 
-      expect(container.firstChild?.firstChild).toHaveClass('bg-sosoeat-orange-100');
+      expect(container.querySelector('article')).toHaveClass('bg-sosoeat-orange-100');
     });
 
-    it('renders nested replies', () => {
-      const commentWithReplies: MeetingComment = {
-        ...mockComment,
-        replies: [
-          {
+    it('shows a collapsed reply toggle for top-level comments with replies', () => {
+      render(
+        <MeetingCommentItem
+          comment={{
             ...mockComment,
-            id: 2,
-            parentId: 1,
-            author: { nickname: '\uC774\uC18C\uB77C', profileUrl: null },
-          },
-        ],
-      };
+            replies: [
+              {
+                ...mockComment,
+                id: 2,
+                parentId: 1,
+                author: { nickname: '이소라', profileUrl: null },
+              },
+            ],
+          }}
+          meetingId={1}
+        />,
+        { wrapper: createWrapper() }
+      );
 
-      render(<MeetingCommentItem comment={commentWithReplies} meetingId={1} />, {
-        wrapper: createWrapper(),
-      });
+      expect(screen.getByRole('button', { name: '답글 1개 보기' })).toBeInTheDocument();
+      expect(screen.queryByText('이소라')).not.toBeInTheDocument();
+    });
 
-      expect(screen.getByText('\uC774\uC18C\uB77C')).toBeInTheDocument();
+    it('keeps replies collapsed by default even when my reply exists', () => {
+      render(
+        <MeetingCommentItem
+          comment={{
+            ...mockComment,
+            replies: [
+              {
+                ...mockComment,
+                id: 2,
+                parentId: 1,
+                isMine: true,
+                author: { nickname: '내 답글', profileUrl: null },
+              },
+            ],
+          }}
+          meetingId={1}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      expect(screen.getByRole('button', { name: '답글 1개 보기' })).toBeInTheDocument();
+      expect(screen.queryByText('내 답글')).not.toBeInTheDocument();
+    });
+
+    it('expands and collapses replies with the toggle button', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <MeetingCommentItem
+          comment={{
+            ...mockComment,
+            replies: [
+              {
+                ...mockComment,
+                id: 2,
+                parentId: 1,
+                author: { nickname: '이소라', profileUrl: null },
+              },
+            ],
+          }}
+          meetingId={1}
+        />,
+        { wrapper: createWrapper() }
+      );
+
+      await user.click(screen.getByRole('button', { name: '답글 1개 보기' }));
+      expect(screen.getByText('이소라')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '답글 숨기기' })).toBeInTheDocument();
+
+      await user.click(screen.getByRole('button', { name: '답글 숨기기' }));
+      expect(screen.queryByText('이소라')).not.toBeInTheDocument();
     });
 
     it('shows the reply button only for top-level comments', () => {
@@ -223,7 +282,7 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      expect(screen.getByRole('button', { name: '\uB2F5\uAE00' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '답글' })).toBeInTheDocument();
 
       rerender(
         <QueryClientProvider
@@ -233,7 +292,7 @@ describe('MeetingCommentItem', () => {
         </QueryClientProvider>
       );
 
-      expect(screen.queryByRole('button', { name: '\uB2F5\uAE00' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: '답글' })).not.toBeInTheDocument();
     });
 
     it('clears reply textarea after closing and reopening', async () => {
@@ -243,19 +302,15 @@ describe('MeetingCommentItem', () => {
         wrapper: createWrapper(),
       });
 
-      await user.click(screen.getByRole('button', { name: '\uB2F5\uAE00' }));
+      await user.click(screen.getByRole('button', { name: '답글' }));
 
-      const textarea = screen.getByPlaceholderText(
-        '\uB2F5\uAE00\uC744 \uC785\uB825\uD558\uC138\uC694.'
-      );
+      const textarea = screen.getByPlaceholderText('답글을 입력하세요.');
       await user.type(textarea, 'reply draft');
-      await user.click(screen.getByRole('button', { name: '\uCDE8\uC18C' }));
+      await user.click(screen.getByRole('button', { name: '취소' }));
 
-      await user.click(screen.getByRole('button', { name: '\uB2F5\uAE00' }));
+      await user.click(screen.getByRole('button', { name: '답글' }));
 
-      expect(
-        screen.getByPlaceholderText('\uB2F5\uAE00\uC744 \uC785\uB825\uD558\uC138\uC694.')
-      ).toHaveValue('');
+      expect(screen.getByPlaceholderText('답글을 입력하세요.')).toHaveValue('');
     });
   });
 });
