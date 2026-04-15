@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import * as Sentry from '@sentry/nextjs';
 import { SearchParams } from 'nuqs';
 
 import { getSosoTalkPosts } from '@/entities/post/index.server';
@@ -29,7 +30,19 @@ export default async function SosoTalkPage({ searchParams }: SosoTalkPageProps) 
   const { tab, sort } = sosotalkSearchParamsCache.parse(resolvedSearchParams);
   const queryParams = createSosoTalkMainPageQueryParams(tab, sort);
 
-  const initialData = await getSosoTalkPosts(queryParams).catch(() => null);
+  const initialData = await getSosoTalkPosts(queryParams).catch((error) => {
+    Sentry.captureException(error, {
+      tags: {
+        area: 'sosotalk-list',
+        action: 'load-initial-data',
+      },
+      extra: {
+        queryParams,
+      },
+    });
+
+    return null;
+  });
 
   return (
     <SosoTalkMainPage initialData={initialData ?? undefined} initialTab={tab} initialSort={sort} />

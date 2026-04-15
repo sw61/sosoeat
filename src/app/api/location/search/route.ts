@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import * as Sentry from '@sentry/nextjs';
+
 const REGION1_ABBR: Record<string, string> = {
   서울특별시: '서울',
   부산광역시: '부산',
@@ -53,6 +55,13 @@ export async function GET(request: NextRequest) {
 
   const apiKey = process.env.KAKAO_REST_API_KEY;
   if (!apiKey) {
+    Sentry.captureException(new Error('Missing Kakao REST API key'), {
+      tags: {
+        area: 'location-search',
+        action: 'config',
+        route: '/api/location/search',
+      },
+    });
     return NextResponse.json({ error: '카카오 API 키가 설정되지 않았습니다.' }, { status: 500 });
   }
 
@@ -63,15 +72,53 @@ export async function GET(request: NextRequest) {
     response = await fetch(url, {
       headers: { Authorization: `KakaoAK ${apiKey}` },
     });
-  } catch {
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        area: 'location-search',
+        action: 'fetch-kakao-api',
+        route: '/api/location/search',
+      },
+      extra: {
+        query,
+      },
+    });
     return NextResponse.json({ error: '카카오 API에 연결할 수 없습니다.' }, { status: 503 });
   }
 
   if (!response.ok) {
+    if (response.status >= 500) {
+      Sentry.captureException(new Error('Kakao local API returned a 5xx response'), {
+        tags: {
+          area: 'location-search',
+          action: 'kakao-api-response',
+          route: '/api/location/search',
+        },
+        extra: {
+          query,
+          status: response.status,
+        },
+      });
+    }
     return NextResponse.json({ error: '장소 검색에 실패했습니다.' }, { status: response.status });
   }
 
-  const data: KakaoLocalResponse = await response.json();
+  let data: KakaoLocalResponse;
+  try {
+    data = await response.json();
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        area: 'location-search',
+        action: 'parse-kakao-api-response',
+        route: '/api/location/search',
+      },
+      extra: {
+        query,
+      },
+    });
+    return NextResponse.json({ error: '?μ냼 寃?됱뿉 ?ㅽ뙣?덉뒿?덈떎.' }, { status: 502 });
+  }
 
   const results = data.documents.map((doc) => {
     const baseAddress = doc.road_address_name || doc.address_name;

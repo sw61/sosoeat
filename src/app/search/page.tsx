@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import * as Sentry from '@sentry/nextjs';
 import { startOfDay } from 'date-fns';
 import { SearchParams } from 'nuqs';
 
@@ -50,12 +51,25 @@ export default async function Page({ searchParams }: PageProps) {
   const toApiKeyword = (keyword: typeof queryKeyword) => {
     return keyword === 'all' ? undefined : keyword;
   };
-  const initialData = await getMeetings({
+  const requestParams = {
     dateStart: finalDateStart.toISOString(),
     sortBy,
     sortOrder,
     keyword: toApiKeyword(queryKeyword),
-  }).catch(() => null);
+  };
+  const initialData = await getMeetings(requestParams).catch((error) => {
+    Sentry.captureException(error, {
+      tags: {
+        area: 'search',
+        action: 'load-initial-data',
+      },
+      extra: {
+        requestParams,
+      },
+    });
+
+    return null;
+  });
 
   return (
     <div className="flex w-full flex-col items-center justify-center">

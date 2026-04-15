@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
+import * as Sentry from '@sentry/nextjs';
+
 import type { Meeting } from '@/entities/meeting';
 import { getMeetings } from '@/entities/meeting/index.server';
 import {
@@ -18,6 +20,18 @@ async function getHomeMeetings(params: Parameters<typeof getMeetings>[0]): Promi
     const { data } = await getMeetings(params);
     return data;
   } catch (error) {
+    if (process.env.NODE_ENV === 'production') {
+      Sentry.captureException(error, {
+        tags: {
+          area: 'home',
+          action: 'load-home-meetings',
+        },
+        extra: {
+          params,
+        },
+      });
+    }
+
     if (process.env.NODE_ENV !== 'production') {
       console.error('Failed to load home meetings.', error);
     }
