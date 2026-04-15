@@ -19,11 +19,20 @@ import {
   useMeetingDetail,
 } from '../../model/meeting-detail.queries';
 import { MeetingDetailCard } from '../meeting-detail-card';
+import { useMeetingShare } from '../meeting-detail-card/hooks/use-meeting-share';
 
 import { useMeetingRole } from './hooks/use-meeting-role';
 
 const MeetingEditModal = dynamic(() =>
   import('@/features/meeting-edit').then((m) => m.MeetingEditModal)
+);
+
+const MeetingShareModal = dynamic(
+  () =>
+    import('../meeting-detail-card/_components/meeting-share-modal').then(
+      (m) => m.MeetingShareModal
+    ),
+  { ssr: false }
 );
 
 interface MeetingHeroSectionProps {
@@ -38,6 +47,15 @@ export function MeetingHeroSection({ meetingId }: MeetingHeroSectionProps) {
 
   const { role, status } = useMeetingRole(meeting);
   const { isOpen: isEditOpen, open: openEdit, close: closeEdit } = useModal();
+  const {
+    isShareModalOpen,
+    shareUrl,
+    shareTitle,
+    shareImageUrl,
+    handleShareClick,
+    handleCancelShare,
+    handleCopyShareLink,
+  } = useMeetingShare({ title: meeting.name, imageUrl: meeting.image });
 
   const refreshPageAndMeetingCache = () => {
     void queryClient.invalidateQueries({
@@ -69,9 +87,7 @@ export function MeetingHeroSection({ meetingId }: MeetingHeroSectionProps) {
       ? {
           role: 'host' as const,
           onConfirm: () => confirmMutation.mutate(),
-          onShare: () => {
-            navigator.clipboard.writeText(window.location.href);
-          },
+          onShare: handleShareClick,
           onEdit: openEdit,
           onDelete: () => deleteMutation.mutate(),
           isActionPending,
@@ -119,6 +135,15 @@ export function MeetingHeroSection({ meetingId }: MeetingHeroSectionProps) {
           onSuccess={refreshPageAndMeetingCache}
         />
       )}
+
+      <MeetingShareModal
+        open={isShareModalOpen}
+        title={shareTitle}
+        url={shareUrl}
+        imageUrl={shareImageUrl}
+        onClose={handleCancelShare}
+        onCopy={handleCopyShareLink}
+      />
     </>
   );
 }
