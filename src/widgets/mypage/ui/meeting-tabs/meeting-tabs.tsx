@@ -54,7 +54,9 @@ export function MeetingTabs() {
       {MYPAGE_TABS.map((tab) => (
         <TabsContent key={tab.value} value={tab.value} className="flex w-full flex-1 flex-col">
           {isLoading ? (
-            <div className="py-40 text-center text-sm text-gray-400">불러오는 중...</div>
+            <div className="flex flex-1 items-center justify-center text-sm text-gray-400">
+              불러오는 중...
+            </div>
           ) : cards.length === 0 ? (
             <MeetingTabsEmpty />
           ) : (
