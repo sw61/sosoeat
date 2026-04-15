@@ -45,18 +45,14 @@ export function MeetingTabs() {
 
   return (
     <Tabs
-      className="mx-auto w-full max-w-285 p-6"
+      className="mx-auto flex w-full max-w-285 flex-1 flex-col p-6"
       value={activeTab}
       onValueChange={(v) => setActiveTab(v as TabValue)}
     >
       <MeetingTabsList />
 
       {MYPAGE_TABS.map((tab) => (
-        <TabsContent
-          key={tab.value}
-          value={tab.value}
-          className="w-full items-center justify-center"
-        >
+        <TabsContent key={tab.value} value={tab.value} className="flex w-full flex-1 flex-col">
           {isLoading ? (
             <div className="py-40 text-center text-sm text-gray-400">불러오는 중...</div>
           ) : cards.length === 0 ? (
