@@ -1,4 +1,5 @@
 import {
+  type InfiniteData,
   queryOptions,
   useInfiniteQuery,
   useMutation,
@@ -109,6 +110,12 @@ const SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX = ['sosotalk-post-infinite-list']
 type SosoTalkLikeMutationContext = {
   previousDetail?: GetSosoTalkPostDetailResponse;
   previousLists: Array<readonly [readonly unknown[], GetSosoTalkPostListResponse | undefined]>;
+  previousInfiniteLists: Array<
+    readonly [
+      readonly unknown[],
+      InfiniteData<GetSosoTalkPostListResponse, string | undefined> | undefined,
+    ]
+  >;
 };
 
 const updateSosoTalkPostDetailLikeCache = (
@@ -150,6 +157,23 @@ const updateSosoTalkPostListLikeCache = (
   };
 };
 
+const updateSosoTalkPostInfiniteListLikeCache = (
+  previousList: InfiniteData<GetSosoTalkPostListResponse, string | undefined> | undefined,
+  postId: number,
+  likeDiff: number
+): InfiniteData<GetSosoTalkPostListResponse, string | undefined> | undefined => {
+  if (!previousList) {
+    return previousList;
+  }
+
+  return {
+    ...previousList,
+    pages: previousList.pages.map(
+      (page) => updateSosoTalkPostListLikeCache(page, postId, likeDiff)!
+    ),
+  };
+};
+
 const invalidateSosoTalkListQueries = (queryClient: ReturnType<typeof useQueryClient>) =>
   Promise.all([
     queryClient.invalidateQueries({ queryKey: SOSOTALK_POST_LIST_QUERY_PREFIX }),
@@ -187,6 +211,10 @@ const restoreSosoTalkLikeCache = (
   context?.previousLists.forEach(([queryKey, previousList]) => {
     queryClient.setQueryData(queryKey, previousList);
   });
+
+  context?.previousInfiniteLists.forEach(([queryKey, previousList]) => {
+    queryClient.setQueryData(queryKey, previousList);
+  });
 };
 
 const createSosoTalkLikeMutation = (
@@ -202,6 +230,7 @@ const createSosoTalkLikeMutation = (
         await Promise.all([
           queryClient.cancelQueries({ queryKey: sosotalkQueryKeys.postDetail(postId) }),
           queryClient.cancelQueries({ queryKey: SOSOTALK_POST_LIST_QUERY_PREFIX }),
+          queryClient.cancelQueries({ queryKey: SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX }),
         ]);
 
         const previousDetail = queryClient.getQueryData<GetSosoTalkPostDetailResponse>(
@@ -209,6 +238,11 @@ const createSosoTalkLikeMutation = (
         );
         const previousLists = queryClient.getQueriesData<GetSosoTalkPostListResponse>({
           queryKey: SOSOTALK_POST_LIST_QUERY_PREFIX,
+        });
+        const previousInfiniteLists = queryClient.getQueriesData<
+          InfiniteData<GetSosoTalkPostListResponse, string | undefined>
+        >({
+          queryKey: SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX,
         });
 
         queryClient.setQueryData<GetSosoTalkPostDetailResponse>(
@@ -220,10 +254,16 @@ const createSosoTalkLikeMutation = (
           (currentList) =>
             updateSosoTalkPostListLikeCache(currentList, postId, nextIsLiked ? 1 : -1)
         );
+        queryClient.setQueriesData<InfiniteData<GetSosoTalkPostListResponse, string | undefined>>(
+          { queryKey: SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX },
+          (currentList) =>
+            updateSosoTalkPostInfiniteListLikeCache(currentList, postId, nextIsLiked ? 1 : -1)
+        );
 
         return {
           previousDetail,
           previousLists,
+          previousInfiniteLists,
         };
       },
       onError: (_error, postId, context) => {
