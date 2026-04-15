@@ -39,3 +39,6 @@ export const MAIN_PAGE_CARD_HOST_IMAGE_CLASS =
   'border-sosoeat-gray-300 size-8 shrink-0 overflow-hidden rounded-full border object-cover';
 
 export const MAIN_PAGE_CARD_HOST_NAME_CLASS = 'text-base leading-6 font-semibold text-[#6B7280]';
+
+export const MAIN_PAGE_CARD_CLOSED_OVERLAY_CLASS =
+  'absolute inset-0 z-20 flex items-center justify-center bg-black/50 text-white text-base text-2xl font-semibold';

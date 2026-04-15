@@ -220,7 +220,23 @@ describe('MainPageCard', () => {
       const meeting = createMockMeeting({ registrationEnd: '2025-03-19T09:00:00+09:00' });
       render(<MainPageCard meeting={meeting} />);
 
-      expect(screen.getByText('마감 종료')).toBeInTheDocument();
+      expect(screen.getByTestId('closed-badge')).toBeInTheDocument();
+    });
+
+    it('마감된 모임일 때 마감 종료 오버레이가 표시된다', () => {
+      (useTimeFormatter as jest.Mock).mockReturnValue({
+        contentText: '',
+        isEnded: true,
+        showCountdown: false,
+      });
+      const meeting = createMockMeeting({ registrationEnd: '2025-03-19T09:00:00+09:00' });
+      const card = render(<MainPageCard meeting={meeting} />);
+
+      const overlay = card.getByTestId('closed-overlay');
+      expect(overlay).toBeInTheDocument();
+      expect(overlay).toHaveClass(
+        'absolute inset-0 z-20 flex items-center justify-center bg-black/50 text-white text-base text-2xl font-semibold'
+      );
     });
 
     it('마감 전 모임일 때 남은 시간이 표시된다', async () => {

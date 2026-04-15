@@ -14,5 +14,27 @@
       }
     }
   },
-  "model": "lmstudio/lmstudio-community/Qwen3.5-9B-GGUF"
+  "model": "lmstudio/lmstudio-community/Qwen3.5-9B-GGUF",
+  "mcp": {
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "C:\\CODE\\sosoeat"],
+      "enabled": true,
+      "timeout": 10000
+    }
+  },
+  "permission": {
+    "external_directory": {
+      "C:\\CODE\\sosoeat\\**": "allow"
+    },
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
+    },
+    "edit": {
+      "C:\\CODE\\sosoeat\\**": "allow"
+    }
+  }
 }
