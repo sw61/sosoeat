@@ -8,7 +8,17 @@ import { DeadlineBadge } from './deadline-badge';
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, ...rest }: { src: string; alt: string; [key: string]: unknown }) => (
+  default: ({
+    src,
+    alt,
+    unoptimized: _unoptimized,
+    ...rest
+  }: {
+    src: string;
+    alt: string;
+    unoptimized?: boolean;
+    [key: string]: unknown;
+  }) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} data-testid="deadline-badge-icon" {...rest} />
   ),

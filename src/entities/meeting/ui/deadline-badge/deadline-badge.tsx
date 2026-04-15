@@ -21,22 +21,29 @@ const variantBadgeClassName = {
 export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineBadgeProps) {
   const timeFormatterResult = useTimeFormatter(registrationEnd);
   if (!timeFormatterResult) return null;
-  const {
-    contentText,
-    isEnded,
-    showCountdown,
-  }: { contentText: string; isEnded: boolean; showCountdown: boolean } = timeFormatterResult ?? {
-    contentText: '',
-    isEnded: false,
-    showCountdown: false,
-  };
+  const { contentText, isEnded, showCountdown } = timeFormatterResult;
+  const iconSrc = showCountdown
+    ? variant === 'groupEat'
+      ? '/icons/alarm-clock-eat.svg'
+      : '/icons/alarm-clock-buy.svg'
+    : variant === 'groupEat'
+      ? '/icons/group-eat-calendar.svg'
+      : '/icons/group-buy-calendar.svg';
 
   return (
     <Badge
       variant="outline"
       className={cn(DEADLINE_BADGE_CLASS, variantBadgeClassName[variant], className)}
     >
-      <div className={'h-5 overflow-hidden'}>
+      <div className="flex h-5 w-full gap-1 overflow-hidden">
+        <Image
+          unoptimized
+          src={iconSrc}
+          alt=""
+          width={20}
+          height={20}
+          className="size-5 shrink-0"
+        />
         <LazyMotion features={loadFeatures}>
           <AnimatePresence mode="wait" initial={false}>
             <m.span
@@ -45,33 +52,8 @@ export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineB
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
-              className="block flex w-full gap-1"
+              className="block w-full"
             >
-              {showCountdown ? (
-                <Image
-                  src={
-                    variant === 'groupEat'
-                      ? '/icons/alarm-clock-eat.svg'
-                      : '/icons/alarm-clock-buy.svg'
-                  }
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="size-5 shrink-0"
-                />
-              ) : (
-                <Image
-                  src={
-                    variant === 'groupEat'
-                      ? '/icons/group-eat-calendar.svg'
-                      : '/icons/group-buy-calendar.svg'
-                  }
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="size-5 shrink-0"
-                />
-              )}
               <div className="w-full truncate">{isEnded ? '마감 완료' : contentText}</div>
             </m.span>
           </AnimatePresence>

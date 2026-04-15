@@ -1,3 +1,4 @@
+export { getDefaultSearchDateStart, getDefaultSearchDateStartIso } from './model/search-date';
 export { searchParamsCache } from './model/search-param';
 export { useSearchInfiniteOptions } from './model/use-search-infinite-options';
 export { default as useSearchPage } from './model/use-search-page';

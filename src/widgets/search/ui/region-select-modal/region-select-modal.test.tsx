@@ -196,6 +196,76 @@ describe('RegionSelectModal', () => {
     expect(dialog).toHaveClass('region-modal-test-class');
   });
 
+  it('districts가 가나다 역순으로 주어져도 드롭다운 항목이 가나다 순으로 렌더된다', async () => {
+    const user = userEvent.setup();
+    const unsortedRegions = [
+      {
+        id: 'seoul',
+        name: '서울',
+        nameEn: 'Seoul',
+        districts: ['중구', '강남구', '노원구', '강동구'],
+      },
+    ];
+
+    render(
+      <RegionSelectModal
+        trigger={<Button type="button">열기</Button>}
+        title="지역 선택"
+        regionCascade={{ regions: unsortedRegions }}
+        dropdownSub={{
+          data: { label: '_', options: [] },
+          value: null,
+          onChange: jest.fn(),
+        }}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: '열기' }));
+    await screen.findByRole('dialog');
+
+    await user.click(screen.getByRole('button', { name: '서울' }));
+
+    const items = await screen.findAllByRole('menuitemcheckbox');
+    const itemNames = items.map((el) => el.textContent ?? '');
+
+    expect(itemNames).toEqual(['강남구', '강동구', '노원구', '중구']);
+  });
+
+  it('여러 시도의 districts가 각각 가나다 순으로 정렬된다', async () => {
+    const user = userEvent.setup();
+    const unsortedRegions = [
+      {
+        id: 'gyeonggi',
+        name: '경기',
+        nameEn: 'Gyeonggi',
+        districts: ['화성시', '가평군', '남양주시'],
+      },
+    ];
+
+    render(
+      <RegionSelectModal
+        trigger={<Button type="button">열기</Button>}
+        title="지역 선택"
+        regionCascade={{ regions: unsortedRegions }}
+        dropdownSub={{
+          data: { label: '_', options: [] },
+          value: null,
+          onChange: jest.fn(),
+        }}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: '열기' }));
+    await screen.findByRole('dialog');
+
+    await user.click(screen.getByRole('button', { name: '경기' }));
+
+    const items = await screen.findAllByRole('menuitemcheckbox');
+    const itemNames = items.map((el) => el.textContent ?? '');
+
+    expect(itemNames).toEqual(['가평군', '남양주시', '화성시']);
+  });
+
   it('regionCascade에서 시도를 누르면 구 선택 드롭다운 메뉴가 열린다', async () => {
     const user = userEvent.setup();
     const cascadeRegions = [

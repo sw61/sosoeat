@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { startOfDay } from 'date-fns';
 import {
@@ -18,6 +18,7 @@ import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
 import type { MeetingFilterBarProps } from '../ui/meeting-filter-bar';
 import type { RegionSelection } from '../ui/region-select-modal';
 
+import { getDefaultSearchDateStartIso } from './search-date';
 import { useSearchInfiniteOptions } from './use-search-infinite-options';
 
 type DateChangeParams = {
@@ -27,7 +28,27 @@ type DateChangeParams = {
 
 const MEETINGS_PAGE_SIZE = 10;
 
-const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | null) => {
+type SearchOptionSnapshot = {
+  dateStart: string;
+  dateEnd?: string;
+  keyword?: string;
+  sortBy?: 'participantCount' | 'dateTime' | 'registrationEnd';
+  sortOrder?: 'asc' | 'desc';
+  type?: 'groupEat' | 'groupBuy';
+};
+
+const useSearchPage = (
+  initialData: Awaited<ReturnType<typeof getMeetings>> | null,
+  initialDefaultDateStartIso?: string
+) => {
+  const fallbackDefaultDateStartIsoRef = useRef(
+    initialDefaultDateStartIso ?? getDefaultSearchDateStartIso()
+  );
+  const [defaultDateStartIso, setDefaultDateStartIso] = useState(
+    fallbackDefaultDateStartIsoRef.current
+  );
+  const hasMountedRef = useRef(false);
+
   const [regionCommitted, setRegionCommitted] = useQueryState<RegionSelection>(
     'regionCommitted',
     parseAsJson<RegionSelection>((value) => {
@@ -99,6 +120,19 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     dateEnd == null
       ? undefined
       : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1).toISOString();
+  const resolvedDefaultDateStartIso = defaultDateStartIso ?? fallbackDefaultDateStartIsoRef.current;
+  const resolvedDefaultDateStart = new Date(resolvedDefaultDateStartIso);
+
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
+    if (dateStart != null) return;
+
+    setDefaultDateStartIso(getDefaultSearchDateStartIso());
+  }, [dateStart, dateEndExclusiveIso, region, searchQuery, sortBy, sortOrder, typeFilter]);
 
   const options: Omit<TeamIdMeetingsGetRequest, 'teamId' | 'region'> & {
     region?: string | string[];
@@ -109,7 +143,7 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
         ? undefined
         : (typeFilter as 'groupEat' | 'groupBuy'),
     region,
-    dateStart: dateStart ?? startOfDay(new Date()),
+    dateStart: dateStart ?? resolvedDefaultDateStart,
     dateEnd: dateEndExclusiveIso == null ? undefined : new Date(dateEndExclusiveIso),
     sortBy:
       sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
@@ -117,11 +151,42 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     keyword: searchQuery === '' ? undefined : searchQuery,
   };
 
+  const currentOptionSnapshot = useMemo<SearchOptionSnapshot>(
+    () => ({
+      dateStart: (dateStart ?? resolvedDefaultDateStart).toISOString(),
+      dateEnd: dateEndExclusiveIso,
+      keyword: searchQuery === '' ? undefined : searchQuery,
+      sortBy:
+        sortBy === null
+          ? undefined
+          : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
+      sortOrder: sortOrder === null ? undefined : (sortOrder as 'asc' | 'desc'),
+      type:
+        typeFilter === 'all' || typeFilter == null
+          ? undefined
+          : (typeFilter as 'groupEat' | 'groupBuy'),
+    }),
+    [
+      dateEndExclusiveIso,
+      dateStart,
+      resolvedDefaultDateStart,
+      searchQuery,
+      sortBy,
+      sortOrder,
+      typeFilter,
+    ]
+  );
+  const initialOptionSnapshotRef = useRef<SearchOptionSnapshot>(currentOptionSnapshot);
+  const shouldUseInitialData =
+    initialData != null &&
+    region == null &&
+    JSON.stringify(initialOptionSnapshotRef.current) === JSON.stringify(currentOptionSnapshot);
+
   const isMulti = Array.isArray(options.region) && options.region.length > 1;
 
   const singleResult = useSearchInfiniteOption(
     options as Omit<TeamIdMeetingsGetRequest, 'teamId'>,
-    initialData ?? undefined
+    shouldUseInitialData ? initialData : undefined
   );
   const multiResult = useSearchInfiniteOptions(options);
 

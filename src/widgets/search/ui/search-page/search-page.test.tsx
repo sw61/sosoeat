@@ -13,6 +13,8 @@ import { useSearchPage } from '../..';
 import SearchPage from './search-page';
 
 const NuqsWrapper = withNuqsTestingAdapter({ searchParams: {} });
+const DEFAULT_DATE_START_ISO = '2026-04-15T09:00:00.000Z';
+
 const renderWithNuqs = (ui: React.ReactElement) => {
   const queryClient = new QueryClient();
   return render(ui, {
@@ -33,9 +35,9 @@ const renderHookWithNuqs = <T,>(hook: () => T) =>
     ),
   });
 
-export const mockHost: Host = {
+const mockHost: Host = {
   id: 1,
-  name: '김소소',
+  name: '테스트호스트',
   image: 'https://example.com/images/host-1.jpg',
 };
 
@@ -45,7 +47,7 @@ const createMockMeeting = (overrides: Partial<MeetingWithHost> = {}): MeetingWit
   name: '강남 점심 같이 먹어요',
   type: 'groupEat',
   region: '서울 강남구',
-  address: '서울특별시 강남구 테헤란로 123',
+  address: '서울시 강남구 테헤란로 123',
   latitude: 37.498095,
   longitude: 127.02761,
   dateTime: new Date('2026-04-15T12:00:00'),
@@ -53,7 +55,7 @@ const createMockMeeting = (overrides: Partial<MeetingWithHost> = {}): MeetingWit
   capacity: 6,
   participantCount: 3,
   image: 'https://example.com/images/meeting-1.jpg',
-  description: '강남역 근처 맛집에서 함께 점심 드실 분 모집합니다.',
+  description: '강남에서 함께 점심 먹을 분을 모집합니다.',
   canceledAt: new Date('1970-01-01T00:00:00'),
   confirmedAt: new Date('2026-04-10T10:00:00'),
   hostId: 1,
@@ -67,17 +69,15 @@ const createMockMeeting = (overrides: Partial<MeetingWithHost> = {}): MeetingWit
   ...overrides,
 });
 
-export const mockMeeting = createMockMeeting();
-
-export const mockMeetingList: MeetingList = {
+const mockMeetingList: MeetingList = {
   data: [
     createMockMeeting({ id: 1, name: '강남 점심 같이 먹어요', type: 'groupEat' }),
     createMockMeeting({
       id: 2,
-      name: '홍대 공동구매 모집',
+      name: '생필품 공동구매 모임',
       type: 'groupBuy',
       region: '서울 마포구',
-      address: '서울특별시 마포구 홍익로 456',
+      address: '서울시 마포구 월드컵로 456',
       participantCount: 5,
       capacity: 10,
       isFavorited: true,
@@ -98,7 +98,7 @@ export const mockMeetingList: MeetingList = {
   hasMore: false,
 };
 
-export const mockEmptyMeetingList: MeetingList = {
+const mockEmptyMeetingList: MeetingList = {
   data: [],
   nextCursor: '',
   hasMore: false,
@@ -147,40 +147,42 @@ describe('SearchPage', () => {
     });
   });
 
-  it('isLoading일때 SearchSkeleton을 렌더링해야 한다', () => {
+  it('isLoading일 때 SearchSkeleton을 노출한다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       data: undefined,
       isLoading: true,
     });
-    const { result } = renderHookWithNuqs(() => useSearchPage(null));
+    const { result } = renderHookWithNuqs(() => useSearchPage(null, DEFAULT_DATE_START_ISO));
     expect(result.current.isLoading).toBe(true);
   });
 
-  it('isError일때 에러 메시지를 렌더링해야 한다', () => {
+  it('isError일 때 에러 상태를 반환한다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       isError: true,
     });
-    const { result } = renderHookWithNuqs(() => useSearchPage(null));
+    const { result } = renderHookWithNuqs(() => useSearchPage(null, DEFAULT_DATE_START_ISO));
     expect(result.current.isError).toBe(true);
   });
 
-  it('meetingData=[] 일때 Empty Page가 보여야한다.', () => {
+  it('meetingData가 비어 있으면 Empty Page를 보여준다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       data: mockInfiniteData(mockEmptyMeetingList),
     });
-    renderWithNuqs(<SearchPage initialData={null} />);
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
     expect(screen.getAllByAltText('Empty Page')).toHaveLength(2);
   });
 
-  it('meetingData가 있을 때 검색 결과를 렌더링해야 한다', () => {
-    const { result } = renderHookWithNuqs(() => useSearchPage(null));
+  it('meetingData가 있으면 검색 결과를 반환한다', () => {
+    const { result } = renderHookWithNuqs(() => useSearchPage(null, DEFAULT_DATE_START_ISO));
     expect(result.current.meetingData).toEqual(mockMeetingList.data);
   });
 
-  it('isFetching=true일 때 SearchSkeleton이 보여야 한다', () => {
+  it('isFetching 상태면 skeleton이 보인다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       data: undefined,
@@ -192,39 +194,47 @@ describe('SearchPage', () => {
       inView: true,
     });
 
-    renderWithNuqs(<SearchPage initialData={null} />);
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
     const skeletons = document.querySelectorAll('.animate-pulse');
     expect(skeletons.length).toBeGreaterThan(0);
   });
 
-  it('hasNextPage=false일 때 "더 이상 모임이 없습니다" 텍스트가 보여야 한다', () => {
+  it('다음 페이지가 없으면 종료 문구를 보여준다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       hasNextPage: false,
       isFetching: false,
     });
-    renderWithNuqs(<SearchPage initialData={null} />);
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
     expect(screen.getByText('더 이상 모임이 없습니다.')).toBeInTheDocument();
   });
 
-  it('hasNextPage=true이고 isFetching=false일 때 "더 이상 모임이 없습니다" 텍스트가 보이지 않아야 한다', () => {
+  it('다음 페이지가 있으면 종료 문구를 숨긴다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       hasNextPage: true,
       isFetching: false,
     });
 
-    renderWithNuqs(<SearchPage initialData={null} />);
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
     expect(screen.queryByText('더 이상 모임이 없습니다.')).not.toBeInTheDocument();
   });
 
-  it('비로그인 + 모임만들기 버튼 클릭 시 로그인 모달이 열려야 한다', () => {
+  it('비로그인 상태에서 모임 만들기 버튼을 누르면 로그인 모달 상태가 열린다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       data: mockInfiniteData(mockEmptyMeetingList),
     });
 
-    renderWithNuqs(<SearchPage initialData={null} />);
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
 
     const createMeetingButton = screen.getByRole('button', { name: /모임 만들기/i });
     fireEvent.click(createMeetingButton);
@@ -232,7 +242,7 @@ describe('SearchPage', () => {
     expect(useAuthStore.getState().isLoginRequired).toBe(true);
   });
 
-  it('로그인 + 모임만들기 버튼 클릭 시 모임 생성 모달이 열려야한다.', () => {
+  it('로그인 상태에서 모임 만들기 버튼을 누르면 모임 생성 모달이 열린다', () => {
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       ...defaultInfiniteReturn,
       data: mockInfiniteData(mockEmptyMeetingList),
@@ -248,7 +258,9 @@ describe('SearchPage', () => {
       },
     });
 
-    renderWithNuqs(<SearchPage initialData={null} />);
+    renderWithNuqs(
+      <SearchPage initialData={null} initialDefaultDateStartIso={DEFAULT_DATE_START_ISO} />
+    );
 
     const createMeetingButton = screen.getByRole('button', { name: /모임 만들기/i });
     fireEvent.click(createMeetingButton);
