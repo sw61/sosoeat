@@ -41,4 +41,4 @@ export const MAIN_PAGE_CARD_HOST_IMAGE_CLASS =
 export const MAIN_PAGE_CARD_HOST_NAME_CLASS = 'text-base leading-6 font-semibold text-[#6B7280]';
 
 export const MAIN_PAGE_CARD_CLOSED_OVERLAY_CLASS =
-  'absolute inset-0 z-20 flex items-center justify-center bg-black/50 text-white text-base text-2xl font-semibold';
+  'absolute inset-0 z-20 flex items-center justify-center bg-black/50 text-white text-2xl font-semibold';
