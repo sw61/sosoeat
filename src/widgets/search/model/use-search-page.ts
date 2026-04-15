@@ -188,7 +188,7 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     setSortOrder(sortOrder);
   };
 
-  const isSearchPending = inputValue !== searchQuery;
+  const isSearchPending = searchQuery !== '' && inputValue === '';
 
   return {
     meetingData,
