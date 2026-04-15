@@ -188,6 +188,8 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     setSortOrder(sortOrder);
   };
 
+  const isSearchPending = inputValue !== searchQuery;
+
   return {
     meetingData,
     handleRegionChange,
@@ -208,6 +210,7 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     isFetchingNextPage,
     inputValue,
     handleSearchQueryChange,
+    isSearchPending,
   };
 };
 
