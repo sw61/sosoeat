@@ -54,6 +54,12 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
   const isPendingRef = useRef(false);
   const hasUserInteractedRef = useRef(false);
 
+  // meetingId가 변경되면 상호작용 상태를 초기화 (컴포넌트 재사용 대응)
+  useEffect(() => {
+    hasUserInteractedRef.current = false;
+    committedRef.current = initialIsFavorited;
+  }, [meetingId]);
+
   // 사용자가 아직 상호작용하지 않은 상태에서 initialIsFavorited가 변경되면 캐시를 동기화
   useEffect(() => {
     if (!hasUserInteractedRef.current) {
