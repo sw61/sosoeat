@@ -50,7 +50,7 @@ export function CommentInput({
   return (
     <div className={cn('flex items-center gap-3 sm:gap-4', className)}>
       {showAvatar ? (
-        <Avatar size="default" className="h-[54px] w-[54px] shrink-0">
+        <Avatar size="default" className="size-10 shrink-0 md:size-[54px]">
           <AvatarImage src={currentUserImageUrl} alt={currentUserName} />
           <AvatarFallback className="text-sm font-semibold">
             {currentUserName.slice(0, 1)}
