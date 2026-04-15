@@ -10,12 +10,13 @@ interface BestSosotalkCarouselProps {
   posts: SosoTalkPostCardItem[];
 }
 
+const DRAG_THRESHOLD_PX = 10;
+
 export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rafRef = useRef<number | null>(null);
 
-  const isDragging = useRef(false);
+  const isPointerDown = useRef(false);
   const startX = useRef(0);
   const startScrollLeft = useRef(0);
   const hasDragged = useRef(false);
@@ -23,19 +24,6 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-
-    const showScrollbar = () => {
-      el.style.setProperty('--scrollbar-color', 'var(--color-gray-300)');
-    };
-    const hideScrollbar = () => {
-      el.style.setProperty('--scrollbar-color', 'transparent');
-    };
-
-    const handleScroll = () => {
-      showScrollbar();
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-      scrollTimeoutRef.current = setTimeout(hideScrollbar, 800);
-    };
 
     const handleWheel = (e: WheelEvent) => {
       if (el.scrollWidth <= el.clientWidth) return;
@@ -50,7 +38,19 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
     };
 
     const handlePointerDown = (e: PointerEvent) => {
-      isDragging.current = true;
+      const target = e.target as HTMLElement | null;
+
+      if (target?.closest('a, button')) {
+        hasDragged.current = false;
+        return;
+      }
+
+      if (!e.isPrimary || e.button !== 0 || el.scrollWidth <= el.clientWidth) {
+        hasDragged.current = false;
+        return;
+      }
+
+      isPointerDown.current = true;
       hasDragged.current = false;
       startX.current = e.clientX;
       startScrollLeft.current = el.scrollLeft;
@@ -58,44 +58,57 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
     };
 
     const handlePointerMove = (e: PointerEvent) => {
-      if (!isDragging.current) return;
+      if (!isPointerDown.current) return;
+
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         const delta = startX.current - e.clientX;
-        if (Math.abs(delta) > 4) hasDragged.current = true;
+
+        if (Math.abs(delta) <= DRAG_THRESHOLD_PX) {
+          return;
+        }
+
+        hasDragged.current = true;
         el.scrollLeft = startScrollLeft.current + delta;
       });
     };
 
-    const handlePointerUp = (e: PointerEvent) => {
-      isDragging.current = false;
-      el.releasePointerCapture(e.pointerId);
-    };
+    const handlePointerEnd = (e: PointerEvent) => {
+      if (!isPointerDown.current) return;
 
-    const handleClickCapture = (e: MouseEvent) => {
-      if (hasDragged.current) {
-        e.preventDefault();
-        hasDragged.current = false;
+      isPointerDown.current = false;
+
+      if (el.hasPointerCapture(e.pointerId)) {
+        el.releasePointerCapture(e.pointerId);
       }
     };
 
-    el.addEventListener('scroll', handleScroll, { passive: true });
+    const handleClickCapture = (e: MouseEvent) => {
+      if (!hasDragged.current) {
+        return;
+      }
+
+      e.preventDefault();
+      e.stopPropagation();
+      hasDragged.current = false;
+    };
+
     el.addEventListener('wheel', handleWheel, { passive: false });
     el.addEventListener('dragstart', handleDragStart);
     el.addEventListener('pointerdown', handlePointerDown);
     el.addEventListener('pointermove', handlePointerMove);
-    el.addEventListener('pointerup', handlePointerUp);
+    el.addEventListener('pointerup', handlePointerEnd);
+    el.addEventListener('pointercancel', handlePointerEnd);
     el.addEventListener('click', handleClickCapture, { capture: true });
 
     return () => {
-      el.removeEventListener('scroll', handleScroll);
       el.removeEventListener('wheel', handleWheel);
       el.removeEventListener('dragstart', handleDragStart);
       el.removeEventListener('pointerdown', handlePointerDown);
       el.removeEventListener('pointermove', handlePointerMove);
-      el.removeEventListener('pointerup', handlePointerUp);
+      el.removeEventListener('pointerup', handlePointerEnd);
+      el.removeEventListener('pointercancel', handlePointerEnd);
       el.removeEventListener('click', handleClickCapture, { capture: true });
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -103,21 +116,23 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
   return (
     <div
       ref={scrollRef}
-      className="flex cursor-grab gap-[18px] overflow-x-auto px-4 pb-2 select-none [scrollbar-color:var(--scrollbar-color,transparent)_transparent] [scrollbar-width:thin] active:cursor-grabbing [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[--scrollbar-color,transparent]"
+      className="-mt-0.5 overflow-x-auto px-4 pt-0.5 pb-2 select-none [scrollbar-color:var(--color-gray-300)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      {posts.map((post) => (
-        <SosoTalkCardCompact
-          key={post.id}
-          id={post.id}
-          title={post.title}
-          imageUrl={post.imageUrl}
-          authorName={post.authorName}
-          authorImageUrl={post.authorImageUrl}
-          likeCount={post.likeCount}
-          commentCount={post.commentCount}
-          createdAt={post.createdAt}
-        />
-      ))}
+      <div className="flex min-w-max cursor-grab gap-[18px] active:cursor-grabbing">
+        {posts.map((post) => (
+          <SosoTalkCardCompact
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            imageUrl={post.imageUrl}
+            authorName={post.authorName}
+            authorImageUrl={post.authorImageUrl}
+            likeCount={post.likeCount}
+            commentCount={post.commentCount}
+            createdAt={post.createdAt}
+          />
+        ))}
+      </div>
     </div>
   );
 }

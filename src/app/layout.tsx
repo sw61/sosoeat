@@ -11,6 +11,7 @@ import { Toaster } from '@/shared/ui/sonner';
 import { Footer } from '@/widgets/footer';
 import { NavigationBar } from '@/widgets/navigation-bar';
 
+import { FontLoader } from './font-loader';
 import { Providers } from './providers';
 
 import './globals.css';
@@ -56,16 +57,10 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link
-          rel="preload"
-          href="/fonts/PretendardVariable.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
+        <FontLoader />
       </head>
       <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
-        <Script src="https://accounts.google.com/gsi/client" strategy="beforeInteractive" />
+        <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
         <NuqsAdapter>
           <Providers initialUser={initialUser}>
             <NavigationBar

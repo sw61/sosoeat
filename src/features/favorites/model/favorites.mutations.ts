@@ -16,21 +16,21 @@ export const useToggleFavorite = () => {
     mutationFn: ({ meetingId, isFavorited }: { meetingId: number; isFavorited: boolean }) =>
       isFavorited ? favoritesApi.favoritePost(meetingId) : favoritesApi.favoriteDelete(meetingId),
     onMutate: async ({ meetingId, isFavorited }) => {
-      await queryClient.cancelQueries({ queryKey: favoriteKeys.count() });
-      await queryClient.cancelQueries({ queryKey: favoriteKeys.status(meetingId) });
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: favoriteKeys.count() }),
+        queryClient.cancelQueries({ queryKey: favoriteKeys.list() }),
+      ]);
       const previousCount = queryClient.getQueryData<number>(favoriteKeys.count());
-      const previousStatus = queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId));
       queryClient.setQueryData(favoriteKeys.count(), (prev: number = 0) =>
         isFavorited ? prev + 1 : Math.max(0, prev - 1)
       );
-      return { previousCount, previousStatus, meetingId };
+      return { previousCount, meetingId };
     },
     onError: (_err, _vars, context) => {
-      queryClient.setQueryData(favoriteKeys.status(context!.meetingId), context?.previousStatus);
       queryClient.setQueryData(favoriteKeys.count(), context?.previousCount);
+      queryClient.invalidateQueries({ queryKey: favoriteKeys.list() });
     },
-    onSuccess: (_data, { meetingId, isFavorited }) => {
-      queryClient.setQueryData(favoriteKeys.status(meetingId), isFavorited);
+    onSuccess: () => {
       return Promise.all([
         queryClient.invalidateQueries({ queryKey: favoriteKeys.count() }),
         queryClient.invalidateQueries({ queryKey: favoriteKeys.list() }),
@@ -53,9 +53,48 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
   const queryClient = useQueryClient();
   const { isAuthenticated, setLoginRequired } = useAuthStore();
 
-  // 서버에 마지막으로 커밋된 상태
   const committedRef = useRef(initialIsFavorited);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isPendingRef = useRef(false);
+  const hasUserInteractedRef = useRef(false);
+
+  // meetingId가 변경되면 상호작용 상태를 초기화 (컴포넌트 재사용 대응)
+  useEffect(() => {
+    hasUserInteractedRef.current = false;
+    committedRef.current = initialIsFavorited;
+  }, [meetingId]);
+
+  // 사용자가 아직 상호작용하지 않은 상태에서 initialIsFavorited가 변경되면 캐시를 동기화
+  useEffect(() => {
+    if (!hasUserInteractedRef.current) {
+      queryClient.setQueryData(favoriteKeys.status(meetingId), initialIsFavorited);
+      committedRef.current = initialIsFavorited;
+    }
+  }, [initialIsFavorited, meetingId, queryClient]);
+
+  const sendRequest = (targetState: boolean) => {
+    isPendingRef.current = true;
+    toggleMutate(
+      { meetingId, isFavorited: targetState },
+      {
+        onSuccess: () => {
+          committedRef.current = targetState;
+          isPendingRef.current = false;
+          const currentUI =
+            queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId)) ??
+            committedRef.current;
+          if (currentUI !== committedRef.current) {
+            sendRequest(currentUI);
+          }
+        },
+        onError: () => {
+          isPendingRef.current = false;
+          hasUserInteractedRef.current = false;
+          queryClient.setQueryData(favoriteKeys.status(meetingId), committedRef.current);
+        },
+      }
+    );
+  };
 
   const toggleFavorite = () => {
     if (!isAuthenticated) {
@@ -63,34 +102,27 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
       return;
     }
 
-    // 로컬 UI만 즉시 토글
+    hasUserInteractedRef.current = true;
     const nextLocalState = !queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId));
     queryClient.setQueryData(favoriteKeys.status(meetingId), nextLocalState);
 
-    // 기존 타이머 취소 후 재설정
+    if (isPendingRef.current) {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = null;
+      return;
+    }
+
     if (timerRef.current) clearTimeout(timerRef.current);
 
     timerRef.current = setTimeout(() => {
-      // 최종 상태가 커밋 상태와 다를 때만 API 호출
       const finalState =
         queryClient.getQueryData<boolean>(favoriteKeys.status(meetingId)) ?? committedRef.current;
       if (finalState !== committedRef.current) {
-        toggleMutate(
-          { meetingId, isFavorited: finalState },
-          {
-            onSuccess: () => {
-              committedRef.current = finalState;
-            },
-            onError: () => {
-              queryClient.setQueryData(favoriteKeys.status(meetingId), committedRef.current);
-            },
-          }
-        );
+        sendRequest(finalState);
       }
     }, DEBOUNCE_MS);
   };
 
-  // 언마운트 시 타이머 정리
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);

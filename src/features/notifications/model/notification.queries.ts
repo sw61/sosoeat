@@ -43,7 +43,7 @@ export const prefetchNotificationInfiniteList = (
 
 const MODULE_LOAD_TIME = Date.now();
 
-export const useUnreadCount = (initialCount = 0) =>
+export const useUnreadCount = (initialCount = 0, enabled = true) =>
   useQuery({
     queryKey: notificationKeys.unreadCount(),
     queryFn: notificationApi.getUnreadCount,
@@ -51,4 +51,5 @@ export const useUnreadCount = (initialCount = 0) =>
     initialDataUpdatedAt: MODULE_LOAD_TIME,
     staleTime: 1000 * 60,
     gcTime: 1000 * 60 * 5,
+    enabled,
   });

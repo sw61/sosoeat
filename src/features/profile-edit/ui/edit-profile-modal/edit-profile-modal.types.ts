@@ -17,6 +17,8 @@ export interface ProfileFieldProps {
   type?: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  maxLength?: number;
+  error?: string;
 }
 
 export interface ProfileImageEditorProps {

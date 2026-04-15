@@ -87,3 +87,5 @@ src/graphify-out/cache/
 .next-benchmark/
 # Sentry Config File
 .env.sentry-build-plugin
+
+.opencode

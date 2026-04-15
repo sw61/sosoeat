@@ -67,7 +67,7 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* ── Font Family ───────────────────────────────── */
-  --font-pretendard-local: 'Pretendard';
+  --font-pretendard-local: 'Pretendard Variable';
   --font-pretendard:
     var(--font-pretendard-local), -apple-system, BlinkMacSystemFont, system-ui, Roboto,
     'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic',

@@ -49,7 +49,7 @@ declare global {
   }
 }
 
-interface SosoTalkShareModalProps {
+interface MeetingShareModalProps {
   open: boolean;
   title: string;
   url: string;
@@ -59,51 +59,27 @@ interface SosoTalkShareModalProps {
 }
 
 const KAKAO_JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
-const PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sosoeat.com';
 
-const toPublicSiteUrl = (value: string) => {
-  if (typeof window === 'undefined') {
-    return value;
-  }
-
-  const resolved = new URL(value, window.location.origin);
-
-  return new URL(
-    `${resolved.pathname}${resolved.search}${resolved.hash}`,
-    PUBLIC_SITE_URL
-  ).toString();
-};
-
-export const toAbsoluteImageUrl = (imageUrl?: string) => {
+const toAbsoluteImageUrl = (imageUrl?: string) => {
   const path = imageUrl || '/images/logo.svg';
 
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path;
   }
 
-  return toPublicSiteUrl(path.startsWith('/') ? path : `/${path}`);
+  if (typeof window === 'undefined') return path;
+
+  return `${window.location.origin}${path.startsWith('/') ? '' : '/'}${path}`;
 };
 
-export const toKakaoShareUrl = (url: string) => {
-  if (!url) {
-    return url;
-  }
-
-  try {
-    return toPublicSiteUrl(url);
-  } catch {
-    return url;
-  }
-};
-
-export function SosoTalkShareModal({
+export function MeetingShareModal({
   open,
   title,
   url,
   imageUrl,
   onClose,
   onCopy,
-}: SosoTalkShareModalProps) {
+}: MeetingShareModalProps) {
   const initializeKakao = () => {
     if (!KAKAO_JS_KEY || typeof window === 'undefined' || !window.Kakao) {
       return;
@@ -120,25 +96,23 @@ export function SosoTalkShareModal({
       return;
     }
 
-    const shareUrl = toKakaoShareUrl(url);
-
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
         title,
-        description: '소소톡 게시글을 확인해 보세요.',
+        description: '소소잇 모임을 확인해 보세요.',
         imageUrl: toAbsoluteImageUrl(imageUrl),
         link: {
-          mobileWebUrl: shareUrl,
-          webUrl: shareUrl,
+          mobileWebUrl: url,
+          webUrl: url,
         },
       },
       buttons: [
         {
-          title: '게시글 보기',
+          title: '모임 보기',
           link: {
-            mobileWebUrl: shareUrl,
-            webUrl: shareUrl,
+            mobileWebUrl: url,
+            webUrl: url,
           },
         },
       ],
@@ -162,10 +136,10 @@ export function SosoTalkShareModal({
               <Share2 className="h-5 w-5" />
             </div>
             <DialogTitle className="text-sosoeat-gray-900 text-xl font-semibold">
-              게시글 공유하기
+              모임 공유하기
             </DialogTitle>
             <DialogDescription className="sr-only">
-              카카오톡 또는 링크 복사로 게시글을 공유할 수 있는 모달입니다.
+              카카오톡 또는 링크 복사로 모임을 공유할 수 있는 모달입니다.
             </DialogDescription>
           </DialogHeader>
 

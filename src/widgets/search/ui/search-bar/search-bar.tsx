@@ -25,6 +25,7 @@ export const SearchBar = ({
   value,
   onChange,
   placeholder = '모임 검색 (제목, 태그, 지역 등)',
+  error,
   className,
 }: SearchBarProps) => {
   return (
@@ -45,6 +46,7 @@ export const SearchBar = ({
           aria-label={placeholder}
         />
       </div>
+      {error && <p className="mt-1 pl-10 text-xs text-red-400/70">{error}</p>}
     </div>
   );
 };

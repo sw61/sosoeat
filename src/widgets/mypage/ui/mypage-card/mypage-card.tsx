@@ -58,19 +58,14 @@ function InfoItem({ Icon, text }: { Icon: LucideIcon; text: string }) {
   );
 }
 
-// 상태 뱃지
 function StatusBadgeGroup({
   confirmedAt,
   isCompleted,
-  isFavorited,
   variant,
-  meetingId,
 }: {
   confirmedAt: Date | null;
   isCompleted: boolean;
-  isFavorited: boolean;
   variant: Variant;
-  meetingId: number;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -84,13 +79,6 @@ function StatusBadgeGroup({
       ) : (
         <EstablishmentStatusBadge confirmedAt={null} variant={variant} />
       )}
-      <div className="relative z-10 ml-auto max-md:hidden">
-        <HeartButton
-          className="relative -top-3 left-0"
-          meetingId={meetingId}
-          isFavorited={isFavorited}
-        />
-      </div>
     </div>
   );
 }
@@ -122,76 +110,74 @@ export function MyPageCard({
         className
       )}
     >
-      <Link href={href} aria-label={title} className="absolute inset-0 z-0" />
-      {/* 이미지 */}
-      <div className="relative shrink-0 overflow-hidden max-md:h-39 max-md:w-full max-md:rounded-t-4xl md:size-47 md:rounded-2xl">
-        <Image
-          src={imageUrl}
-          alt={imageAlt ?? title}
-          fill
-          sizes="(min-width: 768px) 188px, 100vw"
-          className="object-cover"
-        />
+      <Link
+        href={href}
+        aria-label={title}
+        className="flex h-full w-full flex-col md:flex-row md:items-center md:gap-4"
+      >
+        <div className="relative shrink-0 overflow-hidden max-md:h-39 max-md:w-full max-md:rounded-t-4xl md:size-47 md:rounded-2xl">
+          <Image
+            src={imageUrl}
+            alt={imageAlt ?? title}
+            fill
+            sizes="(min-width: 768px) 188px, 100vw"
+            className="cursor-pointer object-cover"
+          />
 
-        {/* 이미지 위 오버레이 (모바일 전용) */}
-        <div className="absolute top-1 right-4 left-4 flex items-center justify-between md:hidden">
-          <VariantBadge variant={variant} />
-          <div className="relative z-10">
-            <HeartButton
-              className="relative top-3 left-1"
-              meetingId={meetingId}
-              isFavorited={isFavorited}
+          <div className="pointer-events-none absolute top-1 right-4 left-4 flex items-center justify-between md:hidden">
+            <VariantBadge variant={variant} />
+          </div>
+        </div>
+
+        <div className="flex h-full flex-1 flex-col justify-between p-3 md:px-0 md:py-4">
+          <div className="mt-3 hidden md:block">
+            <VariantBadge variant={variant} />
+          </div>
+
+          <div className="py-2 md:hidden">
+            <StatusBadgeGroup
+              confirmedAt={confirmedAt}
+              isCompleted={isCompleted}
+              variant={variant}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <CardTitle className="text-sosoeat-gray-800 line-clamp-1 text-lg font-bold">
+              {title}
+            </CardTitle>
+            <CardDescription className="text-sosoeat-gray-800 flex items-center gap-1 font-medium">
+              <UserRound className="text-sosoeat-gray-600 size-3" aria-hidden focusable={false} />
+              {currentCount}/{maxCount}
+            </CardDescription>
+          </div>
+
+          <CardContent className="text-sosoeat-gray-600 flex flex-wrap gap-x-3 gap-y-1 p-0 text-sm font-medium">
+            <InfoItem Icon={MapPin} text={location} />
+            <InfoItem Icon={Calendar} text={formatDate(month, day)} />
+            <InfoItem Icon={Clock} text={formatTime(hour, minute)} />
+          </CardContent>
+
+          <div className="mt-4 hidden md:block">
+            <StatusBadgeGroup
+              confirmedAt={confirmedAt}
+              isCompleted={isCompleted}
+              variant={variant}
             />
           </div>
         </div>
+      </Link>
+
+      <div className="absolute top-1 right-4 z-10 md:hidden">
+        <HeartButton
+          className="relative top-3 left-1"
+          meetingId={meetingId}
+          isFavorited={isFavorited}
+        />
       </div>
 
-      {/* 정보 영역 */}
-      <div className="flex h-full flex-1 flex-col justify-between p-3 md:px-0 md:py-4">
-        {/* 카테고리 뱃지 (웹) */}
-        <div className="mt-3 hidden md:block">
-          <VariantBadge variant={variant} />
-        </div>
-
-        {/* 상태 뱃지 (모바일) */}
-        <div className="py-2 md:hidden">
-          <StatusBadgeGroup
-            confirmedAt={confirmedAt}
-            isCompleted={isCompleted}
-            isFavorited={isFavorited}
-            variant={variant}
-            meetingId={meetingId}
-          />
-        </div>
-
-        {/* 제목 / 인원 */}
-        <div className="flex flex-col gap-1">
-          <CardTitle className="text-sosoeat-gray-800 line-clamp-1 text-lg font-bold">
-            {title}
-          </CardTitle>
-          <CardDescription className="text-sosoeat-gray-800 flex items-center gap-1 font-medium">
-            <UserRound className="text-sosoeat-gray-600 size-3" aria-hidden focusable={false} />
-            {currentCount}/{maxCount}
-          </CardDescription>
-        </div>
-
-        {/* 위치 / 날짜 / 시간 */}
-        <CardContent className="text-sosoeat-gray-600 flex flex-wrap gap-x-3 gap-y-1 p-0 text-sm font-medium">
-          <InfoItem Icon={MapPin} text={location} />
-          <InfoItem Icon={Calendar} text={formatDate(month, day)} />
-          <InfoItem Icon={Clock} text={formatTime(hour, minute)} />
-        </CardContent>
-
-        {/* 상태 뱃지 (웹) */}
-        <div className="mt-4 hidden md:block">
-          <StatusBadgeGroup
-            confirmedAt={confirmedAt}
-            isCompleted={isCompleted}
-            isFavorited={isFavorited}
-            variant={variant}
-            meetingId={meetingId}
-          />
-        </div>
+      <div className="absolute right-4 bottom-4 z-10 hidden md:block">
+        <HeartButton meetingId={meetingId} isFavorited={isFavorited} />
       </div>
     </Card>
   );

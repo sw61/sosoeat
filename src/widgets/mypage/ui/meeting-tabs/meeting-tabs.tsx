@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -39,26 +39,46 @@ export function MeetingTabs() {
     });
   };
 
-  const { cards: fetchedCards, isLoading } = useMeetingTabs(activeTab);
+  const {
+    cards: fetchedCards,
+    isLoading,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useMeetingTabs(activeTab);
 
   const cards = fetchedCards ?? [];
 
+  const observerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = observerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, activeTab]);
+
   return (
     <Tabs
-      className="mx-auto w-full max-w-285 p-6"
+      className="mx-auto flex w-full max-w-285 flex-1 flex-col p-6"
       value={activeTab}
       onValueChange={(v) => setActiveTab(v as TabValue)}
     >
       <MeetingTabsList />
 
       {MYPAGE_TABS.map((tab) => (
-        <TabsContent
-          key={tab.value}
-          value={tab.value}
-          className="w-full items-center justify-center"
-        >
+        <TabsContent key={tab.value} value={tab.value} className="flex w-full flex-1 flex-col">
           {isLoading ? (
-            <div className="py-40 text-center text-sm text-gray-400">불러오는 중...</div>
+            <div className="flex flex-1 items-center justify-center text-sm text-gray-400">
+              불러오는 중...
+            </div>
           ) : cards.length === 0 ? (
             <MeetingTabsEmpty />
           ) : (
@@ -66,6 +86,14 @@ export function MeetingTabs() {
               {cards.map((card) => (
                 <MyPageCard key={card.meetingId} {...card} href={`/meetings/${card.meetingId}`} />
               ))}
+            </div>
+          )}
+
+          {tab.value === activeTab && (
+            <div ref={observerRef} className="py-2">
+              {isFetchingNextPage && (
+                <p className="py-4 text-center text-sm text-gray-400">불러오는 중...</p>
+              )}
             </div>
           )}
         </TabsContent>

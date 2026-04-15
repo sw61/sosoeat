@@ -2,10 +2,16 @@ import type { Metadata } from 'next';
 
 import * as Sentry from '@sentry/nextjs';
 import { startOfDay } from 'date-fns';
+import { addDays, startOfDay } from 'date-fns';
 import { SearchParams } from 'nuqs';
 
 import { getMeetings } from '@/entities/meeting/index.server';
-import { MeetingSearchBanner, SearchPage, searchParamsCache } from '@/widgets/search';
+import {
+  getDefaultSearchDateStartIso,
+  MeetingSearchBanner,
+  SearchPage,
+  searchParamsCache,
+} from '@/widgets/search';
 
 export const metadata: Metadata = {
   title: '모임 검색',
@@ -44,7 +50,7 @@ type PageProps = {
 };
 
 export default async function Page({ searchParams }: PageProps) {
-  const { dateStart, sortBy, sortOrder, queryKeyword } = searchParamsCache.parse(
+  const { dateStart, dateEnd, search, typeFilter, sortBy, sortOrder } = searchParamsCache.parse(
     await searchParams
   );
   const finalDateStart = dateStart ?? startOfDay(new Date());
@@ -72,7 +78,7 @@ export default async function Page({ searchParams }: PageProps) {
   });
 
   return (
-    <div className="flex w-full flex-col items-center justify-center">
+    <div className="bg-sosoeat-gray-100 flex w-full flex-col items-center justify-center">
       <section aria-label="search-banner" className="w-full">
         <MeetingSearchBanner />
       </section>
@@ -80,7 +86,10 @@ export default async function Page({ searchParams }: PageProps) {
         aria-label="search-results"
         className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-4"
       >
-        <SearchPage initialData={initialData} />
+        <SearchPage
+          initialData={initialData}
+          initialDefaultDateStartIso={initialDefaultDateStartIso}
+        />
       </section>
     </div>
   );

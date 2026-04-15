@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +10,7 @@ import { Plus } from 'lucide-react';
 
 import { AuthUser } from '@/entities/auth';
 import { MeetingCreateModalProps, useMeetingCreateTrigger } from '@/features/meeting-create';
+import { NotificationTrigger, useUnreadCount } from '@/features/notifications';
 import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { Button } from '@/shared/ui/button';
 import {
@@ -22,11 +25,10 @@ const MeetingCreateModal = dynamic<MeetingCreateModalProps>(
   { ssr: false }
 );
 
-const Notification = dynamic(
-  () => import('@/features/notifications').then((mod) => mod.Notification),
+const NotificationPanel = dynamic(
+  () => import('@/features/notifications').then((mod) => mod.NotificationPanel),
   { ssr: false }
 );
-
 interface NavActionsProps {
   user: AuthUser | null;
   onLogout: () => void;
@@ -35,6 +37,8 @@ interface NavActionsProps {
 
 export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavActionsProps) {
   const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const { data: unreadCount = 0 } = useUnreadCount(initialUnreadCount, !!user);
 
   if (!user) {
     return (
@@ -58,7 +62,21 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
         모임 만들기
       </Button>
 
-      <Notification initialUnreadCount={initialUnreadCount} />
+      <div className="relative flex items-center">
+        <NotificationTrigger
+          unreadCount={unreadCount}
+          onClick={() => setNotificationOpen((prev) => !prev)}
+          data-notification-trigger
+          aria-label="알림 열기"
+        />
+        {notificationOpen && (
+          <NotificationPanel
+            unreadCount={unreadCount}
+            open={notificationOpen}
+            onOpenChange={setNotificationOpen}
+          />
+        )}
+      </div>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

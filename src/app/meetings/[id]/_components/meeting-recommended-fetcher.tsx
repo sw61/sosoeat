@@ -6,14 +6,19 @@ interface Props {
   meetingId: number;
 }
 
+function getCurrentMinuteISOString() {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  return now.toISOString();
+}
+
 export async function MeetingRecommendedFetcher({ meetingId }: Props) {
   const meeting = await getMeetingById(meetingId);
-  const meetingList = await getMeetings({ region: meeting.region, size: 4 }).catch(() => ({
-    data: [],
-  }));
+  const meetingList = await getMeetings({
+    region: meeting.region,
+    dateStart: getCurrentMinuteISOString(),
+    size: 5,
+  }).catch(() => ({ data: [] }));
 
-  const now = new Date();
-  const futureMeetings = meetingList.data.filter((m) => new Date(m.dateTime) > now);
-
-  return <MeetingRecommendedSection meetings={futureMeetings} currentMeetingId={meetingId} />;
+  return <MeetingRecommendedSection meetings={meetingList.data} currentMeetingId={meetingId} />;
 }

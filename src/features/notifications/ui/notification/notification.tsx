@@ -5,15 +5,13 @@ import { useUnreadCount } from '../../model/notification.queries';
 import { NotificationPanel } from './notification-panel/notification-panel';
 
 interface NotificationProps {
-  triggerClassName?: string;
   initialUnreadCount?: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export const Notification = ({
-  triggerClassName = '',
-  initialUnreadCount = 0,
-}: NotificationProps) => {
+export const Notification = ({ initialUnreadCount = 0, open, onOpenChange }: NotificationProps) => {
   const { data: unreadCount = 0 } = useUnreadCount(initialUnreadCount);
 
-  return <NotificationPanel triggerClassName={triggerClassName} unreadCount={unreadCount} />;
+  return <NotificationPanel unreadCount={unreadCount} open={open} onOpenChange={onOpenChange} />;
 };

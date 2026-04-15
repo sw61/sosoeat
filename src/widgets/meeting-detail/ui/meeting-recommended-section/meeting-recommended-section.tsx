@@ -12,7 +12,7 @@ export function MeetingRecommendedSection({
   meetings,
   currentMeetingId,
 }: MeetingRecommendedSectionProps) {
-  const recommendedMeetings = meetings.filter((m) => m.id !== currentMeetingId);
+  const recommendedMeetings = meetings.filter((m) => m.id !== currentMeetingId).slice(0, 4);
 
   if (recommendedMeetings.length === 0) return null;
 

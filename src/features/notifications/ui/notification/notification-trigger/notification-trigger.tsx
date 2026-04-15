@@ -17,7 +17,7 @@ export const NotificationTrigger = React.forwardRef<HTMLButtonElement, Notificat
         ref={ref}
         type={type}
         className={cn(
-          'relative inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center overflow-visible rounded-[14px] border-0 bg-transparent p-0',
+          'relative inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center overflow-visible rounded-[14px] border-0 bg-transparent p-0',
           className
         )}
         {...props}
@@ -26,7 +26,7 @@ export const NotificationTrigger = React.forwardRef<HTMLButtonElement, Notificat
         <Bell
           className={cn(
             unreadCount > 0 ? 'text-sosoeat-orange-600' : 'text-sosoeat-gray-600',
-            'absolute top-[10px] left-[10px] size-5'
+            'size-6'
           )}
           strokeWidth={1.5}
           aria-hidden="true"

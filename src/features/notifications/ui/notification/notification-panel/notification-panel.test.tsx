@@ -73,6 +73,19 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }));
 
+const renderWithClient = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
+
+const renderOpenPanel = (overrides: Partial<Parameters<typeof NotificationPanel>[0]> = {}) => {
+  const onOpenChange = jest.fn();
+  renderWithClient(<NotificationPanel open={true} onOpenChange={onOpenChange} {...overrides} />);
+  return { onOpenChange };
+};
+
 const MAX_WIDTH_QUERY = '(max-width: 767px)';
 
 function mockMatchMedia(matchesNarrow: boolean) {
@@ -88,23 +101,8 @@ function mockMatchMedia(matchesNarrow: boolean) {
   });
 }
 
-const renderWithClient = (ui: React.ReactElement) => {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
-};
-
-const openPanel = async () => {
-  const user = userEvent.setup();
-  await user.click(screen.getByRole('button', { name: '알림 열기' }));
-  await screen.findByRole('heading', { name: '알림 내역' });
-  return user;
-};
-
 beforeEach(() => {
   mockMatchMedia(false);
-  jest.clearAllMocks();
   (useNotificationReadActions as jest.Mock).mockReturnValue({
     markAllAsRead: jest.fn(),
     markAsRead: jest.fn(),
@@ -116,80 +114,67 @@ beforeEach(() => {
 });
 
 describe('NotificationPanel', () => {
-  it('트리거 버튼이 렌더된다', () => {
-    renderWithClient(<NotificationPanel unreadCount={1} />);
-    expect(screen.getByRole('button', { name: '알림 열기' })).toBeInTheDocument();
-  });
-
-  it('트리거 클릭 시 제목과 모두 읽기 버튼을 렌더한다', async () => {
-    renderWithClient(<NotificationPanel unreadCount={1} />);
-    await openPanel();
+  it('열린 상태에서 제목과 모두 읽기 버튼을 렌더한다', () => {
+    renderOpenPanel({ unreadCount: 1 });
 
     expect(screen.getByRole('heading', { name: '알림 내역' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '모두 읽기' })).toBeInTheDocument();
   });
 
-  it('로딩 중일 때 로더를 렌더한다', async () => {
+  it('로딩 중일 때 로더를 렌더한다', () => {
     (useNotificationInfiniteList as jest.Mock).mockReturnValue(mockReturn({ isPending: true }));
-    renderWithClient(<NotificationPanel />);
-    await openPanel();
+    renderOpenPanel();
 
     expect(document.querySelector('.loader')).toBeInTheDocument();
   });
 
-  it('오류 발생 시 오류 메시지를 렌더한다', async () => {
+  it('오류 발생 시 오류 메시지를 렌더한다', () => {
     (useNotificationInfiniteList as jest.Mock).mockReturnValue(
       mockReturn({ error: new Error('API 오류') })
     );
-    renderWithClient(<NotificationPanel />);
-    await openPanel();
+    renderOpenPanel();
 
     expect(screen.getByText('알림을 불러오는 중 오류가 발생했습니다.')).toBeInTheDocument();
   });
 
-  it('마지막 페이지에 도달하면 "모든 알림을 불러왔어요" 메시지를 렌더한다', async () => {
+  it('마지막 페이지에 도달하면 "모든 알림을 불러왔어요" 메시지를 렌더한다', () => {
     (useNotificationInfiniteList as jest.Mock).mockReturnValue(
       mockReturn({ data: { pages: [{ data: mockData }] } })
     );
-    renderWithClient(<NotificationPanel unreadCount={1} />);
-    await openPanel();
+    renderOpenPanel({ unreadCount: 1 });
 
     expect(screen.getByText('모든 알림을 불러왔어요')).toBeInTheDocument();
   });
 
-  it('다음 페이지가 있을 때 "모든 알림을 불러왔어요" 메시지를 렌더하지 않는다', async () => {
+  it('다음 페이지가 있을 때 "모든 알림을 불러왔어요" 메시지를 렌더하지 않는다', () => {
     (useNotificationInfiniteList as jest.Mock).mockReturnValue(
       mockReturn({ hasNextPage: true, data: { pages: [{ data: mockData }] } })
     );
-    renderWithClient(<NotificationPanel unreadCount={1} />);
-    await openPanel();
+    renderOpenPanel({ unreadCount: 1 });
 
     expect(screen.queryByText('모든 알림을 불러왔어요')).not.toBeInTheDocument();
   });
 
-  it('알림이 없을 때 "알림이 없어요" 메시지를 렌더한다', async () => {
-    renderWithClient(<NotificationPanel />);
-    await openPanel();
+  it('알림이 없을 때 "알림이 없어요" 메시지를 렌더한다', () => {
+    renderOpenPanel();
 
     expect(screen.getByText('알림이 없어요')).toBeInTheDocument();
   });
 
-  it('닫기 버튼 클릭 시 패널이 닫힌다 (PC)', async () => {
-    renderWithClient(<NotificationPanel />);
-    const user = await openPanel();
+  it('닫기 버튼 클릭 시 onOpenChange(false)를 호출한다 (PC)', async () => {
+    const { onOpenChange } = renderOpenPanel();
+    const user = userEvent.setup();
 
     await user.click(screen.getByRole('button', { name: '알림 닫기' }));
-    expect(screen.queryByRole('heading', { name: '알림 내역' })).not.toBeInTheDocument();
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it('닫기 버튼 클릭 시 패널이 닫힌다 (모바일)', async () => {
+  it('닫기 버튼 클릭 시 onOpenChange(false)를 호출한다 (모바일)', async () => {
     mockMatchMedia(true);
-    renderWithClient(<NotificationPanel />);
+    const { onOpenChange } = renderOpenPanel();
     const user = userEvent.setup();
-    await user.click(screen.getByRole('button', { name: '알림 열기' }));
-    await screen.findByRole('dialog');
 
     await user.click(screen.getByRole('button', { name: '알림 닫기' }));
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });

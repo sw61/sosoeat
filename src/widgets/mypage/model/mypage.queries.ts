@@ -1,24 +1,30 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { useFavoriteList } from '@/entities/favorites';
 import { meetingKeys } from '@/entities/meeting';
 
 import { mypageApi } from '../api/mypage.api';
 
-import { FIVE_MINUTES_IN_MS } from './mypage.constants';
+import { FIVE_MINUTES_IN_MS, TEN_MINUTES_IN_MS } from './mypage.constants';
 
 export const useJoinedMeetings = () =>
-  useQuery({
+  useInfiniteQuery({
     queryKey: meetingKeys.joined(),
-    queryFn: mypageApi.fetchJoinedMeetings,
+    queryFn: ({ pageParam }) => mypageApi.fetchJoinedMeetings(pageParam),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     staleTime: FIVE_MINUTES_IN_MS,
+    gcTime: TEN_MINUTES_IN_MS,
   });
 
 export const useCreatedMeetings = () =>
-  useQuery({
+  useInfiniteQuery({
     queryKey: meetingKeys.my(),
-    queryFn: mypageApi.fetchCreatedMeetings,
+    queryFn: ({ pageParam }) => mypageApi.fetchCreatedMeetings(pageParam),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     staleTime: FIVE_MINUTES_IN_MS,
+    gcTime: TEN_MINUTES_IN_MS,
   });
 
 export { useFavoriteList as useFavoriteMeetings };
