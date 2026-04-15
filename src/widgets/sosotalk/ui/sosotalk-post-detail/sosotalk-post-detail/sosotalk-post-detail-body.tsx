@@ -2,21 +2,12 @@ import type { ReactNode } from 'react';
 
 import Image from 'next/image';
 
+import DOMPurify from 'isomorphic-dompurify';
+
 import type { SosoTalkPostBodyProps } from './sosotalk-post-detail.types';
 
 interface SosoTalkPostDetailBodyProps extends SosoTalkPostBodyProps {
   children?: ReactNode;
-}
-
-function sanitizeSosoTalkHtml(contentHtml: string) {
-  return contentHtml
-    .trim()
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
-    .replace(/<(iframe|object|embed|meta|link)\b[^>]*>/gi, '')
-    .replace(/\s+on[a-z]+\s*=\s*(["']).*?\1/gi, '')
-    .replace(/\s+on[a-z]+\s*=\s*[^\s>]+/gi, '')
-    .replace(/\s+(href|src)\s*=\s*(["'])\s*javascript:[^"']*\2/gi, '');
 }
 
 export function SosoTalkPostDetailBody({
@@ -25,7 +16,7 @@ export function SosoTalkPostDetailBody({
   imageUrl,
   children,
 }: SosoTalkPostDetailBodyProps) {
-  const normalizedContentHtml = sanitizeSosoTalkHtml(contentHtml);
+  const normalizedContentHtml = DOMPurify.sanitize(contentHtml.trim());
 
   return (
     <section className="border-sosoeat-gray-300 mt-6 flex flex-col gap-5 border-t pt-5 md:mt-8 md:gap-6 md:pt-6">

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { startOfDay } from 'date-fns';
+import { startOfDay, startOfMinute } from 'date-fns';
 import {
   parseAsIsoDate,
   parseAsJson,
@@ -11,23 +11,33 @@ import {
   useQueryState,
 } from 'nuqs';
 
-import { useSearchInfiniteOption } from '@/entities/meeting';
-import type { getMeetings } from '@/entities/meeting/index.server';
-import type { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client';
+import type { RegionSelection } from '@/entities/location';
+import type {
+  MeetingListResult,
+  MeetingSortBy,
+  MeetingSortOrder,
+  MeetingTypeFilter,
+} from '@/entities/meeting';
 
-import type { MeetingFilterBarProps } from '../ui/meeting-filter-bar';
-import type { RegionSelection } from '../ui/region-select-modal';
-
-import { useSearchInfiniteOptions } from './use-search-infinite-options';
+import { buildMeetingSearchOptions } from './build-meeting-search-options';
+import { buildSearchOptionSnapshot } from './search-option-snapshot';
+import { shouldReuseInitialSearchData } from './should-reuse-initial-search-data';
+import { useSearchMeetingList } from './use-search-meeting-list';
 
 type DateChangeParams = {
   valueStart: Date | null;
   valueEnd: Date | null;
 };
+const getDefaultSearchDateStartIso = (now = new Date()) => startOfMinute(now).toISOString();
 
-const MEETINGS_PAGE_SIZE = 10;
+const useSearchState = (
+  initialData: MeetingListResult | null,
+  initialDefaultDateStartIso?: string
+) => {
+  const [defaultDateStartIso] = useState(
+    () => initialDefaultDateStartIso ?? getDefaultSearchDateStartIso()
+  );
 
-const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | null) => {
   const [regionCommitted, setRegionCommitted] = useQueryState<RegionSelection>(
     'regionCommitted',
     parseAsJson<RegionSelection>((value) => {
@@ -62,20 +72,20 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     'dateEnd',
     parseAsIsoDate.withOptions({ history: 'push' })
   );
-  const [typeFilter, setTypeFilter] = useQueryState<'all' | 'groupEat' | 'groupBuy'>(
+  const [typeFilter, setTypeFilter] = useQueryState<NonNullable<MeetingTypeFilter>>(
     'typeFilter',
     parseAsStringLiteral(['all', 'groupEat', 'groupBuy'] as const)
       .withDefault('all')
       .withOptions({ history: 'push' })
   );
-  const [sortOrder, setSortOrder] = useQueryState<'asc' | 'desc'>(
+  const [sortOrder, setSortOrder] = useQueryState<NonNullable<MeetingSortOrder>>(
     'sortOrder',
     parseAsStringLiteral(['asc', 'desc'] as const)
       .withDefault('asc')
       .withOptions({ history: 'push' })
   );
 
-  const [sortBy, setSortBy] = useQueryState<MeetingFilterBarProps['sortBy']>(
+  const [sortBy, setSortBy] = useQueryState<NonNullable<MeetingSortBy>>(
     'sortBy',
     parseAsStringLiteral(['participantCount', 'dateTime', 'registrationEnd'] as const)
       .withDefault('dateTime')
@@ -89,70 +99,56 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     parseAsString.withDefault('').withOptions({ history: 'push' })
   );
 
-  const region =
-    regionCommitted == null || regionCommitted.length === 0
-      ? undefined
-      : regionCommitted.length === 1
-        ? `${regionCommitted[0].province} ${regionCommitted[0].district}`
-        : regionCommitted.map((r) => `${r.province} ${r.district}`);
-  const dateEndExclusiveIso =
-    dateEnd == null
-      ? undefined
-      : new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate() + 1).toISOString();
+  const options = buildMeetingSearchOptions({
+    regionCommitted,
+    dateStart,
+    dateEnd,
+    defaultDateStartIso,
+    typeFilter,
+    sortBy,
+    sortOrder,
+    searchQuery,
+  });
 
-  const options: Omit<TeamIdMeetingsGetRequest, 'teamId' | 'region'> & {
-    region?: string | string[];
-  } = {
-    size: MEETINGS_PAGE_SIZE,
-    type:
-      typeFilter === 'all' || typeFilter == null
-        ? undefined
-        : (typeFilter as 'groupEat' | 'groupBuy'),
-    region,
-    dateStart: dateStart ?? startOfDay(new Date()),
-    dateEnd: dateEndExclusiveIso == null ? undefined : new Date(dateEndExclusiveIso),
-    sortBy:
-      sortBy === null ? undefined : (sortBy as 'participantCount' | 'dateTime' | 'registrationEnd'),
-    sortOrder: sortOrder === null ? undefined : (sortOrder as 'asc' | 'desc'),
-    keyword: searchQuery === '' ? undefined : searchQuery,
-  };
-
-  const isMulti = Array.isArray(options.region) && options.region.length > 1;
-
-  const singleResult = useSearchInfiniteOption(
-    options as Omit<TeamIdMeetingsGetRequest, 'teamId'>,
-    initialData ?? undefined
-  );
-  const multiResult = useSearchInfiniteOptions(options);
+  const currentOptionSnapshot = buildSearchOptionSnapshot(options);
+  const [initialOptionSnapshot] = useState(() => currentOptionSnapshot);
+  const shouldUseInitialData = shouldReuseInitialSearchData({
+    initialData,
+    initialOptionSnapshot,
+    currentOptionSnapshot,
+    region: options.region,
+  });
 
   const {
-    data: meetingList,
     isLoading,
     isError,
     fetchNextPage,
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-  } = isMulti ? multiResult : singleResult;
-
-  const meetingData = meetingList?.pages.flatMap((page) => page.data) ?? [];
+    meetingData,
+  } = useSearchMeetingList({
+    options,
+    initialData,
+    shouldUseInitialData,
+  });
   const [inputValue, setInputValue] = useState(searchQuery);
 
   const handleSearchQueryChange = (e: string) => {
     setInputValue(e);
   };
 
+  const searchError = inputValue.trim().length === 1 ? '2글자 이상 입력해주세요' : undefined;
+
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      if (inputValue !== searchQuery) {
-        setSearchQuery(inputValue);
+      const trimmedValue = inputValue.trim();
+      if (trimmedValue === '' || trimmedValue.length > 1) {
+        setSearchQuery(trimmedValue);
       }
     }, 500);
 
     return () => clearTimeout(delayDebounce);
-
-    // debounce 효과를 위해 searchQuery 의존성에서 제외 (불필요한 재실행 방지)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue, setSearchQuery]);
 
   const handleTypeFilterChange = (value: 'all' | 'groupEat' | 'groupBuy') => {
@@ -188,6 +184,8 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     setSortOrder(sortOrder);
   };
 
+  const isSearchPending = inputValue !== searchQuery && inputValue !== '';
+
   return {
     meetingData,
     handleRegionChange,
@@ -208,7 +206,9 @@ const useSearchPage = (initialData: Awaited<ReturnType<typeof getMeetings>> | nu
     isFetchingNextPage,
     inputValue,
     handleSearchQueryChange,
+    isSearchPending,
+    searchError,
   };
 };
 
-export default useSearchPage;
+export default useSearchState;

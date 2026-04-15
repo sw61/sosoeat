@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import Image from 'next/image';
 
 import { Check } from 'lucide-react';
@@ -37,13 +39,22 @@ export function RegionCascadeSelect({
   onChange,
   className,
 }: RegionCascadeSelectProps) {
+  const sortedRegions = useMemo(
+    () =>
+      regions.map((region) => ({
+        ...region,
+        districts: [...region.districts].sort((a, b) => a.localeCompare(b, 'ko-KR')),
+      })),
+    [regions]
+  );
+
   return (
     <ul
       className={cn('flex min-h-0 w-full flex-col gap-4', className)}
       role="list"
       aria-label="시·도 목록"
     >
-      {regions.map((r) => {
+      {sortedRegions.map((r) => {
         const selectedDistricts = (value ?? [])
           .filter((s) => s.province === r.name)
           .map((s) => s.district);

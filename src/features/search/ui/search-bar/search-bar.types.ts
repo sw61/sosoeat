@@ -4,4 +4,5 @@ export interface SearchBarProps {
   placeholder?: string;
   /** 루트 컨테이너에 합쳐진다 */
   className?: string;
+  error?: string;
 }

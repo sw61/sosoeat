@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react';
 
+import type { RegionSelection } from '@/entities/location';
 import type { DropdownSubProp } from '@/shared/ui/dropdown-sub/dropdown-sub.types';
+
+export type { RegionSelection };
 
 /** `korea-regions-districts.json`의 지역 항목과 동일한 형태 */
 export interface KoreaRegionRegion {
@@ -9,14 +12,6 @@ export interface KoreaRegionRegion {
   nameEn: string;
   districts: string[];
 }
-
-/** 시·도+구·군 조합 배열. 미선택은 null */
-export type RegionSelection =
-  | {
-      province: string;
-      district: string;
-    }[]
-  | null;
 
 /** RegionSelectModal 전용 — 확정·드래프트는 지역 배열 */
 export type RegionModalDropdownSub = Omit<DropdownSubProp, 'value' | 'onChange'> & {

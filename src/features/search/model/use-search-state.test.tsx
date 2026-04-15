@@ -1,12 +1,12 @@
-'use client';
+﻿'use client';
 
 import { useInfiniteQuery, useQueries } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
-import { startOfDay } from 'date-fns';
+import { startOfDay, startOfMinute } from 'date-fns';
 import { withNuqsTestingAdapter } from 'nuqs/adapters/testing';
 
 import { useSearchInfiniteOptions } from './use-search-infinite-options';
-import useSearchPage from './use-search-page';
+import useSearchState from './use-search-state';
 
 jest.mock('@tanstack/react-query', () => ({
   ...jest.requireActual('@tanstack/react-query'),
@@ -25,14 +25,17 @@ const makeQueryResult = (
   dataUpdatedAt,
 });
 
-const renderHookWithClient = (hook: () => ReturnType<typeof useSearchPage>) => {
+const getDefaultSearchDateStartIso = (now = new Date()) => startOfMinute(now).toISOString();
+
+const renderHookWithClient = (hook: () => ReturnType<typeof useSearchState>) => {
   return renderHook(hook, {
     wrapper: withNuqsTestingAdapter({ searchParams: {} }),
   });
 };
 
-describe('useSearchPage', () => {
+describe('useSearchState', () => {
   beforeEach(() => {
+    jest.useFakeTimers();
     (useInfiniteQuery as jest.Mock).mockReturnValue({
       data: undefined,
       isLoading: false,
@@ -43,8 +46,12 @@ describe('useSearchPage', () => {
     });
   });
 
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('handleRegionChange일 때 상태가 업데이트되어야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleRegionChange([{ province: '서울', district: '강남구' }]);
@@ -54,7 +61,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleDateChange에서 값이 모두 없으면 날짜 상태를 초기화해야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
     const startDate = new Date('2026-04-06T10:30:00');
     const endDate = new Date('2026-04-08T18:00:00');
 
@@ -71,7 +78,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleDateChange에서 시작일만 있으면 시작일 기준으로 상태를 업데이트해야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
     const startDate = new Date('2026-04-06T10:30:00');
 
     act(() => {
@@ -83,7 +90,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleDateChange에서 종료일만 있으면 종료일 기준으로 상태를 업데이트해야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
     const endDate = new Date('2026-04-08T18:00:00');
 
     act(() => {
@@ -95,7 +102,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleTypeFilterChange일 때 타입 필터가 업데이트되어야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleTypeFilterChange('groupBuy');
@@ -105,7 +112,7 @@ describe('useSearchPage', () => {
   });
 
   it('handleSortChange일 때 정렬 기준과 순서가 업데이트되어야 한다', () => {
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     act(() => {
       result.current.handleSortChange('dateTime', 'desc');
@@ -128,10 +135,109 @@ describe('useSearchPage', () => {
       fetchNextPage: jest.fn(),
     });
 
-    const { result } = renderHookWithClient(() => useSearchPage(null));
+    const { result } = renderHookWithClient(() => useSearchState(null));
 
     expect(result.current.meetingData).toHaveLength(3);
-    expect(result.current.meetingData.map((m) => m.id)).toEqual([1, 2, 3]);
+    expect(result.current.meetingData.map((m: { id: number }) => m.id)).toEqual([1, 2, 3]);
+  });
+
+  it('dateStart가 없으면 전달된 기본 시작 시각을 사용한다', () => {
+    const initialDefaultDateStartIso = getDefaultSearchDateStartIso(
+      new Date('2026-04-15T09:00:45')
+    );
+
+    renderHookWithClient(() => useSearchState(null, initialDefaultDateStartIso));
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        queryKey: [
+          'search',
+          'infinite-list',
+          expect.objectContaining({
+            dateStart: new Date(initialDefaultDateStartIso),
+          }),
+        ],
+      })
+    );
+  });
+
+  it('검색 조건이 바뀌면 초기 서버 데이터를 다시 주입하지 않는다', async () => {
+    const initialData = {
+      data: [{ id: 99 }],
+      nextCursor: '',
+      hasMore: false,
+    };
+    const initialDefaultDateStartIso = getDefaultSearchDateStartIso(
+      new Date('2026-04-15T09:00:45')
+    );
+
+    const { result } = renderHookWithClient(() =>
+      useSearchState(initialData as never, initialDefaultDateStartIso)
+    );
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        initialData: { pages: [initialData], pageParams: [undefined] },
+      })
+    );
+
+    act(() => {
+      result.current.handleSearchQueryChange('김칠수');
+    });
+
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        initialData: undefined,
+      })
+    );
+  });
+
+  it('1글자 입력 시 searchError가 반환된다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김');
+    });
+
+    expect(result.current.searchError).toBe('2글자 이상 입력해주세요');
+  });
+
+  it('2글자 이상 입력 시 searchError가 undefined다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김칠');
+    });
+
+    expect(result.current.searchError).toBeUndefined();
+  });
+
+  it('0글자일 때 searchError가 undefined다', () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    expect(result.current.searchError).toBeUndefined();
+  });
+
+  it('1글자 입력 후 600ms 경과해도 API keyword가 전달되지 않는다', async () => {
+    const { result } = renderHookWithClient(() => useSearchState(null));
+
+    act(() => {
+      result.current.handleSearchQueryChange('김');
+    });
+
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
+
+    expect(useInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        queryKey: ['search', 'infinite-list', expect.objectContaining({ keyword: undefined })],
+      })
+    );
   });
 
   it('복수 지역 데이터를 합산하여 반환해야 한다', async () => {
@@ -155,8 +261,7 @@ describe('useSearchPage', () => {
     expect(ids).toContain(2);
   });
 
-  it('두 지역 모두 빈 결과일 때 processedRef 충돌 없이 독립적으로 처리해야 한다', async () => {
-    // 이전 버그: 두 번째 빈 결과가 processedRef의 'unknown:' 키로 스킵됨
+  it('빈 결과여도 processedRef 충돌 없이 독립적으로 처리해야 한다', async () => {
     (useQueries as jest.Mock).mockReturnValue([
       makeQueryResult({ data: [], hasMore: false, nextCursor: '' }),
       makeQueryResult({ data: [], hasMore: false, nextCursor: '' }, Date.now() + 1),
@@ -173,7 +278,7 @@ describe('useSearchPage', () => {
     expect(result.current.isError).toBe(false);
   });
 
-  it('동일한 dataUpdatedAt으로 재렌더 시 데이터를 중복 append하지 않아야 한다', async () => {
+  it('동일한 dataUpdatedAt으로 들어온 데이터는 중복 append하지 않아야 한다', async () => {
     const meeting = { id: 1, region: '부산 북구' };
     const ts = Date.now();
 
@@ -188,7 +293,6 @@ describe('useSearchPage', () => {
     await act(async () => {});
     expect(result.current.data.pages[0].data).toHaveLength(1);
 
-    // 같은 dataUpdatedAt으로 재렌더 → processedRef가 스킵하여 append 안됨
     rerender();
     expect(result.current.data.pages[0].data).toHaveLength(1);
   });
@@ -221,7 +325,7 @@ describe('useSearchPage', () => {
     expect(ids).toContain(2);
   });
 
-  it('한 지역만 hasMore: true이면 hasNextPage가 true를 반환해야 한다', async () => {
+  it('한 지역만 hasMore가 true여도 hasNextPage가 true를 반환해야 한다', async () => {
     const meeting1 = { id: 1, region: '부산 북구' };
     const meeting2 = { id: 2, region: '서울 강남구' };
 

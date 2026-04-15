@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 
+import dynamic from 'next/dynamic';
+
 import { ChevronDown } from 'lucide-react';
 
 import regionData from '@/shared/data/korea-regions-districts.json';
 import { meetingFilterPillTriggerClass } from '@/shared/lib/meeting-filter-pill';
 import { cn } from '@/shared/lib/utils';
-import { DetailDatePicker } from '@/shared/ui/date-picker/detail-date-picker';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -20,6 +21,18 @@ import { RegionSelectModal } from '../region-select-modal';
 import { MeetingFilterBarButton } from './_components/meeting-filter-bar-button';
 import { options } from './repositories/options';
 import type { MeetingFilterBarProps } from './meeting-filter-bar.types';
+
+const DetailDatePicker = dynamic(
+  () => import('@/shared/ui/date-picker/detail-date-picker').then((m) => m.DetailDatePicker),
+  {
+    ssr: false,
+    loading: () => (
+      <button type="button" className={cn(meetingFilterPillTriggerClass, 'min-w-24')} disabled>
+        <span>날짜 전체</span>
+      </button>
+    ),
+  }
+);
 
 type SortOption = (typeof options)[number];
 
