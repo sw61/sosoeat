@@ -12,7 +12,6 @@ interface BestSosotalkCarouselProps {
 
 export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rafRef = useRef<number | null>(null);
 
   const isDragging = useRef(false);
@@ -23,19 +22,6 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-
-    const showScrollbar = () => {
-      el.style.setProperty('--scrollbar-color', 'var(--color-gray-300)');
-    };
-    const hideScrollbar = () => {
-      el.style.setProperty('--scrollbar-color', 'transparent');
-    };
-
-    const handleScroll = () => {
-      showScrollbar();
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-      scrollTimeoutRef.current = setTimeout(hideScrollbar, 800);
-    };
 
     const handleWheel = (e: WheelEvent) => {
       if (el.scrollWidth <= el.clientWidth) return;
@@ -79,7 +65,6 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
       }
     };
 
-    el.addEventListener('scroll', handleScroll, { passive: true });
     el.addEventListener('wheel', handleWheel, { passive: false });
     el.addEventListener('dragstart', handleDragStart);
     el.addEventListener('pointerdown', handlePointerDown);
@@ -88,14 +73,12 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
     el.addEventListener('click', handleClickCapture, { capture: true });
 
     return () => {
-      el.removeEventListener('scroll', handleScroll);
       el.removeEventListener('wheel', handleWheel);
       el.removeEventListener('dragstart', handleDragStart);
       el.removeEventListener('pointerdown', handlePointerDown);
       el.removeEventListener('pointermove', handlePointerMove);
       el.removeEventListener('pointerup', handlePointerUp);
       el.removeEventListener('click', handleClickCapture, { capture: true });
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -103,21 +86,23 @@ export function BestSosotalkCarousel({ posts }: BestSosotalkCarouselProps) {
   return (
     <div
       ref={scrollRef}
-      className="flex cursor-grab gap-[18px] overflow-x-auto px-4 pb-2 select-none [scrollbar-color:var(--scrollbar-color,transparent)_transparent] [scrollbar-width:thin] active:cursor-grabbing [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[--scrollbar-color,transparent]"
+      className="-mt-0.5 overflow-x-auto px-4 pt-0.5 pb-2 select-none [scrollbar-color:var(--color-gray-300)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300"
     >
-      {posts.map((post) => (
-        <SosoTalkCardCompact
-          key={post.id}
-          id={post.id}
-          title={post.title}
-          imageUrl={post.imageUrl}
-          authorName={post.authorName}
-          authorImageUrl={post.authorImageUrl}
-          likeCount={post.likeCount}
-          commentCount={post.commentCount}
-          createdAt={post.createdAt}
-        />
-      ))}
+      <div className="flex min-w-max cursor-grab gap-[18px] active:cursor-grabbing">
+        {posts.map((post) => (
+          <SosoTalkCardCompact
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            imageUrl={post.imageUrl}
+            authorName={post.authorName}
+            authorImageUrl={post.authorImageUrl}
+            likeCount={post.likeCount}
+            commentCount={post.commentCount}
+            createdAt={post.createdAt}
+          />
+        ))}
+      </div>
     </div>
   );
 }
