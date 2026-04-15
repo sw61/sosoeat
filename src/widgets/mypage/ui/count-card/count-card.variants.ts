@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const cardVariants = cva(
-  'hidden md:flex flex-col gap-1 rounded-2xl text-center ring-0 h-20 w-85',
+  'hidden md:flex flex-col gap-1 rounded-2xl text-center ring-0 h-20 w-full',
   {
     variants: {
       variant: {
