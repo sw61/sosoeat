@@ -48,9 +48,9 @@ export function CommentInput({
   };
 
   return (
-    <div className={cn('flex items-center gap-3 sm:gap-4', className)}>
+    <div className={cn('flex items-start gap-3 sm:gap-4', className)}>
       {showAvatar ? (
-        <Avatar size="default" className="size-10 shrink-0 md:size-[54px]">
+        <Avatar size="default" className="h-[54px] w-[54px] shrink-0">
           <AvatarImage src={currentUserImageUrl} alt={currentUserName} />
           <AvatarFallback className="text-sm font-semibold">
             {currentUserName.slice(0, 1)}
@@ -58,7 +58,7 @@ export function CommentInput({
         </Avatar>
       ) : null}
 
-      <div className="bg-sosoeat-gray-300 flex min-h-[46px] min-w-0 flex-1 items-end gap-3 rounded-[24px] py-2 pr-[14px] pl-5 sm:pr-[14px] sm:pl-6">
+      <div className="bg-sosoeat-gray-300 flex min-h-[46px] min-w-0 flex-1 items-end gap-3 rounded-[24px] py-2 pr-[14px] pl-5 sm:pl-6">
         <Textarea
           ref={textareaRef}
           value={value}
