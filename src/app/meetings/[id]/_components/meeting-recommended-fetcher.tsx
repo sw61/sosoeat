@@ -6,11 +6,17 @@ interface Props {
   meetingId: number;
 }
 
+function getCurrentMinuteISOString() {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  return now.toISOString();
+}
+
 export async function MeetingRecommendedFetcher({ meetingId }: Props) {
   const meeting = await getMeetingById(meetingId);
   const meetingList = await getMeetings({
     region: meeting.region,
-    dateStart: new Date().toISOString(),
+    dateStart: getCurrentMinuteISOString(),
     size: 5,
   }).catch(() => ({ data: [] }));
 
