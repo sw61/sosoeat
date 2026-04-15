@@ -56,5 +56,5 @@ const meta: Meta<typeof NotificationComponent> = {
 export default meta;
 
 export const Default: StoryObj<typeof NotificationComponent> = {
-  render: () => <NotificationComponent triggerClassName="" />,
+  render: () => <NotificationComponent open={true} onOpenChange={() => {}} />,
 };

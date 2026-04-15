@@ -23,7 +23,6 @@ import {
 } from '../../../model/notification.queries';
 import { useNotificationReadActions } from '../../../model/use-notification-read-actions';
 import { NotificationItem } from '../notification-item/notification-item';
-import { NotificationTrigger } from '../notification-trigger/notification-trigger';
 
 const PAGE_SIZE = 5;
 
@@ -78,27 +77,28 @@ const NotificationPanelContent = ({
 
   const [activeTab, setActiveTab] = useState<NotificationTab>('all');
   const list = filterNotificationsByTab(allList, activeTab);
-  const tabContainerRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const labelRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
 
   const updateIndicator = () => {
-    const container = tabContainerRef.current;
     const activeIndex = NOTIFICATION_TABS.findIndex((t) => t.key === activeTab);
     const btn = tabRefs.current[activeIndex];
-    if (!container || !btn) return;
-    const containerRect = container.getBoundingClientRect();
-    const btnRect = btn.getBoundingClientRect();
+    const label = labelRefs.current[activeIndex];
+    if (!btn || !label) return;
     setIndicatorStyle({
-      left: btnRect.left - containerRect.left + 8, // px-2 = 8px
-      width: btnRect.width - 16, // 좌우 px-2 제외
+      left: btn.offsetLeft + label.offsetLeft,
+      width: label.offsetWidth,
     });
   };
 
   useEffect(() => {
     updateIndicator();
+
     const observer = new ResizeObserver(updateIndicator);
-    if (tabContainerRef.current) observer.observe(tabContainerRef.current);
+    tabRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
     return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
@@ -149,7 +149,6 @@ const NotificationPanelContent = ({
               onClick={() => {
                 if (showBadge) void markAllAsRead();
               }}
-              aria-label="모두 읽기"
             >
               모두 읽기
             </button>
@@ -166,7 +165,7 @@ const NotificationPanelContent = ({
       </div>
 
       <div className="mt-4 flex shrink-0 flex-row items-end justify-between border-b border-gray-100 px-4">
-        <div ref={tabContainerRef} className="relative flex flex-row gap-1">
+        <div className="relative flex flex-row gap-1">
           {NOTIFICATION_TABS.map(({ key, label }, index) => (
             <button
               key={key}
@@ -184,9 +183,14 @@ const NotificationPanelContent = ({
                 setActiveTab(key);
                 setConfirmDelete(false);
               }}
-              aria-label="알림 읽기 버튼"
             >
-              {label}
+              <span
+                ref={(el) => {
+                  labelRefs.current[index] = el;
+                }}
+              >
+                {label}
+              </span>
             </button>
           ))}
           <span
@@ -221,7 +225,6 @@ const NotificationPanelContent = ({
               type="button"
               className="text-sosoeat-gray-500 hover:text-destructive cursor-pointer px-2 pb-3 text-sm font-semibold transition-colors"
               onClick={() => setConfirmDelete(true)}
-              aria-label="전체 삭제 버튼"
             >
               전체 삭제
             </button>
@@ -259,13 +262,13 @@ const NotificationPanelContent = ({
 };
 
 interface NotificationPanelProps {
-  triggerClassName?: string;
   unreadCount?: number;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export const NotificationPanel = ({ triggerClassName, unreadCount }: NotificationPanelProps) => {
+export const NotificationPanel = ({ unreadCount, open, onOpenChange }: NotificationPanelProps) => {
   const titleId = React.useId();
-  const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
 
@@ -273,14 +276,14 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
     if (nextOpen) {
       void prefetchNotificationInfiniteList(queryClient, { size: PAGE_SIZE });
     }
-    setOpen(nextOpen);
+    onOpenChange(nextOpen);
   };
 
   const panelContent = (
     <NotificationPanelContent
       titleId={titleId}
       unreadCount={unreadCount}
-      onClose={() => setOpen(false)}
+      onClose={() => onOpenChange(false)}
       isMobile={isMobile}
     />
   );
@@ -288,18 +291,14 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
   if (isMobile) {
     return (
       <>
-        {open && <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setOpen(false)} />}
+        {open && (
+          <div className="fixed inset-0 z-40 bg-black/40" onClick={() => onOpenChange(false)} />
+        )}
         <DialogPrimitive.Root open={open} onOpenChange={handleOpen} modal={false}>
-          <DialogPrimitive.Trigger asChild>
-            <NotificationTrigger
-              className={triggerClassName}
-              unreadCount={unreadCount ?? 0}
-              data-notification-trigger
-            />
-          </DialogPrimitive.Trigger>
           <DialogPrimitive.Portal>
             <DialogPrimitive.Content
               aria-describedby={undefined}
+              aria-labelledby={titleId}
               className={MOBILE_PANEL_CLASS}
               onInteractOutside={(e) => {
                 const target = e.target as HTMLElement;
@@ -307,7 +306,7 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
                   e.preventDefault();
                   return;
                 }
-                setOpen(false);
+                onOpenChange(false);
               }}
             >
               <DialogPrimitive.Title className="sr-only">알림</DialogPrimitive.Title>
@@ -321,20 +320,9 @@ export const NotificationPanel = ({ triggerClassName, unreadCount }: Notificatio
 
   // PC: 트리거 버튼 아래에 드롭다운
   return (
-    <div className="relative">
-      <NotificationTrigger
-        className={triggerClassName}
-        unreadCount={unreadCount ?? 0}
-        onClick={() => handleOpen(!open)}
-        data-notification-trigger
-        aria-label="알림 열기"
-      />
-      {open && (
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className={DESKTOP_PANEL_CLASS}>{panelContent}</div>
-        </>
-      )}
-    </div>
+    <>
+      {open && <div className="fixed inset-0 z-40" onClick={() => onOpenChange(false)} />}
+      <div className={DESKTOP_PANEL_CLASS}>{panelContent}</div>
+    </>
   );
 };
