@@ -4,11 +4,25 @@ import { FavoriteList } from '@/shared/types/generated-client';
 
 export const favoritesApi = {
   async fetchList(): Promise<FavoriteList> {
-    const res = await fetchClient.get('/favorites');
-    return parseResponse<FavoriteList>(
-      res,
-      '찜 목록을 불러오는 중 문제가 생겼어요. 다시 시도해 주세요.'
-    );
+    const allData: FavoriteList['data'] = [];
+    let cursor: string | undefined;
+    let pageCount = 0;
+    const MAX_PAGES = 50;
+
+    while (true) {
+      const url = cursor ? `/favorites?cursor=${encodeURIComponent(cursor)}` : '/favorites';
+      const res = await fetchClient.get(url);
+      const page = await parseResponse<FavoriteList>(
+        res,
+        '찜 목록을 불러오는 중 문제가 생겼어요. 다시 시도해 주세요.'
+      );
+      allData.push(...page.data);
+      pageCount++;
+      if (!page.hasMore || !page.nextCursor || pageCount >= MAX_PAGES) break;
+      cursor = page.nextCursor;
+    }
+
+    return { data: allData, nextCursor: '', hasMore: false };
   },
 
   async favoritePost(meetingId: number): Promise<void> {

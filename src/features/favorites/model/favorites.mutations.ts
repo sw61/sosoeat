@@ -16,7 +16,10 @@ export const useToggleFavorite = () => {
     mutationFn: ({ meetingId, isFavorited }: { meetingId: number; isFavorited: boolean }) =>
       isFavorited ? favoritesApi.favoritePost(meetingId) : favoritesApi.favoriteDelete(meetingId),
     onMutate: async ({ meetingId, isFavorited }) => {
-      await queryClient.cancelQueries({ queryKey: favoriteKeys.count() });
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: favoriteKeys.count() }),
+        queryClient.cancelQueries({ queryKey: favoriteKeys.list() }),
+      ]);
       const previousCount = queryClient.getQueryData<number>(favoriteKeys.count());
       queryClient.setQueryData(favoriteKeys.count(), (prev: number = 0) =>
         isFavorited ? prev + 1 : Math.max(0, prev - 1)
@@ -25,6 +28,7 @@ export const useToggleFavorite = () => {
     },
     onError: (_err, _vars, context) => {
       queryClient.setQueryData(favoriteKeys.count(), context?.previousCount);
+      queryClient.invalidateQueries({ queryKey: favoriteKeys.list() });
     },
     onSuccess: () => {
       return Promise.all([
@@ -85,6 +89,7 @@ export const useFavoriteMeeting = (initialIsFavorited: boolean, meetingId: numbe
         },
         onError: () => {
           isPendingRef.current = false;
+          hasUserInteractedRef.current = false;
           queryClient.setQueryData(favoriteKeys.status(meetingId), committedRef.current);
         },
       }
