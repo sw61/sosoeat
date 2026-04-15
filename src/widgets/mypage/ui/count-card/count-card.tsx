@@ -20,11 +20,7 @@ const TITLE = {
 export function CountCard({ count, variant = 'meeting', className, href }: CountCardProps) {
   const card = (
     <Card
-      className={cn(
-        cardVariants({ variant }),
-        href && 'cursor-pointer transition-[filter] hover:brightness-95',
-        className
-      )}
+      className={cn(cardVariants({ variant }), href && 'transition hover:brightness-95', className)}
     >
       <CardHeader>
         <CardTitle>
