@@ -22,8 +22,10 @@ import SearchSkeleton from './search-skeleton';
 
 export default function SearchPage({
   initialData,
+  initialDefaultDateStartIso,
 }: {
   initialData: Awaited<ReturnType<typeof getMeetings>> | null;
+  initialDefaultDateStartIso: string;
 }) {
   const { ref, inView } = useInView({
     threshold: 0.5,
@@ -51,8 +53,7 @@ export default function SearchPage({
     fetchNextPage,
     inputValue,
     handleSearchQueryChange,
-    isSearchPending,
-  } = useSearchPage(initialData);
+  } = useSearchPage(initialData, initialDefaultDateStartIso);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -76,7 +77,7 @@ export default function SearchPage({
           onRegionChange={handleRegionChange}
           onSortChange={handleSortChange}
         />
-        {isLoading || isSearchPending ? (
+        {isLoading ? (
           <SearchSkeleton />
         ) : isError ? (
           <div className="flex min-h-80 w-full items-center justify-center rounded-2xl border border-[#F3F4F6] bg-white px-6 py-12 text-center">

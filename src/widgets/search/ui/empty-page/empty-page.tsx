@@ -2,8 +2,8 @@ import Image from 'next/image';
 
 import { cn } from '@/shared/lib/utils';
 
-/** 뷰포트별 상단 여백 — Jest에서 클래스 포함 여부로 검증 */
-export const EMPTY_PAGE_MARGIN_CLASSES = 'mt-[145px] md:mt-[180px] lg:mt-[200px]';
+/** 뷰포트별 상하 여백 — Jest에서 클래스 포함 여부로 검증 */
+export const EMPTY_PAGE_MARGIN_CLASSES = 'my-[80px] md:my-[100px] lg:my-[120px]';
 
 export const EmptyPage = () => {
   return (
