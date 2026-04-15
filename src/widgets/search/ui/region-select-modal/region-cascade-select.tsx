@@ -80,25 +80,27 @@ export function RegionCascadeSelect({
                 className="max-h-[min(60vh,320px)] overflow-y-auto"
               >
                 <DropdownMenuGroup>
-                  {r.districts.map((district) => (
-                    <DropdownMenuCheckboxItem
-                      key={district}
-                      checked={selectedDistricts.includes(district)}
-                      className="hover:bg-accent cursor-pointer transition-colors"
-                      onCheckedChange={(checked) => {
-                        const next = (value ?? []).filter(
-                          (s) => !(s.province === r.name && s.district === district)
-                        );
-                        if (checked) {
-                          onChange([...next, { province: r.name, district }]);
-                        } else {
-                          onChange(next.length > 0 ? next : null);
-                        }
-                      }}
-                    >
-                      {district}
-                    </DropdownMenuCheckboxItem>
-                  ))}
+                  {[...r.districts]
+                    .sort((a, b) => a.localeCompare(b, 'ko'))
+                    .map((district) => (
+                      <DropdownMenuCheckboxItem
+                        key={district}
+                        checked={selectedDistricts.includes(district)}
+                        className="hover:bg-accent override cursor-pointer py-3 text-base transition-colors md:py-1"
+                        onCheckedChange={(checked) => {
+                          const next = (value ?? []).filter(
+                            (s) => !(s.province === r.name && s.district === district)
+                          );
+                          if (checked) {
+                            onChange([...next, { province: r.name, district }]);
+                          } else {
+                            onChange(next.length > 0 ? next : null);
+                          }
+                        }}
+                      >
+                        {district}
+                      </DropdownMenuCheckboxItem>
+                    ))}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
