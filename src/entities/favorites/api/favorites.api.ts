@@ -9,8 +9,8 @@ export const favoritesApi = {
     let pageCount = 0;
     const MAX_PAGES = 50;
 
-    while (pageCount < MAX_PAGES) {
-      const url = cursor ? `/favorites?cursor=${cursor}` : '/favorites';
+    while (true) {
+      const url = cursor ? `/favorites?cursor=${encodeURIComponent(cursor)}` : '/favorites';
       const res = await fetchClient.get(url);
       const page = await parseResponse<FavoriteList>(
         res,
@@ -18,7 +18,7 @@ export const favoritesApi = {
       );
       allData.push(...page.data);
       pageCount++;
-      if (!page.hasMore) break;
+      if (!page.hasMore || !page.nextCursor || pageCount >= MAX_PAGES) break;
       cursor = page.nextCursor;
     }
 
