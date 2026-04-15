@@ -19,6 +19,6 @@ export function createSosoTalkMainPageQueryParams(
     type: activeTab === 'popular' ? 'best' : 'all',
     sortBy: SORT_BY_MAP[activeSort] ?? 'createdAt',
     sortOrder: 'desc',
-    size: 10,
+    size: 12,
   };
 }

@@ -6,7 +6,7 @@ describe('createSosoTalkMainPageQueryParams', () => {
       type: 'best',
       sortBy: 'commentCount',
       sortOrder: 'desc',
-      size: 10,
+      size: 12,
     });
   });
 
@@ -15,7 +15,7 @@ describe('createSosoTalkMainPageQueryParams', () => {
       type: 'all',
       sortBy: 'createdAt',
       sortOrder: 'desc',
-      size: 10,
+      size: 12,
     });
   });
 
@@ -24,7 +24,7 @@ describe('createSosoTalkMainPageQueryParams', () => {
       type: 'all',
       sortBy: 'likeCount',
       sortOrder: 'desc',
-      size: 10,
+      size: 12,
     });
   });
 });

@@ -82,7 +82,7 @@ describe('useSosoTalkMainPage', () => {
         type: 'all',
         sortBy: 'createdAt',
         sortOrder: 'desc',
-        size: 10,
+        size: 12,
       },
       initialData
     );
@@ -106,7 +106,7 @@ describe('useSosoTalkMainPage', () => {
         type: 'best',
         sortBy: 'likeCount',
         sortOrder: 'desc',
-        size: 10,
+        size: 12,
       },
       undefined
     );

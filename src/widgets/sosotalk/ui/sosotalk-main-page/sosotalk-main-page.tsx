@@ -103,7 +103,7 @@ export const SosoTalkMainPage = ({
                     ) : null}
                     {!hasNextPage ? (
                       <div className="flex py-8">
-                        <p className="text-sosoeat-gray-400 mx-auto text-sm">
+                        <p className="text-sosoeat-gray-500 mx-auto text-sm">
                           모든 게시글을 불러왔어요.
                         </p>
                       </div>
