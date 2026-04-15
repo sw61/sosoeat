@@ -1,6 +1,7 @@
 import type { TabList } from './mypage.types';
 
 export const FIVE_MINUTES_IN_MS = 1000 * 60 * 5;
+export const TEN_MINUTES_IN_MS = 1000 * 60 * 10;
 
 export const MYPAGE_TABS: TabList[] = [
   { value: 'all', label: '나의 모임' },
