@@ -5,6 +5,13 @@ import { SosoTalkMainPage } from './sosotalk-main-page';
 const mockUseSosoTalkMainPage = jest.fn();
 const mockFilterBar = jest.fn();
 
+jest.mock('react-intersection-observer', () => ({
+  useInView: () => ({
+    ref: jest.fn(),
+    inView: false,
+  }),
+}));
+
 jest.mock('./model', () => ({
   useSosoTalkMainPage: () => mockUseSosoTalkMainPage(),
 }));
@@ -34,7 +41,10 @@ describe('SosoTalkMainPage', () => {
     mockUseSosoTalkMainPage.mockReturnValue({
       activeSort: 'latest',
       activeTab: 'all',
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
       isError: false,
+      isFetchingNextPage: false,
       isLoading: false,
       posts: [],
       setActiveSort: jest.fn(),
@@ -46,11 +56,14 @@ describe('SosoTalkMainPage', () => {
     jest.clearAllMocks();
   });
 
-  it('로딩 중에는 로딩 문구를 보여준다', () => {
+  it('로딩 중이면 로딩 문구를 보여준다', () => {
     mockUseSosoTalkMainPage.mockReturnValue({
       activeSort: 'latest',
       activeTab: 'all',
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
       isError: false,
+      isFetchingNextPage: false,
       isLoading: true,
       posts: [],
       setActiveSort: jest.fn(),
@@ -66,7 +79,10 @@ describe('SosoTalkMainPage', () => {
     mockUseSosoTalkMainPage.mockReturnValue({
       activeSort: 'latest',
       activeTab: 'all',
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
       isError: true,
+      isFetchingNextPage: false,
       isLoading: false,
       posts: [],
       setActiveSort: jest.fn(),
@@ -90,7 +106,10 @@ describe('SosoTalkMainPage', () => {
     mockUseSosoTalkMainPage.mockReturnValue({
       activeSort: 'likes',
       activeTab: 'popular',
+      fetchNextPage: jest.fn(),
+      hasNextPage: true,
       isError: false,
+      isFetchingNextPage: false,
       isLoading: false,
       posts: [
         { id: 1, title: '첫 번째 글' },
@@ -113,5 +132,43 @@ describe('SosoTalkMainPage', () => {
         activeTab: 'popular',
       })
     );
+  });
+
+  it('다음 페이지를 불러오는 중이면 안내 문구를 보여준다', () => {
+    mockUseSosoTalkMainPage.mockReturnValue({
+      activeSort: 'latest',
+      activeTab: 'all',
+      fetchNextPage: jest.fn(),
+      hasNextPage: true,
+      isError: false,
+      isFetchingNextPage: true,
+      isLoading: false,
+      posts: [{ id: 1, title: '첫 번째 글' }],
+      setActiveSort: jest.fn(),
+      setActiveTab: jest.fn(),
+    });
+
+    render(<SosoTalkMainPage />);
+
+    expect(screen.getByText('게시글을 더 불러오는 중이에요.')).toBeInTheDocument();
+  });
+
+  it('마지막 페이지면 완료 문구를 보여준다', () => {
+    mockUseSosoTalkMainPage.mockReturnValue({
+      activeSort: 'latest',
+      activeTab: 'all',
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
+      isError: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      posts: [{ id: 1, title: '첫 번째 글' }],
+      setActiveSort: jest.fn(),
+      setActiveTab: jest.fn(),
+    });
+
+    render(<SosoTalkMainPage />);
+
+    expect(screen.getByText('모든 게시글을 불러왔어요.')).toBeInTheDocument();
   });
 });

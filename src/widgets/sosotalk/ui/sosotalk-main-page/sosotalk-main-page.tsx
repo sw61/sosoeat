@@ -1,5 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+
 import Link from 'next/link';
 
 import { Plus } from 'lucide-react';
@@ -30,8 +33,28 @@ export const SosoTalkMainPage = ({
   initialTab,
   initialSort,
 }: SosoTalkMainPageProps) => {
-  const { activeSort, activeTab, isError, isLoading, posts, setActiveSort, setActiveTab } =
-    useSosoTalkMainPage({ initialData, initialTab, initialSort });
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+    root: null,
+  });
+  const {
+    activeSort,
+    activeTab,
+    fetchNextPage,
+    hasNextPage,
+    isError,
+    isFetchingNextPage,
+    isLoading,
+    posts,
+    setActiveSort,
+    setActiveTab,
+  } = useSosoTalkMainPage({ initialData, initialTab, initialSort });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
 
   return (
     <div className={cn('bg-background min-h-screen w-full bg-[#f9f9f9] pb-24 md:pb-28', className)}>
@@ -64,11 +87,28 @@ export const SosoTalkMainPage = ({
             {!isLoading && !isError ? (
               <>
                 {posts.length > 0 ? (
-                  <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:justify-items-stretch">
-                    {posts.map((post) => (
-                      <SosoTalkCard key={post.id} {...post} />
-                    ))}
-                  </div>
+                  <>
+                    <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:justify-items-stretch">
+                      {posts.map((post) => (
+                        <SosoTalkCard key={post.id} {...post} />
+                      ))}
+                    </div>
+                    <div ref={ref} className="flex h-1 items-center justify-center" />
+                    {isFetchingNextPage ? (
+                      <div className="flex py-8">
+                        <p className="text-sosoeat-gray-500 mx-auto text-sm">
+                          게시글을 더 불러오는 중이에요.
+                        </p>
+                      </div>
+                    ) : null}
+                    {!hasNextPage ? (
+                      <div className="flex py-8">
+                        <p className="text-sosoeat-gray-400 mx-auto text-sm">
+                          모든 게시글을 불러왔어요.
+                        </p>
+                      </div>
+                    ) : null}
+                  </>
                 ) : (
                   <div className="flex min-h-[240px] items-center justify-center">
                     <p className="text-sosoeat-gray-400 text-sm">아직 등록된 게시글이 없어요.</p>
