@@ -20,9 +20,10 @@ export const useSearchMeetingList = ({
 
   const singleResult = useSearchInfiniteOption(
     options,
-    shouldUseInitialData ? (initialData ?? undefined) : undefined
+    shouldUseInitialData ? (initialData ?? undefined) : undefined,
+    { enabled: !isMulti }
   );
-  const multiResult = useSearchInfiniteOptions(options);
+  const multiResult = useSearchInfiniteOptions(options, isMulti);
   const result = isMulti ? multiResult : singleResult;
 
   return {

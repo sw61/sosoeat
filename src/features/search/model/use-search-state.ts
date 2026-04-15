@@ -184,7 +184,6 @@ const useSearchState = (
   };
 
   const isSearchPending = inputValue !== searchQuery && inputValue !== '';
-
   return {
     meetingData,
     handleRegionChange,

@@ -60,7 +60,7 @@ function searchInfiniteReducer(
   }
 }
 
-export const useSearchInfiniteOptions = (options: MeetingSearchOptions) => {
+export const useSearchInfiniteOptions = (options: MeetingSearchOptions, enabled = true) => {
   const regionKey = buildRegionKey(options.region);
 
   const [cursor, setCursor] = useState<Record<string, string | undefined>>({});
@@ -77,15 +77,17 @@ export const useSearchInfiniteOptions = (options: MeetingSearchOptions) => {
   }, [region]);
 
   const queryResults = useQueries({
-    queries: Array.isArray(options.region)
-      ? regions.map((region) =>
-          meetingsQueryOptions.options({
-            ...options,
-            region,
-            cursor: cursor[buildRegionRequestKey(regionKey, region)],
-          })
-        )
-      : [],
+    queries:
+      Array.isArray(options.region) && enabled
+        ? regions.map((region) => ({
+            ...meetingsQueryOptions.options({
+              ...options,
+              region,
+              cursor: cursor[buildRegionRequestKey(regionKey, region)],
+            }),
+            enabled,
+          }))
+        : [],
   });
 
   const dataUpdatedKey = queryResults.map((result) => result.dataUpdatedAt).join(',');
@@ -127,8 +129,14 @@ export const useSearchInfiniteOptions = (options: MeetingSearchOptions) => {
     }
   }, [accumulated, cursor, dataUpdatedKey, queryResults, regionKey, regions]);
 
-  const combinedData = combineRegionMeetings(regions, accumulated, regionKey);
-  const sortedMeetings = sortMeetings(combinedData, options.sortBy, options.sortOrder);
+  const combinedData = useMemo(
+    () => combineRegionMeetings(regions, accumulated, regionKey),
+    [regions, accumulated, regionKey]
+  );
+  const sortedMeetings = useMemo(
+    () => sortMeetings(combinedData, options.sortBy, options.sortOrder),
+    [combinedData, options.sortBy, options.sortOrder]
+  );
 
   return {
     data: { pages: [{ data: sortedMeetings, nextCursor: '', hasMore: false }] },
@@ -151,6 +159,10 @@ export const useSearchInfiniteOptions = (options: MeetingSearchOptions) => {
       (region) => hasMoreByRegion[buildRegionRequestKey(regionKey, region)]
     ),
     isFetching: queryResults.some((result) => result.isFetching),
-    isFetchingNextPage: queryResults.some((result) => result.isFetching),
+    isFetchingNextPage: queryResults.some((result, idx) => {
+      const region = regions[idx];
+      const requestKey = buildRegionRequestKey(regionKey, region);
+      return result.isFetching && !!cursor[requestKey];
+    }),
   };
 };

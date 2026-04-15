@@ -17,10 +17,12 @@ export const useSearchOptions = (options: MeetingSearchRequest) => {
 
 export const useSearchInfiniteOption = (
   options: MeetingSearchOptions,
-  initialData?: Awaited<ReturnType<typeof getMeetings>>
+  initialData?: Awaited<ReturnType<typeof getMeetings>>,
+  queryOptions?: { enabled?: boolean }
 ) => {
   return useInfiniteQuery({
     ...meetingsQueryOptions.infiniteOptions(options, initialData),
     placeholderData: keepPreviousData,
+    enabled: queryOptions?.enabled ?? true,
   });
 };

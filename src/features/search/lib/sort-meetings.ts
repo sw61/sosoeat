@@ -20,10 +20,7 @@ export const sortMeetings = (
       break;
 
     case 'registrationEnd':
-      sortedMeetings.sort(
-        (a, b) =>
-          (new Date(a.registrationEnd).getTime() - new Date(b.registrationEnd).getTime()) * order
-      );
+      sortedMeetings.sort((a, b) => a.registrationEnd.localeCompare(b.registrationEnd) * order);
       break;
 
     default:
