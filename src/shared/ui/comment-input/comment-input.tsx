@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef } from 'react';
 
 import { Send } from 'lucide-react';
 
+import { toHttpsUrl } from '../../lib/to-https-url';
 import { cn } from '../../lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../avatar';
 import { Button } from '../button';
@@ -51,7 +52,7 @@ export function CommentInput({
     <div className={cn('flex items-start gap-3 sm:gap-4', className)}>
       {showAvatar ? (
         <Avatar size="default" className="h-[54px] w-[54px] shrink-0">
-          <AvatarImage src={currentUserImageUrl} alt={currentUserName} />
+          <AvatarImage src={toHttpsUrl(currentUserImageUrl)} alt={currentUserName} />
           <AvatarFallback className="text-sm font-semibold">
             {currentUserName.slice(0, 1)}
           </AvatarFallback>

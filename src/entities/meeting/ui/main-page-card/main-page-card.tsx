@@ -65,7 +65,7 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
   const progress =
     (meeting.participantCount / (meeting.capacity <= 0 ? 1 : meeting.capacity)) * 100;
 
-  const hostImage = meeting.host?.image || '/icons/human-basic.svg';
+  const hostImage = toHttpsUrl(meeting.host?.image) || '/icons/human-basic.svg';
 
   const { handleCardClick, handleCardKeyDown } = useDetailRouter({ id: meeting.id });
 

@@ -1,5 +1,6 @@
 import { Heart, MoreHorizontal } from 'lucide-react';
 
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { CommentInput } from '@/shared/ui/comment-input';
@@ -42,7 +43,7 @@ export function SosoTalkCommentItem({
         )}
       >
         <Avatar size="default" className="h-[54px] w-[54px] shrink-0">
-          <AvatarImage src={authorImageUrl} alt={authorName} />
+          <AvatarImage src={toHttpsUrl(authorImageUrl)} alt={authorName} />
           <AvatarFallback className="text-sm font-semibold">
             {authorName.slice(0, 1)}
           </AvatarFallback>
