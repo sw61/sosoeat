@@ -39,8 +39,9 @@ export function Providers({
   }, []);
 
   useEffect(() => {
-    const run = () => {
-      initAmplitude();
+    const run = async () => {
+      await initAmplitude();
+      syncAmplitudeUser(useAuthStore.getState().user);
     };
     if ('requestIdleCallback' in window) {
       const id = window.requestIdleCallback(run);

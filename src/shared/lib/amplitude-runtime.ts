@@ -107,11 +107,10 @@ export async function trackEventRuntime(
 }
 
 export async function syncAmplitudeUserRuntime(user: AuthUser | null) {
-  if (!isAmplitudeEnabled()) {
+  if (!isAmplitudeEnabled() || !isAmplitudeInitialized) {
     return;
   }
 
-  await initAmplitudeRuntime();
   const amplitude = await getAmplitudeAnalytics();
 
   if (!user) {
