@@ -8,6 +8,7 @@ import { LazyMotion } from 'framer-motion';
 import * as m from 'framer-motion/m';
 import { MapPin, Users } from 'lucide-react';
 
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from '@/shared/ui/card';
 import { Progress, type ProgressProps } from '@/shared/ui/progress-bar';
@@ -178,7 +179,7 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
 
           <CardFooter className={MAIN_PAGE_CARD_FOOTER_CLASS}>
             <Image
-              src={hostImage}
+              src={toHttpsUrl(hostImage) ?? '/icons/human-basic.svg'}
               alt={meeting.host.name}
               width={32}
               height={32}
