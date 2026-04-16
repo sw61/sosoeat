@@ -64,6 +64,7 @@ function RegionItem({ region: r, value, onChange }: RegionItemProps) {
             triggerStartPosRef.current = { x: e.clientX, y: e.clientY };
             triggerDidScrollRef.current = false;
             // Prevent Radix from opening on pointerdown — we open manually in onClick
+            e.currentTarget.focus();
             e.preventDefault();
           }}
           onPointerMove={(e) => {
@@ -75,6 +76,7 @@ function RegionItem({ region: r, value, onChange }: RegionItemProps) {
             if (!triggerDidScrollRef.current) {
               setOpen((prev) => !prev);
             }
+            triggerDidScrollRef.current = false;
           }}
         >
           <span className="min-w-0 flex-1 truncate">
