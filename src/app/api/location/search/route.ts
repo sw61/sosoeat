@@ -117,7 +117,10 @@ export async function GET(request: NextRequest) {
         query,
       },
     });
-    return NextResponse.json({ error: '장소 검색 결과' }, { status: 502 });
+    return NextResponse.json(
+      { error: '장소 검색 결과를 처리하는 데 실패했습니다.' },
+      { status: 502 }
+    );
   }
 
   const results = data.documents.map((doc) => {
