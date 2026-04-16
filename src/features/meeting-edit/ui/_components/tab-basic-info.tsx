@@ -33,7 +33,7 @@ interface TabProps {
 const ACCEPTED_IMAGE_TYPES = Object.keys(MIME_TO_EXT).join(',');
 
 const inputClassName =
-  'bg-sosoeat-gray-100 text-sm md:text-base font-normal text-sosoeat-gray-900 border border-transparent placeholder:text-sosoeat-gray-600 transition-all focus:outline-none focus:ring-0 focus:border-sosoeat-orange-500 focus-visible:ring-0 focus-visible:border-sosoeat-orange-500';
+  'bg-sosoeat-gray-100 h-11 text-sm md:text-base font-normal text-sosoeat-gray-900 border border-transparent placeholder:text-sosoeat-gray-600 transition-all focus:outline-none focus:ring-0 focus:border-sosoeat-orange-500 focus-visible:ring-0 focus-visible:border-sosoeat-orange-500';
 
 const requiredIndicator = <span className="text-destructive ml-0.5">*</span>;
 
@@ -81,7 +81,7 @@ export const TabBasicInfo = ({ form, isUploadPending, uploadError, onFileChange 
                     id="edit-type"
                     type="button"
                     className={cn(
-                      'flex h-10 w-full items-center justify-between rounded-[12px] px-3 text-sm md:h-12 md:text-base',
+                      'flex h-11 w-full items-center justify-between rounded-[12px] px-3 text-sm md:text-base',
                       'bg-sosoeat-gray-100 text-sosoeat-gray-900 border border-transparent'
                     )}
                   >
