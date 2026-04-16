@@ -4,8 +4,7 @@ import { ko } from 'date-fns/locale';
 import type { GetSosoTalkPostDetailResponse, SosoTalkComment } from '@/entities/post';
 import type { SosoTalkCommentItemData } from '@/entities/sosotalk-comment';
 
-const SOSOTALK_AUTHOR_IMAGE_FALLBACK =
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop';
+const SOSOTALK_AUTHOR_IMAGE_FALLBACK = '/images/basic-profile.svg';
 
 interface MapCommentToCommentItemDataOptions {
   currentUserId?: number;

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 
-import { apiServer } from '@/shared/api/api-server';
 import { SosoTalkPostDetailPage } from '@/widgets/sosotalk';
 
 interface PageProps {
@@ -11,27 +10,20 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const response = await apiServer.get(`/posts/${id}`).catch(() => null);
-
-  if (!response?.ok) return {};
-
-  const post = await response.json().catch(() => null);
-
-  if (!post) return {};
+  const detailPath = `/sosotalk/${id}`;
 
   return {
-    title: post.title,
-    description: post.content?.slice(0, 150),
+    title: '소소톡 게시글',
+    description: '소소잇에서 소소한 일상과 이야기를 나눠보세요.',
     openGraph: {
-      title: post.title,
-      description: post.content?.slice(0, 150),
-      ...(post.image && { images: [{ url: post.image }] }),
+      title: '소소톡 게시글',
+      description: '소소잇에서 소소한 일상과 이야기를 나눠보세요.',
+      url: detailPath,
     },
     twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.content?.slice(0, 150),
-      ...(post.image && { images: [post.image] }),
+      card: 'summary',
+      title: '소소톡 게시글',
+      description: '소소잇에서 소소한 일상과 이야기를 나눠보세요.',
     },
   };
 }
