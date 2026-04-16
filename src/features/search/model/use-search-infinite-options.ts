@@ -15,6 +15,7 @@ import {
 import { sortMeetings } from '../lib/sort-meetings';
 
 type SearchInfiniteState = {
+  scopeKey: string;
   hasMoreByRegion: Record<string, boolean>;
   accumulated: Record<string, Array<Meeting>>;
 };
@@ -27,10 +28,12 @@ type MergePayload = {
 
 type SearchInfiniteAction = {
   type: 'merge-results';
+  scopeKey: string;
   payloads: MergePayload[];
 };
 
 const initialSearchInfiniteState: SearchInfiniteState = {
+  scopeKey: '',
   hasMoreByRegion: {},
   accumulated: {},
 };
@@ -45,14 +48,21 @@ function searchInfiniteReducer(
         return state;
       }
 
+      // scope가 바뀌면 이전 accumulated를 버리고 새로 시작
+      const base =
+        action.scopeKey !== state.scopeKey
+          ? { scopeKey: action.scopeKey, hasMoreByRegion: {}, accumulated: {} }
+          : state;
+
       const lastPayload = action.payloads[action.payloads.length - 1];
-      const nextHasMoreByRegion = { ...state.hasMoreByRegion };
+      const nextHasMoreByRegion = { ...base.hasMoreByRegion };
 
       action.payloads.forEach(({ requestKey, nextHasMore }) => {
         nextHasMoreByRegion[requestKey] = nextHasMore;
       });
 
       return {
+        scopeKey: action.scopeKey,
         accumulated: lastPayload.nextAccumulated,
         hasMoreByRegion: nextHasMoreByRegion,
       };
@@ -63,8 +73,25 @@ function searchInfiniteReducer(
 export const useSearchInfiniteOptions = (options: MeetingSearchOptions, enabled = true) => {
   const regionKey = buildRegionKey(options.region);
 
+  const dateStartIso = options.dateStart?.toISOString();
+  const dateEndIso = options.dateEnd?.toISOString();
+  const filterSignature = useMemo(
+    () =>
+      [
+        options.type,
+        options.sortBy,
+        options.sortOrder,
+        dateStartIso,
+        dateEndIso,
+        options.keyword,
+      ].join('|'),
+    [options.type, options.sortBy, options.sortOrder, dateStartIso, dateEndIso, options.keyword]
+  );
+
+  const scopeKey = `${regionKey}|${filterSignature}`;
+
   const [cursor, setCursor] = useState<Record<string, string | undefined>>({});
-  const [{ hasMoreByRegion, accumulated }, dispatch] = useReducer(
+  const [{ hasMoreByRegion, accumulated, scopeKey: stateScopeKey }, dispatch] = useReducer(
     searchInfiniteReducer,
     initialSearchInfiniteState
   );
@@ -93,7 +120,13 @@ export const useSearchInfiniteOptions = (options: MeetingSearchOptions, enabled 
   const dataUpdatedKey = queryResults.map((result) => result.dataUpdatedAt).join(',');
 
   useEffect(() => {
-    let nextAccumulated = accumulated;
+    const isScopeChange = scopeKey !== stateScopeKey;
+    // scope 변경 시 processedRef 초기화 — cursor는 이 effect 안에서 무시해 타이밍 경합 방지
+    if (isScopeChange) {
+      processedRef.current = new Set();
+    }
+
+    let nextAccumulated = isScopeChange ? {} : accumulated;
     const payloads: MergePayload[] = [];
 
     regions.forEach((region, idx) => {
@@ -101,8 +134,9 @@ export const useSearchInfiniteOptions = (options: MeetingSearchOptions, enabled 
       if (!result?.data) return;
 
       const requestKey = buildRegionRequestKey(regionKey, region);
-      const cursorKey = cursor[requestKey] ?? '';
-      const processedKey = `${requestKey}:${cursorKey}`;
+      // scope 변경 시 cursor를 강제로 '' 사용 — 비동기 cursor 리셋으로 인한 이중 dispatch 방지
+      const cursorKey = isScopeChange ? '' : (cursor[requestKey] ?? '');
+      const processedKey = `${scopeKey}:${requestKey}:${cursorKey}`;
       if (processedRef.current.has(processedKey)) return;
       processedRef.current.add(processedKey);
 
@@ -122,16 +156,23 @@ export const useSearchInfiniteOptions = (options: MeetingSearchOptions, enabled 
     });
 
     if (payloads.length > 0) {
-      dispatch({
-        type: 'merge-results',
-        payloads,
-      });
+      dispatch({ type: 'merge-results', scopeKey, payloads });
     }
-  }, [accumulated, cursor, dataUpdatedKey, queryResults, regionKey, regions]);
+  }, [
+    accumulated,
+    cursor,
+    dataUpdatedKey,
+    queryResults,
+    regionKey,
+    regions,
+    scopeKey,
+    stateScopeKey,
+  ]);
 
   const combinedData = useMemo(
-    () => combineRegionMeetings(regions, accumulated, regionKey),
-    [regions, accumulated, regionKey]
+    () =>
+      stateScopeKey === scopeKey ? combineRegionMeetings(regions, accumulated, regionKey) : [],
+    [regions, accumulated, regionKey, stateScopeKey, scopeKey]
   );
   const sortedMeetings = useMemo(
     () => sortMeetings(combinedData, options.sortBy, options.sortOrder),

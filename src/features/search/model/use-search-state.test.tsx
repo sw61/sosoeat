@@ -441,4 +441,68 @@ describe('useSearchState', () => {
 
     expect(result.current.hasNextPage).toBe(true);
   });
+
+  it('복수 지역 선택 중 type 필터 변경 시 이전 데이터를 초기화해야 한다', async () => {
+    const meetingAll1 = { id: 1, region: '부산 북구', type: 'groupEat' };
+    const meetingAll2 = { id: 2, region: '서울 강남구', type: 'groupBuy' };
+
+    (useQueries as jest.Mock).mockReturnValue([
+      makeQueryResult({ data: [meetingAll1], hasMore: false, nextCursor: '' }, 1000),
+      makeQueryResult({ data: [meetingAll2], hasMore: false, nextCursor: '' }, 1001),
+    ]);
+
+    const { result, rerender } = renderHook(
+      ({ type }: { type?: string }) =>
+        useSearchInfiniteOptions({ region: ['부산 북구', '서울 강남구'], type: type as never }),
+      { initialProps: { type: undefined as string | undefined } }
+    );
+
+    await act(async () => {});
+    expect(result.current.data.pages[0].data).toHaveLength(2);
+
+    // type 필터 변경: groupEat 만 보여야 함
+    const meetingFiltered = { id: 1, region: '부산 북구', type: 'groupEat' };
+    (useQueries as jest.Mock).mockReturnValue([
+      makeQueryResult({ data: [meetingFiltered], hasMore: false, nextCursor: '' }, 2000),
+      makeQueryResult({ data: [], hasMore: false, nextCursor: '' }, 2001),
+    ]);
+
+    rerender({ type: 'groupEat' });
+    await act(async () => {});
+
+    const ids = result.current.data.pages[0].data.map((m) => (m as { id: number }).id);
+    // 이전 데이터(id:2, groupBuy)가 남아있으면 안 됨
+    expect(ids).not.toContain(2);
+    expect(ids).toContain(1);
+    expect(result.current.data.pages[0].data).toHaveLength(1);
+  });
+
+  it('복수 지역 선택 중 type 필터 변경 시 데이터가 중복되지 않아야 한다', async () => {
+    const meeting = { id: 1, region: '부산 북구' };
+
+    (useQueries as jest.Mock).mockReturnValue([
+      makeQueryResult({ data: [meeting], hasMore: false, nextCursor: '' }, 1000),
+      makeQueryResult({ data: [], hasMore: false, nextCursor: '' }, 1001),
+    ]);
+
+    const { result, rerender } = renderHook(
+      ({ type }: { type?: string }) =>
+        useSearchInfiniteOptions({ region: ['부산 북구', '서울 강남구'], type: type as never }),
+      { initialProps: { type: undefined as string | undefined } }
+    );
+
+    await act(async () => {});
+    expect(result.current.data.pages[0].data).toHaveLength(1);
+
+    // 같은 meeting이 새 필터에서도 반환되는 경우 중복 없어야 함
+    (useQueries as jest.Mock).mockReturnValue([
+      makeQueryResult({ data: [meeting], hasMore: false, nextCursor: '' }, 2000),
+      makeQueryResult({ data: [], hasMore: false, nextCursor: '' }, 2001),
+    ]);
+
+    rerender({ type: 'groupBuy' });
+    await act(async () => {});
+
+    expect(result.current.data.pages[0].data).toHaveLength(1);
+  });
 });

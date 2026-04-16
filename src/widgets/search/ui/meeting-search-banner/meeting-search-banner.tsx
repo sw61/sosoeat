@@ -15,7 +15,7 @@ const subtitleWrapClass =
 
 export function MeetingSearchBanner({ className }: MeetingSearchBannerProps) {
   return (
-    <div className={cn('flex w-full items-start justify-center px-0 pb-4 md:px-4', className)}>
+    <div className={cn('flex w-full items-start justify-center px-0 md:px-4', className)}>
       <div className={bannerShellClass}>
         <Image
           src={'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80'}
