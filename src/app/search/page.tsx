@@ -4,9 +4,7 @@ import type { Metadata } from 'next';
 
 import { SearchParams } from 'nuqs';
 
-import { getMeetingSearchParams } from '@/features/search';
-import { getInitialSearchData } from '@/features/search/index.server';
-import { MeetingSearchBanner , SearchScreenFetcher , SearchScreenSkeleton } from '@/widgets/search';
+import { MeetingSearchBanner, SearchScreenFetcher, SearchScreenSkeleton } from '@/widgets/search';
 
 export const metadata: Metadata = {
   title: '모임 검색',
@@ -45,9 +43,6 @@ type PageProps = {
 };
 
 export default async function Page({ searchParams }: PageProps) {
-  const requestParams = await getMeetingSearchParams(searchParams);
-  const initialData = getInitialSearchData(requestParams);
-
   return (
     <div className="bg-sosoeat-gray-100 flex w-full flex-col items-center justify-center">
       <section aria-label="search-banner" className="w-full">
@@ -58,7 +53,7 @@ export default async function Page({ searchParams }: PageProps) {
         className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-4"
       >
         <Suspense fallback={<SearchScreenSkeleton />}>
-          <SearchScreenFetcher initialData={initialData} />
+          <SearchScreenFetcher searchParams={searchParams} />
         </Suspense>
       </section>
     </div>
