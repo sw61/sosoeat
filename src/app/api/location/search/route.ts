@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
         query,
       },
     });
-    return NextResponse.json({ error: '?μ냼 寃?됱뿉 ?ㅽ뙣?덉뒿?덈떎.' }, { status: 502 });
+    return NextResponse.json({ error: '장소 검색 결과' }, { status: 502 });
   }
 
   const results = data.documents.map((doc) => {
