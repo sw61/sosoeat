@@ -1,5 +1,6 @@
 import { CalendarDays, ChevronLeft, MoreHorizontal } from 'lucide-react';
 
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar/avatar';
 import { Button } from '@/shared/ui/button';
 import {
@@ -68,7 +69,7 @@ export function SosoTalkPostDetailHeader({
       <div className="flex items-center justify-between gap-6">
         <div className="flex items-center gap-3">
           <Avatar size="lg" className="border-sosoeat-gray-300 h-8 w-8 border md:h-9 md:w-9">
-            <AvatarImage src={authorImageUrl} alt={authorName} />
+            <AvatarImage src={toHttpsUrl(authorImageUrl)} alt={authorName} />
             <AvatarFallback>{authorName.slice(0, 1)}</AvatarFallback>
           </Avatar>
           <span className="text-sosoeat-gray-900 text-base font-semibold">{authorName}</span>

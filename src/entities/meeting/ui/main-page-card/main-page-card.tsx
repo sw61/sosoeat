@@ -8,6 +8,7 @@ import { LazyMotion } from 'framer-motion';
 import * as m from 'framer-motion/m';
 import { MapPin, Users } from 'lucide-react';
 
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from '@/shared/ui/card';
 import { Progress, type ProgressProps } from '@/shared/ui/progress-bar';
@@ -64,7 +65,7 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
   const progress =
     (meeting.participantCount / (meeting.capacity <= 0 ? 1 : meeting.capacity)) * 100;
 
-  const hostImage = meeting.host?.image || '/icons/human-basic.svg';
+  const hostImage = toHttpsUrl(meeting.host?.image) || '/icons/human-basic.svg';
 
   const { handleCardClick, handleCardKeyDown } = useDetailRouter({ id: meeting.id });
 

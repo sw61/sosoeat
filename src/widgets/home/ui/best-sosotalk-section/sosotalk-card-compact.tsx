@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Heart, MessageCircle } from 'lucide-react';
 
 import { type SosoTalkPostCardItem, sosotalkPostDetailQueryOptions } from '@/entities/post';
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar/avatar';
 
 type SosoTalkCardCompactProps = Omit<SosoTalkPostCardItem, 'content'>;
@@ -53,7 +54,7 @@ export function SosoTalkCardCompact({
           <div className="flex items-center justify-between text-xs font-medium">
             <div className="flex items-center gap-[6px]">
               <Avatar className="h-6 w-6">
-                <AvatarImage src={authorImageUrl} alt={authorName} />
+                <AvatarImage src={toHttpsUrl(authorImageUrl)} alt={authorName} />
                 <AvatarFallback>{authorName?.slice(0, 1)}</AvatarFallback>
               </Avatar>
               <span className="text-xs">{authorName}</span>
