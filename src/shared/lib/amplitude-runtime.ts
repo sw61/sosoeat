@@ -2,12 +2,15 @@ import type { AuthUser } from '../types/auth';
 
 type AmplitudeAnalyticsModule = typeof import('@amplitude/analytics-browser');
 type AmplitudeSessionReplayPluginModule = typeof import('@amplitude/plugin-session-replay-browser');
+type AmplitudeEngagementModule = typeof import('@amplitude/engagement-browser');
 
 let amplitudeAnalyticsModulePromise: Promise<AmplitudeAnalyticsModule> | null = null;
 let amplitudeSessionReplayPluginModulePromise: Promise<AmplitudeSessionReplayPluginModule> | null =
   null;
+let amplitudeEngagementModulePromise: Promise<AmplitudeEngagementModule> | null = null;
 let isAmplitudeInitialized = false;
 let isSessionReplayAdded = false;
+let isEngagementAdded = false;
 
 const AMPLITUDE_API_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
 
@@ -25,6 +28,14 @@ async function getSessionReplayPlugin() {
   }
 
   return amplitudeSessionReplayPluginModulePromise;
+}
+
+async function getEngagementModule() {
+  if (!amplitudeEngagementModulePromise) {
+    amplitudeEngagementModulePromise = import('@amplitude/engagement-browser');
+  }
+
+  return amplitudeEngagementModulePromise;
 }
 
 function isAmplitudeEnabled() {
@@ -48,6 +59,21 @@ async function addSessionReplayPlugin() {
   ).promise;
 
   isSessionReplayAdded = true;
+}
+
+async function addEngagementPlugin() {
+  if (isEngagementAdded) {
+    return;
+  }
+
+  const [amplitude, engagement] = await Promise.all([
+    getAmplitudeAnalytics(),
+    getEngagementModule(),
+  ]);
+
+  await amplitude.add(engagement.plugin()).promise;
+
+  isEngagementAdded = true;
 }
 
 export async function initAmplitudeRuntime() {
@@ -85,6 +111,7 @@ export async function initAmplitudeRuntime() {
     }).promise;
 
     void addSessionReplayPlugin();
+    void addEngagementPlugin();
   } catch (error) {
     isAmplitudeInitialized = false;
 
