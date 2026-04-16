@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+
 import { fetchUserInfo } from './auth-utils';
 import { CookieStorage } from './cookie-storage';
 
@@ -51,6 +53,12 @@ export async function silentRefresh(): Promise<string | null> {
 
       return data.accessToken as string;
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          area: 'auth',
+          action: 'silent-refresh',
+        },
+      });
       console.error('[silentRefresh] error:', error);
       await CookieStorage.clearSession();
       return null;

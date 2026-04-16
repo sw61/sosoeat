@@ -1,3 +1,4 @@
+﻿import * as Sentry from '@sentry/nextjs';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -9,6 +10,7 @@ import {
   SyncMeetingRequest,
   UpdateMeetingCommentRequest,
 } from '@/entities/meeting-comment';
+import { capture5xxException } from '@/shared/lib/sentry-error';
 
 type CommentAuthor = {
   nickname: string;
@@ -60,10 +62,19 @@ export const useCreateComment = (meetingId: number, author: CommentAuthor) => {
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.list(meetingId) });
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.count(meetingId) });
     },
-    onError: (_error: Error, _, context) => {
+    onError: (error: Error, _, context) => {
       if (context?.previousComments) {
         queryClient.setQueryData(meetingCommentKeys.list(meetingId), context.previousComments);
       }
+      capture5xxException(error, {
+        tags: {
+          area: 'meeting-comment',
+          action: 'create-comment',
+        },
+        extra: {
+          meetingId,
+        },
+      });
       toast.error('댓글 작성 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
@@ -108,10 +119,19 @@ export const useUpdateComment = (meetingId: number) => {
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.list(meetingId) });
       toast.success('댓글이 수정되었습니다.');
     },
-    onError: (_error: Error, _, context) => {
+    onError: (error: Error, _, context) => {
       if (context?.previousComments) {
         queryClient.setQueryData(meetingCommentKeys.list(meetingId), context.previousComments);
       }
+      capture5xxException(error, {
+        tags: {
+          area: 'meeting-comment',
+          action: 'update-comment',
+        },
+        extra: {
+          meetingId,
+        },
+      });
       toast.error('댓글 수정 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
@@ -151,10 +171,19 @@ export const useDeleteComment = (meetingId: number) => {
       queryClient.invalidateQueries({ queryKey: meetingCommentKeys.count(meetingId) });
       toast.success('댓글이 삭제되었습니다.');
     },
-    onError: (_error: Error, _, context) => {
+    onError: (error: Error, _, context) => {
       if (context?.previousComments) {
         queryClient.setQueryData(meetingCommentKeys.list(meetingId), context.previousComments);
       }
+      capture5xxException(error, {
+        tags: {
+          area: 'meeting-comment',
+          action: 'delete-comment',
+        },
+        extra: {
+          meetingId,
+        },
+      });
       toast.error('댓글 삭제 중 문제가 생겼어요. 다시 시도해 주세요.');
     },
   });
@@ -181,7 +210,18 @@ export const useSyncCreateMeeting = () => {
   return useMutation({
     mutationFn: (payload: SyncMeetingRequest) => meetingCommentApi.syncCreateMeeting(payload),
     retry: 3,
-    onError: () => {
+    onError: (error, payload) => {
+      Sentry.captureException(error, {
+        tags: {
+          area: 'meeting-comment',
+          action: 'sync-create-meeting',
+        },
+        extra: {
+          meetingId: payload.id,
+          hostId: payload.hostId,
+          teamId: payload.teamId,
+        },
+      });
       console.error('[syncCreateMeeting] 동기화 실패');
     },
   });

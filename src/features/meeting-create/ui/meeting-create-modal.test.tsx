@@ -170,10 +170,9 @@ describe('MeetingCreateModal', () => {
     await waitFor(() => {
       expect(within(dialog).getByText((_, el) => el?.textContent === '2/4')).toBeInTheDocument();
     });
-    await user.type(
-      within(dialog).getByPlaceholderText('모임 이름을 입력해 주세요'),
-      '맛있는 삼겹살 모임'
-    );
+    fireEvent.change(within(dialog).getByPlaceholderText('모임 이름을 입력해 주세요'), {
+      target: { value: '맛있는 삼겹살 모임' },
+    });
 
     // 장소: readOnly input 클릭 → LocationSearchModal mock에서 장소 선택
     await user.click(within(dialog).getByPlaceholderText('건물, 지번 또는 도로명 검색'));
@@ -199,10 +198,9 @@ describe('MeetingCreateModal', () => {
     await waitFor(() => {
       expect(within(dialog).getByText((_, el) => el?.textContent === '3/4')).toBeInTheDocument();
     });
-    await user.type(
-      within(dialog).getByPlaceholderText('모임을 설명해주세요'),
-      '같이 삼겹살 먹어요!'
-    );
+    fireEvent.change(within(dialog).getByPlaceholderText('모임을 설명해주세요'), {
+      target: { value: '같이 삼겹살 먹어요!' },
+    });
     await user.click(within(dialog).getByRole('button', { name: '다음' }));
 
     // Step 4: Schedule
@@ -221,8 +219,7 @@ describe('MeetingCreateModal', () => {
     fireEvent.change(meetingTimeInput, { target: { value: '19:00' } });
     fireEvent.change(registrationEndDateInput, { target: { value: '2026-12-30' } });
     fireEvent.change(registrationEndTimeInput, { target: { value: '18:00' } });
-    await user.clear(capacityInput);
-    await user.type(capacityInput, '10');
+    fireEvent.change(capacityInput, { target: { value: '10' } });
 
     const submitButton = within(dialog).getByRole('button', { name: '모임 만들기' });
 

@@ -2,6 +2,8 @@ import { Suspense } from 'react';
 
 import type { Metadata } from 'next';
 
+import * as Sentry from '@sentry/nextjs';
+
 import {
   MeetingCommentSkeleton,
   MeetingHeroSkeleton,
@@ -21,7 +23,19 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const meeting = await getMeetingById(Number(id)).catch(() => null);
+  const meeting = await getMeetingById(Number(id)).catch((error) => {
+    Sentry.captureException(error, {
+      tags: {
+        area: 'meeting-detail',
+        location: 'generateMetadata',
+      },
+      extra: {
+        meetingId: id,
+      },
+    });
+
+    return null;
+  });
 
   if (!meeting) return {};
 

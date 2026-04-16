@@ -1,8 +1,8 @@
+import { Suspense } from 'react';
+
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
-import type { Meeting } from '@/entities/meeting';
-import { getMeetings } from '@/entities/meeting/index.server';
 import {
   BestSosotalkSection,
   CtaSection,
@@ -12,19 +12,6 @@ import {
 } from '@/widgets/home';
 
 const MainBanner = dynamic(() => import('@/widgets/main-banner').then((mod) => mod.MainBanner));
-
-async function getHomeMeetings(params: Parameters<typeof getMeetings>[0]): Promise<Meeting[]> {
-  try {
-    const { data } = await getMeetings(params);
-    return data;
-  } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.error('Failed to load home meetings.', error);
-    }
-
-    return [];
-  }
-}
 
 export const metadata: Metadata = {
   title: '홈',
@@ -37,21 +24,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function HomePage() {
-  const latestMeetings = await getHomeMeetings({
-    size: 6,
-    sortBy: 'registrationEnd',
-    sortOrder: 'desc',
-  });
-
+export default function HomePage() {
   return (
     <div>
       <MainBanner />
       <div className="mx-auto max-w-[1136px]">
         <div className="mt-8 flex flex-col gap-8">
           <MeetingTypeSection />
-          <MainPageSection meetings={latestMeetings} />
-          <BestSosotalkSection />
+          <Suspense>
+            <MainPageSection />
+          </Suspense>
+          <Suspense>
+            <BestSosotalkSection />
+          </Suspense>
         </div>
         <HowToUseSection />
       </div>

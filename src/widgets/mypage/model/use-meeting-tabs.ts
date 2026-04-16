@@ -13,11 +13,20 @@ export function useMeetingTabs(activeTab: TabValue) {
 
   const cards = useMemo(() => {
     const favoritedIds = new Set(favoriteQuery.data?.data.map((f) => f.meeting.id) ?? []);
+
     if (activeTab === 'all' && joinedQuery.data) {
-      return toUserMeetingCards(joinedQuery.data, favoritedIds);
+      const allMeetings = joinedQuery.data.pages.flatMap((page) => page.data);
+      return toUserMeetingCards(
+        { data: allMeetings, nextCursor: '', hasMore: false },
+        favoritedIds
+      );
     }
     if (activeTab === 'created' && createdQuery.data) {
-      return toUserMeetingCards(createdQuery.data, favoritedIds);
+      const allMeetings = createdQuery.data.pages.flatMap((page) => page.data);
+      return toUserMeetingCards(
+        { data: allMeetings, nextCursor: '', hasMore: false },
+        favoritedIds
+      );
     }
     if (activeTab === 'favorite' && favoriteQuery.data) {
       return toFavoriteMeetingCards(favoriteQuery.data);
@@ -30,5 +39,24 @@ export function useMeetingTabs(activeTab: TabValue) {
     (activeTab === 'created' && createdQuery.isLoading) ||
     (activeTab === 'favorite' && favoriteQuery.isLoading);
 
-  return { cards, isLoading };
+  const hasNextPage =
+    activeTab === 'all'
+      ? (joinedQuery.hasNextPage ?? false)
+      : activeTab === 'created'
+        ? (createdQuery.hasNextPage ?? false)
+        : false;
+
+  const isFetchingNextPage =
+    activeTab === 'all'
+      ? joinedQuery.isFetchingNextPage
+      : activeTab === 'created'
+        ? createdQuery.isFetchingNextPage
+        : false;
+
+  const fetchNextPage = () => {
+    if (activeTab === 'all') joinedQuery.fetchNextPage();
+    else if (activeTab === 'created') createdQuery.fetchNextPage();
+  };
+
+  return { cards, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage };
 }

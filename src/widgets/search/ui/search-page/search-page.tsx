@@ -11,14 +11,11 @@ import {
   MeetingMakeButton,
   useMeetingCreateTrigger,
 } from '@/features/meeting-create';
+import { MeetingFilterBar, SearchBar, useSearchState } from '@/features/search';
 
-import useSearchPage from '../../model/use-search-page';
 import { EmptyPage } from '../empty-page';
 import Loading from '../loading';
-import { MeetingFilterBar } from '../meeting-filter-bar';
-import { SearchBar } from '../search-bar';
-
-import SearchSkeleton from './search-skeleton';
+import SearchSkeleton from '../search-screen/search-skeleton';
 
 export default function SearchPage({
   initialData,
@@ -54,7 +51,7 @@ export default function SearchPage({
     inputValue,
     handleSearchQueryChange,
     searchError,
-  } = useSearchPage(initialData, initialDefaultDateStartIso);
+  } = useSearchState(initialData, initialDefaultDateStartIso);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {

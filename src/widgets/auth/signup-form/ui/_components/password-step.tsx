@@ -68,7 +68,7 @@ export const PasswordStep = ({
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label="비밀번호 표시 토글"
-                className="text-sosoeat-gray-800 hover:text-sosoeat-gray-900 absolute top-1/2 right-4 -translate-y-1/2 focus:outline-none"
+                className="text-sosoeat-gray-800 hover:text-sosoeat-gray-900 absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer focus:outline-none"
               >
                 {showPassword ? <Eye className="h-6 w-6" /> : <EyeOff className="h-6 w-6" />}
               </button>
@@ -100,7 +100,7 @@ export const PasswordStep = ({
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 aria-label="비밀번호 확인 표시 토글"
-                className="text-sosoeat-gray-800 hover:text-sosoeat-gray-900 absolute top-1/2 right-4 -translate-y-1/2 focus:outline-none"
+                className="text-sosoeat-gray-800 hover:text-sosoeat-gray-900 absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer focus:outline-none"
               >
                 {showConfirmPassword ? <Eye className="h-6 w-6" /> : <EyeOff className="h-6 w-6" />}
               </button>
@@ -119,7 +119,7 @@ export const PasswordStep = ({
           type="button"
           variant="outline"
           onClick={onPrev}
-          className="bg-sosoeat-gray-100 mt-2 h-[52px] rounded-[16px] px-4 text-base font-semibold text-gray-500 shadow-sm transition-colors"
+          className="bg-sosoeat-gray-100 mt-2 h-[52px] cursor-pointer rounded-[16px] px-4 text-base font-semibold text-gray-500 shadow-sm transition-colors"
         >
           <ChevronLeft className="h-6 w-6" />
           <span>이전</span>

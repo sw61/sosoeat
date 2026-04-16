@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
+import * as Sentry from '@sentry/nextjs';
+
 import { useGoogleLoginMutation } from '@/features/auth';
 import { kakaoRedirectUri } from '@/shared/lib/oauth-config';
 import { STORAGE_KEYS } from '@/shared/lib/storage-keys';
@@ -37,7 +39,16 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
   const handleGoogleLogin = () => {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (typeof google === 'undefined' || !clientId) {
-      if (!clientId) console.error('Missing Google Client ID');
+      if (!clientId) {
+        const error = new Error('Missing Google Client ID');
+        console.error(error.message);
+        Sentry.captureException(error, {
+          tags: {
+            area: 'auth',
+            action: 'google-login-config',
+          },
+        });
+      }
       return;
     }
     saveCallbackUrl();
@@ -64,6 +75,16 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
       console.error('Missing Kakao OAuth config', {
         clientId: !!clientId,
         redirectUri: !!redirectUri,
+      });
+      Sentry.captureException(new Error('Missing Kakao OAuth config'), {
+        tags: {
+          area: 'auth',
+          action: 'kakao-login-config',
+        },
+        extra: {
+          hasClientId: !!clientId,
+          hasRedirectUri: !!redirectUri,
+        },
       });
       return;
     }
@@ -97,7 +118,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
               type="button"
               onClick={handleGoogleLogin}
               disabled={googleLoginMutation.isPending}
-              className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] border border-gray-300 bg-white text-base font-semibold text-slate-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 focus:outline-none disabled:opacity-50 md:flex-1"
+              className="flex h-[48px] w-full cursor-pointer items-center justify-center gap-[12px] rounded-[12px] border border-gray-300 bg-white text-base font-semibold text-slate-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 focus:outline-none disabled:opacity-50 md:flex-1"
             >
               <Image src="/icons/google-icon.svg" alt="Google Logo" width={24} height={24} />
               구글로 계속하기
@@ -106,7 +127,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
             <button
               type="button"
               onClick={handleKakaoLogin}
-              className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] bg-[#FEE500] text-base font-semibold text-[rgba(0,0,0,0.85)] opacity-90 hover:opacity-100 focus:ring-2 focus:ring-[#FFEE01] focus:ring-offset-1 focus:outline-none md:flex-1"
+              className="flex h-[48px] w-full cursor-pointer items-center justify-center gap-[12px] rounded-[12px] bg-[#FEE500] text-base font-semibold text-[rgba(0,0,0,0.85)] opacity-90 hover:opacity-100 focus:ring-2 focus:ring-[#FFEE01] focus:ring-offset-1 focus:outline-none md:flex-1"
             >
               <Image src="/icons/kakao-icon.svg" alt="Kakao Logo" width={24} height={24} />
               카카오로 계속하기

@@ -1,15 +1,12 @@
+import { Suspense } from 'react';
+
 import type { Metadata } from 'next';
 
-import { addDays, startOfDay } from 'date-fns';
 import { SearchParams } from 'nuqs';
 
-import { getMeetings } from '@/entities/meeting/index.server';
-import {
-  getDefaultSearchDateStartIso,
-  MeetingSearchBanner,
-  SearchPage,
-  searchParamsCache,
-} from '@/widgets/search';
+import { MeetingSearchBanner, SearchScreenSkeleton } from '@/widgets/search';
+
+import { SearchScreenFetcher } from './search-screen-fetcher.server';
 
 export const metadata: Metadata = {
   title: '모임 검색',
@@ -48,21 +45,6 @@ type PageProps = {
 };
 
 export default async function Page({ searchParams }: PageProps) {
-  const { dateStart, dateEnd, search, typeFilter, sortBy, sortOrder } = searchParamsCache.parse(
-    await searchParams
-  );
-  const initialDefaultDateStartIso = getDefaultSearchDateStartIso();
-  const finalDateStartIso = dateStart?.toISOString() ?? initialDefaultDateStartIso;
-  const finalDateEnd = dateEnd ? addDays(startOfDay(dateEnd), 1).toISOString() : undefined;
-  const initialData = await getMeetings({
-    dateStart: finalDateStartIso,
-    dateEnd: finalDateEnd,
-    type: typeFilter === 'all' ? undefined : typeFilter,
-    sortBy,
-    sortOrder,
-    keyword: search === '' ? undefined : search,
-  }).catch(() => null);
-
   return (
     <div className="bg-sosoeat-gray-100 flex w-full flex-col items-center justify-center">
       <section aria-label="search-banner" className="w-full">
@@ -72,10 +54,9 @@ export default async function Page({ searchParams }: PageProps) {
         aria-label="search-results"
         className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-4"
       >
-        <SearchPage
-          initialData={initialData}
-          initialDefaultDateStartIso={initialDefaultDateStartIso}
-        />
+        <Suspense fallback={<SearchScreenSkeleton />}>
+          <SearchScreenFetcher searchParams={searchParams} />
+        </Suspense>
       </section>
     </div>
   );

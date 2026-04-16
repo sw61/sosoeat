@@ -3,10 +3,12 @@
  * - 응답 실패 시 에러 메시지를 추출해 throw합니다.
  * - 응답 성공 시 JSON을 파싱해 반환합니다.
  */
+import { ApiError } from '../lib/sentry-error';
+
 export async function parseResponse<T>(response: Response, fallbackMessage: string): Promise<T> {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || fallbackMessage);
+    throw new ApiError(errorData.message || fallbackMessage, response.status);
   }
   return response.json();
 }
@@ -20,6 +22,6 @@ export async function parseVoidResponse(
 ): Promise<void> {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || fallbackMessage);
+    throw new ApiError(errorData.message || fallbackMessage, response.status);
   }
 }
