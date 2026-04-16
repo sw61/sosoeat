@@ -179,7 +179,7 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
 
           <CardFooter className={MAIN_PAGE_CARD_FOOTER_CLASS}>
             <Image
-              src={hostImage}
+              src={toHttpsUrl(hostImage) ?? '/icons/human-basic.svg'}
               alt={meeting.host.name}
               width={32}
               height={32}
