@@ -1,12 +1,12 @@
 'use client';
 
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client/apis/MeetingsApi';
 
 import type { getMeetings } from '../index.server';
 
-import { meetingsQueryOptions } from './meetings.options';
+import { meetingsQueryOptions } from './meeting-search-query-options';
 
 export const useSearchList = () => {
   return useQuery(meetingsQueryOptions.all());
@@ -25,10 +25,11 @@ export const useSearchInfiniteOption = (
   options: MeetingsOptions,
   initialData?: Awaited<ReturnType<typeof getMeetings>>
 ) => {
-  return useInfiniteQuery(
-    meetingsQueryOptions.infiniteOptions(
+  return useInfiniteQuery({
+    ...meetingsQueryOptions.infiniteOptions(
       options as Omit<TeamIdMeetingsGetRequest, 'teamId'>,
       initialData
-    )
-  );
+    ),
+    placeholderData: keepPreviousData,
+  });
 };

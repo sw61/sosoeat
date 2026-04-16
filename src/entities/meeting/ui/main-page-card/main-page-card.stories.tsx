@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { addDays, addMonths } from 'date-fns';
 
-import type { MeetingWithHost } from '@/shared/types/generated-client';
+import type { Meeting } from '../../model/meeting.types';
 
 import { MainPageCard } from './main-page-card';
 
@@ -19,11 +19,7 @@ meetingDate.setHours(18, 30, 0, 0);
 const registrationEndDate = addDays(addMonths(now, 1), 4);
 registrationEndDate.setHours(12, 0, 0, 0);
 
-const createdAt = new Date('2025-03-22T00:00:00');
-const updatedAt = new Date('2025-03-21T00:00:00');
-
-/** `confirmedAt: null`은 DTO 타입과 다르지만 `EstablishmentStatusBadge` 동작과 맞춤 */
-const MOCK_MEETING = {
+const MOCK_MEETING: Meeting = {
   id: 1,
   teamId: 'storybook',
   name: '강남역에서 점심 같이 먹어요',
@@ -32,25 +28,23 @@ const MOCK_MEETING = {
   address: '서울특별시 강남구 테헤란로',
   latitude: 37.498,
   longitude: 127.028,
-  dateTime: meetingDate,
-  registrationEnd: registrationEndDate,
+  dateTime: meetingDate.toISOString(),
+  registrationEnd: registrationEndDate.toISOString(),
   capacity: 6,
   participantCount: 3,
   image:
     'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=720',
   description: '',
-  canceledAt: createdAt,
+  canceledAt: null,
   confirmedAt: null,
   hostId: 1,
-  createdBy: 1,
-  createdAt,
-  updatedAt,
+  updatedAt: new Date('2025-03-21T00:00:00').toISOString(),
   host: {
     id: 1,
     name: '김소소',
     image: 'https://i.pravatar.cc/32?img=47',
   },
-} as unknown as MeetingWithHost;
+};
 
 export const Default: Story = {
   args: { meeting: MOCK_MEETING },
@@ -82,7 +76,7 @@ export const EstablishedGroupEat: Story = {
   args: {
     meeting: {
       ...MOCK_MEETING,
-      confirmedAt: new Date('2025-03-22T12:00:00'),
+      confirmedAt: '2025-03-22T12:00:00.000Z',
     },
   },
 };
@@ -92,7 +86,7 @@ export const EstablishedGroupBuy: Story = {
     meeting: {
       ...MOCK_MEETING,
       type: 'groupBuy',
-      confirmedAt: new Date('2025-03-22T12:00:00'),
+      confirmedAt: '2025-03-22T12:00:00.000Z',
     },
   },
 };

@@ -36,7 +36,6 @@ export function useMeetingCommentItem({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useModal();
 
-  // 서버 데이터 변경 시 렌더 중 동기화 (useEffect 대신 React 권장 파생 상태 패턴)
   if (prevServerLike.isLiked !== isLiked || prevServerLike.likeCount !== likeCount) {
     setPrevServerLike({ isLiked, likeCount });
     setLocalIsLiked(isLiked);
@@ -84,6 +83,7 @@ export function useMeetingCommentItem({
       setIsEditing(false);
       return;
     }
+
     updateComment(
       { commentId, payload: { content: editText.trim() } },
       { onSuccess: () => setIsEditing(false) }
@@ -110,6 +110,7 @@ export function useMeetingCommentItem({
 
   const handleReplySubmit = () => {
     if (!replyText.trim()) return;
+
     const savedText = replyText;
     setIsReplying(false);
     setReplyText('');
@@ -130,7 +131,6 @@ export function useMeetingCommentItem({
     editText,
     setEditText,
     isReplying,
-    setIsReplying,
     replyText,
     setReplyText,
     localIsLiked,

@@ -4,15 +4,18 @@ import { useRef, useState } from 'react';
 
 import { toast } from 'sonner';
 
+import { useAuthStore } from '@/entities/auth';
 import {
+  type SosoTalkComment,
   useCreateSosoTalkComment,
+  useCreateSosoTalkCommentLike,
   useDeleteSosoTalkComment,
+  useDeleteSosoTalkCommentLike,
   useUpdateSosoTalkComment,
 } from '@/entities/post';
-import type { Comment } from '@/shared/types/generated-client/models/Comment';
 
 interface UseSosoTalkPostDetailCommentActionsParams {
-  comments: Comment[];
+  comments: SosoTalkComment[];
   isValidPostId: boolean;
   postId: number;
 }
@@ -22,6 +25,8 @@ export function useSosoTalkPostDetailCommentActions({
   isValidPostId,
   postId,
 }: UseSosoTalkPostDetailCommentActionsParams) {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const setLoginRequired = useAuthStore((state) => state.setLoginRequired);
   const [commentInput, setCommentInput] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editingCommentInput, setEditingCommentInput] = useState('');
@@ -30,6 +35,11 @@ export function useSosoTalkPostDetailCommentActions({
   const createCommentMutation = useCreateSosoTalkComment();
   const updateCommentMutation = useUpdateSosoTalkComment();
   const deleteCommentMutation = useDeleteSosoTalkComment();
+  const createCommentLikeMutation = useCreateSosoTalkCommentLike();
+  const deleteCommentLikeMutation = useDeleteSosoTalkCommentLike();
+
+  const findCommentById = (commentId: number) =>
+    comments.find((comment) => comment.id === commentId);
 
   const isEditingCommentMissing =
     editingCommentId != null && !comments.some((comment) => comment.id === editingCommentId);
@@ -48,6 +58,11 @@ export function useSosoTalkPostDetailCommentActions({
       return;
     }
 
+    if (!isAuthenticated) {
+      setLoginRequired(true);
+      return;
+    }
+
     try {
       await createCommentMutation.mutateAsync({
         postId,
@@ -61,7 +76,7 @@ export function useSosoTalkPostDetailCommentActions({
     }
   };
 
-  const handleStartEditComment = (comment: Comment) => {
+  const handleStartEditComment = (comment: SosoTalkComment) => {
     setEditingCommentId(comment.id);
     setEditingCommentInput(comment.content);
   };
@@ -131,12 +146,42 @@ export function useSosoTalkPostDetailCommentActions({
     }
   };
 
+  const handleToggleCommentLike = async (commentId: number) => {
+    const targetComment = findCommentById(commentId);
+
+    if (
+      !isValidPostId ||
+      !targetComment ||
+      createCommentLikeMutation.isPending ||
+      deleteCommentLikeMutation.isPending
+    ) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      setLoginRequired(true);
+      return;
+    }
+
+    try {
+      if (targetComment.isLiked) {
+        await deleteCommentLikeMutation.mutateAsync({ postId, commentId });
+      } else {
+        await createCommentLikeMutation.mutateAsync({ postId, commentId });
+      }
+    } catch {
+      toast.error('좋아요 처리 중 문제가 생겼어요. 다시 시도해 주세요.');
+    }
+  };
+
   return {
     commentSectionRef,
     commentInput,
     editingCommentId,
     editingCommentInput,
     pendingDeleteCommentId,
+    isCommentLikePending:
+      createCommentLikeMutation.isPending || deleteCommentLikeMutation.isPending,
     isEditPending: updateCommentMutation.isPending,
     setCommentInput,
     setEditingCommentInput,
@@ -148,5 +193,6 @@ export function useSosoTalkPostDetailCommentActions({
     handleStartEditComment,
     handleSubmitComment,
     handleSubmitEditComment,
+    handleToggleCommentLike,
   };
 }

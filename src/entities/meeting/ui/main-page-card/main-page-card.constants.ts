@@ -1,5 +1,5 @@
 export const MAIN_PAGE_CARD_CLASS =
-  'max-w-[340px] h-105 w-full max-w-90 cursor-pointer gap-0 overflow-hidden rounded-2xl border border-sosoeat-gray-300 bg-white py-0 font-medium shadow-none ring-0';
+  'w-[343px] md:w-[360px] h-105 cursor-pointer gap-0 overflow-hidden rounded-2xl border border-sosoeat-gray-300 bg-white py-0 font-medium shadow-none ring-0';
 
 export const MAIN_PAGE_CARD_IMAGE_WRAPPER_CLASS =
   'relative h-[180px] w-full shrink-0 overflow-hidden';
@@ -39,3 +39,6 @@ export const MAIN_PAGE_CARD_HOST_IMAGE_CLASS =
   'border-sosoeat-gray-300 size-8 shrink-0 overflow-hidden rounded-full border object-cover';
 
 export const MAIN_PAGE_CARD_HOST_NAME_CLASS = 'text-base leading-6 font-semibold text-[#6B7280]';
+
+export const MAIN_PAGE_CARD_CLOSED_OVERLAY_CLASS =
+  'absolute inset-0 z-20 flex items-center justify-center bg-black/50 text-white text-2xl font-semibold';

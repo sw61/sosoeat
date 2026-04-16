@@ -1,10 +1,19 @@
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  queryOptions,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import {
   createSosoTalkComment,
+  createSosoTalkCommentLike,
   createSosoTalkPost,
   createSosoTalkPostLike,
   deleteSosoTalkComment,
+  deleteSosoTalkCommentLike,
   deleteSosoTalkPost,
   deleteSosoTalkPostLike,
   getSosoTalkPostDetail,
@@ -20,6 +29,7 @@ import type {
   GetSosoTalkPostDetailResponse,
   GetSosoTalkPostListParams,
   GetSosoTalkPostListResponse,
+  SosoTalkComment,
   SosoTalkPostMutationParams,
   UpdateSosoTalkCommentParams,
   UpdateSosoTalkPostParams,
@@ -31,6 +41,8 @@ const SOSOTALK_QUERY_GC_TIME = 1000 * 60 * 10;
 export const sosotalkQueryKeys = {
   all: ['sosotalk'] as const,
   postList: (params?: GetSosoTalkPostListParams) => ['sosotalk-post-list', params] as const,
+  postInfiniteList: (params?: GetSosoTalkPostListParams) =>
+    ['sosotalk-post-infinite-list', params] as const,
   postDetail: (postId?: number) => ['sosotalk-post-detail', postId] as const,
 };
 
@@ -66,14 +78,44 @@ export const useGetSosoTalkPostList = (
   initialData?: GetSosoTalkPostListResponse
 ) => useQuery(sosotalkPostListQueryOptions(params, initialData));
 
+const sosotalkPostInfiniteListQueryOptions = (
+  params?: GetSosoTalkPostListParams,
+  initialData?: GetSosoTalkPostListResponse
+) => ({
+  queryKey: sosotalkQueryKeys.postInfiniteList(params),
+  queryFn: ({ pageParam }: { pageParam?: string }) =>
+    getSosoTalkPostList({
+      ...params,
+      cursor: pageParam,
+    }),
+  initialPageParam: undefined as string | undefined,
+  getNextPageParam: (lastPage: GetSosoTalkPostListResponse) =>
+    lastPage.hasMore ? lastPage.nextCursor : undefined,
+  initialData: initialData ? { pages: [initialData], pageParams: [undefined] } : undefined,
+  staleTime: SOSOTALK_QUERY_STALE_TIME,
+  gcTime: SOSOTALK_QUERY_GC_TIME,
+});
+
+export const useGetSosoTalkPostInfiniteList = (
+  params?: GetSosoTalkPostListParams,
+  initialData?: GetSosoTalkPostListResponse
+) => useInfiniteQuery(sosotalkPostInfiniteListQueryOptions(params, initialData));
+
 export const useGetSosoTalkPostDetail = (postId?: number) =>
   useQuery(sosotalkPostDetailQueryOptions(postId));
 
 const SOSOTALK_POST_LIST_QUERY_PREFIX = ['sosotalk-post-list'] as const;
+const SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX = ['sosotalk-post-infinite-list'] as const;
 
 type SosoTalkLikeMutationContext = {
   previousDetail?: GetSosoTalkPostDetailResponse;
   previousLists: Array<readonly [readonly unknown[], GetSosoTalkPostListResponse | undefined]>;
+  previousInfiniteLists: Array<
+    readonly [
+      readonly unknown[],
+      InfiniteData<GetSosoTalkPostListResponse, string | undefined> | undefined,
+    ]
+  >;
 };
 
 const updateSosoTalkPostDetailLikeCache = (
@@ -115,8 +157,47 @@ const updateSosoTalkPostListLikeCache = (
   };
 };
 
+const updateSosoTalkPostInfiniteListLikeCache = (
+  previousList: InfiniteData<GetSosoTalkPostListResponse, string | undefined> | undefined,
+  postId: number,
+  likeDiff: number
+): InfiniteData<GetSosoTalkPostListResponse, string | undefined> | undefined => {
+  if (!previousList) {
+    return previousList;
+  }
+
+  return {
+    ...previousList,
+    pages: previousList.pages.map(
+      (page) => updateSosoTalkPostListLikeCache(page, postId, likeDiff)!
+    ),
+  };
+};
+
 const invalidateSosoTalkListQueries = (queryClient: ReturnType<typeof useQueryClient>) =>
-  queryClient.invalidateQueries({ queryKey: SOSOTALK_POST_LIST_QUERY_PREFIX });
+  Promise.all([
+    queryClient.invalidateQueries({ queryKey: SOSOTALK_POST_LIST_QUERY_PREFIX }),
+    queryClient.invalidateQueries({ queryKey: SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX }),
+  ]);
+
+const updateSosoTalkCommentLikeCache = (
+  comments: SosoTalkComment[],
+  commentId: number,
+  nextIsLiked: boolean
+): SosoTalkComment[] =>
+  comments.map((comment) => {
+    if (comment.id === commentId) {
+      const likeDiff = nextIsLiked === comment.isLiked ? 0 : nextIsLiked ? 1 : -1;
+
+      return {
+        ...comment,
+        isLiked: nextIsLiked,
+        likeCount: Math.max(0, comment.likeCount + likeDiff),
+      };
+    }
+
+    return comment;
+  });
 
 const restoreSosoTalkLikeCache = (
   queryClient: ReturnType<typeof useQueryClient>,
@@ -128,6 +209,10 @@ const restoreSosoTalkLikeCache = (
   }
 
   context?.previousLists.forEach(([queryKey, previousList]) => {
+    queryClient.setQueryData(queryKey, previousList);
+  });
+
+  context?.previousInfiniteLists.forEach(([queryKey, previousList]) => {
     queryClient.setQueryData(queryKey, previousList);
   });
 };
@@ -145,6 +230,7 @@ const createSosoTalkLikeMutation = (
         await Promise.all([
           queryClient.cancelQueries({ queryKey: sosotalkQueryKeys.postDetail(postId) }),
           queryClient.cancelQueries({ queryKey: SOSOTALK_POST_LIST_QUERY_PREFIX }),
+          queryClient.cancelQueries({ queryKey: SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX }),
         ]);
 
         const previousDetail = queryClient.getQueryData<GetSosoTalkPostDetailResponse>(
@@ -152,6 +238,11 @@ const createSosoTalkLikeMutation = (
         );
         const previousLists = queryClient.getQueriesData<GetSosoTalkPostListResponse>({
           queryKey: SOSOTALK_POST_LIST_QUERY_PREFIX,
+        });
+        const previousInfiniteLists = queryClient.getQueriesData<
+          InfiniteData<GetSosoTalkPostListResponse, string | undefined>
+        >({
+          queryKey: SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX,
         });
 
         queryClient.setQueryData<GetSosoTalkPostDetailResponse>(
@@ -163,10 +254,16 @@ const createSosoTalkLikeMutation = (
           (currentList) =>
             updateSosoTalkPostListLikeCache(currentList, postId, nextIsLiked ? 1 : -1)
         );
+        queryClient.setQueriesData<InfiniteData<GetSosoTalkPostListResponse, string | undefined>>(
+          { queryKey: SOSOTALK_POST_INFINITE_LIST_QUERY_PREFIX },
+          (currentList) =>
+            updateSosoTalkPostInfiniteListLikeCache(currentList, postId, nextIsLiked ? 1 : -1)
+        );
 
         return {
           previousDetail,
           previousLists,
+          previousInfiniteLists,
         };
       },
       onError: (_error, postId, context) => {
@@ -235,6 +332,63 @@ export const useDeleteSosoTalkComment = () => {
     },
   });
 };
+
+const createSosoTalkCommentLikeMutation = (
+  nextIsLiked: boolean,
+  mutationFn: (params: CommentMutationParams) => Promise<unknown>
+) => {
+  return () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn,
+      onMutate: async ({ postId, commentId }) => {
+        await queryClient.cancelQueries({ queryKey: sosotalkQueryKeys.postDetail(postId) });
+        const previousDetail = queryClient.getQueryData<GetSosoTalkPostDetailResponse>(
+          sosotalkQueryKeys.postDetail(postId)
+        );
+
+        queryClient.setQueryData<GetSosoTalkPostDetailResponse>(
+          sosotalkQueryKeys.postDetail(postId),
+          (currentDetail) => {
+            if (!currentDetail) {
+              return currentDetail;
+            }
+
+            return {
+              ...currentDetail,
+              comments: updateSosoTalkCommentLikeCache(
+                currentDetail.comments,
+                commentId,
+                nextIsLiked
+              ),
+            };
+          }
+        );
+
+        return { previousDetail };
+      },
+      onError: (_error, { postId }, context) => {
+        if (context?.previousDetail) {
+          queryClient.setQueryData(sosotalkQueryKeys.postDetail(postId), context.previousDetail);
+        }
+      },
+      onSettled: (_data, _error, { postId }) => {
+        void queryClient.invalidateQueries({ queryKey: sosotalkQueryKeys.postDetail(postId) });
+      },
+    });
+  };
+};
+
+export const useCreateSosoTalkCommentLike = createSosoTalkCommentLikeMutation(
+  true,
+  createSosoTalkCommentLike
+);
+
+export const useDeleteSosoTalkCommentLike = createSosoTalkCommentLikeMutation(
+  false,
+  deleteSosoTalkCommentLike
+);
 
 export const useUpdateSosoTalkPost = () => {
   const queryClient = useQueryClient();

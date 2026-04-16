@@ -84,7 +84,6 @@ const MOCK_MEETING: Meeting = {
   canceledAt: null,
   hostId: 7,
   teamId: 'team9',
-  createdBy: 7,
   updatedAt: '2026-04-10T09:00:00.000Z',
   host: {
     id: 7,

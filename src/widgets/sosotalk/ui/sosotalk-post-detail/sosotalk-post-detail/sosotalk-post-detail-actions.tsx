@@ -8,7 +8,8 @@ import { Eye, Heart, MessageCircle, Share2 } from 'lucide-react';
 
 import type { SosoTalkPostActionsProps } from './sosotalk-post-detail.types';
 
-const loadFeatures = () => import('framer-motion').then((m) => m.domAnimation);
+const loadFeatures = () => import('framer-motion').then((module) => module.domAnimation);
+
 export function SosoTalkPostDetailActions({
   createdDateLabel,
   viewCount,

@@ -1,3 +1,5 @@
+import { TeamIdMeetingsGetRequest } from '@/shared/types/generated-client/apis/MeetingsApi';
+
 export type MeetingCategory = 'groupEat' | 'groupBuy';
 
 export type Meeting = {
@@ -20,7 +22,6 @@ export type Meeting = {
   hostId: number;
   /** 댓글 서버 모임 동기화 등에 사용 (백엔드 모임 상세 응답에 포함) */
   teamId: string;
-  createdBy: number;
   updatedAt: string;
   host: {
     id: number;
@@ -30,3 +31,16 @@ export type Meeting = {
   isFavorited?: boolean;
   isJoined?: boolean;
 };
+
+export type MeetingListResult = {
+  data: Meeting[];
+  nextCursor: string;
+  hasMore: boolean;
+};
+export type MeetingSortBy = NonNullable<TeamIdMeetingsGetRequest['sortBy']>;
+export type MeetingSortOrder = NonNullable<TeamIdMeetingsGetRequest['sortOrder']>;
+export type MeetingTypeFilter = 'all' | 'groupEat' | 'groupBuy';
+export type MeetingSearchOptions = Omit<TeamIdMeetingsGetRequest, 'teamId' | 'region'> & {
+  region?: string | string[];
+};
+export type MeetingSearchRequest = MeetingSearchOptions;

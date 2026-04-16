@@ -3,29 +3,26 @@
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import dynamic from 'next/dynamic';
-
 import { MainPageCard } from '@/entities/meeting';
 import type { getMeetings } from '@/entities/meeting/index.server';
 import { HeartButton } from '@/features/favorites';
-import { MeetingMakeButton, useMeetingCreateTrigger } from '@/features/meeting-create';
+import {
+  MeetingCreateModal,
+  MeetingMakeButton,
+  useMeetingCreateTrigger,
+} from '@/features/meeting-create';
+import { MeetingFilterBar, SearchBar, useSearchState } from '@/features/search';
 
-import useSearchPage from '../../model/use-search-page';
 import { EmptyPage } from '../empty-page';
-import { SearchBar } from '../search-bar';
+import Loading from '../loading';
+import SearchSkeleton from '../search-screen/search-skeleton';
 
-import SearchSkeleton from './search-skeleton';
-
-const MeetingCreateModal = dynamic(() =>
-  import('@/features/meeting-create').then((mod) => mod.MeetingCreateModal)
-);
-const MeetingFilterBar = dynamic(() =>
-  import('../meeting-filter-bar').then((mod) => mod.MeetingFilterBar)
-);
 export default function SearchPage({
   initialData,
+  initialDefaultDateStartIso,
 }: {
   initialData: Awaited<ReturnType<typeof getMeetings>> | null;
+  initialDefaultDateStartIso: string;
 }) {
   const { ref, inView } = useInView({
     threshold: 0.5,
@@ -49,12 +46,12 @@ export default function SearchPage({
     isLoading,
     isError,
     hasNextPage,
-    isFetching,
     isFetchingNextPage,
     fetchNextPage,
     inputValue,
     handleSearchQueryChange,
-  } = useSearchPage(initialData);
+    searchError,
+  } = useSearchState(initialData, initialDefaultDateStartIso);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -63,9 +60,9 @@ export default function SearchPage({
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-[1140px]">
       <div className="flex w-full flex-col gap-4 px-4 md:px-0">
-        <SearchBar onChange={handleSearchQueryChange} value={inputValue} />
+        <SearchBar onChange={handleSearchQueryChange} value={inputValue} error={searchError} />
         <MeetingFilterBar
           sortBy={sortBy}
           sortOrder={sortOrder}
@@ -108,10 +105,8 @@ export default function SearchPage({
             <div ref={ref} className="col-span-full flex h-1 items-center justify-center" />
           </div>
         )}
-        {isFetching ? (
-          <span className="text-sosoeat-gray-600 col-span-full flex justify-center">
-            Loading...
-          </span>
+        {isFetchingNextPage ? (
+          <Loading />
         ) : inView && hasNextPage ? (
           <SearchSkeleton />
         ) : (

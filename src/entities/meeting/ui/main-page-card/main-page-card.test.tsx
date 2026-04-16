@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import type { MeetingWithHost } from '@/shared/types/generated-client';
-
+import type { Meeting } from '../../model/meeting.types';
 import { useTimeFormatter } from '../../model/use-time-formatter';
 
 import { MainPageCard } from './main-page-card';
@@ -61,7 +60,7 @@ jest.mock('next/image', () => ({
     <img src={src} alt={alt} data-testid="main-page-card-image" {...rest} />
   ),
 }));
-function createMockMeeting(overrides: Partial<MeetingWithHost> = {}): MeetingWithHost {
+function createMockMeeting(overrides: Partial<Meeting> = {}): Meeting {
   const now = new Date('2025-03-19T10:00:00+09:00');
   const registrationEnd = new Date(now);
   registrationEnd.setDate(registrationEnd.getDate() + 7);
@@ -75,20 +74,17 @@ function createMockMeeting(overrides: Partial<MeetingWithHost> = {}): MeetingWit
     address: '서울특별시 강남구',
     latitude: 37.498,
     longitude: 127.028,
-    dateTime: new Date('2025-04-24T18:30:00+09:00'),
-    registrationEnd,
+    dateTime: '2025-04-24T18:30:00+09:00',
+    registrationEnd: registrationEnd.toISOString(),
     capacity: 6,
     participantCount: 3,
     image:
       'https://plus.unsplash.com/premium_photo-1774002133542-bbef3f2cc3d5?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description: '',
-    canceledAt: now,
-    confirmedAt: new Date('2025-03-22T12:00:00+09:00'),
+    canceledAt: now.toISOString(),
+    confirmedAt: '2025-03-22T12:00:00+09:00',
     hostId: 1,
-    createdBy: 1,
-    createdAt: now,
-    updatedAt: now,
-    isCompleted: false,
+    updatedAt: now.toISOString(),
     host: {
       id: 1,
       name: '김소소',
@@ -197,7 +193,7 @@ describe('MainPageCard', () => {
       const meeting = {
         ...createMockMeeting(),
         confirmedAt: null,
-      } as unknown as MeetingWithHost;
+      };
       render(<MainPageCard meeting={meeting} />);
 
       expect(screen.queryByText('개설확정')).not.toBeInTheDocument();
@@ -206,7 +202,7 @@ describe('MainPageCard', () => {
 
     it('confirmedAt이 있으면 개설확정이 표시된다', () => {
       const meeting = createMockMeeting({
-        confirmedAt: new Date('2025-03-22T12:00:00+09:00'),
+        confirmedAt: '2025-03-22T12:00:00+09:00',
       });
       render(<MainPageCard meeting={meeting} />);
 
@@ -215,22 +211,36 @@ describe('MainPageCard', () => {
   });
 
   describe('마감 상태', () => {
-    it('마감된 모임일 때 마감 종료가 표시된다', () => {
+    it('마감된 모임일 때 마감 완료가 표시된다', () => {
       (useTimeFormatter as jest.Mock).mockReturnValue({
         contentText: '',
         isEnded: true,
         showCountdown: false,
       });
-      const pastDate = new Date('2025-03-19T09:00:00+09:00');
-      const meeting = createMockMeeting({ registrationEnd: pastDate });
+      const meeting = createMockMeeting({ registrationEnd: '2025-03-19T09:00:00+09:00' });
       render(<MainPageCard meeting={meeting} />);
 
-      expect(screen.getByText('마감 종료')).toBeInTheDocument();
+      expect(screen.getByTestId('closed-badge')).toBeInTheDocument();
+    });
+
+    it('마감된 모임일 때 마감 완료 오버레이가 표시된다', () => {
+      (useTimeFormatter as jest.Mock).mockReturnValue({
+        contentText: '',
+        isEnded: true,
+        showCountdown: false,
+      });
+      const meeting = createMockMeeting({ registrationEnd: '2025-03-19T09:00:00+09:00' });
+      const card = render(<MainPageCard meeting={meeting} />);
+
+      const overlay = card.getByTestId('closed-overlay');
+      expect(overlay).toBeInTheDocument();
+      expect(overlay).toHaveClass(
+        'absolute inset-0 z-20 flex items-center justify-center bg-black/50 text-white text-2xl font-semibold'
+      );
     });
 
     it('마감 전 모임일 때 남은 시간이 표시된다', async () => {
-      const futureDate = new Date('2025-03-26T10:00:00+09:00');
-      const meeting = createMockMeeting({ registrationEnd: futureDate });
+      const meeting = createMockMeeting({ registrationEnd: '2025-03-26T10:00:00+09:00' });
 
       (useTimeFormatter as jest.Mock).mockReturnValue({
         contentText: '모집완료 1일 0시간 남았어요!',

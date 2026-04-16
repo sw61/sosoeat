@@ -15,7 +15,19 @@ jest.mock('next/navigation', () => ({
 }));
 
 jest.mock('@/features/notifications', () => ({
-  Notification: () => <button aria-label="알림 열기">알림</button>,
+  NotificationTrigger: ({
+    onClick,
+    'aria-label': ariaLabel,
+  }: {
+    onClick: () => void;
+    'aria-label'?: string;
+  }) => (
+    <button aria-label={ariaLabel ?? '알림 열기'} onClick={onClick}>
+      알림
+    </button>
+  ),
+  NotificationPanel: () => null,
+  useUnreadCount: jest.fn().mockReturnValue({ data: 0 }),
 }));
 
 const mockPush = jest.fn();

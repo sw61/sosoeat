@@ -1,0 +1,165 @@
+'use client';
+
+import * as React from 'react';
+
+import { XIcon } from 'lucide-react';
+
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/ui/dialog';
+import { DropdownSub } from '@/shared/ui/dropdown-sub/dropdown-sub';
+
+import { useRegionSelectModal } from './hooks/use-region-select-modal';
+import {
+  omitRegionModalValueOnChange,
+  recordToSelection,
+  selectionToRecord,
+} from './services/region-select-modal.service';
+import { RegionCascadeSelect } from './region-cascade-select';
+import type { RegionSelectModalProps } from './region-select-modal.types';
+
+/**
+ * 피그마 Region Select modal — shell 544×724, padding 48, gap 48, radius 40,
+ * shadow 0 0 50px rgba(0,0,0,0.08), 콘텐츠 폭 448 (= 544 − 48×2)
+ */
+const dialogContentClass =
+  'flex h-[min(724px,90vh)] w-full max-w-[min(544px,calc(100%-2rem))] flex-col items-start gap-6 ' +
+  'overflow-hidden bg-[#FFFFFF] p-6 isolate rounded-[24px] border-0 ' +
+  'shadow-[0_0_50px_rgba(0,0,0,0.08)] ring-0 sm:gap-12 sm:p-12 sm:rounded-[40px] sm:h-[724px] sm:max-w-[544px]';
+
+/** pretendard/text-2xl/semibold — gray/900 #111827 */
+const titleClass =
+  'm-0 w-full max-w-md font-sans text-2xl leading-8 font-semibold tracking-[-0.02em] text-[#111827]';
+
+/** 피그마 Input — h 48, p 12, gray/50 #F9FAFB, radius 12 */
+const regionSelectDropdownTriggerClass =
+  'h-12 max-w-md cursor-pointer rounded-xl bg-[#F9FAFB] px-3 py-3 text-base font-normal tracking-[-0.02em] text-[#333333] transition-colors hover:bg-accent';
+
+/** 스크롤 영역 — 스크롤바 ≈ w-1.5, thumb slate/300 느낌 */
+const scrollAreaClass =
+  'flex min-h-0 min-w-0 w-full max-w-md flex-1 flex-col gap-4 overflow-y-auto pr-1 [scrollbar-color:#CCCCCC_transparent] [scrollbar-width:thin] ' +
+  '[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent ' +
+  '[&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#CCCCCC]';
+
+/** 푸터 행 — gap 16, 버튼 각 216@448 콘텐츠 폭 */
+const footerClass =
+  'mx-0! mt-0 mb-0 w-full max-w-md self-center flex-row! flex-wrap justify-center! gap-4! border-0 bg-transparent p-0 shadow-none';
+
+/** slate/200 border #DDDDDD, padding 16×30, text slate/600 */
+const cancelButtonClass =
+  'h-12 sm:h-[60px] min-w-0 flex-1 rounded-2xl border border-[#DDDDDD] bg-white px-[30px] py-4 text-base sm:text-xl font-semibold ' +
+  'tracking-[-0.02em] text-[#737373] shadow-none hover:bg-neutral-50';
+
+const resetButtonClass =
+  'h-12 sm:h-[60px] min-w-0 flex-1 rounded-2xl border border-sosoeat-orange-600 bg-white px-[30px] py-4 text-base sm:text-xl font-semibold ' +
+  'tracking-[-0.02em] text-sosoeat-orange-700 shadow-none hover:bg-sosoeat-orange-50';
+
+const confirmButtonClass =
+  'h-12 sm:h-[60px] min-w-0 flex-1 rounded-2xl border-0 bg-[#FF6600] px-[30px] py-4 text-base sm:text-xl font-semibold ' +
+  'tracking-[-0.02em] text-white shadow-none hover:bg-[#e65c00]';
+
+export const RegionSelectModal = ({
+  trigger,
+  title,
+  dropdownSub,
+  regionCascade,
+  draftValue: draftValueProp,
+  onDraftChange,
+  children,
+  contentClassName,
+}: RegionSelectModalProps) => {
+  const triggerAsChild = React.isValidElement(trigger);
+
+  const { open, draftValue, setDraft, handleOpenChange, handleConfirm, handleReset, showCascade } =
+    useRegionSelectModal({
+      dropdownSub,
+      regionCascade,
+      draftValueProp,
+      onDraftChange,
+    });
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild={triggerAsChild}>{trigger}</DialogTrigger>
+      <DialogContent
+        showCloseButton={false}
+        aria-describedby={undefined}
+        className={cn(dialogContentClass, contentClassName)}
+      >
+        {/* Frame 2611146: 헤더 gap 24 (title↔description) */}
+        <div className="flex w-full max-w-md min-w-0 flex-col gap-6 self-start">
+          <div className="flex min-h-8 w-full min-w-0 flex-row items-center justify-between gap-3">
+            <DialogTitle className={titleClass}>{title}</DialogTitle>
+            <DialogClose asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                className="size-8 shrink-0 text-[#737373] hover:bg-transparent hover:text-[#737373]"
+                aria-label="닫기"
+              >
+                <XIcon className="size-6" strokeWidth={1.8} />
+              </Button>
+            </DialogClose>
+          </div>
+        </div>
+
+        {/* Frame 2610642: 본문 영역 ↔ 푸터 gap 56 */}
+        <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-14">
+          <div className={scrollAreaClass}>
+            {showCascade && regionCascade != null ? (
+              <RegionCascadeSelect
+                regions={regionCascade.regions}
+                value={draftValue}
+                onChange={setDraft}
+              />
+            ) : null}
+            {!showCascade && dropdownSub != null ? (
+              <DropdownSub
+                {...omitRegionModalValueOnChange(dropdownSub)}
+                value={selectionToRecord(draftValue)}
+                onChange={(rec) => setDraft(recordToSelection(rec))}
+                triggerClassName={cn(
+                  regionSelectDropdownTriggerClass,
+                  dropdownSub.triggerClassName
+                )}
+                itemClassName="cursor-pointer transition-colors hover:bg-accent"
+              />
+            ) : null}
+            {children}
+          </div>
+          <DialogFooter className={cn(footerClass, dropdownSub != null && '[&>button]:min-w-0')}>
+            {dropdownSub != null ? (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className={resetButtonClass}
+                  onClick={handleReset}
+                >
+                  초기화
+                </Button>
+                <Button type="button" className={confirmButtonClass} onClick={handleConfirm}>
+                  확인
+                </Button>
+              </>
+            ) : (
+              <DialogClose asChild>
+                <Button type="button" variant="outline" className={cancelButtonClass}>
+                  닫기
+                </Button>
+              </DialogClose>
+            )}
+          </DialogFooter>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};

@@ -33,9 +33,9 @@ export function SosoTalkCard({
       href={`/sosotalk/${id}`}
       onMouseEnter={prefetchPostDetail}
       onFocus={prefetchPostDetail}
-      className="focus-visible:ring-ring block rounded-[14px] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+      className="focus-visible:ring-ring block w-[343px] rounded-[14px] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
     >
-      <article className="border-border bg-card flex h-[352px] w-[302px] flex-col overflow-hidden rounded-[14px] border transition-transform hover:-translate-y-0.5">
+      <article className="border-border bg-card flex h-[352px] w-[343px] flex-col overflow-hidden rounded-[14px] border transition-transform hover:-translate-y-0.5 sm:w-[302px]">
         <div className="relative h-[170px] w-full">
           <Image
             src={imageUrl}

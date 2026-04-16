@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { type InfiniteData, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react';
 
 import {
@@ -104,6 +104,14 @@ const createPostList = (): GetSosoTalkPostListResponse => ({
   hasMore: false,
 });
 
+const createInfinitePostList = (): InfiniteData<
+  GetSosoTalkPostListResponse,
+  string | undefined
+> => ({
+  pages: [createPostList()],
+  pageParams: [undefined],
+});
+
 const createDeferred = <T,>() => {
   let resolve!: (value: T | PromiseLike<T>) => void;
   let reject!: (reason?: unknown) => void;
@@ -146,6 +154,10 @@ describe('sosotalk like mutations', () => {
     const { queryClient, wrapper } = createWrapper();
     queryClient.setQueryData(sosotalkQueryKeys.postDetail(POST_ID), createPostDetail());
     queryClient.setQueryData(sosotalkQueryKeys.postList(LIST_PARAMS), createPostList());
+    queryClient.setQueryData(
+      sosotalkQueryKeys.postInfiniteList(LIST_PARAMS),
+      createInfinitePostList()
+    );
 
     const { result } = renderHook(() => useCreateSosoTalkPostLike(), { wrapper });
 
@@ -168,6 +180,13 @@ describe('sosotalk like mutations', () => {
       queryClient.getQueryData<GetSosoTalkPostListResponse>(sosotalkQueryKeys.postList(LIST_PARAMS))
     ).toMatchObject({
       data: [expect.objectContaining({ id: POST_ID, likeCount: 5 })],
+    });
+    expect(
+      queryClient.getQueryData<InfiniteData<GetSosoTalkPostListResponse, string | undefined>>(
+        sosotalkQueryKeys.postInfiniteList(LIST_PARAMS)
+      )
+    ).toMatchObject({
+      pages: [{ data: [expect.objectContaining({ id: POST_ID, likeCount: 5 })] }],
     });
 
     deferred.resolve({});
@@ -195,6 +214,10 @@ describe('sosotalk like mutations', () => {
 
     queryClient.setQueryData(sosotalkQueryKeys.postDetail(POST_ID), likedDetail);
     queryClient.setQueryData(sosotalkQueryKeys.postList(LIST_PARAMS), likedList);
+    queryClient.setQueryData(sosotalkQueryKeys.postInfiniteList(LIST_PARAMS), {
+      pages: [likedList],
+      pageParams: [undefined],
+    } satisfies InfiniteData<GetSosoTalkPostListResponse, string | undefined>);
 
     const { result } = renderHook(() => useDeleteSosoTalkPostLike(), { wrapper });
 
@@ -212,6 +235,13 @@ describe('sosotalk like mutations', () => {
       queryClient.getQueryData<GetSosoTalkPostListResponse>(sosotalkQueryKeys.postList(LIST_PARAMS))
     ).toMatchObject({
       data: [expect.objectContaining({ id: POST_ID, likeCount: 5 })],
+    });
+    expect(
+      queryClient.getQueryData<InfiniteData<GetSosoTalkPostListResponse, string | undefined>>(
+        sosotalkQueryKeys.postInfiniteList(LIST_PARAMS)
+      )
+    ).toMatchObject({
+      pages: [{ data: [expect.objectContaining({ id: POST_ID, likeCount: 5 })] }],
     });
   });
 });

@@ -1,6 +1,6 @@
-import { MeetingWithHost } from '@/shared/types/generated-client';
+import type { Meeting } from '@/entities/meeting';
 
-export interface HeartButtonProps extends Pick<MeetingWithHost, 'isFavorited'> {
+export interface HeartButtonProps extends Pick<Meeting, 'isFavorited'> {
   className?: string;
   sizeClass?: string;
   iconClass?: string;

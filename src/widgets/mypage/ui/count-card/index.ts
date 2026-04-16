@@ -1,1 +1,1 @@
-export { CountCard, FavoriteCountCard, MeetingCountCard } from './count-card';
+export { CountCard, FavoriteCountCard, MeetingCountCard, PostCountCard } from './count-card';

@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 
 import type { GetSosoTalkPostListResponse } from '@/entities/post';
-import { mapPostToSosoTalkCardItem, useGetSosoTalkPostList } from '@/entities/post';
+import { mapPostToSosoTalkCardItem, useGetSosoTalkPostInfiniteList } from '@/entities/post';
 
 import { useSosoTalkMainPage } from './use-sosotalk-main-page';
 
@@ -16,11 +16,11 @@ jest.mock('nuqs', () => ({
 
 jest.mock('@/entities/post', () => ({
   mapPostToSosoTalkCardItem: jest.fn(),
-  useGetSosoTalkPostList: jest.fn(),
+  useGetSosoTalkPostInfiniteList: jest.fn(),
 }));
 
 const mockUseQueryState = jest.requireMock('nuqs').useQueryState as jest.Mock;
-const mockUseGetSosoTalkPostList = useGetSosoTalkPostList as jest.Mock;
+const mockUseGetSosoTalkPostInfiniteList = useGetSosoTalkPostInfiniteList as jest.Mock;
 const mockMapPostToSosoTalkCardItem = mapPostToSosoTalkCardItem as jest.Mock;
 
 const initialData: GetSosoTalkPostListResponse = {
@@ -53,8 +53,11 @@ describe('useSosoTalkMainPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    mockUseGetSosoTalkPostList.mockReturnValue({
-      data: initialData,
+    mockUseGetSosoTalkPostInfiniteList.mockReturnValue({
+      data: { pages: [initialData] },
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
       isLoading: false,
       isError: false,
     });
@@ -74,12 +77,12 @@ describe('useSosoTalkMainPage', () => {
       })
     );
 
-    expect(mockUseGetSosoTalkPostList).toHaveBeenCalledWith(
+    expect(mockUseGetSosoTalkPostInfiniteList).toHaveBeenCalledWith(
       {
         type: 'all',
         sortBy: 'createdAt',
         sortOrder: 'desc',
-        size: 10,
+        size: 12,
       },
       initialData
     );
@@ -98,12 +101,12 @@ describe('useSosoTalkMainPage', () => {
       })
     );
 
-    expect(mockUseGetSosoTalkPostList).toHaveBeenCalledWith(
+    expect(mockUseGetSosoTalkPostInfiniteList).toHaveBeenCalledWith(
       {
         type: 'best',
         sortBy: 'likeCount',
         sortOrder: 'desc',
-        size: 10,
+        size: 12,
       },
       undefined
     );

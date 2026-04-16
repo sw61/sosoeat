@@ -85,3 +85,7 @@ AGENTS.md
 src/graphify-out/cache/
 .claude/settings.local.json/
 .next-benchmark/
+# Sentry Config File
+.env.sentry-build-plugin
+
+.opencode

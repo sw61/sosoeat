@@ -13,14 +13,9 @@ const headlineClass =
 const subtitleWrapClass =
   'mt-2 hidden max-w-[273px] text-base leading-7 font-normal text-white/80 md:block';
 
-export default function MeetingSearchBanner({ className }: MeetingSearchBannerProps) {
+export function MeetingSearchBanner({ className }: MeetingSearchBannerProps) {
   return (
-    <div
-      className={cn(
-        'flex w-full max-w-[1140px] items-start justify-center px-0 pb-4 md:px-4',
-        className
-      )}
-    >
+    <div className={cn('flex w-full items-start justify-center px-0 pb-4 md:px-4', className)}>
       <div className={bannerShellClass}>
         <Image
           src={'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80'}

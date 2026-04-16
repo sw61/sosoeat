@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
-import { startOfDay } from 'date-fns';
 import { SearchParams } from 'nuqs';
 
-import { getMeetings } from '@/entities/meeting/index.server';
-import { MeetingSearchBanner, SearchPage, searchParamsCache } from '@/widgets/search';
+import { getMeetingSearchParams } from '@/features/search';
+import { getInitialSearchData } from '@/features/search/index.server';
+import { MeetingSearchBanner, SearchScreen } from '@/widgets/search';
 
 export const metadata: Metadata = {
   title: '모임 검색',
@@ -14,7 +14,28 @@ export const metadata: Metadata = {
     title: '모임 검색 | 소소잇',
     description:
       '지역·날짜·키워드로 원하는 소모임을 찾아보세요. 취미가 맞는 사람들과의 만남이 기다리고 있어요.',
+    type: 'website',
+    images: [
+      {
+        url: '/images/search-og-image.png',
+      },
+    ],
   },
+  alternates: {
+    canonical: '/search',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '모임 검색 | 소소잇',
+    description:
+      '지역·날짜·키워드로 원하는 소모임을 찾아보세요. 취미가 맞는 사람들과의 만남이 기다리고 있어요.',
+    images: [
+      {
+        url: '/images/search-og-image.png',
+      },
+    ],
+  },
+  keywords: ['소모임 검색', '지역별 모임', '날짜별 모임', '키워드 검색', '소소잇', '모임 검색'],
 };
 
 type PageProps = {
@@ -22,28 +43,23 @@ type PageProps = {
 };
 
 export default async function Page({ searchParams }: PageProps) {
-  const { dateStart, sortBy, sortOrder, queryKeyword } = searchParamsCache.parse(
-    await searchParams
-  );
-  const finalDateStart = dateStart ?? startOfDay(new Date());
-  const toApiKeyword = (keyword: typeof queryKeyword) => {
-    return keyword === 'all' ? undefined : keyword;
-  };
-  const initialData = await getMeetings({
-    dateStart: finalDateStart.toISOString(),
-    sortBy,
-    sortOrder,
-    keyword: toApiKeyword(queryKeyword),
-  }).catch(() => null);
+  const requestParams = await getMeetingSearchParams(searchParams);
+  const initialData = await getInitialSearchData(requestParams);
 
   return (
-    <div>
-      <div className="flex justify-center">
+    <div className="bg-sosoeat-gray-100 flex w-full flex-col items-center justify-center">
+      <section aria-label="search-banner" className="w-full">
         <MeetingSearchBanner />
-      </div>
-      <div className="mx-auto flex max-w-[1140px] flex-col items-center justify-center gap-4 md:min-w-[780px] md:px-4 md:pt-4 lg:min-w-[1140px]">
-        <SearchPage initialData={initialData} />
-      </div>
+      </section>
+      <section
+        aria-label="search-results"
+        className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-4"
+      >
+        <SearchScreen
+          initialData={initialData}
+          initialDefaultDateStartIso={requestParams.dateStart}
+        />
+      </section>
     </div>
   );
 }
