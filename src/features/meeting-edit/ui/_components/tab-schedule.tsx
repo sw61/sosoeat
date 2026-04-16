@@ -98,7 +98,7 @@ export const TabSchedule = ({ form }: TabProps) => {
           type="text"
           inputMode="numeric"
           placeholder="최소 2명 이상 입력해 주세요."
-          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 h-11 border-transparent text-sm font-normal md:text-base"
+          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 placeholder:text-sosoeat-gray-600 focus:border-sosoeat-orange-500 focus-visible:border-sosoeat-orange-500 h-11 border border-transparent text-sm font-normal transition-all focus:ring-0 focus:outline-none focus-visible:ring-0 md:text-base"
           onKeyDown={(e) => {
             if (e.key.length > 1 || e.ctrlKey || e.metaKey) return;
             if (!/^\d$/.test(e.key)) {
