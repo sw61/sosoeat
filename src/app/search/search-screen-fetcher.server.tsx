@@ -2,8 +2,7 @@ import { SearchParams } from 'nuqs';
 
 import { getMeetingSearchParams } from '@/features/search';
 import { getInitialSearchData } from '@/features/search/index.server';
-
-import { SearchScreen } from './search-screen';
+import { SearchScreen } from '@/widgets/search';
 
 export const SearchScreenFetcher = async ({
   searchParams,

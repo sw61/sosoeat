@@ -4,7 +4,9 @@ import type { Metadata } from 'next';
 
 import { SearchParams } from 'nuqs';
 
-import { MeetingSearchBanner, SearchScreenFetcher, SearchScreenSkeleton } from '@/widgets/search';
+import { MeetingSearchBanner, SearchScreenSkeleton } from '@/widgets/search';
+
+import { SearchScreenFetcher } from './search-screen-fetcher.server';
 
 export const metadata: Metadata = {
   title: '모임 검색',
