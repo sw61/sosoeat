@@ -152,7 +152,7 @@ export function MainBanner() {
         )}
       </Carousel>
 
-      <div className="pointer-events-none absolute bottom-10 left-1/2 z-40 w-full -translate-x-1/2 px-4">
+      <div className="pointer-events-none absolute bottom-6 left-1/2 z-40 w-full -translate-x-1/2 px-4">
         <div className="mx-auto flex flex-col items-center gap-5">
           <div className="flex gap-2.5">
             {BANNERS.map((_, index) => (
@@ -178,13 +178,15 @@ export function MainBanner() {
 }
 
 function BannerImage({ banner, index }: { banner: Banner; index: number }) {
+  const isFirst = index === 0;
   return (
     <div className="relative h-[420px] md:h-[450px]">
       <Image
         src={banner.imageUrl}
         alt={banner.alt}
         fill
-        priority={index === 0}
+        priority={isFirst}
+        fetchPriority={isFirst ? 'high' : 'low'}
         className="object-cover"
         sizes="100vw"
       />

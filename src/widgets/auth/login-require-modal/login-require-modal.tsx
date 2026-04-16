@@ -8,11 +8,12 @@ import { AlertModal } from '@/shared/ui/alert-modal/alert-modal';
 export const LoginRequireModal = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { isLoginRequired, setLoginRequired } = useAuthStore();
+  const { isLoginRequired, loginRequiredCallbackUrl, setLoginRequired } = useAuthStore();
 
   const handleConfirm = () => {
     setLoginRequired(false);
-    router.push(`/login?callbackUrl=${encodeURIComponent(pathname ?? '')}`);
+    const callbackUrl = loginRequiredCallbackUrl ?? pathname ?? '';
+    router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   };
 
   const handleCancel = () => {

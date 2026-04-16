@@ -39,11 +39,10 @@ export const StepCategory = ({ form }: StepProps<MeetingFormData>) => {
                   key={value}
                   className={cn(
                     'flex cursor-pointer flex-col items-center justify-center gap-3 transition-all',
-                    'rounded-[24px] border-2 text-sm font-medium',
-                    'h-[136px] w-full md:max-w-[209px]',
+                    'w-full overflow-hidden rounded-[24px] border-2 pb-4 text-sm font-medium md:max-w-[209px]',
                     field.value === value
                       ? CATEGORY_SELECTED_STYLES[value]
-                      : 'bg-sosoeat-gray-100 text-sosoeat-gray-700 border-sosoeat-gray-200'
+                      : 'bg-sosoeat-gray-200 text-sosoeat-gray-700 border-sosoeat-gray-300'
                   )}
                 >
                   <input
@@ -53,13 +52,13 @@ export const StepCategory = ({ form }: StepProps<MeetingFormData>) => {
                     checked={field.value === value}
                     onChange={(e) => field.onChange(e.target.value)}
                   />
-                  <div className="relative h-20 w-20">
+                  <div className="relative aspect-4/3 w-full">
                     <Image
                       src={CATEGORY_ICONS[value]}
                       alt={label as string}
                       fill
-                      sizes="80px"
-                      className="object-contain"
+                      sizes="(min-width: 768px) 209px, 50vw"
+                      className="object-cover"
                     />
                   </div>
                   <span className="text-sm font-semibold md:text-base">{label as string}</span>

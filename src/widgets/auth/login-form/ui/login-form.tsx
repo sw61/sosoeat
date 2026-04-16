@@ -69,7 +69,7 @@ const LoginFormContent = (props: LoginFormProps) => {
             />
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground absolute top-1/2 right-4 -translate-y-1/2 focus-visible:outline-none"
+              className="text-muted-foreground hover:text-foreground absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer focus-visible:outline-none"
               onClick={toggleShowPassword}
               aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 표시'}
             >

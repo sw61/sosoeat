@@ -55,7 +55,7 @@ export const SignupStepper = ({ currentStepNumber }: SignupStepperProps) => {
                 <div
                   className={cn(
                     'h-[2px] w-full transition-all duration-300',
-                    isLineActive ? 'bg-sosoeat-orange-gradation' : 'bg-gray-200'
+                    isLineActive ? 'bg-sosoeat-orange-600' : 'bg-gray-200'
                   )}
                 />
               </div>

@@ -7,6 +7,7 @@ interface AuthState {
   user: AuthUser | null;
   isInitialized: boolean;
   isLoginRequired: boolean;
+  loginRequiredCallbackUrl: string | null;
   isSessionExpired: boolean;
 }
 
@@ -16,6 +17,7 @@ interface AuthActions {
   initialize: (user: AuthUser | null) => void;
   setInitialized: (val: boolean) => void;
   setLoginRequired: (val: boolean) => void;
+  openLoginRequired: (callbackUrl?: string) => void;
   setSessionExpired: (val: boolean) => void;
   /**
    * 401 응답 시 인증 상태에 따라 세션만료(로그인) 또는 로그인필요 모달을 띄웁니다.
@@ -36,6 +38,7 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   user: null,
   isInitialized: false,
   isLoginRequired: false,
+  loginRequiredCallbackUrl: null,
   isSessionExpired: false,
 
   // Actions
@@ -47,7 +50,13 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   },
 
   logout: () => {
-    set({ isAuthenticated: false, user: null, isLoginRequired: false, isSessionExpired: false });
+    set({
+      isAuthenticated: false,
+      user: null,
+      isLoginRequired: false,
+      loginRequiredCallbackUrl: null,
+      isSessionExpired: false,
+    });
   },
 
   initialize: (user: AuthUser | null) => {
@@ -59,7 +68,16 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   },
 
   setInitialized: (val: boolean) => set({ isInitialized: val }),
-  setLoginRequired: (val: boolean) => set({ isLoginRequired: val }),
+  setLoginRequired: (val: boolean) =>
+    set((state) => ({
+      isLoginRequired: val,
+      loginRequiredCallbackUrl: val ? state.loginRequiredCallbackUrl : null,
+    })),
+  openLoginRequired: (callbackUrl?: string) =>
+    set({
+      isLoginRequired: true,
+      loginRequiredCallbackUrl: callbackUrl ?? null,
+    }),
   setSessionExpired: (val: boolean) => set({ isSessionExpired: val }),
 
   handleAuthError: () => {
@@ -67,7 +85,7 @@ export const useAuthStore = create<AuthStore>()((set) => ({
     if (state.isAuthenticated) {
       set({ isSessionExpired: true });
     } else {
-      set({ isLoginRequired: true });
+      set({ isLoginRequired: true, loginRequiredCallbackUrl: null });
     }
   },
 }));
