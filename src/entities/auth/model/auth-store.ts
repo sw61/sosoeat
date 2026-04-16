@@ -69,10 +69,10 @@ export const useAuthStore = create<AuthStore>()((set) => ({
 
   setInitialized: (val: boolean) => set({ isInitialized: val }),
   setLoginRequired: (val: boolean) =>
-    set({
+    set((state) => ({
       isLoginRequired: val,
-      loginRequiredCallbackUrl: val ? useAuthStore.getState().loginRequiredCallbackUrl : null,
-    }),
+      loginRequiredCallbackUrl: val ? state.loginRequiredCallbackUrl : null,
+    })),
   openLoginRequired: (callbackUrl?: string) =>
     set({
       isLoginRequired: true,
