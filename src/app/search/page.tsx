@@ -1,10 +1,12 @@
+import { Suspense } from 'react';
+
 import type { Metadata } from 'next';
 
 import { SearchParams } from 'nuqs';
 
 import { getMeetingSearchParams } from '@/features/search';
 import { getInitialSearchData } from '@/features/search/index.server';
-import { MeetingSearchBanner, SearchScreen } from '@/widgets/search';
+import { MeetingSearchBanner , SearchScreenFetcher , SearchScreenSkeleton } from '@/widgets/search';
 
 export const metadata: Metadata = {
   title: '모임 검색',
@@ -44,7 +46,7 @@ type PageProps = {
 
 export default async function Page({ searchParams }: PageProps) {
   const requestParams = await getMeetingSearchParams(searchParams);
-  const initialData = await getInitialSearchData(requestParams);
+  const initialData = getInitialSearchData(requestParams);
 
   return (
     <div className="bg-sosoeat-gray-100 flex w-full flex-col items-center justify-center">
@@ -55,10 +57,9 @@ export default async function Page({ searchParams }: PageProps) {
         aria-label="search-results"
         className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-4"
       >
-        <SearchScreen
-          initialData={initialData}
-          initialDefaultDateStartIso={requestParams.dateStart}
-        />
+        <Suspense fallback={<SearchScreenSkeleton />}>
+          <SearchScreenFetcher initialData={initialData} />
+        </Suspense>
       </section>
     </div>
   );
