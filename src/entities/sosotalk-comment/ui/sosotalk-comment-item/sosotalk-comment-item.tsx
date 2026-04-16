@@ -1,5 +1,6 @@
 import { Heart, MoreHorizontal } from 'lucide-react';
 
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { CommentInput } from '@/shared/ui/comment-input';
@@ -42,7 +43,7 @@ export function SosoTalkCommentItem({
         )}
       >
         <Avatar size="default" className="h-[54px] w-[54px] shrink-0">
-          <AvatarImage src={authorImageUrl} alt={authorName} />
+          <AvatarImage src={toHttpsUrl(authorImageUrl)} alt={authorName} />
           <AvatarFallback className="text-sm font-semibold">
             {authorName.slice(0, 1)}
           </AvatarFallback>
@@ -78,9 +79,15 @@ export function SosoTalkCommentItem({
                     <MoreHorizontal className="h-5 w-5" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="min-w-[120px]">
-                  <DropdownMenuItem onClick={onEditClick}>수정하기</DropdownMenuItem>
-                  <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
+                <DropdownMenuContent align="end" className="min-w-[120px] md:min-w-[144px]">
+                  <DropdownMenuItem className="md:px-2.5 md:py-2 md:text-base" onClick={onEditClick}>
+                    수정하기
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    className="md:px-2.5 md:py-2 md:text-base"
+                    onClick={onDeleteClick}
+                  >
                     삭제하기
                   </DropdownMenuItem>
                 </DropdownMenuContent>

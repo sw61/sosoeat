@@ -6,6 +6,7 @@ import type { MeetingCategory } from '@/entities/meeting';
 import { DeadlineBadge, EstablishmentStatusBadge } from '@/entities/meeting';
 import { HeartButton } from '@/features/favorites';
 // import { UseStateBadge } from '@/shared/ui/use-state-badge/use-state-badge'; // TODO: isScheduled 기준 논의 후 활성화
+import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 
@@ -100,7 +101,7 @@ function HostRow({ name, profileImage, className }: HostRowProps) {
   return (
     <div className={cn('flex items-center gap-3', className)}>
       <Avatar size="default">
-        <AvatarImage src={profileImage} alt={name} />
+        <AvatarImage src={toHttpsUrl(profileImage)} alt={name} />
         <AvatarFallback>
           <UserIcon className="text-sosoeat-gray-400 h-4 w-4" />
         </AvatarFallback>

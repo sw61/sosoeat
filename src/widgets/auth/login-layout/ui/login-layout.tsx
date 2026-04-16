@@ -118,7 +118,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
               type="button"
               onClick={handleGoogleLogin}
               disabled={googleLoginMutation.isPending}
-              className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] border border-gray-300 bg-white text-base font-semibold text-slate-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 focus:outline-none disabled:opacity-50 md:flex-1"
+              className="flex h-[48px] w-full cursor-pointer items-center justify-center gap-[12px] rounded-[12px] border border-gray-300 bg-white text-base font-semibold text-slate-800 hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 focus:outline-none disabled:opacity-50 md:flex-1"
             >
               <Image src="/icons/google-icon.svg" alt="Google Logo" width={24} height={24} />
               구글로 계속하기
@@ -127,7 +127,7 @@ export const LoginLayout = ({ children }: LoginLayoutProps) => {
             <button
               type="button"
               onClick={handleKakaoLogin}
-              className="flex h-[48px] w-full items-center justify-center gap-[12px] rounded-[12px] bg-[#FEE500] text-base font-semibold text-[rgba(0,0,0,0.85)] opacity-90 hover:opacity-100 focus:ring-2 focus:ring-[#FFEE01] focus:ring-offset-1 focus:outline-none md:flex-1"
+              className="flex h-[48px] w-full cursor-pointer items-center justify-center gap-[12px] rounded-[12px] bg-[#FEE500] text-base font-semibold text-[rgba(0,0,0,0.85)] opacity-90 hover:opacity-100 focus:ring-2 focus:ring-[#FFEE01] focus:ring-offset-1 focus:outline-none md:flex-1"
             >
               <Image src="/icons/kakao-icon.svg" alt="Kakao Logo" width={24} height={24} />
               카카오로 계속하기
