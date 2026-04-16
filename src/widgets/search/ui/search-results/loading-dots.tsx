@@ -8,7 +8,7 @@ export function LoadingDots() {
       <m.div
         animate="jump"
         transition={{ staggerChildren: -0.2, staggerDirection: -1 }}
-        className="flex items-center justify-center gap-2.5"
+        className="-mt-2 mb-8 flex items-center justify-center gap-2.5 md:-mt-3"
       >
         {[0, 1, 2].map((i) => (
           <m.div
