@@ -7,15 +7,15 @@ export const fetchMeServer = async (): Promise<User | null> => {
   return res.json();
 };
 
-const MAX_FETCH_SIZE = 100;
+const MAX_FETCH_SIZE = 50;
 
 export const fetchMeetingCountServer = async (): Promise<number> => {
-  const res = await apiServer.get(`/users/me/meetings?size=${MAX_FETCH_SIZE}`, {
+  const res = await apiServer.get(`/users/me/meetings?type=joined&size=${MAX_FETCH_SIZE}`, {
     cache: 'no-store',
   });
   if (!res.ok) return 0;
   const data: UserMeetingsResponse = await res.json();
-  return data.data.length;
+  return data.data?.length ?? 0;
 };
 
 export const fetchFavoriteCountServer = async (): Promise<number> => {
