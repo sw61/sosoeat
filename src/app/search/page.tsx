@@ -46,8 +46,8 @@ type PageProps = {
 
 export default async function Page({ searchParams }: PageProps) {
   return (
-    <div className="bg-sosoeat-gray-100 flex w-full flex-col items-center justify-center">
-      <section aria-label="search-banner" className="w-full">
+    <div className="bg-sosoeat-gray-100 flex w-full flex-1 flex-col items-center">
+      <section aria-label="search-banner" className="mt-4 w-full">
         <MeetingSearchBanner />
       </section>
       <section

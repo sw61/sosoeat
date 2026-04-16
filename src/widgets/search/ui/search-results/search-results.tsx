@@ -67,7 +67,7 @@ export function SearchResults({
         <LoadingDots />
       ) : (
         !hasNextPage && (
-          <span className="text-sosoeat-gray-600 col-span-full flex justify-center">
+          <span className="text-sosoeat-gray-600 col-span-full mb-8 flex justify-center">
             더 이상 모임이 없습니다.
           </span>
         )

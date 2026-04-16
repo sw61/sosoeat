@@ -15,11 +15,10 @@ import { Providers } from './providers';
 
 import './globals.css';
 
-export const metadataBase: URL = new URL(
-  process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000'
-);
+const metadataBase = new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000');
 
 export const metadata: Metadata = {
+  metadataBase,
   title: {
     default: '소소잇 | 소소한 일상과 만남을 잇다',
     template: '%s | 소소잇',
