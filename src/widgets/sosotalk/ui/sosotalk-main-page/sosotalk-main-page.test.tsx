@@ -16,6 +16,14 @@ jest.mock('./model', () => ({
   useSosoTalkMainPage: () => mockUseSosoTalkMainPage(),
 }));
 
+jest.mock('@/entities/auth', () => ({
+  useAuthStore: jest.fn(),
+}));
+
+const { useAuthStore: mockUseAuthStore } = jest.requireMock('@/entities/auth') as {
+  useAuthStore: jest.Mock;
+};
+
 jest.mock('../sosotalk-banner', () => ({
   SosoTalkBanner: (props: Record<string, unknown>) => (
     <div data-testid="sosotalk-banner">{String(props.alt)}</div>
@@ -38,6 +46,12 @@ jest.mock('../sosotalk-filter-bar', () => ({
 
 describe('SosoTalkMainPage', () => {
   beforeEach(() => {
+    mockUseAuthStore.mockImplementation((selector: (state: unknown) => unknown) =>
+      selector({
+        isAuthenticated: true,
+        isInitialized: true,
+      })
+    );
     mockUseSosoTalkMainPage.mockReturnValue({
       activeSort: 'latest',
       activeTab: 'all',
@@ -170,5 +184,20 @@ describe('SosoTalkMainPage', () => {
     render(<SosoTalkMainPage />);
 
     expect(screen.getByText('모든 게시글을 불러왔어요.')).toBeInTheDocument();
+  });
+  it('redirects unauthenticated users to login from the write button', () => {
+    mockUseAuthStore.mockImplementation((selector: (state: unknown) => unknown) =>
+      selector({
+        isAuthenticated: false,
+        isInitialized: true,
+      })
+    );
+
+    render(<SosoTalkMainPage />);
+
+    expect(screen.getByRole('link', { name: '게시글 작성' })).toHaveAttribute(
+      'href',
+      '/login?callbackUrl=%2Fsosotalk%2Fwrite'
+    );
   });
 });

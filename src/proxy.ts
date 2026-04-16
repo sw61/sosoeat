@@ -8,8 +8,9 @@ import { NextResponse } from 'next/server';
  * accessToken이 없으면 /api/auth/refresh를 호출하여 갱신합니다.
  */
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const isProtectedRoute = pathname.startsWith('/mypage');
+  const { pathname, search } = request.nextUrl;
+  const callbackUrl = encodeURIComponent(`${pathname}${search}`);
+  const isProtectedRoute = pathname.startsWith('/mypage') || pathname.startsWith('/sosotalk/write');
 
   if (!isProtectedRoute) {
     return NextResponse.next();
@@ -17,7 +18,6 @@ export async function proxy(request: NextRequest) {
 
   const hasRefreshToken = request.cookies.has('refreshToken');
   if (!hasRefreshToken) {
-    const callbackUrl = encodeURIComponent(pathname);
     return NextResponse.redirect(new URL(`/login?callbackUrl=${callbackUrl}`, request.url));
   }
 
@@ -33,7 +33,6 @@ export async function proxy(request: NextRequest) {
   });
 
   if (!refreshRes.ok) {
-    const callbackUrl = encodeURIComponent(pathname);
     return NextResponse.redirect(new URL(`/login?callbackUrl=${callbackUrl}`, request.url));
   }
 
@@ -46,5 +45,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/mypage/:path*'],
+  matcher: ['/mypage/:path*', '/sosotalk/write', '/sosotalk/write/:path*'],
 };

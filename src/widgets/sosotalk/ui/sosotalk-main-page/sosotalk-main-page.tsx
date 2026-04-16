@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 import { Plus } from 'lucide-react';
 
+import { useAuthStore } from '@/entities/auth';
 import type { GetSosoTalkPostListResponse } from '@/entities/post';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
@@ -26,6 +27,8 @@ interface SosoTalkMainPageProps {
 
 const SOSOTALK_BANNER_IMAGE =
   'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop';
+const SOSOTALK_WRITE_PATH = '/sosotalk/write';
+const SOSOTALK_WRITE_LOGIN_PATH = `/login?callbackUrl=${encodeURIComponent(SOSOTALK_WRITE_PATH)}`;
 
 export const SosoTalkMainPage = ({
   className,
@@ -33,6 +36,8 @@ export const SosoTalkMainPage = ({
   initialTab,
   initialSort,
 }: SosoTalkMainPageProps) => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isInitialized = useAuthStore((state) => state.isInitialized);
   const { ref, inView } = useInView({
     threshold: 0.5,
     root: null,
@@ -49,6 +54,8 @@ export const SosoTalkMainPage = ({
     setActiveSort,
     setActiveTab,
   } = useSosoTalkMainPage({ initialData, initialTab, initialSort });
+  const writeHref =
+    !isInitialized || isAuthenticated ? SOSOTALK_WRITE_PATH : SOSOTALK_WRITE_LOGIN_PATH;
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -128,7 +135,7 @@ export const SosoTalkMainPage = ({
           'md:right-8 md:bottom-8 md:h-16 md:px-7 md:text-lg'
         )}
       >
-        <Link href="/sosotalk/write">
+        <Link href={writeHref}>
           <Plus className="size-5" aria-hidden />
           게시글 작성
         </Link>
