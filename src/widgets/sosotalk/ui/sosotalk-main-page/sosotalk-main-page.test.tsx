@@ -1,9 +1,11 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { SosoTalkMainPage } from './sosotalk-main-page';
 
 const mockUseSosoTalkMainPage = jest.fn();
 const mockFilterBar = jest.fn();
+const mockOpenLoginRequired = jest.fn();
 
 jest.mock('react-intersection-observer', () => ({
   useInView: () => ({
@@ -50,8 +52,10 @@ describe('SosoTalkMainPage', () => {
       selector({
         isAuthenticated: true,
         isInitialized: true,
+        openLoginRequired: mockOpenLoginRequired,
       })
     );
+    mockOpenLoginRequired.mockClear();
     mockUseSosoTalkMainPage.mockReturnValue({
       activeSort: 'latest',
       activeTab: 'all',
@@ -185,19 +189,21 @@ describe('SosoTalkMainPage', () => {
 
     expect(screen.getByText('모든 게시글을 불러왔어요.')).toBeInTheDocument();
   });
-  it('redirects unauthenticated users to login from the write button', () => {
+
+  it('비로그인 사용자가 작성 버튼을 누르면 로그인 유도 모달을 연다', async () => {
+    const user = userEvent.setup();
     mockUseAuthStore.mockImplementation((selector: (state: unknown) => unknown) =>
       selector({
         isAuthenticated: false,
         isInitialized: true,
+        openLoginRequired: mockOpenLoginRequired,
       })
     );
 
     render(<SosoTalkMainPage />);
 
-    expect(screen.getByRole('link', { name: '게시글 작성' })).toHaveAttribute(
-      'href',
-      '/login?callbackUrl=%2Fsosotalk%2Fwrite'
-    );
+    await user.click(screen.getByRole('button', { name: '게시글 작성' }));
+
+    expect(mockOpenLoginRequired).toHaveBeenCalledWith('/sosotalk/write');
   });
 });

@@ -28,7 +28,6 @@ interface SosoTalkMainPageProps {
 const SOSOTALK_BANNER_IMAGE =
   'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop';
 const SOSOTALK_WRITE_PATH = '/sosotalk/write';
-const SOSOTALK_WRITE_LOGIN_PATH = `/login?callbackUrl=${encodeURIComponent(SOSOTALK_WRITE_PATH)}`;
 
 export const SosoTalkMainPage = ({
   className,
@@ -38,6 +37,7 @@ export const SosoTalkMainPage = ({
 }: SosoTalkMainPageProps) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const isInitialized = useAuthStore((state) => state.isInitialized);
+  const openLoginRequired = useAuthStore((state) => state.openLoginRequired);
   const { ref, inView } = useInView({
     threshold: 0.5,
     root: null,
@@ -54,8 +54,7 @@ export const SosoTalkMainPage = ({
     setActiveSort,
     setActiveTab,
   } = useSosoTalkMainPage({ initialData, initialTab, initialSort });
-  const writeHref =
-    !isInitialized || isAuthenticated ? SOSOTALK_WRITE_PATH : SOSOTALK_WRITE_LOGIN_PATH;
+  const shouldRenderWriteLink = !isInitialized || isAuthenticated;
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -127,19 +126,33 @@ export const SosoTalkMainPage = ({
         </div>
       </main>
 
-      <Button
-        asChild
-        variant="ghost"
-        className={cn(
-          'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 fixed right-5 bottom-[calc(20px+env(safe-area-inset-bottom))] z-50 h-14 rounded-full px-5 text-base font-bold text-white shadow-lg hover:text-white',
-          'md:right-8 md:bottom-8 md:h-16 md:px-7 md:text-lg'
-        )}
-      >
-        <Link href={writeHref}>
+      {shouldRenderWriteLink ? (
+        <Button
+          asChild
+          variant="ghost"
+          className={cn(
+            'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 fixed right-5 bottom-[calc(20px+env(safe-area-inset-bottom))] z-50 h-14 rounded-full px-5 text-base font-bold text-white shadow-lg hover:text-white',
+            'md:right-8 md:bottom-8 md:h-16 md:px-7 md:text-lg'
+          )}
+        >
+          <Link href={SOSOTALK_WRITE_PATH}>
+            <Plus className="size-5" aria-hidden />
+            게시글 작성
+          </Link>
+        </Button>
+      ) : (
+        <Button
+          variant="ghost"
+          className={cn(
+            'bg-sosoeat-orange-600 hover:bg-sosoeat-orange-700 fixed right-5 bottom-[calc(20px+env(safe-area-inset-bottom))] z-50 h-14 rounded-full px-5 text-base font-bold text-white shadow-lg hover:text-white',
+            'md:right-8 md:bottom-8 md:h-16 md:px-7 md:text-lg'
+          )}
+          onClick={() => openLoginRequired(SOSOTALK_WRITE_PATH)}
+        >
           <Plus className="size-5" aria-hidden />
           게시글 작성
-        </Link>
-      </Button>
+        </Button>
+      )}
     </div>
   );
 };
