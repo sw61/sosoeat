@@ -12,7 +12,7 @@ export const DETAIL_DATE_PICKER_CALENDAR_CLASS =
 
 export const DETAIL_DATE_PICKER_CHEVRON_CLASS = 'text-foreground h-1.75 w-3.75';
 
-export const DETAIL_DATE_PICKER_ACTIONS_CLASS = 'flex w-full justify-center gap-2';
+export const DETAIL_DATE_PICKER_ACTIONS_CLASS = 'flex w-full justify-center gap-2 mt-3';
 
 export const DETAIL_DATE_PICKER_ACTION_BUTTON_CLASS = 'h-10 w-29.5 text-sm font-semibold';
 

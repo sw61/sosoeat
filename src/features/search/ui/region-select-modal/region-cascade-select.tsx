@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import Image from 'next/image';
 
@@ -32,6 +32,93 @@ export interface RegionCascadeSelectProps {
   className?: string;
 }
 
+interface RegionItemProps {
+  region: KoreaRegionRegion & { districts: string[] };
+  value: RegionSelection;
+  onChange: (next: RegionSelection) => void;
+}
+
+function RegionItem({ region: r, value, onChange }: RegionItemProps) {
+  const didScrollRef = useRef(false);
+  const startPosRef = useRef<{ x: number; y: number } | null>(null);
+
+  const selectedDistricts = (value ?? [])
+    .filter((s) => s.province === r.name)
+    .map((s) => s.district);
+
+  const hasSelection = selectedDistricts.length > 0;
+
+  return (
+    <li>
+      <DropdownMenu>
+        <DropdownMenuTrigger className={cn(triggerClass, hasSelection && triggerSelectedClass)}>
+          <span className="min-w-0 flex-1 truncate">
+            {hasSelection ? `${r.name} · ${selectedDistricts.join(', ')}` : r.name}
+          </span>
+          {hasSelection ? (
+            <Check
+              className="text-sosoeat-orange-600 pointer-events-none size-6 shrink-0"
+              strokeWidth={2.25}
+              aria-hidden
+            />
+          ) : (
+            <Image
+              src="/icons/arrow-down.svg"
+              alt=""
+              width={24}
+              height={24}
+              className="shrink-0"
+              aria-hidden
+            />
+          )}
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent
+          align="start"
+          sideOffset={4}
+          className="max-h-[min(60vh,320px)] overflow-y-auto"
+          onPointerDown={(e) => {
+            startPosRef.current = { x: e.clientX, y: e.clientY };
+            didScrollRef.current = false;
+          }}
+          onPointerMove={(e) => {
+            if (!startPosRef.current || didScrollRef.current) return;
+            const dx = e.clientX - startPosRef.current.x;
+            const dy = e.clientY - startPosRef.current.y;
+            if (dx * dx + dy * dy > 25) didScrollRef.current = true;
+          }}
+        >
+          <DropdownMenuGroup>
+            {r.districts.map((district) => (
+              <DropdownMenuCheckboxItem
+                key={district}
+                checked={selectedDistricts.includes(district)}
+                className="hover:bg-accent cursor-pointer py-3 text-base transition-colors md:py-1"
+                onSelect={(e) => {
+                  if (didScrollRef.current) e.preventDefault();
+                }}
+                onCheckedChange={(checked) => {
+                  const next = (value ?? []).filter(
+                    (s) => !(s.province === r.name && s.district === district)
+                  );
+
+                  if (checked) {
+                    onChange([...next, { province: r.name, district }]);
+                  } else {
+                    onChange(next.length > 0 ? next : null);
+                  }
+                }}
+              >
+                {district}
+              </DropdownMenuCheckboxItem>
+            ))}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </li>
+  );
+}
+
 export function RegionCascadeSelect({
   regions,
   value,
@@ -53,72 +140,9 @@ export function RegionCascadeSelect({
       role="list"
       aria-label="시·도 목록"
     >
-      {sortedRegions.map((r) => {
-        const selectedDistricts = (value ?? [])
-          .filter((s) => s.province === r.name)
-          .map((s) => s.district);
-
-        const hasSelection = selectedDistricts.length > 0;
-
-        return (
-          <li key={r.id}>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                className={cn(triggerClass, hasSelection && triggerSelectedClass)}
-              >
-                <span className="min-w-0 flex-1 truncate">
-                  {hasSelection ? `${r.name} · ${selectedDistricts.join(', ')}` : r.name}
-                </span>
-                {hasSelection ? (
-                  <Check
-                    className="text-sosoeat-orange-600 pointer-events-none size-6 shrink-0"
-                    strokeWidth={2.25}
-                    aria-hidden
-                  />
-                ) : (
-                  <Image
-                    src="/icons/arrow-down.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                    className="shrink-0"
-                    aria-hidden
-                  />
-                )}
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent
-                align="start"
-                sideOffset={4}
-                className="max-h-[min(60vh,320px)] overflow-y-auto"
-              >
-                <DropdownMenuGroup>
-                  {r.districts.map((district) => (
-                    <DropdownMenuCheckboxItem
-                      key={district}
-                      checked={selectedDistricts.includes(district)}
-                      className="hover:bg-accent cursor-pointer py-3 text-base transition-colors md:py-1"
-                      onCheckedChange={(checked) => {
-                        const next = (value ?? []).filter(
-                          (s) => !(s.province === r.name && s.district === district)
-                        );
-
-                        if (checked) {
-                          onChange([...next, { province: r.name, district }]);
-                        } else {
-                          onChange(next.length > 0 ? next : null);
-                        }
-                      }}
-                    >
-                      {district}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </li>
-        );
-      })}
+      {sortedRegions.map((r) => (
+        <RegionItem key={r.id} region={r} value={value} onChange={onChange} />
+      ))}
     </ul>
   );
 }
