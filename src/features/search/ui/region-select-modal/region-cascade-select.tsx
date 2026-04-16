@@ -82,12 +82,10 @@ function RegionItem({ region: r, value, onChange }: RegionItemProps) {
             didScrollRef.current = false;
           }}
           onPointerMove={(e) => {
-            if (!startPosRef.current) return;
-            const d = Math.hypot(
-              e.clientX - startPosRef.current.x,
-              e.clientY - startPosRef.current.y
-            );
-            if (d > 5) didScrollRef.current = true;
+            if (!startPosRef.current || didScrollRef.current) return;
+            const dx = e.clientX - startPosRef.current.x;
+            const dy = e.clientY - startPosRef.current.y;
+            if (dx * dx + dy * dy > 25) didScrollRef.current = true;
           }}
         >
           <DropdownMenuGroup>

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import Image from 'next/image';
 
-import DOMPurify from 'isomorphic-dompurify';
+import { SafeHtml } from '@/shared/ui/safeHtml/safe-html';
 
 import type { SosoTalkPostBodyProps } from './sosotalk-post-detail.types';
 
@@ -16,13 +16,11 @@ export function SosoTalkPostDetailBody({
   imageUrl,
   children,
 }: SosoTalkPostDetailBodyProps) {
-  const normalizedContentHtml = DOMPurify.sanitize(contentHtml.trim());
-
   return (
     <section className="border-sosoeat-gray-300 mt-6 flex flex-col gap-5 border-t pt-5 md:mt-8 md:gap-6 md:pt-6">
-      <div
+      <SafeHtml
+        html={contentHtml.trim()}
         className="text-sosoeat-gray-800 prose prose-p:my-0 prose-p:min-h-[1.85em] prose-strong:font-bold prose-em:italic prose-u:underline max-w-none text-lg font-normal [&_li]:my-1 [&_li]:pl-1 [&_li>p]:my-0 [&_ol]:my-0 [&_ol]:list-outside [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:whitespace-pre-wrap [&_p+ol]:mt-3 [&_p+ul]:mt-3 [&_ul]:my-0 [&_ul]:list-outside [&_ul]:list-disc [&_ul]:pl-6"
-        dangerouslySetInnerHTML={{ __html: normalizedContentHtml }}
       />
 
       {imageUrl ? (

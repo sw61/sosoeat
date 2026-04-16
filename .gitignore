@@ -89,3 +89,6 @@ src/graphify-out/cache/
 .env.sentry-build-plugin
 
 .opencode
+
+.next-qa/
+.next-webpack-qa/
