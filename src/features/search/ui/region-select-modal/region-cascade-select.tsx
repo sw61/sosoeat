@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import Image from 'next/image';
 
@@ -39,8 +39,15 @@ interface RegionItemProps {
 }
 
 function RegionItem({ region: r, value, onChange }: RegionItemProps) {
+  const [open, setOpen] = useState(false);
+
+  // Content scroll detection (prevents item selection when scrolling inside dropdown)
   const didScrollRef = useRef(false);
   const startPosRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Trigger scroll detection (prevents dropdown from opening when scrolling the list)
+  const triggerDidScrollRef = useRef(false);
+  const triggerStartPosRef = useRef<{ x: number; y: number } | null>(null);
 
   const selectedDistricts = (value ?? [])
     .filter((s) => s.province === r.name)
@@ -50,8 +57,26 @@ function RegionItem({ region: r, value, onChange }: RegionItemProps) {
 
   return (
     <li>
-      <DropdownMenu>
-        <DropdownMenuTrigger className={cn(triggerClass, hasSelection && triggerSelectedClass)}>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger
+          className={cn(triggerClass, hasSelection && triggerSelectedClass)}
+          onPointerDown={(e) => {
+            triggerStartPosRef.current = { x: e.clientX, y: e.clientY };
+            triggerDidScrollRef.current = false;
+            // Prevent Radix from opening on pointerdown — we open manually in onClick
+            e.preventDefault();
+          }}
+          onPointerMove={(e) => {
+            if (!triggerStartPosRef.current || triggerDidScrollRef.current) return;
+            const dy = Math.abs(e.clientY - triggerStartPosRef.current.y);
+            if (dy > 8) triggerDidScrollRef.current = true;
+          }}
+          onClick={() => {
+            if (!triggerDidScrollRef.current) {
+              setOpen((prev) => !prev);
+            }
+          }}
+        >
           <span className="min-w-0 flex-1 truncate">
             {hasSelection ? `${r.name} · ${selectedDistricts.join(', ')}` : r.name}
           </span>
