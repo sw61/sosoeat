@@ -124,12 +124,12 @@ export function MyPageCard({
             className="cursor-pointer object-cover"
           />
 
-          <div className="pointer-events-none absolute top-3 right-4 left-4 flex items-center justify-between md:hidden">
+          <div className="pointer-events-none absolute top-4 right-4 left-4 flex items-center justify-between md:hidden">
             <VariantBadge variant={variant} />
           </div>
         </div>
 
-        <div className="flex h-full flex-1 flex-col justify-between p-4 md:px-0 md:py-4">
+        <div className="flex h-full flex-1 flex-col justify-between p-4 md:px-0">
           <div className="mt-3 hidden md:block">
             <VariantBadge variant={variant} />
           </div>
