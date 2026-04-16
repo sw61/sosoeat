@@ -28,7 +28,7 @@ export function DateTimeField({
       <div className="grid cursor-pointer grid-cols-2 gap-3">
         <button
           type="button"
-          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 hover:border-sosoeat-gray-200 flex h-10 items-center gap-2 rounded-lg border border-transparent px-3.5 py-2 text-left text-sm font-normal transition-all md:h-12 md:text-base"
+          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 hover:border-sosoeat-gray-200 flex h-11 items-center gap-2 rounded-lg border border-transparent px-3.5 py-2 text-left text-sm font-normal transition-all md:text-base"
         >
           <svg
             width="24"
@@ -52,7 +52,7 @@ export function DateTimeField({
         </button>
         <button
           type="button"
-          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 hover:border-sosoeat-gray-200 flex h-10 items-center gap-2 rounded-lg border border-transparent px-3.5 py-2 text-left text-sm font-normal transition-all md:h-12 md:text-base"
+          className="bg-sosoeat-gray-100 text-sosoeat-gray-900 hover:border-sosoeat-gray-200 flex h-11 items-center gap-2 rounded-lg border border-transparent px-3.5 py-2 text-left text-sm font-normal transition-all md:text-base"
         >
           <svg
             width="24"

@@ -56,9 +56,15 @@ export function SosoTalkPostDetailHeader({
                 <MoreHorizontal className="h-7 w-7" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-[120px]">
-              <DropdownMenuItem onClick={onEditClick}>수정하기</DropdownMenuItem>
-              <DropdownMenuItem variant="destructive" onClick={onDeleteClick}>
+            <DropdownMenuContent align="end" className="min-w-[120px] md:min-w-[144px]">
+              <DropdownMenuItem className="md:px-2.5 md:py-2 md:text-base" onClick={onEditClick}>
+                수정하기
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                variant="destructive"
+                className="md:px-2.5 md:py-2 md:text-base"
+                onClick={onDeleteClick}
+              >
                 삭제하기
               </DropdownMenuItem>
             </DropdownMenuContent>

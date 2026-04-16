@@ -83,8 +83,7 @@ export interface SosoTalkPostCardItem {
 const SOSOTALK_POST_IMAGE_FALLBACK =
   'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop';
 
-const SOSOTALK_AUTHOR_IMAGE_FALLBACK =
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop';
+const SOSOTALK_AUTHOR_IMAGE_FALLBACK = '/images/basic-profile.svg';
 
 const stripHtmlTags = (content: string) =>
   content

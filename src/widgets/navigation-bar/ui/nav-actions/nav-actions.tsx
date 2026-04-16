@@ -97,11 +97,15 @@ export function NavActions({ user, onLogout, initialUnreadCount = 0 }: NavAction
             />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem className="h-10" asChild>
+        <DropdownMenuContent align="end" className="min-w-[120px] md:min-w-[144px]">
+          <DropdownMenuItem className="h-10 md:h-11 md:px-2.5 md:text-base" asChild>
             <Link href="/mypage">마이페이지</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="h-10" variant="destructive" onClick={onLogout}>
+          <DropdownMenuItem
+            className="h-10 md:h-11 md:px-2.5 md:text-base"
+            variant="destructive"
+            onClick={onLogout}
+          >
             로그아웃
           </DropdownMenuItem>
         </DropdownMenuContent>
