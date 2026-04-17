@@ -19,9 +19,7 @@ interface LocationMapPreviewProps {
 }
 
 export function LocationMapPreview({ latitude, longitude, className }: LocationMapPreviewProps) {
-  const [sdkReady, setSdkReady] = useState(
-    () => typeof window !== 'undefined' && !!window.kakao?.maps
-  );
+  const [sdkReady, setSdkReady] = useState(false);
   const appKey = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY ?? '';
 
   return (

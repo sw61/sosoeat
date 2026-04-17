@@ -19,9 +19,7 @@ interface KakaoMapLoaderProps {
 }
 
 export function KakaoMapLoader({ appKey, latitude, longitude }: KakaoMapLoaderProps) {
-  const [sdkReady, setSdkReady] = useState(
-    () => typeof window !== 'undefined' && !!window.kakao?.maps
-  );
+  const [sdkReady, setSdkReady] = useState(false);
 
   return (
     <>

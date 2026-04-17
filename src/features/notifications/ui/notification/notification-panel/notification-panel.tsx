@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { X } from 'lucide-react';
@@ -42,16 +42,15 @@ const DESKTOP_SCROLL_CLASS =
   'overflow-x-hidden overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#cccccc_transparent] h-[360px]';
 
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
+  return useSyncExternalStore(
+    (callback) => {
+      const mq = window.matchMedia('(max-width: 767px)');
+      mq.addEventListener('change', callback);
+      return () => mq.removeEventListener('change', callback);
+    },
+    () => window.matchMedia('(max-width: 767px)').matches,
+    () => false
   );
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-  return isMobile;
 }
 
 interface NotificationPanelContentProps {
