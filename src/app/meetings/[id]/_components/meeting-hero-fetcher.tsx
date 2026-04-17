@@ -16,6 +16,7 @@ interface Props {
 export async function MeetingHeroFetcher({ meetingId }: Props) {
   const queryClient = getQueryClient();
   const meeting = await getMeetingById(meetingId);
+  const referenceNow = new Date().toISOString();
 
   queryClient.setQueryData(meetingsQueryOptions.meetingDetail(meetingId).queryKey, meeting);
 
@@ -23,7 +24,11 @@ export async function MeetingHeroFetcher({ meetingId }: Props) {
     <>
       <link rel="preload" as="image" href={meeting.image} />
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <MeetingHeroSection key={`${meeting.id}-${meeting.updatedAt}`} meetingId={meetingId} />
+        <MeetingHeroSection
+          key={`${meeting.id}-${meeting.updatedAt}`}
+          meetingId={meetingId}
+          referenceNow={referenceNow}
+        />
         <MeetingDescriptionSection description={meeting.description} />
         <MeetingLocationSection
           address={meeting.address}

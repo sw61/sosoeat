@@ -10,6 +10,7 @@ export type MeetingStatus = 'open' | 'closed' | 'confirmed' | 'full';
 type BaseProps = {
   meeting: Meeting;
   status: MeetingStatus;
+  referenceNow?: string;
   /** 참여·취소·확정·공유 등 메인 액션 API 진행 중 */
   isActionPending?: boolean;
   /** 호스트 모임 삭제 API 진행 중 */

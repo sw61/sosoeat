@@ -18,19 +18,24 @@ interface LocationMapPreviewProps {
   className?: string;
 }
 
+function isKakaoMapsSdkReady() {
+  return typeof window !== 'undefined' && typeof window.kakao?.maps?.load === 'function';
+}
+
 export function LocationMapPreview({ latitude, longitude, className }: LocationMapPreviewProps) {
-  const [sdkReady, setSdkReady] = useState(false);
+  const [hasLoadedScript, setHasLoadedScript] = useState(isKakaoMapsSdkReady);
   const appKey = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY ?? '';
+  const sdkReady = hasLoadedScript || isKakaoMapsSdkReady();
 
   return (
     <>
-      {!sdkReady && (
-        <Script
-          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`}
-          strategy="afterInteractive"
-          onLoad={() => setSdkReady(true)}
-        />
-      )}
+      <Script
+        id="kakao-map-sdk"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`}
+        strategy="afterInteractive"
+        onLoad={() => setHasLoadedScript(true)}
+        onReady={() => setHasLoadedScript(true)}
+      />
       <div className="overflow-hidden rounded-xl">
         {sdkReady ? (
           <KakaoMap latitude={latitude} longitude={longitude} className={className} />

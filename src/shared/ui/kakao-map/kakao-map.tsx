@@ -28,7 +28,9 @@ export function KakaoMap({ latitude, longitude, className }: KakaoMapProps) {
 
   useEffect(() => {
     const node = containerRef.current;
-    if (!node) return;
+    if (!node || typeof window === 'undefined' || typeof window.kakao?.maps?.load !== 'function') {
+      return;
+    }
 
     let cancelled = false;
     let overlay: kakao.maps.CustomOverlay | null = null;

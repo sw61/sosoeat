@@ -37,15 +37,16 @@ const MeetingShareModal = dynamic(
 
 interface MeetingHeroSectionProps {
   meetingId: number;
+  referenceNow: string;
 }
 
-export function MeetingHeroSection({ meetingId }: MeetingHeroSectionProps) {
+export function MeetingHeroSection({ meetingId, referenceNow }: MeetingHeroSectionProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: meeting } = useMeetingDetail(meetingId);
   const { isAuthenticated, setLoginRequired } = useAuthStore();
 
-  const { role, status } = useMeetingRole(meeting);
+  const { role, status } = useMeetingRole(meeting, referenceNow);
   const { isOpen: isEditOpen, open: openEdit, close: closeEdit } = useModal();
   const {
     isShareModalOpen,
@@ -122,7 +123,12 @@ export function MeetingHeroSection({ meetingId }: MeetingHeroSectionProps) {
           />
         </div>
         <div className="min-w-0 flex-1">
-          <MeetingDetailCard meeting={meeting} status={status} {...cardProps} />
+          <MeetingDetailCard
+            meeting={meeting}
+            status={status}
+            referenceNow={referenceNow}
+            {...cardProps}
+          />
         </div>
       </div>
 

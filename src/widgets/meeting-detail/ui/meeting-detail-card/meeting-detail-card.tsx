@@ -189,7 +189,7 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
   const { category, fullDateLabel, activeConfig, actionHandler } = useMeetingDetailCard(props);
   // NOTE: useMeetingDetailCard에서 isExpanded, toggleExpanded 반환 시 미사용 — 훅 정리 가능
 
-  const { meeting } = props;
+  const { meeting, referenceNow } = props;
 
   const isConfirmed = meeting.confirmedAt != null;
   // TODO: isScheduled(이용예정) 뱃지 표시 기준 논의 필요 — 현재 비활성화
@@ -239,6 +239,7 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
         <div className={cn('flex items-center', !hasSafetyBadge && 'justify-between')}>
           <DeadlineBadge
             registrationEnd={new Date(meeting.registrationEnd)}
+            referenceNow={referenceNow}
             variant={category}
             className="min-w-0 flex-1"
           />
@@ -254,6 +255,7 @@ export function MeetingDetailCard(props: MeetingDetailCardProps) {
         <div className="flex min-w-0 items-center gap-1 overflow-hidden">
           <DeadlineBadge
             registrationEnd={new Date(meeting.registrationEnd)}
+            referenceNow={referenceNow}
             variant={category}
             className="min-w-0 flex-1"
           />

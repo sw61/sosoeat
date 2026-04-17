@@ -18,15 +18,22 @@ interface KakaoMapLoaderProps {
   longitude: number;
 }
 
+function isKakaoMapsSdkReady() {
+  return typeof window !== 'undefined' && typeof window.kakao?.maps?.load === 'function';
+}
+
 export function KakaoMapLoader({ appKey, latitude, longitude }: KakaoMapLoaderProps) {
-  const [sdkReady, setSdkReady] = useState(false);
+  const [hasLoadedScript, setHasLoadedScript] = useState(isKakaoMapsSdkReady);
+  const sdkReady = hasLoadedScript || isKakaoMapsSdkReady();
 
   return (
     <>
       <Script
+        id="kakao-map-sdk"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`}
         strategy="afterInteractive"
-        onLoad={() => setSdkReady(true)}
+        onLoad={() => setHasLoadedScript(true)}
+        onReady={() => setHasLoadedScript(true)}
       />
       {sdkReady ? (
         <KakaoMap latitude={latitude} longitude={longitude} />

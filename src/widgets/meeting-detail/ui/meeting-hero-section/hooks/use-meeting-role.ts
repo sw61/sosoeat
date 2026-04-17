@@ -15,13 +15,13 @@ interface UseMeetingRoleResult {
   isJoined: boolean;
 }
 
-export function useMeetingRole(meeting: Meeting): UseMeetingRoleResult {
+export function useMeetingRole(meeting: Meeting, referenceNow?: string): UseMeetingRoleResult {
   const user = useAuthStore((s) => s.user);
 
   const isHost = user != null && user.id === meeting.hostId;
   const isJoined = meeting.isJoined ?? false;
   const role: MeetingRole = isHost ? 'host' : isJoined ? 'participant' : 'guest';
-  const status: MeetingStatus = getMeetingStatus(meeting);
+  const status: MeetingStatus = getMeetingStatus(meeting, referenceNow);
 
   return { role, status, isJoined };
 }
