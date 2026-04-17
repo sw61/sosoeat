@@ -43,6 +43,10 @@ export const metadata: Metadata = {
       '취미·관심사가 맞는 사람들과 소모임을 만들고 참여하세요. 소소톡으로 일상을 나누고 새로운 만남을 시작해보세요.',
     images: getDefaultSocialImages(),
   },
+  icons: {
+    icon: '/icons/sosoeat.png',
+    apple: '/icons/sosoeat.png',
+  },
   other: {
     viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
   },
