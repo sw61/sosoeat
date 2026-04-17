@@ -30,7 +30,7 @@ export const getMeetingSearchParams = async (searchParams: Promise<unknown>) => 
     typeFilter: typeFilter === 'all' ? undefined : typeFilter,
     dateEnd: dateEnd ? dateEnd.toISOString() : undefined,
     dateStart: finalDateStart.toISOString(),
-    search,
+    keyword: search,
   };
 
   return requestParams;
