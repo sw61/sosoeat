@@ -19,16 +19,17 @@ jest.mock('./_components/meeting-image-editor', () => ({
     <div>
       <input
         type="file"
-        aria-label="meeting-image-input"
+        aria-label="이미지 선택"
         onChange={() => onChange('https://s3.example.com/image.jpg')}
       />
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      {imageUrl ? <img alt="meeting-image-preview" src={imageUrl} /> : null}
+      {imageUrl ? <img alt="모임 이미지" src={imageUrl} /> : null}
       {error ? <p>{error}</p> : null}
     </div>
   ),
 }));
 
+// useUploadImage mock — 이미지 업로드를 즉시 성공으로 처리
 jest.mock('@/entities/image', () => ({
   useUploadImage: () => ({
     mutateAsync: jest.fn().mockResolvedValue('https://s3.example.com/image.jpg'),
@@ -44,6 +45,7 @@ jest.mock('@/entities/image', () => ({
   },
 }));
 
+// DateTimePicker mock — JSDOM에서 Popover 기반 picker 조작 불가, hidden input으로 대체
 jest.mock('@/shared/ui/date-picker/date-time-picker', () => ({
   DateTimePicker: ({
     dateValue,
@@ -78,6 +80,7 @@ jest.mock('@/shared/ui/date-picker/date-time-picker', () => ({
   ),
 }));
 
+// LocationSearchModal mock — 장소 검색 모달 자체는 별도 테스트, 여기선 선택 동작만 검증
 jest.mock('@/entities/location', () => ({
   LocationSearchModal: ({
     open,
@@ -95,16 +98,16 @@ jest.mock('@/entities/location', () => ({
           type="button"
           onClick={() =>
             onSelect({
-              placeName: 'Teheran-ro 123',
-              addressName: 'Seoul Gangnam-gu Yeoksam-dong',
+              placeName: '테헤란로 123',
+              addressName: '서울 강남구 여의도동',
               latitude: 37.5,
               longitude: 127.0,
-              region1: 'Seoul',
-              region2: 'Gangnam-gu',
+              region1: '서울',
+              region2: '강남구',
             })
           }
         >
-          select-location
+          장소선택
         </button>
       </div>
     );
@@ -120,12 +123,14 @@ const createWrapper = () => {
 
 const renderWithClient = (ui: React.ReactElement) => render(ui, { wrapper: createWrapper() });
 
+// Radix UI Dialog needs ResizeObserver
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
 }));
 
+// PointerEvent might be needed for Radix UI
 if (!global.PointerEvent) {
   class PointerEvent extends MouseEvent {
     constructor(type: string, props: PointerEventInit = {}) {
@@ -158,16 +163,17 @@ describe('MeetingCreateModal', () => {
     cleanup();
   });
 
-  it('renders the dialog when open is true', async () => {
+  it('open이 true일 때 모달이 렌더링된다', async () => {
     renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
 
     const dialog = await getDialog();
 
     expect(dialog).toBeInTheDocument();
     expect(within(dialog).getByText((_, el) => el?.textContent === '1/4')).toBeInTheDocument();
+    expect(within(dialog).getByRole('heading', { name: '카테고리 선택' })).toBeInTheDocument();
   });
 
-  it('submits the completed form', async () => {
+  it('전체 폼을 작성하고 제출하면 onSubmit이 호출된다', async () => {
     const user = userEvent.setup();
 
     renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
@@ -184,7 +190,7 @@ describe('MeetingCreateModal', () => {
     });
 
     fireEvent.change(dialog.querySelector('input[name="name"]') as HTMLInputElement, {
-      target: { value: 'Dinner meetup' },
+      target: { value: '맛있는 삼겹살 모임' },
     });
 
     await user.click(
@@ -193,7 +199,7 @@ describe('MeetingCreateModal', () => {
     await waitFor(() => {
       expect(screen.getByTestId('location-search-modal')).toBeInTheDocument();
     });
-    await user.click(screen.getByRole('button', { name: 'select-location' }));
+    await user.click(screen.getByRole('button', { name: '장소선택' }));
     await waitFor(() => {
       expect(screen.queryByTestId('location-search-modal')).not.toBeInTheDocument();
     });
@@ -213,7 +219,7 @@ describe('MeetingCreateModal', () => {
     });
 
     fireEvent.change(dialog.querySelector('textarea[name="description"]') as HTMLTextAreaElement, {
-      target: { value: 'Let us eat together after work.' },
+      target: { value: '같이 삼겹살 먹어요!' },
     });
 
     await user.click(getPrimaryButton(dialog));
@@ -248,10 +254,10 @@ describe('MeetingCreateModal', () => {
     expect(DEFAULT_PROPS.onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         type: 'groupEat',
-        name: 'Dinner meetup',
-        region: 'Seoul Gangnam-gu',
+        name: '맛있는 삼겹살 모임',
+        region: '서울 강남구',
         image: 'https://s3.example.com/image.jpg',
-        description: 'Let us eat together after work.',
+        description: '같이 삼겹살 먹어요!',
         dateTime: new Date('2026-12-31T19:00'),
         registrationEnd: new Date('2026-12-30T18:00'),
         capacity: 10,
@@ -259,7 +265,7 @@ describe('MeetingCreateModal', () => {
     );
   });
 
-  it('moves back to the previous step', async () => {
+  it('이전 버튼을 누르면 이전 단계로 돌아간다', async () => {
     const user = userEvent.setup();
 
     renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
@@ -283,7 +289,7 @@ describe('MeetingCreateModal', () => {
     expect(dialog.querySelector('input[type="radio"][value="groupEat"]')).toBeChecked();
   });
 
-  it('calls onClose when cancel is pressed on the first step', async () => {
+  it('취소 버튼을 누르면 onClose가 호출된다', async () => {
     const user = userEvent.setup();
 
     renderWithClient(<MeetingCreateModal {...DEFAULT_PROPS} />);
