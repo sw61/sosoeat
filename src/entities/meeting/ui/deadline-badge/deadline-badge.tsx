@@ -40,7 +40,7 @@ export function DeadlineBadge({
       variant="outline"
       className={cn(DEADLINE_BADGE_CLASS, variantBadgeClassName[variant], className)}
     >
-      <div className="flex h-5 w-full gap-1 overflow-hidden">
+      <div className="flex h-5 w-full gap-1 overflow-hidden" suppressHydrationWarning>
         <Image
           unoptimized
           src={iconSrc}
@@ -58,6 +58,7 @@ export function DeadlineBadge({
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
               className="block w-full"
+              suppressHydrationWarning
             >
               <div className="w-full truncate">{isEnded ? '마감 완료' : contentText}</div>
             </m.span>
