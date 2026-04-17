@@ -29,6 +29,7 @@ async function getLatestMeetings(): Promise<Meeting[]> {
 
 export async function MainPageSection() {
   const meetings = await getLatestMeetings();
+  const referenceNow = new Date().toISOString();
 
   return (
     <section className="px-4">
@@ -38,7 +39,7 @@ export async function MainPageSection() {
       </h2>
       <div className="grid grid-cols-1 justify-items-center gap-6 min-[776px]:grid-cols-2 min-[1160px]:grid-cols-3">
         {meetings.map((meeting) => (
-          <MainPageCardWithHeart key={meeting.id} meeting={meeting} />
+          <MainPageCardWithHeart key={meeting.id} meeting={meeting} referenceNow={referenceNow} />
         ))}
       </div>
     </section>

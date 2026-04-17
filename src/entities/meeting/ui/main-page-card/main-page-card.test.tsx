@@ -230,7 +230,9 @@ describe('MainPageCard', () => {
         showCountdown: false,
       });
       const meeting = createMockMeeting({ registrationEnd: '2025-03-19T09:00:00+09:00' });
-      const card = render(<MainPageCard meeting={meeting} />);
+      const card = render(
+        <MainPageCard meeting={meeting} referenceNow="2025-03-19T10:00:00+09:00" />
+      );
 
       const overlay = card.getByTestId('closed-overlay');
       expect(overlay).toBeInTheDocument();

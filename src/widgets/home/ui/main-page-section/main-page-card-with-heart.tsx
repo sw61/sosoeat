@@ -6,12 +6,14 @@ import { HeartButton } from '@/features/favorites';
 
 interface MainPageCardWithHeartProps {
   meeting: Meeting;
+  referenceNow?: string;
 }
 
-export function MainPageCardWithHeart({ meeting }: MainPageCardWithHeartProps) {
+export function MainPageCardWithHeart({ meeting, referenceNow }: MainPageCardWithHeartProps) {
   return (
     <MainPageCard
       meeting={meeting}
+      referenceNow={referenceNow}
       renderFavoriteButton={(id, isFavorited) => (
         <HeartButton meetingId={id} isFavorited={isFavorited} size="md" />
       )}

@@ -61,7 +61,7 @@ export function SosoTalkCommentItem({
                   {relativeTime ? (
                     <>
                       <span aria-hidden="true">·</span>
-                      <span>{relativeTime}</span>
+                      <span suppressHydrationWarning>{relativeTime}</span>
                     </>
                   ) : null}
                 </div>
@@ -80,7 +80,10 @@ export function SosoTalkCommentItem({
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="min-w-[120px] md:min-w-[144px]">
-                  <DropdownMenuItem className="md:px-2.5 md:py-2 md:text-base" onClick={onEditClick}>
+                  <DropdownMenuItem
+                    className="md:px-2.5 md:py-2 md:text-base"
+                    onClick={onEditClick}
+                  >
                     수정하기
                   </DropdownMenuItem>
                   <DropdownMenuItem

@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 
 import * as Sentry from '@sentry/nextjs';
 
+import { getDefaultSocialImages } from '@/shared/lib/social-metadata';
 import {
   MeetingCommentSkeleton,
   MeetingHeroSkeleton,
@@ -46,13 +47,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'article',
       title: meeting.name,
       description: meeting.description,
-      ...(meeting.image && { images: [{ url: meeting.image }] }),
+      images: meeting.image ? [{ url: meeting.image }] : getDefaultSocialImages(),
     },
     twitter: {
       card: 'summary_large_image',
       title: meeting.name,
       description: meeting.description,
-      ...(meeting.image && { images: [meeting.image] }),
+      images: meeting.image ? [{ url: meeting.image }] : getDefaultSocialImages(),
     },
   };
 }

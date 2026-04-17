@@ -58,12 +58,17 @@ const variantImageBadgeIcon = {
 const getProgressVariant = (meetingType: string): ProgressProps['variant'] =>
   meetingType === 'groupEat' ? 'groupEat' : 'groupBuy';
 
-export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProps) => {
+export const MainPageCard = ({
+  meeting,
+  referenceNow,
+  renderFavoriteButton,
+}: MainPageCardProps) => {
   const variant = getProgressVariant(meeting.type);
   const registrationEnd = new Date(meeting.registrationEnd);
   const formatted = format(new Date(meeting.dateTime), 'M/d(E) HH:mm', { locale: ko });
   const progress =
     (meeting.participantCount / (meeting.capacity <= 0 ? 1 : meeting.capacity)) * 100;
+  const isInitiallyClosed = referenceNow ? registrationEnd < new Date(referenceNow) : false;
 
   const hostImage = toHttpsUrl(meeting.host?.image) || '/icons/human-basic.svg';
 
@@ -82,7 +87,7 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
           onKeyDown={handleCardKeyDown}
         >
           <div className={MAIN_PAGE_CARD_IMAGE_WRAPPER_CLASS}>
-            {registrationEnd < new Date() && (
+            {isInitiallyClosed && (
               <div data-testid="closed-overlay" className={MAIN_PAGE_CARD_CLOSED_OVERLAY_CLASS}>
                 마감 완료
               </div>
@@ -150,6 +155,7 @@ export const MainPageCard = ({ meeting, renderFavoriteButton }: MainPageCardProp
               <div data-testid="closed-badge" className="mt-0 min-w-0 flex-1">
                 <DeadlineBadge
                   registrationEnd={registrationEnd}
+                  referenceNow={referenceNow}
                   variant={variant}
                   className="w-full overflow-hidden"
                 />

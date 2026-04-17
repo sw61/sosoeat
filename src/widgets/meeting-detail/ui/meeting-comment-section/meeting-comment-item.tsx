@@ -95,7 +95,7 @@ export function MeetingCommentItem({
                 <div className="text-sosoeat-gray-500 flex items-center gap-1 text-xs leading-4 font-semibold">
                   <time>{formatCommentDate(createdAt)}</time>
                   <span aria-hidden="true">·</span>
-                  <span>{formatCommentRelativeTime(createdAt)}</span>
+                  <span suppressHydrationWarning>{formatCommentRelativeTime(createdAt)}</span>
                 </div>
               </div>
               {isHostComment && (
