@@ -16,8 +16,7 @@ export function createDefaultSocialImage() {
         display: 'flex',
         position: 'relative',
         overflow: 'hidden',
-        background:
-          'radial-gradient(circle at top left, rgba(255, 190, 92, 0.35), transparent 32%), linear-gradient(135deg, #fff8f1 0%, #fff1e6 55%, #ffe2cf 100%)',
+        backgroundImage: 'linear-gradient(135deg, #fff8f1 0%, #fff1e6 55%, #ffe2cf 100%)',
         color: '#2d241f',
         fontFamily: 'sans-serif',
       }}
