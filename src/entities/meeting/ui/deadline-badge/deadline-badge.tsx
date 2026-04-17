@@ -59,7 +59,9 @@ export function DeadlineBadge({
               transition={{ duration: 0.25 }}
               className="block w-full"
             >
-              <div className="w-full truncate">{isEnded ? '마감 완료' : contentText}</div>
+              <div suppressHydrationWarning className="w-full truncate">
+                {isEnded ? '마감 완료' : contentText}
+              </div>
             </m.span>
           </AnimatePresence>
         </LazyMotion>
