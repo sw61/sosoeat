@@ -81,10 +81,7 @@ export function SosoTalkPostDetailHeader({
           <span className="text-sosoeat-gray-900 text-base font-semibold">{authorName}</span>
         </div>
 
-        <div
-          className="text-sosoeat-gray-700 flex shrink-0 items-center gap-2 text-sm font-medium md:text-base"
-          suppressHydrationWarning
-        >
+        <div className="text-sosoeat-gray-700 flex shrink-0 items-center gap-2 text-sm font-medium md:text-base">
           <CalendarDays className="h-4 w-4 shrink-0" />
           <time dateTime={createdAtDateTime ?? undefined} suppressHydrationWarning>
             {createdAt}
