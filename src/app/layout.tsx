@@ -7,6 +7,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { getFavoritesCount } from '@/entities/favorites/index.server';
 import { getUnreadCountServer } from '@/features/notifications/index.server';
 import { CookieStorage } from '@/shared/lib/cookie-storage';
+import { getDefaultSocialImages } from '@/shared/lib/social-metadata';
 import { Toaster } from '@/shared/ui/sonner';
 import { Footer } from '@/widgets/footer';
 import { NavigationBar } from '@/widgets/navigation-bar';
@@ -20,24 +21,27 @@ const metadataBase = new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localho
 export const metadata: Metadata = {
   metadataBase,
   title: {
-    default: '소소잇 | 소소한 일상과 만남을 잇다',
+    default: '소소잇 | 소소한 일상과 만남을 나누다',
     template: '%s | 소소잇',
   },
   description:
-    '취미·관심사가 맞는 사람들과 소모임을 만들고 참여하세요. 소소톡으로 일상을 나누고 새로운 만남을 시작해보세요.',
-  keywords: ['소소잇', '소소한 일상', '모임', '소모임', '취미', '소소톡', '만남'],
+    '취향과 관심사가 맞는 모임과 사람을 만들고 참여해보세요. 소소잇으로 일상을 나누고 새로운 만남을 시작해보세요.',
+  keywords: ['소소잇', '소소한 일상', '모임', '만남', '취향', '커뮤니티'],
   openGraph: {
     type: 'website',
     siteName: '소소잇',
     locale: 'ko_KR',
-    title: '소소잇 | 소소한 일상과 만남을 잇다',
+    title: '소소잇 | 소소한 일상과 만남을 나누다',
     description:
-      '취미·관심사가 맞는 사람들과 소모임을 만들고 참여하세요. 소소톡으로 일상을 나누고 새로운 만남을 시작해보세요.',
+      '취향과 관심사가 맞는 모임과 사람을 만들고 참여해보세요. 소소잇으로 일상을 나누고 새로운 만남을 시작해보세요.',
+    images: getDefaultSocialImages(),
   },
   twitter: {
     card: 'summary_large_image',
-    title: '소소잇 | 소소한 일상과 만남을 잇다',
-    description: '취미·관심사가 맞는 사람들과 소모임을 나누고 새로운 만남을 시작해보세요.',
+    title: '소소잇 | 소소한 일상과 만남을 나누다',
+    description:
+      '취향과 관심사가 맞는 모임과 사람을 만들고 참여해보세요. 소소잇으로 일상을 나누고 새로운 만남을 시작해보세요.',
+    images: getDefaultSocialImages(),
   },
   other: {
     viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',

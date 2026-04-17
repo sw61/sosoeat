@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
+import { getDefaultSocialImages } from '@/shared/lib/social-metadata';
 import {
   BestSosotalkSection,
   CtaSection,
@@ -16,11 +17,19 @@ const MainBanner = dynamic(() => import('@/widgets/main-banner').then((mod) => m
 export const metadata: Metadata = {
   title: '홈',
   description:
-    '취미·관심사가 맞는 사람들과 소모임을 만들고 참여하세요. 소소톡으로 일상을 나누고 새로운 만남을 시작해보세요.',
+    '취향과 관심사가 맞는 모임과 사람을 만들고 참여해보세요. 소소잇으로 일상을 나누고 새로운 만남을 시작해보세요.',
   openGraph: {
     title: '홈 | 소소잇',
     description:
-      '취미·관심사가 맞는 사람들과 소모임을 만들고 참여하세요. 소소톡으로 일상을 나누고 새로운 만남을 시작해보세요.',
+      '취향과 관심사가 맞는 모임과 사람을 만들고 참여해보세요. 소소잇으로 일상을 나누고 새로운 만남을 시작해보세요.',
+    images: getDefaultSocialImages(),
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '홈 | 소소잇',
+    description:
+      '취향과 관심사가 맞는 모임과 사람을 만들고 참여해보세요. 소소잇으로 일상을 나누고 새로운 만남을 시작해보세요.',
+    images: getDefaultSocialImages(),
   },
 };
 

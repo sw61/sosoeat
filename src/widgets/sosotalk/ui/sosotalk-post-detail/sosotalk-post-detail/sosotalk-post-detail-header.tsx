@@ -83,7 +83,9 @@ export function SosoTalkPostDetailHeader({
 
         <div className="text-sosoeat-gray-700 flex shrink-0 items-center gap-2 text-sm font-medium md:text-base">
           <CalendarDays className="h-4 w-4 shrink-0" />
-          <time dateTime={createdAtDateTime ?? undefined}>{createdAt}</time>
+          <time dateTime={createdAtDateTime ?? undefined} suppressHydrationWarning>
+            {createdAt}
+          </time>
         </div>
       </div>
     </header>

@@ -2,11 +2,11 @@
 import { useEffect, useState } from 'react';
 import { TZDate } from 'react-day-picker';
 
-export const useTimeFormatter = (registrationEnd: Date | null) => {
-  const [, setNow] = useState(() => new Date());
+export const useTimeFormatter = (registrationEnd: Date | null, referenceNow?: string) => {
+  const [now, setNow] = useState(() => new Date(referenceNow ?? Date.now()));
   const [showCountdown, setShowCountdown] = useState(false);
 
-  const startDate = new TZDate(new Date(), 'Asia/Seoul');
+  const startDate = new TZDate(now, 'Asia/Seoul');
   const endDate = registrationEnd === null ? null : new TZDate(registrationEnd, 'Asia/Seoul');
 
   const diffMs = endDate === null ? -1 : endDate.getTime() - startDate.getTime();
