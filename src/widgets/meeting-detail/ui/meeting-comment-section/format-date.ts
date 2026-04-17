@@ -2,10 +2,20 @@ function pad(value: number) {
   return String(value).padStart(2, '0');
 }
 
-export function formatCommentDate(isoDate: string): string {
-  const date = new Date(isoDate);
+const SEOUL_TIME_ZONE = 'Asia/Seoul';
 
-  return `${date.getMonth() + 1}월 ${date.getDate()}일 ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+export function formatCommentDate(isoDate: string): string {
+  const parts = new Intl.DateTimeFormat('ko-KR', {
+    timeZone: SEOUL_TIME_ZONE,
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(new Date(isoDate));
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+
+  return `${values.month}월 ${values.day}일 ${pad(Number(values.hour))}:${pad(Number(values.minute))}`;
 }
 
 export function formatCommentRelativeTime(isoDate: string, now: Date = new Date()): string {

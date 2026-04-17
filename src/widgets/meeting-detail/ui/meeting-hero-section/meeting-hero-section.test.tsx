@@ -129,9 +129,12 @@ describe('MeetingHeroSection', () => {
   it('비로그인 상태에서 참여하기를 누르면 로그인 필요 모달 상태만 연다', async () => {
     const user = userEvent.setup();
 
-    render(<MeetingHeroSection meetingId={MOCK_MEETING.id} />, {
-      wrapper: createWrapper(),
-    });
+    render(
+      <MeetingHeroSection meetingId={MOCK_MEETING.id} referenceNow="2026-04-10T09:00:00.000Z" />,
+      {
+        wrapper: createWrapper(),
+      }
+    );
 
     await user.click(screen.getByRole('button', { name: '참여하기' }));
 
@@ -153,9 +156,12 @@ describe('MeetingHeroSection', () => {
       isSessionExpired: false,
     });
 
-    render(<MeetingHeroSection meetingId={MOCK_MEETING.id} />, {
-      wrapper: createWrapper(),
-    });
+    render(
+      <MeetingHeroSection meetingId={MOCK_MEETING.id} referenceNow="2026-04-10T09:00:00.000Z" />,
+      {
+        wrapper: createWrapper(),
+      }
+    );
 
     await user.click(screen.getByRole('button', { name: '참여하기' }));
 

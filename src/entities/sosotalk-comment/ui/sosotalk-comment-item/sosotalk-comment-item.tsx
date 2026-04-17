@@ -61,7 +61,7 @@ export function SosoTalkCommentItem({
                   {relativeTime ? (
                     <>
                       <span aria-hidden="true">·</span>
-                      <span>{relativeTime}</span>
+                      <span suppressHydrationWarning>{relativeTime}</span>
                     </>
                   ) : null}
                 </div>

@@ -18,8 +18,13 @@ const variantBadgeClassName = {
   groupEat: 'bg-sosoeat-orange-100 text-sosoeat-orange-700 hover:bg-sosoeat-orange-200',
 } as const;
 
-export function DeadlineBadge({ registrationEnd, variant, className }: DeadlineBadgeProps) {
-  const timeFormatterResult = useTimeFormatter(registrationEnd);
+export function DeadlineBadge({
+  registrationEnd,
+  referenceNow,
+  variant,
+  className,
+}: DeadlineBadgeProps) {
+  const timeFormatterResult = useTimeFormatter(registrationEnd, referenceNow);
   if (!timeFormatterResult) return null;
   const { contentText, isEnded, showCountdown } = timeFormatterResult;
   const iconSrc = showCountdown
