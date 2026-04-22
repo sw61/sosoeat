@@ -1,5 +1,166 @@
 # 소소잇 프로젝트
 
+---
+
+## 📱 기능 소개 (Features)
+
+### 1. 로그인 / 회원가입
+
+<table>
+  <tr>
+    <td align="center"><b>로그인</b></td>
+    <td align="center"><b>유효성 검사</b></td>
+    <td align="center"><b>회원가입 1단계</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_login.png" /></td>
+    <td><img src="public/readme/sosoeat_login_validation.png" /></td>
+    <td><img src="public/readme/sosoeat_signup_step1.png" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>회원가입 2단계</b></td>
+    <td align="center"><b>회원가입 3단계</b></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_signup_step2.png" /></td>
+    <td><img src="public/readme/sosoeat_signup_step3.png" /></td>
+    <td></td>
+  </tr>
+</table>
+
+---
+
+### 2. 홈 / 모임 목록 / 검색
+
+<table>
+  <tr>
+    <td align="center"><b>홈</b></td>
+    <td align="center"><b>모임 목록</b></td>
+    <td align="center"><b>검색</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_home.png" /></td>
+    <td><img src="public/readme/sosoeat_meetings.png" /></td>
+    <td><img src="public/readme/sosoeat_search.png" /></td>
+  </tr>
+</table>
+
+---
+
+### 3. 모임 생성
+
+<table>
+  <tr>
+    <td align="center"><b>1단계</b></td>
+    <td align="center"><b>2단계</b></td>
+    <td align="center"><b>3단계</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_create_meeting_step1.png" /></td>
+    <td><img src="public/readme/sosoeat_create_meeting_step2.png" /></td>
+    <td><img src="public/readme/sosoeat_create_meeting_step3.png" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>4단계</b></td>
+    <td align="center"><b>지도 검색</b></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_create_meeting_step4.png" /></td>
+    <td><img src="public/readme/sosoeat_create_meeting_map.png" /></td>
+    <td></td>
+  </tr>
+</table>
+
+---
+
+### 4. 모임 상세 / 참여
+
+<table>
+  <tr>
+    <td align="center"><b>참여 전</b></td>
+    <td align="center"><b>참여 후</b></td>
+    <td align="center"><b>확정 전</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_before_participate.png" /></td>
+    <td><img src="public/readme/sosoeat_after_participate.png" /></td>
+    <td><img src="public/readme/sosoeat_before_confirm.png" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>확정 후</b></td>
+    <td align="center"><b>댓글</b></td>
+    <td align="center"><b>공유</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_after_confirm.png" /></td>
+    <td><img src="public/readme/sosoeat_meeting_detail_comment.png" /></td>
+    <td><img src="public/readme/sosoeat_meeting_share.png" /></td>
+  </tr>
+</table>
+
+---
+
+### 5. 소소톡
+
+<table>
+  <tr>
+    <td align="center"><b>목록</b></td>
+    <td align="center"><b>상세</b></td>
+    <td align="center"><b>에디터</b></td>
+    <td align="center"><b>공유</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_sosotalk.png" /></td>
+    <td><img src="public/readme/sosoeat_sosotalk_detail.png" /></td>
+    <td><img src="public/readme/sosoeat_sosotalk_editor.png" /></td>
+    <td><img src="public/readme/sosoeat_sosotalk_share.png" /></td>
+  </tr>
+</table>
+
+---
+
+### 6. 마이페이지
+
+<table>
+  <tr>
+    <td align="center"><b>메인</b></td>
+    <td align="center"><b>프로필 수정</b></td>
+    <td align="center"><b>이미지 변경</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_mypage.png" /></td>
+    <td><img src="public/readme/sosoeat_mypage_edit.png" /></td>
+    <td><img src="public/readme/sosoeat_mypage_image.png" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>참여한 모임</b></td>
+    <td align="center"><b>찜한 모임</b></td>
+    <td align="center"><b>작성한 글</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_mypage_tab1.png" /></td>
+    <td><img src="public/readme/sosoeat_mypage_tab2.png" /></td>
+    <td><img src="public/readme/sosoeat_mypage_tab3.png" /></td>
+  </tr>
+</table>
+
+---
+
+### 7. 알림
+
+<table>
+  <tr>
+    <td align="center"><b>알림</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_notification.png" /></td>
+  </tr>
+</table>
+
+---
+
 ## 🚀 기술 스택 (Tech Stack)
 
 ### 핵심 기술 (Core)
