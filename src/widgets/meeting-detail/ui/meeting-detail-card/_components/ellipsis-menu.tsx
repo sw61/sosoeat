@@ -42,7 +42,10 @@ export function EllipsisMenu({ onEdit, onDelete, isDeletePending }: EllipsisMenu
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[120px] md:min-w-[144px]">
-        <DropdownMenuItem className="cursor-pointer md:px-2.5 md:py-2 md:text-base" onClick={onEdit}>
+        <DropdownMenuItem
+          className="cursor-pointer md:px-2.5 md:py-2 md:text-base"
+          onClick={onEdit}
+        >
           수정하기
         </DropdownMenuItem>
         <DropdownMenuItem
