@@ -6,6 +6,8 @@
 
 ### 1. 로그인 / 회원가입
 
+소셜 로그인(카카오, 구글) 및 자체 회원가입을 지원하며, 단계별 유효성 검사를 제공합니다.
+
 <table>
   <tr>
     <td align="center"><b>로그인</b></td>
@@ -33,6 +35,8 @@
 
 ### 2. 홈 / 모임 상세 / 검색
 
+지역 선택 및 인기순 · 모임일 임박순 · 모집 마감 기준 정렬 필터를 통해 원하는 모임을 빠르게 탐색할 수 있습니다.
+
 <table>
   <tr>
     <td align="center"><b>홈</b></td>
@@ -50,25 +54,27 @@
 
 ### 3. 모임 생성
 
+카카오맵 API를 연동하여 장소를 직접 검색하고 지정할 수 있으며, 단계별로 모임 정보를 입력합니다.
+
 <table>
   <tr>
     <td align="center"><b>1단계</b></td>
     <td align="center"><b>2단계</b></td>
-    <td align="center"><b>3단계</b></td>
+    <td align="center"><b>지도 검색(장소)</b></td>
   </tr>
   <tr>
     <td><img src="public/readme/sosoeat_create_meeting_step1.png" width="250" /></td>
     <td><img src="public/readme/sosoeat_create_meeting_step2.png" width="250" /></td>
-    <td><img src="public/readme/sosoeat_create_meeting_step3.png" width="250" /></td>
+    <td><img src="public/readme/sosoeat_create_meeting_map.png" width="250" /></td>
   </tr>
   <tr>
+    <td align="center"><b>3단계</b></td>
     <td align="center"><b>4단계</b></td>
-    <td align="center"><b>지도 검색</b></td>
     <td></td>
   </tr>
   <tr>
+    <td><img src="public/readme/sosoeat_create_meeting_step3.png" width="250" /></td>
     <td><img src="public/readme/sosoeat_create_meeting_step4.png" width="250" /></td>
-    <td><img src="public/readme/sosoeat_create_meeting_map.png" width="250" /></td>
     <td></td>
   </tr>
 </table>
@@ -76,6 +82,8 @@
 ---
 
 ### 4. 모임 상세 / 참여
+
+참여 여부 및 모임 확정 상태에 따라 UI가 동적으로 변화하며, 댓글 · 대댓글 및 공유 기능을 제공합니다.
 
 <table>
   <tr>
@@ -104,6 +112,8 @@
 
 ### 5. 소소톡
 
+굵게 · 기울임 · 밑줄 · 정렬 · 목록 · 번호 목록 · 이미지 첨부를 지원하는 리치 텍스트 에디터로 게시글을 작성할 수 있습니다.
+
 <table>
   <tr>
     <td align="center"><b>목록</b></td>
@@ -122,6 +132,8 @@
 ---
 
 ### 6. 마이페이지
+
+프로필 이미지 크롭(Crop) 기능을 지원하며, 참여한 모임 · 찜한 모임 · 작성한 글을 탭으로 확인할 수 있습니다.
 
 <table>
   <tr>
@@ -149,6 +161,8 @@
 ---
 
 ### 7. 알림
+
+모임 참여 · 확정 · 취소 등 주요 이벤트에 대한 알림을 실시간으로 받을 수 있습니다.
 
 <table>
   <tr>
