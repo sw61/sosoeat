@@ -194,24 +194,34 @@ npm run dev
 
 <table>
   <tr>
+    <td align="center"><b>전체 화면</b></td>
     <td align="center"><b>참여 전</b></td>
     <td align="center"><b>참여 후</b></td>
-    <td align="center"><b>확정 전</b></td>
   </tr>
   <tr>
+    <td><img src="public/readme/sosoeat_meetings.png" width="250" /></td>
     <td><img src="public/readme/sosoeat_before_participate.png" width="250" /></td>
     <td><img src="public/readme/sosoeat_after_participate.png" width="250" /></td>
-    <td><img src="public/readme/sosoeat_before_confirm.png" width="250" /></td>
   </tr>
   <tr>
+    <td align="center"><b>확정 전</b></td>
     <td align="center"><b>확정 후</b></td>
     <td align="center"><b>댓글</b></td>
-    <td align="center"><b>공유</b></td>
   </tr>
   <tr>
+    <td><img src="public/readme/sosoeat_before_confirm.png" width="250" /></td>
     <td><img src="public/readme/sosoeat_after_confirm.png" width="250" /></td>
     <td><img src="public/readme/sosoeat_meeting_detail_comment.png" width="250" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>공유</b></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
     <td><img src="public/readme/sosoeat_meeting_share.png" width="250" /></td>
+    <td></td>
+    <td></td>
   </tr>
 </table>
 
@@ -240,7 +250,7 @@ npm run dev
 
 ### 7. 마이페이지
 
-프로필 이미지 크롭(Crop) 기능을 지원하며, 참여한 모임 · 찜한 모임 · 작성한 글을 탭으로 확인할 수 있습니다.
+프로필 이미지 크롭(Crop) 기능을 지원하며, 참여한 모임 · 찜한 모임 · 내가 만든 모임을 탭으로 확인할 수 있습니다.
 
 <table>
   <tr>
