@@ -33,26 +33,43 @@
 
 ---
 
-### 2. 홈 / 모임 상세 / 검색
+### 2. 홈
 
-지역 선택 및 인기순 · 모임일 임박순 · 모집 마감 기준 정렬 필터를 통해 원하는 모임을 빠르게 탐색할 수 있습니다.
+모임 목록을 한눈에 확인하고 원하는 모임으로 바로 이동할 수 있습니다.
 
 <table>
   <tr>
     <td align="center"><b>홈</b></td>
-    <td align="center"><b>모임 상세</b></td>
-    <td align="center"><b>검색</b></td>
   </tr>
   <tr>
     <td><img src="public/readme/sosoeat_home.png" width="250" /></td>
-    <td><img src="public/readme/sosoeat_meetings.png" width="250" /></td>
-    <td><img src="public/readme/sosoeat_search.png" width="250" /></td>
   </tr>
 </table>
 
 ---
 
-### 3. 모임 생성
+### 3. 검색
+
+지역 선택 및 인기순 · 모임일 임박순 · 모집 마감 기준 정렬 필터를 통해 원하는 모임을 빠르게 탐색할 수 있습니다.
+
+<table>
+  <tr>
+    <td align="center"><b>검색</b></td>
+    <td align="center"><b>필터 1</b></td>
+    <td align="center"><b>필터 2</b></td>
+    <td align="center"><b>필터 3</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/readme/sosoeat_search.png" width="250" /></td>
+    <td><img src="public/readme/sosoeat_search_filter1.png" width="250" /></td>
+    <td><img src="public/readme/sosoeat_search_filter2.png" width="250" /></td>
+    <td><img src="public/readme/sosoeat_search_filter3.png" width="250" /></td>
+  </tr>
+</table>
+
+---
+
+### 4. 모임 생성
 
 카카오맵 API를 연동하여 장소를 직접 검색하고 지정할 수 있으며, 단계별로 모임 정보를 입력합니다.
 
@@ -81,7 +98,7 @@
 
 ---
 
-### 4. 모임 상세 / 참여
+### 5. 모임 상세 / 참여
 
 참여 여부 및 모임 확정 상태에 따라 UI가 동적으로 변화하며, 댓글 · 대댓글 및 공유 기능을 제공합니다.
 
@@ -110,7 +127,7 @@
 
 ---
 
-### 5. 소소톡
+### 6. 소소토크
 
 굵게 · 기울임 · 밑줄 · 정렬 · 목록 · 번호 목록 · 이미지 첨부를 지원하는 리치 텍스트 에디터로 게시글을 작성할 수 있습니다.
 
@@ -131,7 +148,7 @@
 
 ---
 
-### 6. 마이페이지
+### 7. 마이페이지
 
 프로필 이미지 크롭(Crop) 기능을 지원하며, 참여한 모임 · 찜한 모임 · 작성한 글을 탭으로 확인할 수 있습니다.
 
@@ -160,7 +177,7 @@
 
 ---
 
-### 7. 알림
+### 8. 알림
 
 모임 참여 · 확정 · 취소 등 주요 이벤트에 대한 알림을 실시간으로 받을 수 있습니다.
 
