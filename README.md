@@ -2,12 +2,15 @@
 
 <div align="center">
   <img width="305" height="153" alt="image" src="https://github.com/user-attachments/assets/558a5dbf-702a-4a43-ae53-c0edec70eede" />
+  <br>
   
-  **소소잇**은 이웃 간 공동식사 및 공동구매를 연결하는 1인 가구 맞춤 커뮤니티 플랫폼입니다.
-  
-  <span style="color: #666;">배달비 부담, 혼밥의 외로움, 대용량 식재료 낭비 등의 일상적 불편을 함께 먹고 함께 소비하는 소소한 연결로 해소합니다.</span>
-  
-  <span style="color: #666;">실용적이고 일상적인 관계에 집중하여 누구나 부담 없이 참여할 수 있습니다.</span>
+**" 소소잇은 이웃 간 공동식사 및 공동구매를 연결하는 1인 가구 맞춤 커뮤니티 플랫폼입니다. "**
+
+배달비 부담, 혼밥의 외로움, 대용량 식재료 낭비 등의 일상적 불편을 함께 먹고 함께 소비하는 소소한 연결로 해소합니다.
+
+실용적이고 일상적인 관계에 집중하여 누구나 부담 없이 참여할 수 있습니다.
+
+  <br>
   
   <img width="701" height="436" alt="image" src="https://github.com/user-attachments/assets/a60089d7-c185-42db-a105-d08a519a3d01" />
 </div>
@@ -251,6 +254,8 @@ npm run dev
 - 토크 상세 컴포넌트
 - 댓글 컴포넌트
 - 숭정 페이지
+
+<br>
 
 ---
 
