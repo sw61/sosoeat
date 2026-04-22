@@ -46,7 +46,7 @@ npm run dev
   
 | 안순현 | 정윤영 | 이상원 | 박지민 | 지성준 |
 |:---:|:---:|:---:|:---:|:---:|
-|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/2804bbfc-4ec9-4c46-8375-9f204a06d2b5" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/df75d689-036d-47f9-8d51-91b8117e989d" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/7ff577ea-c716-4535-9efb-4100cf7ee872" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/32e101e0-bbdd-4d81-8cb4-61a9c18e175b" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/75227322-381d-4266-b6d9-a512b9060991" />
+|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/2804bbfc-4ec9-4c46-8375-9f204a06d2b5" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/df75d689-036d-47f9-8d51-91b8117e989d" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/7ff577ea-c716-4535-9efb-4100cf7ee872" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/32e101e0-bbdd-4d81-8cb4-61a9c18e175b" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/75227322-381d-4266-b6d9-a512b9060991" /> |
 |[cncn0069](https://github.com/cncn0069)|[nunnong](https://github.com/nunnong)|[sw61](https://github.com/sw61)|[nanuenyamini](https://github.com/naneunyamini)|[Onuelen](https://github.com/Onuelen)|
 
 </div>
@@ -253,7 +253,7 @@ npm run dev
 - 게시글 작성(마크다운)
 - 토크 상세 컴포넌트
 - 댓글 컴포넌트
-- 숭정 페이지
+- 수정 페이지
 
 <br>
 
