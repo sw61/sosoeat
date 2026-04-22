@@ -1,31 +1,52 @@
-# 🍴 소소잇 - 1인 가구를 위한 공동식사·공동구매 플랫폼
-<div align="center">
-  <img width="701" height="436" alt="image" src="https://github.com/user-attachments/assets/a60089d7-c185-42db-a105-d08a519a3d01" />
+## 📌 프로젝트 소개
 
+<div align="center">
+  <img width="305" height="153" alt="image" src="https://github.com/user-attachments/assets/558a5dbf-702a-4a43-ae53-c0edec70eede" />
+  
+  **소소잇**은 이웃 간 공동식사 및 공동구매를 연결하는 1인 가구 맞춤 커뮤니티 플랫폼입니다.
+  
+  <span style="color: #666;">배달비 부담, 혼밥의 외로움, 대용량 식재료 낭비 등의 일상적 불편을 함께 먹고 함께 소비하는 소소한 연결로 해소합니다.</span>
+  
+  <span style="color: #666;">실용적이고 일상적인 관계에 집중하여 누구나 부담 없이 참여할 수 있습니다.</span>
+  
+  <img width="701" height="436" alt="image" src="https://github.com/user-attachments/assets/a60089d7-c185-42db-a105-d08a519a3d01" />
 </div>
 
 <br>
 
-- **개발 기간**: 2026.03 ~ 2026.04
 
-- **배포 URL** : https://sosoeat.vercel.app/home
-
+## 📅 개발 기간
+**2026.03 ~ 2026.04**
 <br>
-
-## 📌 프로젝트 소개
-
-- **소소잇**은 이웃 간 공동식사 및 공동구매를 연결하는 1인 가구 맞춤 커뮤니티 플랫폼입니다.
-- 배달비 부담, 혼밥의 외로움, 대용량 식재료 낭비 등의 일상적 불편을 함께 먹고 함께 소비하는 소소한 연결로 해소합니다.
-- 실용적이고 일상적인 관계에 집중하여 누구나 부담 없이 참여할 수 있습니다.
-
+## 🔗 배포 URL
+https://sosoeat.vercel.app/home
 <br>
+## 🏁 시작하기
+
+```
+# 1. 저장소 클론
+git clone <https://github.com/your-repo/team9.git>
+cd team9
+
+# 2. 패키지 설치
+npm install
+
+# 3. 서버 실행
+npm run dev
+```
+
+---
 
 ## 👥 팀 구성
 
+<div align="center">
+  
 | 안순현 | 정윤영 | 이상원 | 박지민 | 지성준 |
 |:---:|:---:|:---:|:---:|:---:|
 |<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/2804bbfc-4ec9-4c46-8375-9f204a06d2b5" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/df75d689-036d-47f9-8d51-91b8117e989d" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/7ff577ea-c716-4535-9efb-4100cf7ee872" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/32e101e0-bbdd-4d81-8cb4-61a9c18e175b" />|<img width="150" height="150" alt="image" src="https://github.com/user-attachments/assets/75227322-381d-4266-b6d9-a512b9060991" />
 |[cncn0069](https://github.com/cncn0069)|[nunnong](https://github.com/nunnong)|[sw61](https://github.com/sw61)|[nanuenyamini](https://github.com/naneunyamini)|[Onuelen](https://github.com/Onuelen)|
+
+</div>
 
 ---
 
@@ -145,6 +166,92 @@
 **HTML 기반 에디터**
 - HTML 기반 글쓰기 에디터를 직접 개발했습니다.
 - 텍스트 꾸미기, 이미지 삽입 등 풍부한 글쓰기가 가능합니다.
+---
+
+
+## 👥 R & R
+
+
+### 🛠️ 안순현
+**담당 페이지 및 기능**
+- 모임 찾기 페이지
+- 알림 내역
+
+**UI 컴포넌트**
+- dropdown
+- progress bar
+- date picker
+- filter bar
+- main-page-card
+- 모임 만들기 버튼
+- 모임 찾기 배너
+- 지역 선택 modal
+- 빈 페이지
+- 알림 카드
+  
+<br>
+
+### 🪄 정윤영
+**담당 페이지 및 기능**
+- 메인 페이지
+- 모임 상세 페이지
+
+**UI 컴포넌트**
+- badge
+- navigation-bar
+- main footer
+- best sosoeat card
+- 유저 가이드 컴포넌트
+- 상세 모임 정보 카드
+- 카카오 맵 → 모임 위치
+- 댓글 컴포넌트
+- 모임 추천 컴포넌트
+
+<br>
+
+### 🌟 이상원
+**담당 페이지 및 기능**
+- 로그인 페이지
+- 회원가입 페이지
+- 인증 전반
+
+**UI 컴포넌트**
+- main banner
+- footer
+- 모임 만들기 modal
+- login-form
+- signup-form
+
+<br>
+
+### 📝 박지민
+**담당 페이지 및 기능**
+- 마이페이지
+- 유저 정보 수정
+
+**UI 컴포넌트**
+- input
+- mypage card
+- user card
+- count card
+- tabs
+- 빈 화면
+- avatar edit
+
+<br>
+
+### 🎨 지성준
+**담당 페이지 및 기능**
+- 소소Talk 페이지
+
+**UI 컴포넌트**
+- 토크 카드 컴포넌트
+- 토크 배너 컴포넌트
+- 게시글 작성(마크다운)
+- 토크 상세 컴포넌트
+- 댓글 컴포넌트
+- 숭정 페이지
+
 ---
 
 ## ⚡ 성능 최적화
