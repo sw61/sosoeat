@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 import { AnimatePresence, LazyMotion } from 'framer-motion';
 import * as m from 'framer-motion/m';
 
@@ -27,13 +25,10 @@ export function DeadlineBadge({
   const timeFormatterResult = useTimeFormatter(registrationEnd, referenceNow);
   if (!timeFormatterResult) return null;
   const { contentText, isEnded, showCountdown } = timeFormatterResult;
-  const iconSrc = showCountdown
-    ? variant === 'groupEat'
-      ? '/icons/alarm-clock-eat.svg'
-      : '/icons/alarm-clock-buy.svg'
-    : variant === 'groupEat'
-      ? '/icons/group-eat-calendar.svg'
-      : '/icons/group-buy-calendar.svg';
+  const alarmSrc =
+    variant === 'groupEat' ? '/icons/alarm-clock-eat.svg' : '/icons/alarm-clock-buy.svg';
+  const calendarSrc =
+    variant === 'groupEat' ? '/icons/group-eat-calendar.png' : '/icons/group-buy-calendar.png';
 
   return (
     <Badge
@@ -41,13 +36,21 @@ export function DeadlineBadge({
       className={cn(DEADLINE_BADGE_CLASS, variantBadgeClassName[variant], className)}
     >
       <div className="flex h-5 w-full gap-1 overflow-hidden">
-        <Image
-          unoptimized
-          src={iconSrc}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={alarmSrc}
           alt=""
           width={20}
           height={20}
-          className="size-5 shrink-0"
+          className={cn('size-5 shrink-0', showCountdown ? 'block' : 'hidden')}
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={calendarSrc}
+          alt=""
+          width={20}
+          height={20}
+          className={cn('size-5 shrink-0', showCountdown ? 'hidden' : 'block')}
         />
         <LazyMotion features={loadFeatures}>
           <AnimatePresence mode="wait" initial={false}>
