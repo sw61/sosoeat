@@ -6,24 +6,6 @@ import { useTimeFormatter } from '../../model/use-time-formatter';
 
 import { DeadlineBadge } from './deadline-badge';
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: ({
-    src,
-    alt,
-    unoptimized: _unoptimized,
-    ...rest
-  }: {
-    src: string;
-    alt: string;
-    unoptimized?: boolean;
-    [key: string]: unknown;
-  }) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={src} alt={alt} data-testid="deadline-badge-icon" {...rest} />
-  ),
-}));
-
 jest.mock('framer-motion', () => ({
   motion: new Proxy(
     {},
@@ -118,10 +100,10 @@ describe('DeadlineBadge', () => {
       <DeadlineBadge registrationEnd={new Date('2025-03-26T10:00:00+09:00')} variant="groupEat" />
     );
 
-    expect(screen.getByTestId('deadline-badge-icon')).toHaveAttribute(
-      'src',
-      '/icons/alarm-clock-eat.svg'
-    );
+    const imgs = Array.from(document.querySelectorAll('img'));
+    const alarmImg = imgs.find((img) => img.getAttribute('src') === '/icons/alarm-clock-eat.svg');
+    expect(alarmImg).toBeInTheDocument();
+    expect(alarmImg).toHaveClass('block');
   });
 
   it('groupBuy이면 buy용 알람 아이콘을 쓴다', () => {
@@ -129,9 +111,9 @@ describe('DeadlineBadge', () => {
       <DeadlineBadge registrationEnd={new Date('2025-03-26T10:00:00+09:00')} variant="groupBuy" />
     );
 
-    expect(screen.getByTestId('deadline-badge-icon')).toHaveAttribute(
-      'src',
-      '/icons/alarm-clock-buy.svg'
-    );
+    const imgs = Array.from(document.querySelectorAll('img'));
+    const alarmImg = imgs.find((img) => img.getAttribute('src') === '/icons/alarm-clock-buy.svg');
+    expect(alarmImg).toBeInTheDocument();
+    expect(alarmImg).toHaveClass('block');
   });
 });
