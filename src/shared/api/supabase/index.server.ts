@@ -1,1 +1,1 @@
-export { supabaseServer } from './supabase-server.server';
+export { supabaseAdmin } from './supabase-admin.server';
