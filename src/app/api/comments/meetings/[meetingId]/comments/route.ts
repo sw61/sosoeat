@@ -101,11 +101,13 @@ export async function POST(
     profileUrl: user.image ?? null,
   });
 
-  await supabaseAdmin.from('Meeting').upsert({
-    id,
-    teamId: user.teamId ?? (process.env.NEXT_PUBLIC_TEAM_ID as string),
-    hostId: user.id,
-  });
+  // ignoreDuplicates: true — 모임이 없을 때만 삽입, 기존 hostId 덮어쓰기 방지
+  await supabaseAdmin
+    .from('Meeting')
+    .upsert(
+      { id, teamId: user.teamId ?? (process.env.NEXT_PUBLIC_TEAM_ID as string), hostId: user.id },
+      { onConflict: 'id', ignoreDuplicates: true }
+    );
 
   const { content, parentId } = await request.json();
 
