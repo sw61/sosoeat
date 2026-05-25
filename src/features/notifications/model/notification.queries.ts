@@ -28,7 +28,7 @@ export const useNotificationInfiniteList = (
 ) =>
   useInfiniteQuery({
     ...getNotificationInfiniteQueryOptions(options),
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 30,
     gcTime: 1000 * 60 * 5,
   });
 
@@ -49,7 +49,8 @@ export const useUnreadCount = (initialCount = 0, enabled = true) =>
     queryFn: notificationApi.getUnreadCount,
     initialData: initialCount,
     initialDataUpdatedAt: MODULE_LOAD_TIME,
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 30,
     gcTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 30,
     enabled,
   });
