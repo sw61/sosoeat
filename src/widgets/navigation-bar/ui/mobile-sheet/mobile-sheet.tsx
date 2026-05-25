@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -11,6 +11,7 @@ import { LogOut, Menu, User } from 'lucide-react';
 import { AuthUser } from '@/entities/auth';
 import type { MeetingCreateModalProps } from '@/features/meeting-create';
 import { useMeetingCreateTrigger } from '@/features/meeting-create';
+import { useIsMobile } from '@/shared/lib/use-is-mobile';
 import { cn } from '@/shared/lib/utils';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
 import {
@@ -46,15 +47,11 @@ export function MobileSheet({
 }: MobileSheetProps) {
   const [open, setOpen] = useState(false);
   const { handleOpen, isOpen, close, createMeeting } = useMeetingCreateTrigger();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)');
-    const handleChange = (e: MediaQueryListEvent) => {
-      if (e.matches) setOpen(false);
-    };
-    mq.addEventListener('change', handleChange);
-    return () => mq.removeEventListener('change', handleChange);
-  }, []);
+    if (!isMobile) startTransition(() => setOpen(false));
+  }, [isMobile]);
 
   return (
     <>
