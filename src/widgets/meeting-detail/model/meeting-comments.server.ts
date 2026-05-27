@@ -7,7 +7,7 @@ export async function fetchMeetingCommentsForPage(meetingId: number): Promise<Me
   const currentUser = await CookieStorage.getUser();
   const currentUserId = currentUser?.id ?? null;
 
-  const [{ data: meeting }, { data: allComments }] = await Promise.all([
+  const [meetingResult, commentsResult] = await Promise.all([
     supabaseAdmin.from('Meeting').select('hostId').eq('id', meetingId).maybeSingle(),
     supabaseAdmin
       .from('Comment')
@@ -15,6 +15,12 @@ export async function fetchMeetingCommentsForPage(meetingId: number): Promise<Me
       .eq('meetingId', meetingId)
       .order('createdAt'),
   ]);
+
+  if (meetingResult.error) throw new Error(meetingResult.error.message);
+  if (commentsResult.error) throw new Error(commentsResult.error.message);
+
+  const meeting = meetingResult.data;
+  const allComments = commentsResult.data;
 
   if (!allComments?.length) return [];
 
@@ -61,11 +67,13 @@ export async function fetchMeetingCommentsForPage(meetingId: number): Promise<Me
 }
 
 export async function fetchMeetingCommentCountForPage(meetingId: number): Promise<number> {
-  const { count } = await supabaseAdmin
+  const { count, error } = await supabaseAdmin
     .from('Comment')
     .select('*', { count: 'exact', head: true })
     .eq('meetingId', meetingId)
     .eq('isDeleted', false);
+
+  if (error) throw new Error(error.message);
 
   return count ?? 0;
 }

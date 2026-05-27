@@ -15,7 +15,7 @@ export async function GET(
   const currentUser = await CookieStorage.getUser();
   const currentUserId = currentUser?.id ?? null;
 
-  const [{ data: meeting }, { data: allComments, error }] = await Promise.all([
+  const [meetingResult, commentsResult] = await Promise.all([
     supabaseAdmin.from('Meeting').select('hostId').eq('id', id).maybeSingle(),
     supabaseAdmin
       .from('Comment')
@@ -24,7 +24,13 @@ export async function GET(
       .order('createdAt'),
   ]);
 
-  if (error) return Response.json({ message: error.message }, { status: 500 });
+  if (meetingResult.error)
+    return Response.json({ message: meetingResult.error.message }, { status: 500 });
+  if (commentsResult.error)
+    return Response.json({ message: commentsResult.error.message }, { status: 500 });
+
+  const meeting = meetingResult.data;
+  const allComments = commentsResult.data;
   if (!allComments?.length) return Response.json([]);
 
   const commentIds = allComments.map((c) => c.id);
@@ -95,21 +101,29 @@ export async function POST(
   const { user, errorResponse } = await verifyMember();
   if (errorResponse) return errorResponse;
 
-  await supabaseAdmin.from('User').upsert({
+  const { error: userError } = await supabaseAdmin.from('User').upsert({
     id: user.id,
     nickname: user.name,
     profileUrl: user.image ?? null,
   });
 
+  if (userError) return Response.json({ message: userError.message }, { status: 500 });
+
   // ignoreDuplicates: true — 모임이 없을 때만 삽입, 기존 hostId 덮어쓰기 방지
-  await supabaseAdmin
+  const { error: meetingError } = await supabaseAdmin
     .from('Meeting')
     .upsert(
       { id, teamId: user.teamId ?? (process.env.NEXT_PUBLIC_TEAM_ID as string), hostId: user.id },
       { onConflict: 'id', ignoreDuplicates: true }
     );
 
+  if (meetingError) return Response.json({ message: meetingError.message }, { status: 500 });
+
   const { content, parentId } = await request.json();
+    
+  if (!content || typeof content !== 'string' || content.trim() === '') {
+    return Response.json({ message: '댓글 내용을 입력해주세요.' }, { status: 400 });
+  }
 
   const { data: comment, error } = await supabaseAdmin
     .from('Comment')

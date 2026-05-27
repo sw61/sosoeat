@@ -26,6 +26,11 @@ export async function PATCH(
     return Response.json({ message: '본인 댓글만 수정할 수 있습니다.' }, { status: 403 });
 
   const { content } = await request.json();
+
+  if (!content || typeof content !== 'string' || content.trim() === '') {
+    return Response.json({ message: '댓글 내용을 입력해주세요.' }, { status: 400 });
+  }
+
   const { data: updated, error } = await supabaseAdmin
     .from('Comment')
     .update({ content })
