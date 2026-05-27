@@ -7,7 +7,6 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { useAuthStore } from '@/entities/auth';
 import { meetingsQueryOptions } from '@/entities/meeting';
-import { toMeetingEditFormData } from '@/features/meeting-edit';
 import { useModal } from '@/shared/lib/use-modal';
 
 import {
@@ -124,7 +123,7 @@ export function MeetingHeroActions({ meetingId, referenceNow }: MeetingHeroActio
           open={isEditOpen}
           onClose={closeEdit}
           meetingId={meeting.id}
-          defaultValues={toMeetingEditFormData(meeting)}
+          meeting={meeting}
           onSuccess={refreshPageAndMeetingCache}
         />
       )}

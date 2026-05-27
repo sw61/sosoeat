@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { type FieldErrors, useForm } from 'react-hook-form';
 
 import { useUploadImage } from '@/entities/image';
+import type { Meeting } from '@/entities/meeting';
 import { createLazyZodResolver } from '@/shared/lib/lazy-zod-resolver';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
@@ -12,6 +13,7 @@ import { ResponsiveModal } from '@/shared/ui/responsive-modal/responsive-modal';
 import { BASIC_INFO_KEYS, EDIT_TABS } from '../model/meeting-edit.constants';
 import type { MeetingEditFormData } from '../model/meeting-edit.schema';
 import type { MeetingEditModalProps, MeetingEditTab } from '../model/meeting-edit.types';
+import { toMeetingEditFormData } from '../model/meeting-edit.utils';
 import { useUpdateMeeting } from '../model/use-update-meeting';
 
 import { TabBasicInfo, TabSchedule } from './_components';
@@ -20,12 +22,19 @@ const meetingEditFormResolver = createLazyZodResolver<MeetingEditFormData>(() =>
   import('../model/meeting-edit.schema').then((mod) => mod.meetingEditFormSchema)
 );
 
+type MeetingEditFormProps = {
+  onClose: () => void;
+  meetingId: number;
+  defaultValues: MeetingEditFormData;
+  onSuccess?: () => void;
+};
+
 const MeetingEditForm = ({
   onClose,
   meetingId,
   defaultValues,
   onSuccess,
-}: Omit<MeetingEditModalProps, 'open'>) => {
+}: MeetingEditFormProps) => {
   const [activeTab, setActiveTab] = useState<MeetingEditTab>('basicInfo');
   const { mutateAsync } = useUpdateMeeting(meetingId, onSuccess);
   const {
@@ -163,14 +172,14 @@ const MeetingEditForm = ({
  *   open={isOpen}
  *   onClose={close}
  *   meetingId={meeting.id}
- *   defaultValues={toMeetingEditFormData(meeting)}
+ *   meeting={meeting}
  * />
  */
 export const MeetingEditModal = ({
   open,
   onClose,
   meetingId,
-  defaultValues,
+  meeting,
   onSuccess,
 }: MeetingEditModalProps) => {
   return (
@@ -178,7 +187,7 @@ export const MeetingEditModal = ({
       <MeetingEditForm
         onClose={onClose}
         meetingId={meetingId}
-        defaultValues={defaultValues}
+        defaultValues={toMeetingEditFormData(meeting)}
         onSuccess={onSuccess}
       />
     </ResponsiveModal>
