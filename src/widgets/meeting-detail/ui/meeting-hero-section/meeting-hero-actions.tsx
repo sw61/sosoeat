@@ -60,6 +60,7 @@ export function MeetingHeroActions({ meetingId, referenceNow }: MeetingHeroActio
   const refreshPageAndMeetingCache = () => {
     void queryClient.invalidateQueries({
       queryKey: meetingsQueryOptions.meetingDetail(meeting.id).queryKey,
+      refetchType: 'none',
     });
     router.refresh();
   };
