@@ -48,12 +48,13 @@ export async function DELETE(
   const { user, errorResponse } = await verifyMember();
   if (errorResponse) return errorResponse;
 
-  const { data: comment } = await supabaseAdmin
+  const { data: comment, error: fetchError } = await supabaseAdmin
     .from('Comment')
     .select('userId')
     .eq('id', id)
     .maybeSingle();
 
+  if (fetchError) return Response.json({ message: fetchError.message }, { status: 500 });
   if (!comment) return Response.json({ message: '댓글을 찾을 수 없습니다.' }, { status: 404 });
   if (comment.userId !== user.id)
     return Response.json({ message: '본인 댓글만 삭제할 수 있습니다.' }, { status: 403 });
