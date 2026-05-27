@@ -10,7 +10,6 @@ import { AuthUser, useAuthStore } from '@/entities/auth';
 import { AuthInitializer } from '@/features/auth';
 import { setCommentSessionExpiredHandler } from '@/shared/api/comment-client';
 import { setSessionExpiredHandler } from '@/shared/api/fetch-client';
-import { initAmplitude, syncAmplitudeUser } from '@/shared/lib/amplitude';
 
 const LoginRequireModal = dynamic(
   () => import('@/widgets/auth').then((mod) => mod.LoginRequireModal),
@@ -40,6 +39,7 @@ export function Providers({
 
   useEffect(() => {
     const run = async () => {
+      const { initAmplitude, syncAmplitudeUser } = await import('@/shared/lib/amplitude');
       await initAmplitude();
       syncAmplitudeUser(useAuthStore.getState().user);
     };
@@ -53,7 +53,9 @@ export function Providers({
   }, []);
 
   useEffect(() => {
-    syncAmplitudeUser(user);
+    void import('@/shared/lib/amplitude').then(({ syncAmplitudeUser }) => {
+      syncAmplitudeUser(user);
+    });
   }, [user]);
 
   return (
