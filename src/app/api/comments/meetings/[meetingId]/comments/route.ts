@@ -120,6 +120,10 @@ export async function POST(
   if (meetingError) return Response.json({ message: meetingError.message }, { status: 500 });
 
   const { content, parentId } = await request.json();
+    
+  if (!content || typeof content !== 'string' || content.trim() === '') {
+    return Response.json({ message: '댓글 내용을 입력해주세요.' }, { status: 400 });
+  }
 
   const { data: comment, error } = await supabaseAdmin
     .from('Comment')
