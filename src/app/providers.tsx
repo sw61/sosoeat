@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -29,6 +29,7 @@ export function Providers({
 }) {
   const [queryClient] = useState(() => new QueryClient());
   const user = useAuthStore((state) => state.user);
+  const amplitudeReady = useRef(false);
 
   useEffect(() => {
     // 401 응답 시 인증 상태에 따라 적절한 모달을 띄우는 핸들러를 주입합니다.
@@ -41,6 +42,7 @@ export function Providers({
     const run = async () => {
       const { initAmplitude, syncAmplitudeUser } = await import('@/shared/lib/amplitude');
       await initAmplitude();
+      amplitudeReady.current = true;
       syncAmplitudeUser(useAuthStore.getState().user);
     };
     if ('requestIdleCallback' in window) {
@@ -53,6 +55,7 @@ export function Providers({
   }, []);
 
   useEffect(() => {
+    if (!amplitudeReady.current) return;
     void import('@/shared/lib/amplitude').then(({ syncAmplitudeUser }) => {
       syncAmplitudeUser(user);
     });
