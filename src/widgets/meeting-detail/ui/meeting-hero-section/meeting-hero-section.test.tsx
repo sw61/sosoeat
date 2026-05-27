@@ -21,7 +21,6 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('@/features/meeting-edit', () => ({
   MeetingEditModal: () => null,
-  toMeetingEditFormData: jest.fn(),
 }));
 
 jest.mock('../../model/meeting-detail.queries', () => ({
