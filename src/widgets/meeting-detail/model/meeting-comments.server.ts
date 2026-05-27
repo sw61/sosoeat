@@ -16,6 +16,7 @@ export async function fetchMeetingCommentsForPage(meetingId: number): Promise<Me
       .order('createdAt'),
   ]);
 
+  if (meetingResult.error) throw new Error(meetingResult.error.message);
   if (commentsResult.error) throw new Error(commentsResult.error.message);
 
   const meeting = meetingResult.data;
