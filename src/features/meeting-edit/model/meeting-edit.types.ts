@@ -1,3 +1,5 @@
+import type { Meeting } from '@/entities/meeting';
+
 import type { MeetingEditFormData } from './meeting-edit.schema';
 
 export type { MeetingEditFormData };
@@ -8,6 +10,6 @@ export interface MeetingEditModalProps {
   open: boolean;
   onClose: () => void;
   meetingId: number;
-  defaultValues: MeetingEditFormData;
+  meeting: Meeting;
   onSuccess?: () => void;
 }

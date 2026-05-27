@@ -18,6 +18,7 @@ export function MeetingHeroSection({ meeting, referenceNow }: MeetingHeroSection
           alt={meeting.name}
           fill
           priority
+          fetchPriority="high"
           sizes="(max-width: 767px) calc(100vw - 32px), calc(50vw - 40px)"
           draggable={false}
           className="object-cover"
