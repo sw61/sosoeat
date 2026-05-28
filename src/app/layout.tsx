@@ -47,7 +47,7 @@ const pretendard = localFont({
     },
   ],
   display: 'optional',
-  variable: '--font-pretendard-local',
+  variable: '--font-pretendard-preload',
 });
 
 const metadataBase = new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000');
