@@ -87,4 +87,31 @@ describe('POST /api/sentry-webhook', () => {
       expect.objectContaining({ method: 'POST' })
     );
   });
+
+  it('truncates embed title to 256 characters', async () => {
+    const fetchSpy = jest
+      .spyOn(global, 'fetch')
+      .mockResolvedValue(new Response(null, { status: 204 }));
+
+    const longTitle = 'A'.repeat(300);
+    const payload = {
+      action: 'created',
+      data: { issue: { id: '2', title: longTitle, level: 'error' } },
+    };
+    await POST(makeRequest(JSON.stringify(payload)));
+
+    const sentBody = JSON.parse(fetchSpy.mock.calls[0][1]!.body as string);
+    expect(sentBody.embeds[0].title.length).toBeLessThanOrEqual(256);
+  });
+
+  it('returns 502 when Discord responds with an error', async () => {
+    jest.spyOn(global, 'fetch').mockResolvedValue(new Response(null, { status: 400 }));
+
+    const payload = {
+      action: 'created',
+      data: { issue: { id: '3', title: 'Error', level: 'error' } },
+    };
+    const response = await POST(makeRequest(JSON.stringify(payload)));
+    expect(response.status).toBe(502);
+  });
 });
