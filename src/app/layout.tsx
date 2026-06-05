@@ -15,6 +15,8 @@ import { Providers } from './providers';
 
 import './globals.css';
 
+const PRELOAD_SUBSETS = ['91', '88', '90', '81', '89'];
+
 const metadataBase = new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000');
 
 export const metadata: Metadata = {
@@ -64,6 +66,18 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
+      <head>
+        {PRELOAD_SUBSETS.map((n) => (
+          <link
+            key={n}
+            rel="preload"
+            href={`/fonts/subsets/PretendardVariable.subset.${n}.woff2`}
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+        ))}
+      </head>
       <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
         <NuqsAdapter>
           <Providers initialUser={initialUser}>
