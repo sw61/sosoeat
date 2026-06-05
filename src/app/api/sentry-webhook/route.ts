@@ -26,7 +26,7 @@ const LEVEL_COLORS: Record<string, number> = {
 function verifySignature(body: string, signature: string, secret: string): boolean {
   const digest = createHmac('sha256', secret).update(body, 'utf8').digest('hex');
   try {
-    return timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+    return timingSafeEqual(Buffer.from(digest, 'hex'), Buffer.from(signature, 'hex'));
   } catch {
     return false;
   }
@@ -54,20 +54,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const issue = payload.data?.issue;
+  const issue = payload?.data?.issue;
   if (!issue) {
     return NextResponse.json({ ok: true });
   }
 
   const level = issue.level ?? 'error';
 
-  await fetch(discordUrl, {
+  const rawTitle = `[${level.toUpperCase()}] ${issue.title}`;
+  const title = rawTitle.length > 256 ? rawTitle.slice(0, 253) + '...' : rawTitle;
+
+  const discordRes = await fetch(discordUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       embeds: [
         {
-          title: `[${level.toUpperCase()}] ${issue.title}`,
+          title,
           url: issue.permalink,
           description: issue.culprit,
           color: LEVEL_COLORS[level] ?? LEVEL_COLORS.error,
@@ -81,6 +84,10 @@ export async function POST(request: Request) {
       ],
     }),
   });
+
+  if (!discordRes.ok) {
+    return NextResponse.json({ error: 'Discord delivery failed' }, { status: 502 });
+  }
 
   return NextResponse.json({ ok: true });
 }
