@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 // eslint-disable-next-line feature-sliced/absolute-relative
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
