@@ -1,12 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { X } from 'lucide-react';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 
+import { useIsMobile } from '@/shared/lib/use-is-mobile';
 import { cn } from '@/shared/lib/utils';
 import type { Notification } from '@/shared/types/generated-client';
 import { CountingBadge } from '@/shared/ui/counting-badge/counting-badge';
@@ -40,18 +41,6 @@ const MOBILE_SCROLL_CLASS =
   'overflow-x-hidden overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#cccccc_transparent] min-h-0 flex-1';
 const DESKTOP_SCROLL_CLASS =
   'overflow-x-hidden overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#cccccc_transparent] h-[360px]';
-
-function useIsMobile() {
-  return useSyncExternalStore(
-    (callback) => {
-      const mq = window.matchMedia('(max-width: 767px)');
-      mq.addEventListener('change', callback);
-      return () => mq.removeEventListener('change', callback);
-    },
-    () => window.matchMedia('(max-width: 767px)').matches,
-    () => false
-  );
-}
 
 interface NotificationPanelContentProps {
   titleId: string;

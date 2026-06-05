@@ -12,11 +12,10 @@ export const setCommentSessionExpiredHandler = (handler: () => void) => {
 /**
  * [Client-only] commentClient
  * 클라이언트 컴포넌트에서 사용합니다.
- * /api/comment-proxy를 통해 comment server(Railway Express)로 요청을 전달합니다.
- * Authorization 헤더 삽입 및 토큰 갱신은 프록시 Route Handler에서 처리합니다.
+ * /api/comments Route Handler를 통해 Supabase에 직접 접근합니다.
  */
 const request = async (url: string, options: RequestInit = {}): Promise<Response> => {
-  const fullUrl = `/api/comment-proxy/${url.replace(/^\//, '')}`;
+  const fullUrl = `/api/comments/${url.replace(/^\//, '')}`;
 
   const headers = new Headers(options.headers);
   if (!headers.has('Content-Type')) {
@@ -25,7 +24,7 @@ const request = async (url: string, options: RequestInit = {}): Promise<Response
 
   const response = await fetch(fullUrl, { ...options, headers });
 
-  if (response.status === 401 && fullUrl.startsWith('/api/comment-proxy/')) {
+  if (response.status === 401) {
     onSessionExpired?.();
   }
 

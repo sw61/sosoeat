@@ -30,6 +30,9 @@ jobs:
 
       - name: 프로젝트 빌드 실행
         run: npm run build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
       # --- Vercel 배포 섹션 ---
 
