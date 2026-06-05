@@ -5,11 +5,7 @@ import type { Metadata } from 'next';
 import * as Sentry from '@sentry/nextjs';
 
 import { getDefaultSocialImages } from '@/shared/lib/social-metadata';
-import {
-  MeetingCommentSkeleton,
-  MeetingHeroSkeleton,
-  MeetingRecommendedSkeleton,
-} from '@/widgets/meeting-detail';
+import { MeetingCommentSkeleton, MeetingRecommendedSkeleton } from '@/widgets/meeting-detail';
 import { getMeetingById } from '@/widgets/meeting-detail/index.server';
 
 import { MeetingCommentFetcher } from './_components/meeting-comment-fetcher';
@@ -66,9 +62,7 @@ export default async function MeetingDetailPage({ params }: Props) {
 
   return (
     <main className="space-y-[30px] py-6 md:py-8 lg:py-10">
-      <Suspense fallback={<MeetingHeroSkeleton />}>
-        <MeetingHeroFetcher meetingId={meetingId} />
-      </Suspense>
+      <MeetingHeroFetcher meetingId={meetingId} />
 
       <Suspense fallback={<MeetingCommentSkeleton />}>
         <MeetingCommentFetcher meetingId={meetingId} />

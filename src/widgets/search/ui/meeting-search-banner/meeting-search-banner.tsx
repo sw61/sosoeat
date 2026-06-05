@@ -8,7 +8,7 @@ const bannerShellClass =
   'relative h-48 w-full overflow-hidden rounded-xlsm:h-56 md:h-[244px] md:max-w-[1140px] md:rounded-2xl';
 
 const headlineClass =
-  'font-pretendard-local text-3xl leading-[1.2] font-extrabold tracking-[-0.03em] text-white  md:text-[46px] md:leading-[55px] md:tracking-[-1.38px]';
+  'text-3xl leading-[1.2] font-extrabold tracking-[-0.03em] text-white  md:text-[46px] md:leading-[55px] md:tracking-[-1.38px]';
 
 const subtitleWrapClass =
   'mt-2 hidden max-w-[273px] text-base leading-7 font-normal text-white/80 md:block';
@@ -42,7 +42,7 @@ export function MeetingSearchBanner({ className }: MeetingSearchBannerProps) {
             <div
               className={subtitleWrapClass}
               style={{
-                fontFamily: "'Noto Sans KR', var(--font-pretendard-local), sans-serif",
+                fontFamily: "'Noto Sans KR', 'Pretendard Variable', sans-serif",
               }}
             >
               {'가고 싶었던 맛집, 혼자 가기 아쉬웠죠? 모여요에서 같이 먹을 사람을 찾아보세요.'}

@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { useAuthStore } from '@/entities/auth';
 import type { Meeting } from '@/entities/meeting';
 
-import { MeetingHeroSection } from './meeting-hero-section';
+import { MeetingHeroActions } from './meeting-hero-actions';
 
 const mockJoinMutate = jest.fn();
 const mockLeaveMutate = jest.fn();
@@ -21,7 +21,6 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('@/features/meeting-edit', () => ({
   MeetingEditModal: () => null,
-  toMeetingEditFormData: jest.fn(),
 }));
 
 jest.mock('../../model/meeting-detail.queries', () => ({
@@ -107,7 +106,7 @@ const createWrapper = () => {
   );
 };
 
-describe('MeetingHeroSection', () => {
+describe('MeetingHeroActions', () => {
   beforeEach(() => {
     mockJoinMutate.mockClear();
     mockLeaveMutate.mockClear();
@@ -130,7 +129,7 @@ describe('MeetingHeroSection', () => {
     const user = userEvent.setup();
 
     render(
-      <MeetingHeroSection meetingId={MOCK_MEETING.id} referenceNow="2026-04-10T09:00:00.000Z" />,
+      <MeetingHeroActions meetingId={MOCK_MEETING.id} referenceNow="2026-04-10T09:00:00.000Z" />,
       {
         wrapper: createWrapper(),
       }
@@ -157,7 +156,7 @@ describe('MeetingHeroSection', () => {
     });
 
     render(
-      <MeetingHeroSection meetingId={MOCK_MEETING.id} referenceNow="2026-04-10T09:00:00.000Z" />,
+      <MeetingHeroActions meetingId={MOCK_MEETING.id} referenceNow="2026-04-10T09:00:00.000Z" />,
       {
         wrapper: createWrapper(),
       }

@@ -18,7 +18,7 @@ export async function MeetingCommentFetcher({ meetingId }: Props) {
   const meeting = await getMeetingById(meetingId);
 
   const [comments, commentCount] = await Promise.all([
-    fetchMeetingCommentsForPage(meetingId, meeting),
+    fetchMeetingCommentsForPage(meetingId),
     fetchMeetingCommentCountForPage(meetingId),
   ]);
 
