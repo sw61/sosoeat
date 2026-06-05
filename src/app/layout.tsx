@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
 import Script from 'next/script';
 
 // eslint-disable-next-line feature-sliced/absolute-relative
@@ -17,38 +16,7 @@ import { Providers } from './providers';
 
 import './globals.css';
 
-const pretendard = localFont({
-  src: [
-    // critical subsets — benchmark top 5 (가장 느렸던 = 가장 많이 쓰이는)
-    {
-      path: '../../public/fonts/subsets/PretendardVariable.subset.91.woff2',
-      weight: '45 920',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/subsets/PretendardVariable.subset.88.woff2',
-      weight: '45 920',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/subsets/PretendardVariable.subset.90.woff2',
-      weight: '45 920',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/subsets/PretendardVariable.subset.81.woff2',
-      weight: '45 920',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/subsets/PretendardVariable.subset.89.woff2',
-      weight: '45 920',
-      style: 'normal',
-    },
-  ],
-  display: 'optional',
-  variable: '--font-pretendard-local',
-});
+const PRELOAD_SUBSETS = ['91', '88', '90', '81', '89'];
 
 const metadataBase = new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000');
 
@@ -98,7 +66,19 @@ export default async function RootLayout({
   ]);
 
   return (
-    <html className={pretendard.variable} lang="ko">
+    <html lang="ko">
+      <head>
+        {PRELOAD_SUBSETS.map((n) => (
+          <link
+            key={n}
+            rel="preload"
+            href={`/fonts/subsets/PretendardVariable.subset.${n}.woff2`}
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+        ))}
+      </head>
       <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
         <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
         <NuqsAdapter>
