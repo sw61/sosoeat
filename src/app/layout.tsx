@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 // eslint-disable-next-line feature-sliced/absolute-relative
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
@@ -14,6 +15,8 @@ import { NavigationBar } from '@/widgets/navigation-bar';
 import { Providers } from './providers';
 
 import './globals.css';
+
+const PRELOAD_SUBSETS = ['91', '88', '90', '81', '89'];
 
 const metadataBase = new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000');
 
@@ -64,7 +67,24 @@ export default async function RootLayout({
 
   return (
     <html lang="ko">
+      <head>
+        {PRELOAD_SUBSETS.map((n) => (
+          <link
+            key={n}
+            rel="preload"
+            href={`/fonts/subsets/PretendardVariable.subset.${n}.woff2`}
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+        ))}
+      </head>
       <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
+        <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
+        <Script
+          src={`https://cdn.amplitude.com/script/${process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY}.js`}
+          strategy="lazyOnload"
+        />
         <NuqsAdapter>
           <Providers initialUser={initialUser}>
             <NavigationBar

@@ -1067,7 +1067,7 @@
 @font-face {
   font-family: 'Pretendard Variable';
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
   font-weight: 45 920;
   src: url(/fonts/subsets/PretendardVariable.subset.87.woff2) format('woff2-variations');
   unicode-range:

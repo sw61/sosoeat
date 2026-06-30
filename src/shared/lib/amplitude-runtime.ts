@@ -1,165 +1,59 @@
 import type { AuthUser } from '../types/auth';
 
-type AmplitudeAnalyticsModule = typeof import('@amplitude/analytics-browser');
-type AmplitudeSessionReplayPluginModule = typeof import('@amplitude/plugin-session-replay-browser');
-type AmplitudeEngagementModule = typeof import('@amplitude/engagement-browser');
+interface AmplitudeIdentify {
+  set(key: string, value: string): this;
+}
 
-let amplitudeAnalyticsModulePromise: Promise<AmplitudeAnalyticsModule> | null = null;
-let amplitudeSessionReplayPluginModulePromise: Promise<AmplitudeSessionReplayPluginModule> | null =
-  null;
-let amplitudeEngagementModulePromise: Promise<AmplitudeEngagementModule> | null = null;
-let isAmplitudeInitialized = false;
-let isSessionReplayAdded = false;
-let isEngagementAdded = false;
+interface AmplitudeInstance {
+  track(eventName: string, eventProperties?: Record<string, unknown>): void;
+  reset(): void;
+  setUserId(userId: string): void;
+  setGroup(groupType: string, groupName: string): void;
+  identify(identify: AmplitudeIdentify): void;
+  Identify: new () => AmplitudeIdentify;
+}
 
-const AMPLITUDE_API_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
-
-async function getAmplitudeAnalytics() {
-  if (!amplitudeAnalyticsModulePromise) {
-    amplitudeAnalyticsModulePromise = import('@amplitude/analytics-browser');
+declare global {
+  interface Window {
+    amplitude?: AmplitudeInstance;
   }
-
-  return amplitudeAnalyticsModulePromise;
 }
 
-async function getSessionReplayPlugin() {
-  if (!amplitudeSessionReplayPluginModulePromise) {
-    amplitudeSessionReplayPluginModulePromise = import('@amplitude/plugin-session-replay-browser');
+export function initAmplitudeRuntime() {
+  // CDN script auto-initializes
+}
+
+export function trackEventRuntime(eventName: string, eventProperties?: Record<string, unknown>) {
+  if (window.amplitude) {
+    window.amplitude.track(eventName, eventProperties);
   }
-
-  return amplitudeSessionReplayPluginModulePromise;
 }
 
-async function getEngagementModule() {
-  if (!amplitudeEngagementModulePromise) {
-    amplitudeEngagementModulePromise = import('@amplitude/engagement-browser');
-  }
-
-  return amplitudeEngagementModulePromise;
-}
-
-function isAmplitudeEnabled() {
-  return typeof window !== 'undefined' && !!AMPLITUDE_API_KEY;
-}
-
-async function addSessionReplayPlugin() {
-  if (isSessionReplayAdded) {
+export function syncAmplitudeUserRuntime(user: AuthUser | null) {
+  if (!window.amplitude) {
     return;
   }
-
-  const [amplitude, sessionReplay] = await Promise.all([
-    getAmplitudeAnalytics(),
-    getSessionReplayPlugin(),
-  ]);
-
-  await amplitude.add(
-    sessionReplay.sessionReplayPlugin({
-      sampleRate: 1,
-    })
-  ).promise;
-
-  isSessionReplayAdded = true;
-}
-
-async function addEngagementPlugin() {
-  if (isEngagementAdded) {
-    return;
-  }
-
-  const [amplitude, engagement] = await Promise.all([
-    getAmplitudeAnalytics(),
-    getEngagementModule(),
-  ]);
-
-  await amplitude.add(engagement.plugin()).promise;
-
-  isEngagementAdded = true;
-}
-
-export async function initAmplitudeRuntime() {
-  if (!isAmplitudeEnabled() || isAmplitudeInitialized) {
-    return;
-  }
-
-  const apiKey = AMPLITUDE_API_KEY;
-
-  if (!apiKey) {
-    return;
-  }
-
-  isAmplitudeInitialized = true;
-
-  try {
-    const amplitude = await getAmplitudeAnalytics();
-    await amplitude.init(apiKey, {
-      autocapture: {
-        attribution: true,
-        fileDownloads: true,
-        formInteractions: true,
-        pageViews: true,
-        sessions: true,
-        elementInteractions: true,
-        networkTracking: true,
-        webVitals: true,
-        frustrationInteractions: {
-          thrashedCursor: true,
-          errorClicks: true,
-          deadClicks: true,
-          rageClicks: true,
-        },
-      },
-    }).promise;
-
-    void addSessionReplayPlugin();
-    void addEngagementPlugin();
-  } catch (error) {
-    isAmplitudeInitialized = false;
-
-    if (process.env.NODE_ENV !== 'production') {
-      console.error('Failed to initialize Amplitude.', error);
-    }
-  }
-}
-
-export async function trackEventRuntime(
-  eventName: string,
-  eventProperties?: Record<string, unknown>
-) {
-  if (!isAmplitudeEnabled()) {
-    return;
-  }
-
-  const amplitude = await getAmplitudeAnalytics();
-  amplitude.track(eventName, eventProperties);
-}
-
-export async function syncAmplitudeUserRuntime(user: AuthUser | null) {
-  if (!isAmplitudeEnabled() || !isAmplitudeInitialized) {
-    return;
-  }
-
-  const amplitude = await getAmplitudeAnalytics();
 
   if (!user) {
-    amplitude.reset();
+    window.amplitude.reset();
     return;
   }
 
-  amplitude.setUserId(String(user.id) + '-' + user.email);
+  window.amplitude.setUserId(String(user.id) + '-' + user.email);
 
-  const identify = new amplitude.Identify();
+  const identify = new window.amplitude.Identify();
 
   identify.set('email', user.email);
   identify.set('name', user.name);
 
   if (user.teamId) {
     identify.set('teamId', user.teamId);
-    amplitude.setGroup('teamId', user.teamId);
+    window.amplitude.setGroup('teamId', user.teamId);
   }
 
   if (user.companyName) {
     identify.set('companyName', user.companyName);
   }
 
-  amplitude.identify(identify);
+  window.amplitude.identify(identify);
 }
