@@ -31,7 +31,7 @@ export function KakaoMapLoader({ appKey, latitude, longitude }: KakaoMapLoaderPr
       <Script
         id="kakao-map-sdk"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         onLoad={() => setHasLoadedScript(true)}
         onReady={() => setHasLoadedScript(true)}
       />
