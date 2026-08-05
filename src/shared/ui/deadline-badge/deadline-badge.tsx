@@ -1,10 +1,9 @@
 import { AnimatePresence, LazyMotion } from 'framer-motion';
 import * as m from 'framer-motion/m';
 
-import { cn } from '@/shared/lib/utils';
-import { Badge } from '@/shared/ui/badge';
-
-import { useTimeFormatter } from '../../model/use-time-formatter';
+import { useTimeFormatter } from '../../lib/use-time-formatter';
+import { cn } from '../../lib/utils';
+import { Badge } from '../badge';
 
 import { DEADLINE_BADGE_CLASS } from './deadline-badge.constants';
 import type { DeadlineBadgeProps } from './deadline-badge.types';

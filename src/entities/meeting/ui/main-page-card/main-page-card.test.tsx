@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 
+import { useTimeFormatter } from '@/shared/lib/use-time-formatter';
+
 import type { Meeting } from '../../model/meeting.types';
-import { useTimeFormatter } from '../../model/use-time-formatter';
 
 import { MainPageCard } from './main-page-card';
 
@@ -95,7 +96,7 @@ function createMockMeeting(overrides: Partial<Meeting> = {}): Meeting {
   };
 }
 
-jest.mock('../../model/use-time-formatter', () => ({
+jest.mock('@/shared/lib/use-time-formatter', () => ({
   useTimeFormatter: jest.fn(),
 }));
 

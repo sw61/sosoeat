@@ -11,11 +11,11 @@ import { MapPin, Users } from 'lucide-react';
 import { toHttpsUrl } from '@/shared/lib/to-https-url';
 import { cn } from '@/shared/lib/utils';
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from '@/shared/ui/card';
+import { DeadlineBadge } from '@/shared/ui/deadline-badge';
+import { EstablishmentStatusBadge } from '@/shared/ui/establishment-status-badge';
 import { Progress, type ProgressProps } from '@/shared/ui/progress-bar';
 
 import { useDetailRouter } from '../../model/use-detail-router';
-import { DeadlineBadge } from '../deadline-badge';
-import { EstablishmentStatusBadge } from '../establishment-status-badge';
 
 import {
   MAIN_PAGE_CARD_BADGES_ROW_CLASS,

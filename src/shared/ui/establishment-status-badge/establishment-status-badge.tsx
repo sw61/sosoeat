@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-import { cn } from '@/shared/lib/utils';
-import { Badge } from '@/shared/ui/badge';
+import { cn } from '../../lib/utils';
+import { Badge } from '../badge';
 
 import {
   ESTABLISHED_BADGE_BASE_CLASS,
