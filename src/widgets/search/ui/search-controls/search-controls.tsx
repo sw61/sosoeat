@@ -1,7 +1,7 @@
 'use client';
 
 import type { RegionSelection } from '@/entities/location';
-import type { MeetingSortBy, MeetingSortOrder, MeetingTypeFilter } from '@/entities/meeting';
+import type { MeetingSortBy, MeetingSortOrder, MeetingTypeFilter } from '@/entities/meeting-search';
 import { MeetingFilterBar, SearchBar } from '@/features/search';
 
 type DateChangeParams = {

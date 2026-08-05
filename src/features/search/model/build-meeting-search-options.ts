@@ -4,7 +4,7 @@ import type {
   MeetingSortBy,
   MeetingSortOrder,
   MeetingTypeFilter,
-} from '@/entities/meeting';
+} from '@/entities/meeting-search';
 
 const MEETINGS_PAGE_SIZE = 10;
 

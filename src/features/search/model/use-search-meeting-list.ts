@@ -1,7 +1,8 @@
 'use client';
 
-import type { MeetingListResult, MeetingSearchOptions } from '@/entities/meeting';
-import { useSearchInfiniteOption } from '@/entities/meeting';
+import type { MeetingListResult } from '@/entities/meeting';
+import type { MeetingSearchOptions } from '@/entities/meeting-search';
+import { useSearchInfiniteOption } from '@/entities/meeting-search';
 
 import { useSearchInfiniteOptions } from './use-search-infinite-options';
 
