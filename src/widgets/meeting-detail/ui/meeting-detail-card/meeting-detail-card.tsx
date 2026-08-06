@@ -101,7 +101,7 @@ function HostRow({ name, profileImage, className }: HostRowProps) {
   return (
     <div className={cn('flex items-center gap-3', className)}>
       <Avatar size="default">
-        <AvatarImage src={toHttpsUrl(profileImage)} alt={name} />
+        <AvatarImage src={toHttpsUrl(profileImage)} alt={name} width={32} />
         <AvatarFallback>
           <UserIcon className="text-sosoeat-gray-400 h-4 w-4" />
         </AvatarFallback>
