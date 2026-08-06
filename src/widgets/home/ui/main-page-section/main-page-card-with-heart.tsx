@@ -1,7 +1,7 @@
 'use client';
 
 import type { Meeting } from '@/entities/meeting';
-import { MainPageCard } from '@/entities/meeting';
+import { MainPageCard } from '@/entities/meeting-card';
 import { HeartButton } from '@/features/favorites';
 
 interface MainPageCardWithHeartProps {

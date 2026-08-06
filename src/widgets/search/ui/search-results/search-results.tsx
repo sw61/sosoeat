@@ -1,6 +1,7 @@
 ﻿'use client';
 
-import { MainPageCard, type Meeting } from '@/entities/meeting';
+import type { Meeting } from '@/entities/meeting';
+import { MainPageCard } from '@/entities/meeting-card';
 import { HeartButton } from '@/features/favorites';
 
 import { EmptyPage } from '../empty-page';

@@ -1,7 +1,7 @@
-import type { Meeting } from '../../model/meeting.types';
+import type { MeetingCardData } from '../../model/meeting-card.types';
 
 export interface MainPageCardProps {
-  meeting: Meeting;
+  meeting: MeetingCardData;
   referenceNow?: string;
   renderFavoriteButton?: (id: number, isFavorited: boolean) => React.ReactNode;
 }

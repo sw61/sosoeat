@@ -1,5 +1,5 @@
 import { RegionSelection } from '@/entities/location';
-import { MeetingSortBy, MeetingSortOrder, MeetingTypeFilter } from '@/entities/meeting';
+import { MeetingSortBy, MeetingSortOrder, MeetingTypeFilter } from '@/entities/meeting-search';
 
 export interface MeetingFilterBarProps {
   /** 필터 바 루트 컨테이너에 합쳐진다 */

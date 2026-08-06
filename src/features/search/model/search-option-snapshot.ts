@@ -1,4 +1,4 @@
-import type { MeetingSortBy, MeetingSortOrder, MeetingTypeFilter } from '@/entities/meeting';
+import type { MeetingSortBy, MeetingSortOrder, MeetingTypeFilter } from '@/entities/meeting-search';
 
 import type { ResolvedMeetingSearchOptions } from './build-meeting-search-options';
 
