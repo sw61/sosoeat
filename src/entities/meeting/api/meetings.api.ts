@@ -1,20 +1,10 @@
-import qs from 'qs';
-
 import { fetchClient } from '@/shared/api/fetch-client';
 import { parseResponse, parseVoidResponse } from '@/shared/api/parse-response';
 import { CreateMeeting } from '@/shared/types/generated-client/models/CreateMeeting';
 import { UpdateMeeting } from '@/shared/types/generated-client/models/UpdateMeeting';
 import { UpdateMeetingStatus } from '@/shared/types/generated-client/models/UpdateMeetingStatus';
 
-import type { Meeting, MeetingListResult, MeetingSearchRequest } from '../model/meeting.types';
-
-const makeQueryString = (params: MeetingSearchRequest): string => {
-  return qs.stringify(params, {
-    skipNulls: true,
-    addQueryPrefix: true,
-    serializeDate: (date: Date) => date.toISOString(),
-  });
-};
+import type { Meeting } from '../model/meeting.types';
 
 /**
  * [Service Layer] meetingsApi
@@ -24,17 +14,6 @@ export const meetingsApi = {
   async getById(id: number): Promise<Meeting> {
     const response = await fetchClient.get(`/meetings/${id}`);
     return parseResponse<Meeting>(response, '모임 조회에 실패했습니다.');
-  },
-
-  async getList(): Promise<MeetingListResult> {
-    const response = await fetchClient.get('/meetings');
-    return parseResponse<MeetingListResult>(response, '모임 목록 조회에 실패했습니다.');
-  },
-
-  async getByFilter(options: MeetingSearchRequest): Promise<MeetingListResult> {
-    const queryString = makeQueryString(options);
-    const response = await fetchClient.get(`/meetings${queryString}`);
-    return parseResponse<MeetingListResult>(response, '모임 목록 조회에 실패했습니다.');
   },
 
   /**

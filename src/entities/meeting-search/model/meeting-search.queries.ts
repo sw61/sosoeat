@@ -2,26 +2,26 @@
 
 import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import type { getMeetings } from '../index.server';
+import type { MeetingListResult } from '@/entities/meeting';
 
-import type { MeetingSearchOptions, MeetingSearchRequest } from './meeting.types';
-import { meetingsQueryOptions } from './meeting-search-query-options';
+import type { MeetingSearchOptions, MeetingSearchRequest } from './meeting-search.types';
+import { meetingSearchQueryOptions } from './meeting-search-query-options';
 
 export const useSearchList = () => {
-  return useQuery(meetingsQueryOptions.all());
+  return useQuery(meetingSearchQueryOptions.all());
 };
 
 export const useSearchOptions = (options: MeetingSearchRequest) => {
-  return useQuery(meetingsQueryOptions.options(options));
+  return useQuery(meetingSearchQueryOptions.options(options));
 };
 
 export const useSearchInfiniteOption = (
   options: MeetingSearchOptions,
-  initialData?: Awaited<ReturnType<typeof getMeetings>>,
+  initialData?: MeetingListResult,
   queryOptions?: { enabled?: boolean }
 ) => {
   return useInfiniteQuery({
-    ...meetingsQueryOptions.infiniteOptions(options, initialData),
+    ...meetingSearchQueryOptions.infiniteOptions(options, initialData),
     placeholderData: keepPreviousData,
     enabled: queryOptions?.enabled ?? true,
   });

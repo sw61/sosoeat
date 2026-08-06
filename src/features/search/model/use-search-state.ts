@@ -12,12 +12,8 @@ import {
 } from 'nuqs';
 
 import type { RegionSelection } from '@/entities/location';
-import type {
-  MeetingListResult,
-  MeetingSortBy,
-  MeetingSortOrder,
-  MeetingTypeFilter,
-} from '@/entities/meeting';
+import type { MeetingListResult } from '@/entities/meeting';
+import type { MeetingSortBy, MeetingSortOrder, MeetingTypeFilter } from '@/entities/meeting-search';
 
 import { buildMeetingSearchOptions } from './build-meeting-search-options';
 import { buildSearchOptionSnapshot } from './search-option-snapshot';

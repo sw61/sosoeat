@@ -4,7 +4,8 @@ import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 import { useQueries } from '@tanstack/react-query';
 
-import { type Meeting, type MeetingSearchOptions, meetingsQueryOptions } from '@/entities/meeting';
+import type { Meeting } from '@/entities/meeting';
+import { type MeetingSearchOptions, meetingSearchQueryOptions } from '@/entities/meeting-search';
 
 import {
   buildRegionKey,
@@ -107,7 +108,7 @@ export const useSearchInfiniteOptions = (options: MeetingSearchOptions, enabled 
     queries:
       Array.isArray(options.region) && enabled
         ? regions.map((region) => ({
-            ...meetingsQueryOptions.options({
+            ...meetingSearchQueryOptions.options({
               ...options,
               region,
               cursor: cursor[buildRegionRequestKey(regionKey, region)],

@@ -1,4 +1,4 @@
-import type { ProgressProps } from '@/shared/ui/progress-bar';
+import type { ProgressProps } from '../progress-bar';
 
 export interface EstablishmentStatusBadgeProps {
   confirmedAt: Date | null;

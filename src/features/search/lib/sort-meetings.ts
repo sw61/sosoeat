@@ -1,4 +1,5 @@
-import type { Meeting, MeetingSortBy, MeetingSortOrder } from '@/entities/meeting';
+import type { Meeting } from '@/entities/meeting';
+import type { MeetingSortBy, MeetingSortOrder } from '@/entities/meeting-search';
 
 export const sortMeetings = (
   meetings: Meeting[],

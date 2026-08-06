@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { addDays, addMonths } from 'date-fns';
 
-import type { Meeting } from '../../model/meeting.types';
+import type { MeetingCardData } from '../../model/meeting-card.types';
 
 import { MainPageCard } from './main-page-card';
 
 const meta = {
-  title: 'entities/meeting/ui/MainPageCard',
+  title: 'entities/meeting-card/ui/MainPageCard',
   component: MainPageCard,
 } satisfies Meta<typeof MainPageCard>;
 
@@ -19,28 +19,19 @@ meetingDate.setHours(18, 30, 0, 0);
 const registrationEndDate = addDays(addMonths(now, 1), 4);
 registrationEndDate.setHours(12, 0, 0, 0);
 
-const MOCK_MEETING: Meeting = {
+const MOCK_MEETING: MeetingCardData = {
   id: 1,
-  teamId: 'storybook',
   name: '강남역에서 점심 같이 먹어요',
   type: 'groupEat',
   region: '서울 강남구',
-  address: '서울특별시 강남구 테헤란로',
-  latitude: 37.498,
-  longitude: 127.028,
   dateTime: meetingDate.toISOString(),
   registrationEnd: registrationEndDate.toISOString(),
   capacity: 6,
   participantCount: 3,
   image:
     'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=720',
-  description: '',
-  canceledAt: null,
   confirmedAt: null,
-  hostId: 1,
-  updatedAt: new Date('2025-03-21T00:00:00').toISOString(),
   host: {
-    id: 1,
     name: '김소소',
     image: 'https://i.pravatar.cc/32?img=47',
   },

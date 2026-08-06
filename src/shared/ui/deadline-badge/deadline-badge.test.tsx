@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render, screen } from '@testing-library/react';
 
-import { useTimeFormatter } from '../../model/use-time-formatter';
+import { useTimeFormatter } from '../../lib/use-time-formatter';
 
 import { DeadlineBadge } from './deadline-badge';
 
@@ -37,7 +37,7 @@ jest.mock(
     )
 );
 
-jest.mock('../../model/use-time-formatter', () => ({
+jest.mock('../../lib/use-time-formatter', () => ({
   useTimeFormatter: jest.fn(),
 }));
 
