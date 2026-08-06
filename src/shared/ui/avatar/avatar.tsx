@@ -2,9 +2,15 @@
 
 import * as React from 'react';
 
+import { getImageProps } from 'next/image';
+
 import { Avatar as AvatarPrimitive } from 'radix-ui';
 
 import { cn } from '../../lib/utils';
+
+function isOptimizableSrc(src: string | Blob | undefined): src is string {
+  return typeof src === 'string' && !src.startsWith('/') && !src.endsWith('.svg');
+}
 
 function Avatar({
   className,
@@ -26,10 +32,25 @@ function Avatar({
   );
 }
 
-function AvatarImage({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+function AvatarImage({
+  className,
+  src,
+  alt,
+  width,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Image> & { width?: number }) {
+  const shouldOptimize = width !== undefined && isOptimizableSrc(src);
+
+  const { src: optimizedSrc, srcSet } = shouldOptimize
+    ? getImageProps({ src, alt: alt ?? '', width, height: width, quality: 75 }).props
+    : { src, srcSet: undefined };
+
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
+      src={optimizedSrc}
+      srcSet={srcSet}
+      alt={alt}
       className={cn('aspect-square size-full rounded-full object-cover', className)}
       {...props}
     />
