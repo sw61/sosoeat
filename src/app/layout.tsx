@@ -80,7 +80,6 @@ export default async function RootLayout({
         ))}
       </head>
       <body className="flex min-h-screen min-w-[375px] flex-col overscroll-none">
-        <Script src="https://accounts.google.com/gsi/client" strategy="lazyOnload" />
         <Script
           src={`https://cdn.amplitude.com/script/${process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY}.js`}
           strategy="lazyOnload"
