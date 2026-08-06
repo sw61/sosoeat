@@ -121,7 +121,7 @@ export function MeetingShareModal({
 
   return (
     <>
-      {KAKAO_JS_KEY ? (
+      {KAKAO_JS_KEY && open ? (
         <Script
           src="https://developers.kakao.com/sdk/js/kakao.min.js"
           strategy="afterInteractive"
