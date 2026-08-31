@@ -173,6 +173,9 @@ describe('MeetingCreateModal', () => {
     expect(within(dialog).getByRole('heading', { name: '카테고리 선택' })).toBeInTheDocument();
   });
 
+  // 4단계 폼을 끝까지 채우느라 waitFor 가 여러 번 들어간다.
+  // 단독 실행은 2초 내외지만 전체 스위트를 병렬로 돌리면 기본 제한(5초)을 넘기므로
+  // 이 테스트에만 여유를 둔다.
   it('전체 폼을 작성하고 제출하면 onSubmit이 호출된다', async () => {
     const user = userEvent.setup();
 
@@ -263,7 +266,7 @@ describe('MeetingCreateModal', () => {
         capacity: 10,
       })
     );
-  });
+  }, 20000);
 
   it('이전 버튼을 누르면 이전 단계로 돌아간다', async () => {
     const user = userEvent.setup();
