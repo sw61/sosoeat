@@ -1,5 +1,7 @@
 import { cookies } from 'next/headers';
 
+import { jwtVerify, SignJWT } from 'jose';
+
 import { AuthUser } from '../types/auth';
 
 export interface SessionData {
@@ -17,6 +19,12 @@ const COOKIE_OPTIONS = {
 
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
+function getSecret() {
+  const value = process.env.SESSION_SECRET;
+  if (!value) throw new Error('SESSION_SECRET is not set');
+  return new TextEncoder().encode(value);
+}
+
 /**
  * [Infrastructure Layer] CookieStorage
  * next/headers의 cookies()를 사용하여 서버 사이드에서 토큰을 관리합니다.
@@ -32,15 +40,16 @@ export class CookieStorage {
 
   /**
    * 서버 컴포넌트 / Route Handler 전용.
-   * 클라이언트에서는 AuthInitializer의 getUserFromCookie() 사용.
+   * 클라이언트에는 layout.tsx에서 initialUser prop으로 전달됩니다.
    */
   static async getUser(): Promise<AuthUser | null> {
     const raw = (await cookies()).get('user')?.value;
     if (!raw) return null;
     try {
-      return JSON.parse(raw) as AuthUser;
+      const { payload } = await jwtVerify(raw, getSecret());
+      return (payload.user as AuthUser) ?? null;
     } catch {
-      return null;
+      return null; // 위조 · 만료 · 형식 오류
     }
   }
 
@@ -62,7 +71,13 @@ export class CookieStorage {
     }
 
     if (data.user) {
-      cookieStore.set('user', JSON.stringify(data.user), {
+      const sealed = await new SignJWT({ user: data.user })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime(`${SESSION_MAX_AGE}s`)
+        .sign(getSecret());
+
+      cookieStore.set('user', sealed, {
         ...COOKIE_OPTIONS,
         maxAge: SESSION_MAX_AGE,
       });
