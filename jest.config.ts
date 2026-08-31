@@ -21,7 +21,7 @@ const jestConfig = async () => {
   const nextConfig = await createJestConfig(config)();
   return {
     ...nextConfig,
-    transformIgnorePatterns: ['node_modules/(?!nuqs/)'],
+    transformIgnorePatterns: ['node_modules/(?!(?:nuqs|jose)/)'],
   };
 };
 export default jestConfig;
